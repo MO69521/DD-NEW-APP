@@ -1,0 +1,9 @@
+<svg width="42" height="5" viewBox="0 0 42 5" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M42 2.30359C42 2.13651 41.8635 2.00163 41.6964 2.00361L0 2.5L41.6964 2.99639C41.8635 2.99837 42 2.86349 42 2.69641V2.30359Z" fill="url(#lineGrad)"/>
+<defs>
+<linearGradient id="lineGrad" x1="42" y1="2.5" x2="8.39998" y2="2.5" gradientUnits="userSpaceOnUse">
+<stop offset="0.350962" stop-color="#FFFAD7"/>
+<stop offset="1" stop-color="#FFFAD7" stop-opacity="0"/>
+</linearGradient>
+</defs>
+</svg>

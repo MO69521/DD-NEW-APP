@@ -1,0 +1,445 @@
+/// 全局尺寸 token（Figma 精确值），禁止在 UI 组件内写死 layout 数值。
+abstract final class AppSizes {
+  // ── 通用 ──
+  static const double hairline = 0.5;
+  static const double borderWidthEmphasis = 1.5;
+  static const double iconSm = 14;
+
+  // ── 通用二级页顶栏 (AppTopBar) ──
+  static const double topBarHeight = 44;
+  static const double topBarCircleSize = 32;
+  static const double topBarBackIconWidth = 14;
+  static const double topBarBackIconHeight = 20;
+  static const double topBarActionIconSize = 19;
+
+  // ── 通用按钮 (AppButton) ──
+  static const double buttonPaddingHNormal = 24;
+  static const double buttonPaddingVNormal = 12;
+  static const double buttonPaddingHSmall = 16;
+  static const double buttonPaddingVSmall = 8;
+  static const double buttonLoadingIndicatorSize = 16;
+  static const double buttonIconLabelGap = 8;
+
+  // ── 搜索栏 / 玻璃态胶囊 ──
+  static const double searchBarHeight = 40;
+  static const double glassBlurSigma = 8;
+  static const double statusBarPlaceholderHeight = 44;
+  static const double bookstoreHeaderVerticalInset = 2;
+  static const double bookstoreStickyHeaderHeight =
+      searchBarHeight + bookstoreHeaderVerticalInset * 2;
+  static const double bookstoreHeaderToFirstSectionGap = 20;
+  static const double bookstoreLoadMoreTriggerOffset = 240;
+  static const double bookstoreLoadingIndicatorSize = 20;
+  static const double bookstoreLoadingIndicatorStrokeWidth = 2;
+
+  // ── 底部导航 (Figma 353:1522 / 294:5130) ──
+  static const double bottomNavBarHeight = 82;
+  static const double bottomNavCapsuleWidth = 327;
+  static const double bottomNavCapsuleHeight = 50;
+  static const double bottomNavHorizontalInset = 24;
+  static const double bottomNavBottomInset = 4;
+  static const double bottomNavBlurSigma = 12;
+  static const double bottomNavIconSize = 26;
+  static const double bottomNavItemHeight = 42;
+  static const double bottomNavIconLabelGap = 2;
+  static const double bottomNavItemContentTopInset = 0;
+  static const double bottomNavItemContentBottomInset = 4;
+  static const double homeIndicatorWidth = 134;
+  static const double homeIndicatorHeight = 5;
+
+  // ── 榜单 (Figma 456:12299) ──
+  static const double tabIndicatorWidth = 24;
+  static const double tabIndicatorHeight = 3;
+  static const double rankingHeaderActionTopInset = 5;
+  static const double rankingHeaderActionBottomInset = 4;
+  static const double rankingFullListIconSize = 12;
+  static const double rankingCarouselItemWidth = 132;
+  static const int rankingCarouselMaxItems = 7;
+  static const int rankingGridMaxItems = 6;
+  static const double rankingRowCoverWidth = 74;
+  static const double bookCoverRankingAspectRatio = 132 / 179;
+  static const double rankingCompactTextBlockHeight = 66;
+
+  // ── 书籍封面 ──
+  static const double bookCoverListWidth = 50;
+  static const double bookCoverListHeight = 68;
+  static const double bookCoverGridAspectRatio = 56 / 76;
+  static const double bookGridTitleCategoryGap = 8;
+  static const double bookGridTextBlockHeight = 56;
+  static const double bookGridCoverToTextGap = 8;
+
+  // ── 网格尺寸 ──
+  static const double rankingGridDesignItemWidth = 151.5;
+  static const double rankingGridItemHeight = bookCoverListHeight;
+  static const double editorPickGridAspectRatio = 0.48;
+  static const double guessLikeGridAspectRatio = 0.55;
+
+  // ── 福利页 (Figma 294:4943) ──
+  static const double welfareHeaderHeight = 44;
+  static const double welfareCurrencyBarHeight = 76;
+  static const double welfareVipBannerHeight = 49;
+  static const double welfareRechargeCardHeight = 126;
+  static const double welfareRechargeIllustrationWidth = 76;
+  static const double welfareRechargeHotBadgeWidth = 33;
+  static const double welfareRechargeHotBadgeHeight = 18;
+  static const double welfareRechargePriceButtonHeight = 28;
+  static const double welfareCheckInMilestoneHeight = 70;
+  static const double welfareCheckInProgressLineHeight = 4;
+  static const double welfareCheckInProgressLineCenterY = 35;
+  static const double welfareCheckInProgressLineTop =
+      welfareCheckInProgressLineCenterY - welfareCheckInProgressLineHeight / 2;
+  static const double welfareCheckInProgressDotSize = 12;
+  static const double welfareCheckInProgressDotBorderWidth = 2;
+  static const double welfareCheckInMilestoneBubbleHeight = 26;
+  static const double welfareCheckInMilestoneBubbleAreaWidth = 46;
+  static const double welfareCheckInMilestoneBubbleAreaWidthWide = 48;
+  static const double welfareCheckInMilestoneBubbleAreaHeight = 41;
+  static const double welfareCheckInMilestoneBubbleGraphicHeight = 21.6482;
+  static const double welfareCheckInMilestoneDotTop = 24;
+  static const double welfareCheckInDayHeaderPaddingTop = 5;
+  static const double welfareCheckInDayHeaderPaddingBottom = 4;
+  static const double welfareCheckInDayBodyPaddingVertical = 6;
+  static const double welfareCheckInCumulativePadding = 8;
+  static const double welfareCheckInCtaPaddingHorizontal = 28;
+  static const double welfareCheckInCtaPaddingVertical = 14;
+  static const double welfareCheckInCtaHeight = 42;
+  static const double welfareCheckInDayWideMinWidth = 132;
+  static const double welfareCurrencyIconSize = 16;
+  static const double welfareCurrencyArrowSize = 12;
+  static const double welfareCurrencyDividerHeight = 15;
+  static const double welfareCurrencyAmountFontSize = 24;
+  static const double welfareCurrencyBlurSigma = 16;
+  static const double welfareRechargeIllustrationHeight = 52;
+  static const double welfareVipBadgeSize = 24;
+  static const double welfareVipBadgeTextGap = 8;
+  static const double welfareVipTextIconGap = 4;
+  static const double welfareVipCtaPaddingHorizontal = 12;
+  static const double welfareVipCtaPaddingVertical = 6;
+  static const double welfareVipCtaBorderWidth = 0.8;
+  static const double welfareRechargeInfoIconSize = 24;
+  static const double welfareCheckInRewardIconSize = 24;
+  static const double welfareCheckInSmallRewardIconSize = 12;
+  static const double welfareTaskActionHeight = 30;
+  static const double welfareTaskActionMinWidth = 74;
+  static const double welfareTaskActionIconSize = 16;
+  static const double welfareTaskRewardIconSize = 12;
+  static const double welfareTaskRewardChipHeight = 18;
+  static const double welfareTaskTimelineNodeWidth = 66;
+  static const double welfareTaskTimelineProgressHeight = 36;
+  // 限免卡切图为 72×72 方形画布，卡面本体仅占约 70×45 并带透明边距，
+  // 故用方形展示框承载，使卡面渲染为 Figma 的 ≈32.5×20.4。
+  static const double welfareReadingFreeCardWidth = 33;
+  static const double welfareReadingFreeCardHeight = 33;
+  static const double welfareTaskTimelineLineHeight = 4;
+  static const double welfareTaskTimelineDotSize = 12;
+  static const double welfareTaskTimelineDotBorderWidth = 2;
+  static const double welfareTaskTimelineFooterHeight = 20;
+  static const double welfareTaskTimelineTailWidth = 10;
+  static const double welfareTaskTimelineTailHeight = 4;
+  static const double welfareTaskPopularIconSize = 16;
+  static const double welfareTaskVipBadgeHeight = 18;
+  static const double welfareTaskListVipBannerHeight = 66;
+
+  /// 任务卡向上叠压 VIP 入口的高度（Figma 559:23234 重叠 24px）。
+  static const double welfareTaskCardOverlap = 24;
+
+  /// 任务卡毛玻璃背景模糊半径。
+  static const double welfareTaskCardBlurSigma = 180;
+
+  // ── 书架页 (Figma 220:9341 / 377:1909) ──
+  static const double bookshelfHeaderHeight = 44;
+  static const double bookshelfReadingBannerHeight = 54;
+  static const double bookshelfBearIllustrationWidth = 68;
+  static const double bookshelfBearIllustrationInset = 4;
+  static const double bookshelfReadingBannerContentInsetLeft = 80;
+  static const double bookshelfHeaderToBannerGap = 18;
+  static const double bookshelfBannerToGridGap = 24;
+  static const double bookshelfClaimWelfareIconSize = 16;
+  static const double bookshelfClaimWelfareCtaHeight = 30;
+  static const double bookshelfClaimWelfareCtaPaddingHorizontal = 11;
+  static const double bookshelfClaimWelfareCtaPaddingVertical = 7;
+  static const double bookshelfManageActionFontSize = 14;
+
+  // ── 我的页 (Figma 205:3998) ──
+  static const double profileHeroHeight = 375;
+  static const double profileContentOverlapTop = 196;
+  static const double profileAvatarSize = 80;
+  static const double profileSettingsButtonSize = 32;
+  static const double profilePartnerAvatarSize = 24;
+  static const double profilePartnerAvatarGap = 6;
+  static const double profileShortcutIconSize = 32;
+  static const double profileShortcutIconToLabelGap = 10;
+  static const double profileShortcutItemHeight = 60;
+  static const double profileShortcutRowGap = 30;
+  static const double profileHeroUserInfoTop = 100;
+  static const double profileHeroSettingsTop = 52;
+  static const double profileHeroBackgroundImageOpacity = 0.16;
+  static const List<double> profileHeroImageMaskStops = [
+    0.0,
+    0.604723,
+    0.801425,
+    1.0,
+  ];
+
+  // ── 榜单详情页 (Figma 220:8376) ──
+  /// hero 内容高度（设计 200 - 状态栏 44）。
+  static const double rankingHeroContentHeight = 156;
+
+  /// 顶部分段相对状态栏底部的偏移（设计 190 - 44）。
+  static const double rankingSegmentedTopOffset = 146;
+
+  /// 书单主体相对状态栏底部的偏移（设计 244 - 44）。
+  static const double rankingBodyTopOffset = 200;
+
+  /// hero 标题块距 hero 底部内边距（设计：标题块底 152，hero 高 200）。
+  static const double rankingHeroTitleBottomInset = 48;
+  static const double rankingHeroTitleToSubtitleGap = 8;
+  static const double rankingHeroDecorationGap = 8;
+
+  static const double rankingTopBarHeight = 44;
+  static const double rankingCircleButtonSize = 32;
+  static const double rankingBackIconWidth = 14;
+  static const double rankingBackIconHeight = 20;
+  static const double rankingShareIconSize = 19;
+  static const double rankingLaurelWidth = 20;
+  static const double rankingLaurelHeight = 32;
+  static const double rankingSubtitleLineWidth = 42;
+  static const double rankingSubtitleLineHeight = 5;
+
+  /// 头图背景蒙版渐变停靠点（顶部压暗 → 透出插画 → 底部融暗）。
+  static const List<double> rankingHeroScrimStops = [0.0, 0.32, 0.72, 1.0];
+
+  static const double rankingSegmentedOuterPadding = 2;
+  static const double rankingSegmentedItemPaddingVertical = 10;
+  static const double rankingSegmentedBlurSigma = 12;
+
+  static const double rankingDimensionRailWidth = 76;
+  static const double rankingDimensionItemPaddingVertical = 16;
+  static const double rankingDimensionItemPaddingHorizontal = 12;
+  static const double rankingDimensionIndicatorWidth = 3;
+  static const double rankingDimensionIndicatorHeight = 16;
+
+  static const double rankingBookRowCoverWidth = 80;
+  static const double rankingBookRowCoverHeight = 109;
+  static const double rankingBookRowTitleCategoryGap = 12;
+
+  // ── 书籍详情页 (Figma 183:1874) ──
+  static const double bookDetailHeroHeight = 509;
+
+  /// 内容区起始 Y（设计 456），上方透出 hero 壁纸并叠压其底部渐隐区。
+  static const double bookDetailContentTopOffset = 456;
+  static const double bookDetailContentHInset = 12;
+  static const double bookDetailSectionGap = 24;
+  static const double bookDetailGlassBlurSigma = 12;
+
+  static const double bookDetailTopBarHeight = 44;
+  static const double bookDetailCircleButtonSize = 32;
+  static const double bookDetailBackIconWidth = 14;
+  static const double bookDetailBackIconHeight = 20;
+  static const double bookDetailShareIconSize = 19;
+
+  static const double bookDetailAuthorAvatarSize = 16;
+
+  static const double bookDetailStatsBarHeight = 73;
+  static const double bookDetailStatsDividerHeight = 15;
+
+  static const double bookDetailTabOuterPadding = 2;
+  static const double bookDetailTabItemPaddingVertical = 10;
+
+  static const double bookDetailCatalogPaddingH = 12.5;
+  static const double bookDetailCatalogPaddingV = 16.5;
+  static const double bookDetailCatalogArrowSize = 12;
+  static const double bookDetailCatalogDrawerWidthRatio = 0.78;
+  static const double bookDetailCatalogDrawerCoverWidth = 48;
+  static const double bookDetailCatalogDrawerCoverHeight = 64;
+  static const double bookDetailCatalogDrawerHeaderPaddingH = 16;
+  static const double bookDetailCatalogDrawerHeaderPaddingV = 16;
+  static const double bookDetailCatalogChapterPaddingV = 14;
+  static const double bookDetailCatalogLockIconSize = 16;
+
+  static const double bookDetailCharCoverWidth = 132;
+  static const double bookDetailCharCoverHeight = 179;
+  static const double bookDetailCharFavPaddingH = 24;
+  static const double bookDetailCharFavPaddingV = 6;
+  static const double bookDetailSectionHintIconSize = 12;
+  static const double bookDetailDiscussionAvatarSize = 28;
+  static const double bookDetailDiscussionListAvatarSize = 24;
+  static const double bookDetailDiscussionBodyIndent = 40;
+  static const double bookDetailDiscussionCardPadding = 12;
+  static const double bookDetailDiscussionReplyPadding = 10;
+  static const double bookDetailDiscussionLikeIconSize = 18;
+  static const double bookDetailDiscussionFilterPaddingH = 16;
+  static const double bookDetailDiscussionFilterPaddingV = 6;
+  static const double bookDetailDiscussionListGap = 22;
+  static const double bookDiscussionDetailReplyAvatarSize = 24;
+  static const double bookDiscussionDetailReplyItemGap = 14;
+  static const double bookDiscussionDetailInputBarHeight = 52;
+  static const double bookDiscussionDetailInputIconSize = 18;
+  static const double bookDetailUpdateDateColumnWidth = 92;
+  static const double bookDetailUpdateTimelineWidth = 16;
+  static const double bookDetailUpdateDotOuterSize = 12;
+  static const double bookDetailUpdateDotInnerSize = 4;
+  static const double bookDetailUpdateDotBorderWidth = 1.5;
+  static const double bookDetailUpdateLineWidth = 1;
+  static const double bookDetailUpdateHeaderRowHeight = 24;
+  static const double bookDetailUpdateItemGap = 20;
+  static const double bookDetailUpdateSectionPadding = 12;
+
+  static const double bookDetailBottomIconSize = 24;
+  static const double bookDetailBottomItemHeight = 42;
+  static const double bookDetailReadCtaPaddingH = 28;
+  static const double bookDetailReadCtaPaddingV = 14;
+  static const double bookDetailGiftBadgePaddingH = 2;
+
+  // ── 搜索页（深色态） ──
+  static const double searchAppBarBackIconWidth = 14;
+  static const double searchAppBarBackIconHeight = 20;
+  static const double searchInputIconSize = 16;
+
+  static const double searchResultCoverWidth = 84;
+  static const double searchResultCoverHeight = 112;
+  static const double searchResultRowVerticalPadding = 16;
+  static const double searchResultCoverToTextGap = 12;
+  static const double searchResultTitleToTagsGap = 8;
+  static const double searchResultTagsToDescGap = 8;
+  static const double searchResultTitleToAddGap = 8;
+  static const double searchResultAddIconSize = 22;
+
+  static const double searchEmptyIllustrationSize = 160;
+  static const double searchEmptyIconSize = 56;
+  static const int searchEmptyTopFlex = 3;
+  static const int searchEmptyBottomFlex = 5;
+
+  /// 富信息书卡：简介 → 作者脚注间距。
+  static const double bookCardDescToFooterGap = 8;
+
+  // ── 会员页 (Figma 1086:4182) ──
+  static const double membershipHeroHeight = 300;
+
+  /// 分页器及以下内容区整体上移量，与 hero 熊脚轻微重叠。
+  static const double membershipLowerContentLift = 20;
+
+  /// 布局占位高度（hero 背景可溢出绘制）。
+  static const double membershipHeroLayoutHeight =
+      membershipHeroHeight - membershipLowerContentLift;
+
+  /// hero 文案块距屏幕顶（含状态栏 44 + 标题栏 44 + 间距 20）。
+  static const double membershipHeroTextTop = 108;
+  static const double membershipDotsTop = 179;
+  static const double membershipDotsActiveWidth = 8;
+  static const double membershipDotSize = 4;
+  static const double membershipUserCardTop = 211;
+  static const double membershipUserAvatarSize = 44;
+  static const double membershipPlanSelectedBorderWidth = 2;
+  static const double membershipPlanUnselectedBorderWidth = 1;
+  static const double membershipPlanSelectorGap = 16;
+  static const double membershipBenefitIconCircle = 46;
+  static const double membershipBenefitIcon = 30;
+  static const double membershipBenefitIconLabelGap = 7;
+  static const double membershipBenefitRowGap = 16;
+  static const int membershipBenefitColumns = 4;
+
+  /// 权益区切换单行布局的最小宽度；达到后 7 项均分容器总宽。
+  static const double membershipBenefitGridMaxWidth = 420;
+  static const double membershipCtaHeight = 42;
+  static const double membershipCtaBreathScaleMin = 1;
+  static const double membershipCtaBreathScaleMax = 1.04;
+
+  /// 扫光高亮带宽度占按钮宽度比例。
+  static const double membershipCtaSweepBandWidthRatio = 0.42;
+  static const double membershipHeroToPlanGap = 15;
+  static const double membershipPlanCardWidth = 150;
+  static const double membershipPlanCardHeight = 167;
+  static const double membershipPlanFooterHeight = 28;
+  static const double membershipHeroCarouselTextHeight = 64;
+
+  /// 横向滑动超过该距离才翻页（像素）。
+  static const double membershipHeroSwipeDistanceThreshold = 48;
+
+  /// 横向滑动速度超过该值才翻页（逻辑像素/秒）。
+  static const double membershipHeroSwipeVelocityThreshold = 260;
+
+  /// 单次拖动最多跟手距离（相对屏宽比例）。
+  static const double membershipHeroMaxDragPageRatio = 0.92;
+
+  /// 首尾页越界拖动的橡皮筋阻尼系数（越小越「拉不动」）。
+  static const double membershipHeroRubberBandFriction = 0.52;
+  static const double membershipBackIconWidth = 14;
+  static const double membershipBackIconHeight = 20;
+
+  // ── 伙伴页 / 探索（深色 + 粉紫主题） ──
+  static const double partnerHeaderHeight = 44;
+  static const double partnerPageTitleFontSize = 22;
+  static const double partnerTopTabFontSize = 16;
+  static const double partnerNotificationBadgeMinSize = 16;
+  static const double partnerNotificationBadgePaddingH = 4;
+  static const double partnerSearchIconSize = 20;
+  static const double partnerHeaderToCategoryGap = 12;
+  static const double partnerCategoryChipHeight = 32;
+  static const double partnerCategoryChipPaddingH = 8;
+  static const double partnerCategoryChipSpacing = 8;
+  static const double partnerCategoryToSortGap = 12;
+  static const double partnerSortBarHeight = 36;
+  static const double partnerSortIconSize = 14;
+  static const double partnerNewBadgeWidth = 28;
+  static const double partnerNewBadgeHeight = 14;
+  static const double partnerFilterIconSize = 16;
+  static const double partnerCharacterCoverAspectRatio = 132 / 179;
+
+  /// Figma 卡片人物特写比例（880 × 1320）。
+  static const double partnerCharacterPortraitAspectRatio = 880 / 1320;
+  static const String partnerCharacterCoverBackgroundAsset =
+      'assets/images/partner/card_cover_bg.png';
+  static const double partnerCharacterCardPadding = 12;
+  static const double partnerCharacterNameToQuoteGap = 4;
+  static const double partnerCharacterQuoteToSubtitleGap = 4;
+  static const double partnerCharacterSubtitleToFooterGap = 8;
+  static const double partnerCharacterBadgePaddingH = 6;
+  static const double partnerCharacterBadgePaddingV = 3;
+  static const double partnerCharacterBadgeMinHeight = 16;
+  static const double partnerTraitTagHeight = 22;
+  static const double partnerTraitTagPaddingH = 6;
+  static const double partnerTraitTagPaddingV = 3;
+  static const double partnerTraitTagSpacing = 4;
+
+  /// 与 [AppTextStyles.partnerCharacterName] 行高一致（15 × 1.3）。
+  static const double partnerCharacterNameLineHeight = 19.5;
+
+  /// 与 [AppTextStyles.partnerCharacterQuote] 行高一致（13 × 1.4）。
+  static const double partnerCharacterQuoteLineHeight = 18.2;
+
+  /// 与 [AppTextStyles.partnerCharacterSubtitle] 行高一致（12 × 1.3）。
+  static const double partnerCharacterSubtitleLineHeight = 15.6;
+
+  /// 封面以下正文区高度（padding + 三行文案 + 标签行）。
+  static const double partnerCharacterBodyHeight =
+      partnerCharacterCardPadding * 2 +
+      partnerCharacterNameLineHeight +
+      partnerCharacterNameToQuoteGap +
+      partnerCharacterQuoteLineHeight +
+      partnerCharacterQuoteToSubtitleGap +
+      partnerCharacterSubtitleLineHeight +
+      partnerCharacterSubtitleToFooterGap +
+      partnerTraitTagHeight;
+
+  /// 探索页角色卡总高度（封面 + 正文区）。
+  static double partnerCharacterCardHeight(double cardWidth) {
+    return cardWidth / partnerCharacterCoverAspectRatio +
+        partnerCharacterBodyHeight;
+  }
+
+  static const double partnerLoadMoreTriggerOffset = 240;
+  static const double partnerLoadingIndicatorSize = 20;
+  static const double partnerLoadingIndicatorStrokeWidth = 2;
+  static const double partnerFilterSheetOptionHeight = 48;
+
+  // ── 分类页（深色态） ──
+  static const double categoryFilterGroupSpacing = 20;
+  static const double categoryFilterChipSpacing = 16;
+  static const double categoryFilterChipRunSpacing = 14;
+  static const double categoryFilterChipLabelToUnderlineGap = 4;
+  static const double categoryFilterUnderlineWidth = 16;
+  static const double categoryFilterUnderlineHeight = 3;
+  static const double categoryFilterSectionVerticalPadding = 16;
+  static const double categoryHeaderToFilterGap = 8;
+}

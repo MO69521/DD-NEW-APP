@@ -1,0 +1,9 @@
+export 'application/book_detail_cubit.dart';
+export 'application/book_discussion_detail_cubit.dart';
+export 'domain/entities/book_detail.dart';
+export 'domain/entities/book_catalog_chapter.dart';
+export 'domain/entities/book_discussion_post.dart';
+export 'domain/entities/book_detail_tab.dart';
+export 'domain/entities/book_update_entry.dart';
+export 'presentation/pages/book_discussion_detail_page.dart';
+export 'presentation/pages/book_detail_page.dart';

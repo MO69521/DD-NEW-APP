@@ -1,0 +1,130 @@
+---
+description: Flutter Feature-First 架构强制规范 (STRICT V2) — 分层、依赖、UI、状态、路由
+alwaysApply: true
+---
+
+# Flutter Project Development Rules (STRICT V2)
+
+## 0. 核心目标
+
+- 长期可维护
+- 可扩展而不重构
+- UI / 业务 / 数据彻底解耦
+- 避免隐性依赖
+
+## 1. 架构强制（Feature First）
+
+```
+lib/
+  core/
+  shared/
+  features/
+  routes/
+```
+
+### 1.1 feature 标准结构
+
+```
+features/<name>/
+  data/
+  domain/
+  application/
+  presentation/
+```
+
+### 1.2 禁止跨 feature 直接引用实现层
+
+❌ `features/A` import `features/B/data/*`
+❌ `features/A` import `features/B/application/*`
+
+### 1.3 允许跨 feature 的唯一方式
+
+- domain model（共享契约）
+- interface（抽象）
+- shared service（`core/services`）
+
+## 2. 依赖方向强制
+
+**允许：** `presentation → application → domain → data`，`core → all`，`shared → core only`
+
+**禁止反向：** `domain → application`，`data → presentation`，`core → features`
+
+## 3. UI 规则
+
+必须使用：`AppColors`、`AppSpacing`、`AppRadius`、`AppTextStyles`、`AppDurations`
+
+❌ 禁止写死：`Color(...)`、`fontSize: 14`、`EdgeInsets.all(16)`、`BorderRadius.circular(12)`
+
+UI 只做：渲染 state、触发 action
+
+## 4. 组件分级
+
+| Level | 位置 | 说明 |
+|-------|------|------|
+| L1 Primitive | `shared/widgets/` | Button, Input, Text — 可跨项目复用 |
+| L2 Composite | `shared/components/` | FormSection, CardLayout — 多 L1 组合 |
+| L3 Feature | `features/*/presentation/components/` | 仅当前 feature |
+
+❌ feature 组件进 shared；shared 写业务逻辑；L3 无判断提升到 shared
+
+## 5. 状态管理
+
+- state 只能在 `application` 层创建，UI 禁止创建 state
+- 分类：UI State / Domain State / Interaction State，必须分离
+- state 不可变、可重建，禁止直接修改字段
+
+## 6. data 层
+
+只做：API request、DTO mapping、cache/storage
+
+❌ 禁止：业务逻辑、UI 结构、状态管理
+
+## 7. domain 层
+
+纯 Dart。❌ 禁止 `import flutter`、`import ui`、`import http`
+
+✔ 只允许：entity、value object、business rule、interface
+
+## 8. shared 污染防控
+
+✔ 高频复用（≥3次）、UI 基础组件、layout
+
+❌ feature 逻辑组件、API 相关组件、页面拆分组件
+
+## 9. 路由
+
+❌ `Navigator.push()` — 必须 `AppRouter.go()` / `AppRouter.pushNamed()`，注册在 `routes/app_router.dart`
+
+## 10. import 规则
+
+优先级：`core → shared → feature → local`
+
+❌ deep import — 必须 `import features/a/index.dart`（如已暴露）
+
+## 11. 代码拆分
+
+必须拆分：widget > 150 行、file > 300 行、nesting > 5 层
+
+## 12. 性能
+
+list 必须 builder；避免全局 rebuild；state 局部订阅；大 widget memoize / const
+
+## 13. Cursor 生成代码前必须判断
+
+1. 属于哪一层
+2. 是否违反依赖方向
+3. 是否可复用 shared
+4. 是否写死样式
+5. 是否引入跨 feature 依赖
+
+## 14. 强制重构触发
+
+- UI 包含逻辑
+- shared 被污染
+- feature 互相引用实现层
+- state 跨层修改
+- widget 过重不可拆
+
+## 15. 修改后合规审计（强制）
+
+每次完成 `lib/` 下 Dart 代码修改后，必须执行 `.cursor/skills/flutter-post-edit-audit` 并输出审计报告。

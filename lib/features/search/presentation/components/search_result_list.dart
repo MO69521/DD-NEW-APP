@@ -1,0 +1,50 @@
+import 'package:flutter/material.dart';
+
+import '../../../../core/domain/entities/book.dart';
+import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_sizes.dart';
+import '../../../../core/theme/app_spacing.dart';
+import '../../../../shared/layouts/app_bottom_nav.dart';
+import '../../domain/entities/search_result_item.dart';
+import 'search_result_row.dart';
+
+/// L3 — 搜索结果列表（builder 渲染，行间分隔线）。
+class SearchResultList extends StatelessWidget {
+  const SearchResultList({
+    super.key,
+    required this.items,
+    this.onItemTap,
+    this.onAddToShelf,
+  });
+
+  final List<SearchResultItem> items;
+  final void Function(Book book)? onItemTap;
+  final void Function(Book book)? onAddToShelf;
+
+  static const double _bottomReserve = AppBottomNav.barHeight + AppSpacing.xl;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.separated(
+      padding: const EdgeInsets.fromLTRB(
+        AppSpacing.md,
+        0,
+        AppSpacing.md,
+        _bottomReserve,
+      ),
+      itemCount: items.length,
+      separatorBuilder: (_, _) => const Divider(
+        height: AppSizes.hairline,
+        thickness: AppSizes.hairline,
+        color: AppColors.borderGlass,
+      ),
+      itemBuilder: (context, index) {
+        return SearchResultRow(
+          item: items[index],
+          onTap: onItemTap,
+          onAddToShelf: onAddToShelf,
+        );
+      },
+    );
+  }
+}

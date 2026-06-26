@@ -1,0 +1,99 @@
+import 'package:flutter/material.dart';
+
+import '../../../../core/domain/entities/book.dart';
+import '../../../../core/theme/app_sizes.dart';
+import '../../../../core/theme/app_spacing.dart';
+import '../../../../shared/components/book_grid_card.dart';
+
+/// 书架书籍 3 列网格，卡片样式对齐书城编辑推荐。
+class BookshelfBookGrid extends StatelessWidget {
+  const BookshelfBookGrid({
+    super.key,
+    required this.books,
+    this.onBookTap,
+    this.isManaging = false,
+  });
+
+  final List<Book> books;
+  final ValueChanged<Book>? onBookTap;
+  final bool isManaging;
+
+  static const int crossAxisCount = 3;
+
+  static double itemHeightForWidth(double maxWidth) {
+    final totalSpacing = AppSpacing.md * (crossAxisCount - 1);
+    final itemWidth = (maxWidth - totalSpacing) / crossAxisCount;
+    final coverHeight = itemWidth / AppSizes.bookCoverGridAspectRatio;
+    return coverHeight +
+        AppSizes.bookGridCoverToTextGap +
+        AppSizes.bookGridTextBlockHeight;
+  }
+
+  static Widget sliver({
+    required List<Book> books,
+    required double gridWidth,
+    ValueChanged<Book>? onBookTap,
+  }) {
+    if (books.isEmpty) {
+      return const SliverToBoxAdapter(child: SizedBox.shrink());
+    }
+
+    final itemHeight = itemHeightForWidth(gridWidth);
+
+    return SliverGrid(
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: crossAxisCount,
+        mainAxisSpacing: AppSpacing.md,
+        crossAxisSpacing: AppSpacing.md,
+        mainAxisExtent: itemHeight,
+      ),
+      delegate: SliverChildBuilderDelegate(
+        (context, index) {
+          final book = books[index];
+          return BookGridCard(
+            key: ValueKey(book.id),
+            title: book.title,
+            category: book.category,
+            coverAsset: book.coverAsset,
+            onTap: onBookTap == null ? null : () => onBookTap!(book),
+          );
+        },
+        childCount: books.length,
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (books.isEmpty) {
+      return const SizedBox.shrink();
+    }
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final itemHeight = itemHeightForWidth(constraints.maxWidth);
+
+        return GridView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: crossAxisCount,
+            mainAxisSpacing: AppSpacing.md,
+            crossAxisSpacing: AppSpacing.md,
+            mainAxisExtent: itemHeight,
+          ),
+          itemCount: books.length,
+          itemBuilder: (context, index) {
+            final book = books[index];
+            return BookGridCard(
+              title: book.title,
+              category: book.category,
+              coverAsset: book.coverAsset,
+              onTap: onBookTap == null ? null : () => onBookTap!(book),
+            );
+          },
+        );
+      },
+    );
+  }
+}
