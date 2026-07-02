@@ -7,6 +7,7 @@ import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../routes/app_router.dart';
 import '../../../../routes/app_routes.dart';
+import '../../../../shared/components/app_swipe_tab_switcher.dart';
 import '../../../../shared/components/app_top_bar.dart';
 import '../../../../shared/components/empty_state.dart';
 import '../../../../shared/layouts/app_page_chrome.dart';
@@ -97,8 +98,9 @@ class _LoadedHelpFeedbackBody extends StatelessWidget {
     }
 
     final cubit = context.read<HelpFeedbackCubit>();
+    const tabs = HelpFeedbackTab.values;
 
-    return switch (state.selectedTab) {
+    final tabBody = switch (state.selectedTab) {
       HelpFeedbackTab.faq => HelpFeedbackFaqView(
         groups: content.faqGroups,
         onQuestionTap: (question) => AppRouter.pushNamed(
@@ -120,5 +122,12 @@ class _LoadedHelpFeedbackBody extends StatelessWidget {
         onSubmit: cubit.submitFeedback,
       ),
     };
+
+    return AppSwipeTabSwitcher(
+      selectedIndex: tabs.indexOf(state.selectedTab),
+      tabCount: tabs.length,
+      onIndexChanged: (index) => cubit.selectTab(tabs[index]),
+      child: tabBody,
+    );
   }
 }

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_colors.dart';
@@ -175,17 +177,87 @@ class _PopularIcon extends StatelessWidget {
   }
 }
 
-class _TaskDescription extends StatelessWidget {
+class _TaskDescription extends StatefulWidget {
   const _TaskDescription({required this.description, this.highlight});
 
   final String description;
   final String? highlight;
 
   @override
+  State<_TaskDescription> createState() => _TaskDescriptionState();
+}
+
+class _TaskDescriptionState extends State<_TaskDescription> {
+  Timer? _timer;
+  Duration? _remaining;
+
+  static final RegExp _countdownPattern = RegExp(r'^\d{2}:\d{2}:\d{2}$');
+
+  @override
+  void initState() {
+    super.initState();
+    _syncCountdown();
+  }
+
+  @override
+  void didUpdateWidget(covariant _TaskDescription oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.highlight != widget.highlight) {
+      _syncCountdown();
+    }
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
+  void _syncCountdown() {
+    _timer?.cancel();
+    _remaining = _parseCountdown(widget.highlight);
+    if (_remaining == null) return;
+
+    _timer = Timer.periodic(const Duration(seconds: 1), (_) {
+      final current = _remaining;
+      if (current == null || current.inSeconds <= 0) {
+        _timer?.cancel();
+        return;
+      }
+      setState(() {
+        _remaining = current - const Duration(seconds: 1);
+      });
+    });
+  }
+
+  Duration? _parseCountdown(String? value) {
+    if (value == null || !_countdownPattern.hasMatch(value)) return null;
+    final parts = value.split(':').map(int.parse).toList(growable: false);
+    return Duration(hours: parts[0], minutes: parts[1], seconds: parts[2]);
+  }
+
+  String _formatCountdown(Duration duration) {
+    final hours = duration.inHours.toString().padLeft(2, '0');
+    final minutes = duration.inMinutes
+        .remainder(Duration.minutesPerHour)
+        .toString()
+        .padLeft(2, '0');
+    final seconds = duration.inSeconds
+        .remainder(Duration.secondsPerMinute)
+        .toString()
+        .padLeft(2, '0');
+    return '$hours:$minutes:$seconds';
+  }
+
+  @override
   Widget build(BuildContext context) {
-    if (highlight == null || highlight!.isEmpty) {
+    final highlight = _remaining == null
+        ? widget.highlight
+        : _formatCountdown(_remaining!);
+
+    if (highlight == null || highlight.isEmpty) {
       return AppText(
-        description,
+        widget.description,
         style: AppTextStyles.welfareSubtitle.copyWith(
           color: AppWelfareColors.subtitleMuted,
           height: 1.0,
@@ -202,7 +274,7 @@ class _TaskDescription extends StatelessWidget {
           height: 1.45,
         ),
         children: [
-          TextSpan(text: description),
+          TextSpan(text: widget.description),
           TextSpan(
             text: highlight,
             style: AppTextStyles.welfareSubtitle.copyWith(

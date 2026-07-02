@@ -37,13 +37,14 @@ class DailyReadingBanner extends StatelessWidget {
           children: [
             Positioned(
               left: AppSizes.bookshelfBearIllustrationInset,
-              bottom: 0,
+              top: AppSizes.bookshelfBearIllustrationInset,
               width: AppSizes.bookshelfBearIllustrationWidth,
-              child: Align(
-                alignment: Alignment.bottomCenter,
+              height: AppSizes.bookshelfBearIllustrationHeight,
+              child: ClipRect(
                 child: AppAssetImage(
                   assetPath: _bearAsset,
                   width: AppSizes.bookshelfBearIllustrationWidth,
+                  height: AppSizes.bookshelfBearIllustrationWidth,
                   fit: BoxFit.fitWidth,
                 ),
               ),

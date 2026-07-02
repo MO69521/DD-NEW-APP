@@ -12,6 +12,10 @@ abstract final class AppSizes {
   static const double topBarBackIconWidth = 14;
   static const double topBarBackIconHeight = 20;
   static const double topBarActionIconSize = 19;
+
+  /// 右上角动作图标显示尺寸：无圆形底色，按原始设计尺寸展示（全局统一）。
+  static const double topBarActionIconDisplaySize = 24;
+  static const double topBarTitleMaxWidth = 220;
   static const double dialogBackgroundBlurSigma = 64;
 
   // ── 通用按钮 (AppButton) ──
@@ -161,6 +165,7 @@ abstract final class AppSizes {
   static const double bookshelfHeaderHeight = 44;
   static const double bookshelfReadingBannerHeight = 54;
   static const double bookshelfBearIllustrationWidth = 68;
+  static const double bookshelfBearIllustrationHeight = 52;
   static const double bookshelfBearIllustrationInset = 4;
   static const double bookshelfReadingBannerContentInsetLeft = 80;
   static const double bookshelfHeaderToBannerGap = 18;
@@ -187,6 +192,9 @@ abstract final class AppSizes {
   static const double toastPaddingHorizontal = 20;
   static const double toastPaddingVertical = 12;
   static const double toastHorizontalMargin = 48;
+
+  /// Tab 左右滑动切换触发的最小水平速度（像素/秒）。
+  static const double swipeTabVelocityThreshold = 200;
 
   // ── 我的页 (Figma 205:3998) ──
   static const double profileHeroHeight = 375;
@@ -229,8 +237,20 @@ abstract final class AppSizes {
   static const int myMessagesEmptyTopFlex = 2;
   static const int myMessagesEmptyBottomFlex = 3;
 
+  // ── 我的卡包页 ──
+  static const double cardPackEmptyIllustrationSize = 160;
+  static const int cardPackEmptyTopFlex = 3;
+  static const int cardPackEmptyBottomFlex = 4;
+
   // ── 设置页 ──
   static const double settingsLogoSize = 72;
+  static const double settingsMenuRowMinHeight = 60;
+  static const double settingsNotificationRowMinHeight = 56;
+  static const double settingsNotificationRowWithSubtitleMinHeight = 88;
+  static const double appSwitchWidth = 50;
+  static const double appSwitchHeight = 30;
+  static const double appSwitchThumbSize = 24;
+  static const double appSwitchInset = 3;
 
   // ── 榜单详情页头图（Figma 1297:741 完整榜单）──
   static const double rankingHeroDesignWidth = 375;
@@ -253,23 +273,16 @@ abstract final class AppSizes {
   static const double rankingHeroTitleMainHeight = 38;
   static const double rankingHeroSubtitleTop = 44;
 
-  /// 顶部标题栏到底部头图标题块的视觉间距。
-  static const double rankingHeroTitleBarGap = 8;
-
   /// 分段控件吸附后距离顶部标题栏的视觉间距。
   static const double rankingStickyControlsTopGap = 8;
 
-  static const double rankingHeroTitleBlockTop =
-      bookstoreTopHeaderHeight + rankingHeroTitleBarGap;
+  /// 标题块相对屏幕顶边位置（Figma 1297:784，含状态栏与顶部导航区域）。
+  static const double rankingHeroTitleBlockTop = 97.5;
   static const double rankingHeroTitleBlockBottom =
       rankingHeroTitleBlockTop + rankingHeroTitleBlockHeight;
 
-  /// 标题块到底部分段的视觉间距。
-  static const double rankingHeroTitleToSegmentedGap = 8;
-
-  /// 频道分段相对帧顶 Y：标题块底部 + 标准间距。
-  static const double rankingSegmentedFrameTop =
-      rankingHeroTitleBlockBottom + rankingHeroTitleToSegmentedGap;
+  /// 频道分段相对屏幕顶边位置（Figma 1297:827）。
+  static const double rankingSegmentedFrameTop = 176;
 
   /// 频道分段控件实际高度（outer padding×2 + item padding×2 + 14px 文本行高）。
   static const double rankingSegmentedHeight =
@@ -419,6 +432,10 @@ abstract final class AppSizes {
   static const double bookDetailUpdateSectionPadding = 12;
 
   static const double bookDetailBottomIconSize = 24;
+  static const double bookDetailShelfActionIconWidth = 17.3298;
+  static const double bookDetailShelfActionIconHeight = 14.7811;
+  static const double bookDetailHeartActionIconWidth = 18.5769;
+  static const double bookDetailHeartActionIconHeight = 16.3402;
   static const double bookDetailBottomItemHeight = 42;
   static const double bookDetailReadCtaPaddingH = 28;
   static const double bookDetailReadCtaPaddingV = 14;

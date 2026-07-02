@@ -147,7 +147,7 @@ class BookCardHorizontal extends StatelessWidget {
               titleMaxLines: 2,
               titleCategoryGap: AppSpacing.xs,
               fixedHeight: coverHeight,
-              pinCategoryBottom: true,
+              pinCategoryBottom: false,
             ),
           ),
         ],

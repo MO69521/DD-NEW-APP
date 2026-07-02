@@ -1,18 +1,14 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/theme/app_durations.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/theme/app_theme_context.dart';
-import '../../../../shared/widgets/app_text.dart';
 import '../../domain/entities/bookstore_top_tab.dart';
 
 /// 书城顶栏一级 Tab（推荐 / 分类 / 排行）。
 class BookstoreTopTabs extends StatelessWidget {
-  const BookstoreTopTabs({
-    super.key,
-    required this.selected,
-    this.onSelected,
-  });
+  const BookstoreTopTabs({super.key, required this.selected, this.onSelected});
 
   final BookstoreTopTab selected;
   final ValueChanged<BookstoreTopTab>? onSelected;
@@ -48,20 +44,32 @@ class _BookstoreTopTabItem extends StatelessWidget {
   final bool isSelected;
   final VoidCallback? onTap;
 
+  static const double _selectedScale = 1.03;
+  static const double _unselectedScale = 0.98;
+
   @override
   Widget build(BuildContext context) {
     final colors = context.appColors;
+    final style =
+        (isSelected
+                ? AppTextStyles.tabActiveDark
+                : AppTextStyles.tabInactiveDark)
+            .copyWith(
+              color: isSelected ? colors.textPrimary : colors.textMuted,
+            );
 
     return GestureDetector(
       onTap: onTap,
       behavior: HitTestBehavior.opaque,
-      child: AppText(
-        tab.label,
-        style: (isSelected
-                ? AppTextStyles.tabActiveDark
-                : AppTextStyles.tabInactiveDark)
-            .copyWith(
-          color: isSelected ? colors.textPrimary : colors.textMuted,
+      child: AnimatedScale(
+        scale: isSelected ? _selectedScale : _unselectedScale,
+        duration: AppDurations.fast,
+        curve: Curves.easeOutCubic,
+        child: AnimatedDefaultTextStyle(
+          duration: AppDurations.fast,
+          curve: Curves.easeOutCubic,
+          style: style,
+          child: Text(tab.label),
         ),
       ),
     );

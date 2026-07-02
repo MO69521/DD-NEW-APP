@@ -6,6 +6,7 @@ import '../../../../core/theme/app_partner_colors.dart';
 import '../../../../core/theme/app_sizes.dart';
 import '../../../../routes/app_router.dart';
 import '../../../../routes/app_routes.dart';
+import '../../../../shared/components/app_swipe_tab_switcher.dart';
 import '../../../../shared/components/empty_state.dart';
 import '../../../../shared/widgets/app_button.dart';
 import '../../../../shared/components/app_blurred_chrome_bar.dart';
@@ -32,15 +33,12 @@ class PartnerPage extends StatelessWidget {
     return BlocBuilder<PartnerCubit, PartnerState>(
       buildWhen: (previous, current) =>
           previous.ui != current.ui ||
-          (previous.domain.content == null) !=
-              (current.domain.content == null),
+          (previous.domain.content == null) != (current.domain.content == null),
       builder: (context, state) {
         if (state.ui.isLoading) {
           return const _PartnerPageShell(
             body: Center(
-              child: CircularProgressIndicator(
-                color: AppPartnerColors.primary,
-              ),
+              child: CircularProgressIndicator(color: AppPartnerColors.primary),
             ),
           );
         }
@@ -60,9 +58,7 @@ class PartnerPage extends StatelessWidget {
 
         final content = state.domain.content;
         if (content == null) {
-          return const _PartnerPageShell(
-            body: EmptyState(title: '暂无数据'),
-          );
+          return const _PartnerPageShell(body: EmptyState(title: '暂无数据'));
         }
 
         return const _PartnerView();
@@ -79,10 +75,17 @@ class _PartnerView extends StatelessWidget {
     return BlocSelector<PartnerCubit, PartnerState, PartnerTopTab>(
       selector: (state) => state.interaction.topTab,
       builder: (context, topTab) {
-        if (topTab == PartnerTopTab.interaction) {
-          return const _PartnerInteractionView();
-        }
-        return const _PartnerScrollView();
+        final content = topTab == PartnerTopTab.interaction
+            ? const _PartnerInteractionView()
+            : const _PartnerScrollView();
+        return AppSwipeTabSwitcher(
+          selectedIndex: topTab.index,
+          tabCount: PartnerTopTab.values.length,
+          onIndexChanged: (index) => context.read<PartnerCubit>().switchTopTab(
+            PartnerTopTab.values[index],
+          ),
+          child: content,
+        );
       },
     );
   }
@@ -121,15 +124,15 @@ class _PartnerScrollView extends StatelessWidget {
               builder: (context, topTab) {
                 return switch (topTab) {
                   PartnerTopTab.message => PartnerMessageBody(
-                      onConversationTap: _onConversationTap,
-                    ),
+                    onConversationTap: _onConversationTap,
+                  ),
                   PartnerTopTab.explore => PartnerExploreBody(
-                      onCharacterTap: _onCharacterTap,
-                      onFilterTap: () => _openFilterSheet(context),
-                    ),
+                    onCharacterTap: _onCharacterTap,
+                    onFilterTap: () => _openFilterSheet(context),
+                  ),
                   PartnerTopTab.interaction => const SliverToBoxAdapter(
-                      child: SizedBox.shrink(),
-                    ),
+                    child: SizedBox.shrink(),
+                  ),
                 };
               },
             ),
@@ -197,8 +200,9 @@ class _PartnerInteractionHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final statusBarHeight = AppLayout.statusBarHeight(context);
-    final headerHeight =
-        AppSizes.partnerInteractionHeaderOverlayHeight(statusBarHeight);
+    final headerHeight = AppSizes.partnerInteractionHeaderOverlayHeight(
+      statusBarHeight,
+    );
     final cubit = context.read<PartnerCubit>();
 
     return AppBlurredChromeBar(
@@ -209,11 +213,15 @@ class _PartnerInteractionHeader extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             SizedBox(height: statusBarHeight),
-            BlocSelector<PartnerCubit, PartnerState, ({
-              PartnerTopTab topTab,
-              int messageUnreadCount,
-              int interactionUnreadCount,
-            })>(
+            BlocSelector<
+              PartnerCubit,
+              PartnerState,
+              ({
+                PartnerTopTab topTab,
+                int messageUnreadCount,
+                int interactionUnreadCount,
+              })
+            >(
               selector: (state) => (
                 topTab: state.interaction.topTab,
                 messageUnreadCount: state.domain.messageUnreadCount,
@@ -249,11 +257,15 @@ class _PartnerHeaderContent extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         SizedBox(height: statusBarHeight),
-        BlocSelector<PartnerCubit, PartnerState, ({
-          PartnerTopTab topTab,
-          int messageUnreadCount,
-          int interactionUnreadCount,
-        })>(
+        BlocSelector<
+          PartnerCubit,
+          PartnerState,
+          ({
+            PartnerTopTab topTab,
+            int messageUnreadCount,
+            int interactionUnreadCount,
+          })
+        >(
           selector: (state) => (
             topTab: state.interaction.topTab,
             messageUnreadCount: state.domain.messageUnreadCount,
@@ -275,10 +287,7 @@ class _PartnerHeaderContent extends StatelessWidget {
 }
 
 class _PartnerPageShell extends StatelessWidget {
-  const _PartnerPageShell({
-    required this.body,
-    this.showPageBackground = true,
-  });
+  const _PartnerPageShell({required this.body, this.showPageBackground = true});
 
   final Widget body;
   final bool showPageBackground;
@@ -288,20 +297,14 @@ class _PartnerPageShell extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppPartnerColors.pageBackgroundBottom,
       body: Stack(
-        children: [
-          if (showPageBackground) const PartnerPageBackground(),
-          body,
-        ],
+        children: [if (showPageBackground) const PartnerPageBackground(), body],
       ),
     );
   }
 }
 
 class _PartnerHeaderDelegate extends SliverPersistentHeaderDelegate {
-  _PartnerHeaderDelegate({
-    required this.height,
-    required this.child,
-  });
+  _PartnerHeaderDelegate({required this.height, required this.child});
 
   final double height;
   final Widget child;

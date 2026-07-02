@@ -88,6 +88,7 @@ class ProfileCubit extends Cubit<ProfileState> {
       case ProfileMenuAction.qqGroup:
         unawaited(_openQqGroup());
       case ProfileMenuAction.cardPack:
+        AppRouter.pushNamed(AppRoutes.cardPackName);
       case ProfileMenuAction.dressUp:
       case ProfileMenuAction.cardAlbum:
         break;

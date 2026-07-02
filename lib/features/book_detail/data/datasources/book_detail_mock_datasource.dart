@@ -1,3 +1,5 @@
+import '../../../../core/domain/entities/book.dart';
+import '../../../../core/domain/entities/book_cover_tag.dart';
 import '../../domain/entities/book_catalog_chapter.dart';
 import '../../domain/entities/book_detail.dart';
 import '../../domain/entities/book_discussion_filter.dart';
@@ -211,6 +213,9 @@ class BookDetailMockDataSource {
       ],
       catalogChapters: _mockCatalogChapters(),
       giftCount: '668',
+      listedAtText: '上架时间：2026年5月1日上架',
+      copyrightText:
+          '版权信息：本书的数字版权由点点穿书提供并授权发行，版权所有，侵权必究。如有任何疑问，请通过“我的-帮助与反馈”告知我们。',
       characters: const [
         BookCharacter(
           id: 'c1',
@@ -233,8 +238,79 @@ class BookDetailMockDataSource {
           coverAsset: 'assets/covers/cover_06.png',
         ),
       ],
+      authorOtherBooks: _authorOtherBooks,
+      recommendedBooks: _recommendedBooks,
     );
   }
+
+  static const List<Book> _authorOtherBooks = [
+    Book(
+      id: 'author_1',
+      title: '双男主：拐弯男神计划',
+      category: '纯爱 · 现代 · 豪门',
+      coverAsset: 'assets/covers/cover_06.png',
+      coverTag: BookCoverTag.completed,
+    ),
+    Book(
+      id: 'author_2',
+      title: '帝女风华 病娇饲养指南',
+      category: '女性向 · 古代 · 王权',
+      coverAsset: 'assets/covers/cover_05.png',
+      coverTag: BookCoverTag.completed,
+    ),
+    Book(
+      id: 'author_3',
+      title: '双男主：穿书之病娇反派都想宠我',
+      category: '纯爱 · 古代 · 仙侠',
+      coverAsset: 'assets/covers/cover_04.png',
+      coverTag: BookCoverTag.completed,
+    ),
+  ];
+
+  static const List<Book> _recommendedBooks = [
+    Book(
+      id: 'recommend_1',
+      title: '换嫁侯爷，疯批暴君缠我入骨',
+      category: '女性向 · 古代 · 宅斗',
+      coverAsset: 'assets/covers/cover_03.png',
+      coverTag: BookCoverTag.updated,
+    ),
+    Book(
+      id: 'recommend_2',
+      title: '强娶后，病娇私下跪地求亲亲',
+      category: '女性向 · 古代 · 宫斗',
+      coverAsset: 'assets/covers/cover_02.png',
+      coverTag: BookCoverTag.completed,
+    ),
+    Book(
+      id: 'recommend_3',
+      title: '双男主：穿书之病娇反派都想宠我',
+      category: '纯爱 · 古代 · 仙侠',
+      coverAsset: 'assets/covers/cover_04.png',
+      coverTag: BookCoverTag.completed,
+    ),
+    Book(
+      id: 'recommend_4',
+      title: '修仙人生模拟',
+      category: '全性向 · 古代 · 仙侠',
+      coverAsset: 'assets/covers/cover_01.png',
+      coverTag: BookCoverTag.completed,
+    ),
+    Book(
+      id: 'recommend_5',
+      title: '读心后，发现男人都想撩了我！',
+      category: '纯爱 · 古代 · 王权',
+      coverAsset: 'assets/covers/cover_06.png',
+      coverTag: BookCoverTag.completed,
+    ),
+    Book(
+      id: 'recommend_6',
+      title: '帝女风华 病娇饲养指南',
+      category: '女性向 · 古代 · 王权',
+      coverAsset: 'assets/covers/cover_05.png',
+      coverTag: BookCoverTag.completed,
+    ),
+  ];
 
   static List<BookCatalogChapter> _mockCatalogChapters() {
     const chapterNames = [

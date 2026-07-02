@@ -87,10 +87,14 @@ class MembershipPlanCard extends StatelessWidget {
                                   ),
                                 ),
                                 const SizedBox(width: AppSpacing.xxsHalf),
-                                AppText(
-                                  plan.priceText,
-                                  style: AppTextStyles.membershipPlanPrice
-                                      .copyWith(color: priceColor),
+                                Flexible(
+                                  child: AppText(
+                                    plan.priceText,
+                                    style: AppTextStyles.membershipPlanPrice
+                                        .copyWith(color: priceColor),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
                                 ),
                               ],
                             ),

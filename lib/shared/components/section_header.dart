@@ -13,12 +13,14 @@ class SectionHeader extends StatelessWidget {
     required this.title,
     this.titleStyle,
     this.actionLabel,
+    this.actionIconAsset = 'assets/icons/arrow_right.svg',
     this.onActionTap,
   });
 
   final String title;
   final TextStyle? titleStyle;
   final String? actionLabel;
+  final String actionIconAsset;
   final VoidCallback? onActionTap;
 
   @override
@@ -27,7 +29,8 @@ class SectionHeader extends StatelessWidget {
       children: [
         AppText(
           title,
-          style: titleStyle ??
+          style:
+              titleStyle ??
               AppTextStyles.sectionTitleDark.copyWith(
                 color: AppColors.textOnDark,
               ),
@@ -48,7 +51,7 @@ class SectionHeader extends StatelessWidget {
                 ),
                 const SizedBox(width: AppSpacing.xxs),
                 AppIcon(
-                  assetPath: 'assets/icons/arrow_right.svg',
+                  assetPath: actionIconAsset,
                   width: AppSpacing.sm,
                   height: AppSpacing.sm,
                   color: AppColors.sectionActionIcon,

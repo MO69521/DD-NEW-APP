@@ -1,21 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../core/domain/entities/book.dart';
 import '../../../../core/theme/app_layout.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../routes/app_router.dart';
-import '../../../../shared/components/app_top_bar.dart';
+import '../../../../routes/app_routes.dart';
 import '../../../../shared/components/empty_state.dart';
 import '../../../../shared/widgets/app_button.dart';
 import '../../../../shared/layouts/app_bottom_nav.dart';
 import '../../../../shared/components/app_blurred_chrome_bar.dart';
 import '../../../../shared/layouts/app_scroll_blur_scope.dart';
-import '../../domain/entities/ranking_channel.dart';
+import '../../../../shared/widgets/app_icon.dart';
+import '../../../../shared/widgets/app_text.dart';
+import '../../../../core/theme/app_text_styles.dart';
 import '../../application/ranking_cubit.dart';
 import '../../application/ranking_state.dart';
-import 'ranking_book_list.dart';
+import 'ranking_book_row.dart';
 import 'ranking_channel_segmented.dart';
 import 'ranking_dimension_rail.dart';
 import 'ranking_hero_banner.dart';
@@ -96,8 +99,7 @@ class _RankingTabStack extends StatefulWidget {
 
 class _RankingTabStackState extends State<_RankingTabStack> {
   late final ScrollController _scrollController;
-  bool _controlsPinned = false;
-  double _pinThreshold = 0;
+  double _scrollOffset = 0;
 
   @override
   void initState() {
@@ -115,24 +117,14 @@ class _RankingTabStackState extends State<_RankingTabStack> {
   }
 
   void _updatePinnedFromController() {
-    _updateControlsPinned(_scrollController.offset);
+    _updateScrollOffset(_scrollController.offset);
   }
 
-  void _updateControlsPinned(double scrollOffset) {
-    final nextPinned = scrollOffset >= _pinThreshold;
-    if (nextPinned != _controlsPinned && mounted) {
-      setState(() => _controlsPinned = nextPinned);
+  void _updateScrollOffset(double scrollOffset) {
+    if ((scrollOffset - _scrollOffset).abs() < AppSizes.hairline) return;
+    if (mounted) {
+      setState(() => _scrollOffset = scrollOffset);
     }
-  }
-
-  bool _onScrollNotification(ScrollNotification notification) {
-    if (notification.metrics.axis != Axis.vertical) return false;
-    final scrollOffset =
-        notification.metrics.pixels > notification.metrics.extentBefore
-        ? notification.metrics.pixels
-        : notification.metrics.extentBefore;
-    _updateControlsPinned(scrollOffset);
-    return false;
   }
 
   @override
@@ -161,14 +153,10 @@ class _RankingTabStackState extends State<_RankingTabStack> {
               : AppSizes.topBarHeight,
         );
         final fixedTop = topChromeHeight + AppSizes.rankingStickyControlsTopGap;
-        final headerTopInset = widget.embedded ? 0.0 : topChromeHeight;
-        final segmentedTop =
-            headerTopInset +
-            AppLayout.rankingScaledDesignY(
-              width,
-              AppSizes.rankingSegmentedFrameTop,
-            );
-        _pinThreshold = segmentedTop - topChromeHeight;
+        final segmentedTop = AppLayout.rankingScaledDesignY(
+          width,
+          AppSizes.rankingSegmentedFrameTop,
+        );
         final segmentedWidth = AppLayout.rankingScaledDesignX(
           width,
           AppSizes.rankingSegmentedDesignWidth,
@@ -184,89 +172,66 @@ class _RankingTabStackState extends State<_RankingTabStack> {
             fixedTop +
             AppSizes.rankingSegmentedHeight +
             AppSizes.rankingSegmentedToBodyGap;
+        final headerHeight =
+            segmentedTop +
+            AppSizes.rankingSegmentedHeight +
+            AppSizes.rankingSegmentedToBodyGap;
+        final floatingSegmentedTop = (segmentedTop - _scrollOffset)
+            .clamp(fixedTop, segmentedTop)
+            .toDouble();
+        final floatingRailTop = (headerHeight - _scrollOffset)
+            .clamp(pinnedRailTop, headerHeight)
+            .toDouble();
 
-        return NotificationListener<ScrollNotification>(
-          onNotification: _onScrollNotification,
-          child: ColoredBox(
-            color: AppColors.backgroundDark,
-            child: Stack(
-              children: [
-                NestedScrollView(
-                  controller: _scrollController,
-                  headerSliverBuilder: (context, innerBoxIsScrolled) => [
-                    SliverToBoxAdapter(
-                      child: _RankingScrollHeader(
-                        title: title,
-                        subtitle: dimension.subtitle,
-                        selectedChannel: channel,
-                        onChannelSelected: cubit.selectChannel,
-                        showSegmented: !_controlsPinned,
-                        topInset: headerTopInset,
-                      ),
-                    ),
-                  ],
-                  body: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Visibility(
-                        visible: !_controlsPinned,
-                        maintainSize: true,
-                        maintainState: true,
-                        maintainAnimation: true,
-                        child: RankingDimensionRail(
-                          selected: dimension,
-                          onSelected: cubit.selectDimension,
-                        ),
-                      ),
-                      const SizedBox(width: AppSpacing.md),
-                      Expanded(
-                        child: RankingBookList(
-                          books: books,
-                          bottomScrollPadding: bottomScrollPadding,
-                          onBookTap: AppRouter.goBookDetail,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                if (_controlsPinned) ...[
-                  Positioned(
-                    top: fixedTop,
-                    left: segmentedLeft,
-                    width: segmentedWidth,
-                    child: RankingChannelSegmented(
-                      selected: channel,
-                      onSelected: cubit.selectChannel,
+        return ColoredBox(
+          color: AppColors.backgroundDark,
+          child: Stack(
+            children: [
+              CustomScrollView(
+                controller: _scrollController,
+                physics: const BouncingScrollPhysics(),
+                slivers: [
+                  SliverToBoxAdapter(
+                    child: _RankingScrollHeader(
+                      title: title,
+                      subtitle: dimension.subtitle,
                     ),
                   ),
-                  Positioned(
-                    top: pinnedRailTop,
-                    left: 0,
-                    child: RankingDimensionRail(
-                      selected: dimension,
-                      onSelected: cubit.selectDimension,
-                    ),
+                  _RankingBookSliverList(
+                    books: books,
+                    bottomScrollPadding: bottomScrollPadding,
+                    onBookTap: AppRouter.goBookDetail,
                   ),
                 ],
-                if (!widget.embedded)
-                  Positioned(
-                    top: statusBar,
-                    left: 0,
-                    right: 0,
-                    child: AppBlurredChromeBar(
-                      enabled: widget.topBlurEnabled,
-                      child: AppTopBar(
-                        onBack: () => AppRouter.pop(),
-                        actions: [
-                          AppTopBarAction(
-                            iconAsset: 'assets/icons/ranking/share.svg',
-                          ),
-                        ],
-                      ),
-                    ),
+              ),
+              Positioned(
+                top: floatingSegmentedTop,
+                left: segmentedLeft,
+                width: segmentedWidth,
+                child: RankingChannelSegmented(
+                  selected: channel,
+                  onSelected: cubit.selectChannel,
+                ),
+              ),
+              Positioned(
+                top: floatingRailTop,
+                left: 0,
+                child: RankingDimensionRail(
+                  selected: dimension,
+                  onSelected: cubit.selectDimension,
+                ),
+              ),
+              if (!widget.embedded)
+                Positioned(
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  child: _RankingTopChrome(
+                    statusBarHeight: statusBar,
+                    blurEnabled: widget.topBlurEnabled,
                   ),
-              ],
-            ),
+                ),
+            ],
           ),
         );
       },
@@ -274,50 +239,114 @@ class _RankingTabStackState extends State<_RankingTabStack> {
   }
 }
 
+class _RankingBookSliverList extends StatelessWidget {
+  const _RankingBookSliverList({
+    required this.books,
+    required this.bottomScrollPadding,
+    required this.onBookTap,
+  });
+
+  final List<Book> books;
+  final double bottomScrollPadding;
+  final ValueChanged<Book> onBookTap;
+
+  @override
+  Widget build(BuildContext context) {
+    if (books.isEmpty) {
+      return const SliverFillRemaining(
+        hasScrollBody: false,
+        child: EmptyState(title: '暂无榜单内容'),
+      );
+    }
+
+    final safeBottom = MediaQuery.paddingOf(context).bottom;
+    final trailingPadding = bottomScrollPadding > 0
+        ? bottomScrollPadding
+        : AppSpacing.xl;
+
+    return SliverPadding(
+      padding: EdgeInsets.only(
+        top: AppSizes.rankingBookListTopPadding,
+        bottom: safeBottom + trailingPadding,
+      ),
+      sliver: SliverList.builder(
+        itemCount: books.length,
+        itemBuilder: (context, index) {
+          final book = books[index];
+          return Padding(
+            padding: const EdgeInsets.only(right: AppSpacing.md),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  width: AppSizes.rankingDimensionRailWidth + AppSpacing.md,
+                ),
+                Expanded(
+                  child: _RankingBookListItem(
+                    book: book,
+                    showDivider: index > 0,
+                    onTap: () => onBookTap(book),
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+class _RankingBookListItem extends StatelessWidget {
+  const _RankingBookListItem({
+    required this.book,
+    required this.showDivider,
+    required this.onTap,
+  });
+
+  final Book book;
+  final bool showDivider;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final row = RankingBookRow(book: book, onTap: onTap);
+    if (!showDivider) return row;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        const Divider(
+          height: AppSizes.hairline,
+          thickness: AppSizes.hairline,
+          color: AppColors.borderGlass,
+        ),
+        row,
+      ],
+    );
+  }
+}
+
 /// 可随列表滚动的头图 + 频道筛选区（Figma 1297:741）。
 class _RankingScrollHeader extends StatelessWidget {
-  const _RankingScrollHeader({
-    required this.title,
-    required this.subtitle,
-    required this.selectedChannel,
-    required this.onChannelSelected,
-    required this.showSegmented,
-    required this.topInset,
-  });
+  const _RankingScrollHeader({required this.title, required this.subtitle});
 
   final String title;
   final String subtitle;
-  final RankingChannel selectedChannel;
-  final ValueChanged<RankingChannel> onChannelSelected;
-  final bool showSegmented;
-  final double topInset;
 
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
         final width = constraints.maxWidth;
-        final segmentedTop =
-            topInset +
-            AppLayout.rankingScaledDesignY(
-              width,
-              AppSizes.rankingSegmentedFrameTop,
-            );
+        final segmentedTop = AppLayout.rankingScaledDesignY(
+          width,
+          AppSizes.rankingSegmentedFrameTop,
+        );
         final headerHeight =
             segmentedTop +
             AppSizes.rankingSegmentedHeight +
             AppSizes.rankingSegmentedToBodyGap;
-        final segmentedWidth = AppLayout.rankingScaledDesignX(
-          width,
-          AppSizes.rankingSegmentedDesignWidth,
-        );
-        final segmentedLeft =
-            width / 2 +
-            AppLayout.rankingScaledDesignX(
-              width,
-              AppSizes.rankingSegmentedCenterOffsetX,
-            ) -
-            segmentedWidth / 2;
 
         return SizedBox(
           height: headerHeight,
@@ -325,25 +354,106 @@ class _RankingScrollHeader extends StatelessWidget {
             clipBehavior: Clip.hardEdge,
             children: [
               Positioned(
-                top: topInset,
+                top: 0,
                 left: 0,
                 right: 0,
                 child: RankingHeroBanner(title: title, subtitle: subtitle),
               ),
-              if (showSegmented)
-                Positioned(
-                  top: segmentedTop,
-                  left: segmentedLeft,
-                  width: segmentedWidth,
-                  child: RankingChannelSegmented(
-                    selected: selectedChannel,
-                    onSelected: onChannelSelected,
-                  ),
-                ),
             ],
           ),
         );
       },
+    );
+  }
+}
+
+class _RankingTopChrome extends StatelessWidget {
+  const _RankingTopChrome({
+    required this.statusBarHeight,
+    required this.blurEnabled,
+  });
+
+  final double statusBarHeight;
+  final bool blurEnabled;
+
+  static const String _searchIconAsset = 'assets/icons/search.svg';
+
+  @override
+  Widget build(BuildContext context) {
+    return AppBlurredChromeBar(
+      enabled: blurEnabled,
+      child: Padding(
+        padding: EdgeInsets.only(top: statusBarHeight),
+        child: SizedBox(
+          height: AppSizes.bookstoreTopHeaderHeight,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm),
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                const _RankingTopTabs(),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: GestureDetector(
+                    onTap: () => AppRouter.pushNamed(AppRoutes.searchName),
+                    behavior: HitTestBehavior.opaque,
+                    child: const AppIcon(
+                      assetPath: _searchIconAsset,
+                      width: AppSizes.bookstoreSearchIconSize,
+                      height: AppSizes.bookstoreSearchIconSize,
+                      color: AppColors.textOnDarkMuted,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _RankingTopTabs extends StatelessWidget {
+  const _RankingTopTabs();
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: const [
+        _RankingTopTab(
+          label: '推荐',
+          style: AppTextStyles.tabInactiveDark,
+          route: AppRoutes.home,
+        ),
+        SizedBox(width: AppSpacing.md),
+        _RankingTopTab(
+          label: '分类',
+          style: AppTextStyles.tabInactiveDark,
+          route: AppRoutes.category,
+        ),
+        SizedBox(width: AppSpacing.md),
+        _RankingTopTab(label: '排行', style: AppTextStyles.tabActiveDark),
+      ],
+    );
+  }
+}
+
+class _RankingTopTab extends StatelessWidget {
+  const _RankingTopTab({required this.label, required this.style, this.route});
+
+  final String label;
+  final TextStyle style;
+  final String? route;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: route == null ? null : () => AppRouter.go(route!),
+      behavior: HitTestBehavior.opaque,
+      child: AppText(label, style: style),
     );
   }
 }

@@ -5,6 +5,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
+import '../../../../shared/widgets/app_asset_image.dart';
 import '../../../../shared/widgets/app_selection_mark.dart';
 import '../../../../shared/widgets/app_text.dart';
 import 'currency_wallet_section_card.dart';
@@ -86,22 +87,15 @@ class _PaymentLogo extends StatelessWidget {
 
   final PaymentMethod method;
 
+  static const String _wechatAsset = 'assets/icons/payment/wechat_pay.png';
+  static const String _alipayAsset = 'assets/icons/payment/alipay.png';
+
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return AppAssetImage(
+      assetPath: method == PaymentMethod.wechat ? _wechatAsset : _alipayAsset,
       width: AppSizes.welfareRechargeInfoIconSize,
       height: AppSizes.welfareRechargeInfoIconSize,
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-        color: method == PaymentMethod.wechat
-            ? AppColors.success
-            : AppColors.primaryLight,
-        shape: BoxShape.circle,
-      ),
-      child: AppText(
-        method == PaymentMethod.wechat ? '微' : '支',
-        style: AppTextStyles.captionMd.copyWith(color: AppColors.textOnDark),
-      ),
     );
   }
 }

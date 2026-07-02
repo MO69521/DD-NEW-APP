@@ -40,6 +40,9 @@ abstract final class AppRoutes {
   static const String myMessages = '/my-messages';
   static const String myMessagesName = 'myMessages';
 
+  static const String cardPack = '/card-pack';
+  static const String cardPackName = 'cardPack';
+
   static const String helpFeedback = '/help-feedback';
   static const String helpFeedbackName = 'helpFeedback';
   static const String helpFeedbackFaqDetail = '/help-feedback/faq-detail';
@@ -47,4 +50,14 @@ abstract final class AppRoutes {
 
   static const String settings = '/settings';
   static const String settingsName = 'settings';
+  static const String notificationSettings = '/settings/notifications';
+  static const String notificationSettingsName = 'notificationSettings';
+  static const String personalizedAds = '/settings/personalized-ads';
+  static const String personalizedAdsName = 'personalizedAds';
+  static const String readingPreferences = '/settings/reading-preferences';
+  static const String readingPreferencesName = 'readingPreferences';
+  static const String teenMode = '/settings/teen-mode';
+  static const String teenModeName = 'teenMode';
+  static const String settingsDocument = '/settings/document/:type';
+  static const String settingsDocumentName = 'settingsDocument';
 }

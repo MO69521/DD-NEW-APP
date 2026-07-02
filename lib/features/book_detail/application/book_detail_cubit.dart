@@ -167,6 +167,21 @@ class BookDetailCubit extends Cubit<BookDetailState> {
     );
   }
 
+  void refreshRecommendations() {
+    final detail = state.domain.detail;
+    final books = detail?.recommendedBooks;
+    if (detail == null || books == null || books.length < 2) return;
+
+    final nextBooks = [...books.skip(1), books.first];
+    emit(
+      state.copyWith(
+        domain: state.domain.copyWith(
+          detail: detail.copyWith(recommendedBooks: nextBooks),
+        ),
+      ),
+    );
+  }
+
   BookDiscussionPost _toggleLikeForPost(
     BookDiscussionPost post,
     String postId,

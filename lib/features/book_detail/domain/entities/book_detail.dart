@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 
+import '../../../../core/domain/entities/book.dart';
 import 'book_catalog_chapter.dart';
 import 'book_discussion_post.dart';
 import 'book_update_entry.dart';
@@ -42,6 +43,10 @@ class BookDetail extends Equatable {
     required this.catalogChapters,
     required this.giftCount,
     required this.characters,
+    required this.listedAtText,
+    required this.copyrightText,
+    this.authorOtherBooks = const [],
+    this.recommendedBooks = const [],
   });
 
   final String id;
@@ -73,6 +78,10 @@ class BookDetail extends Equatable {
   final String giftCount;
 
   final List<BookCharacter> characters;
+  final String listedAtText;
+  final String copyrightText;
+  final List<Book> authorOtherBooks;
+  final List<Book> recommendedBooks;
 
   BookDetail copyWith({
     String? title,
@@ -80,6 +89,10 @@ class BookDetail extends Equatable {
     List<BookDiscussionPost>? discussionPosts,
     List<BookUpdateEntry>? updateEntries,
     List<BookCatalogChapter>? catalogChapters,
+    List<Book>? authorOtherBooks,
+    List<Book>? recommendedBooks,
+    String? listedAtText,
+    String? copyrightText,
   }) {
     return BookDetail(
       id: id,
@@ -96,9 +109,13 @@ class BookDetail extends Equatable {
       discussionCount: discussionCount,
       discussionPosts: discussionPosts ?? this.discussionPosts,
       updateEntries: updateEntries ?? this.updateEntries,
-      catalogChapters: this.catalogChapters,
+      catalogChapters: catalogChapters ?? this.catalogChapters,
       giftCount: giftCount,
       characters: characters,
+      listedAtText: listedAtText ?? this.listedAtText,
+      copyrightText: copyrightText ?? this.copyrightText,
+      authorOtherBooks: authorOtherBooks ?? this.authorOtherBooks,
+      recommendedBooks: recommendedBooks ?? this.recommendedBooks,
     );
   }
 
@@ -121,5 +138,9 @@ class BookDetail extends Equatable {
     catalogChapters,
     giftCount,
     characters,
+    listedAtText,
+    copyrightText,
+    authorOtherBooks,
+    recommendedBooks,
   ];
 }

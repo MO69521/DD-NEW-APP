@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
-import '../../../../core/theme/app_theme_context.dart';
 import '../../../../shared/widgets/app_icon.dart';
 import '../../domain/entities/bookstore_top_tab.dart';
 import 'bookstore_top_tabs.dart';
@@ -47,33 +47,21 @@ class BookstorePageHeader extends StatelessWidget {
   }
 }
 
-class _SearchIconButton extends StatefulWidget {
+class _SearchIconButton extends StatelessWidget {
   const _SearchIconButton({this.onTap});
 
   final VoidCallback? onTap;
 
   @override
-  State<_SearchIconButton> createState() => _SearchIconButtonState();
-}
-
-class _SearchIconButtonState extends State<_SearchIconButton> {
-  bool _pressed = false;
-
-  @override
   Widget build(BuildContext context) {
-    final colors = context.appColors;
-
     return GestureDetector(
-      onTapDown: (_) => setState(() => _pressed = true),
-      onTapUp: (_) => setState(() => _pressed = false),
-      onTapCancel: () => setState(() => _pressed = false),
-      onTap: widget.onTap,
+      onTap: onTap,
       behavior: HitTestBehavior.opaque,
       child: AppIcon(
         assetPath: BookstorePageHeader.searchIconAsset,
         width: AppSizes.bookstoreSearchIconSize,
         height: AppSizes.bookstoreSearchIconSize,
-        color: _pressed ? colors.accent : colors.textMuted,
+        color: AppColors.textOnDark,
       ),
     );
   }

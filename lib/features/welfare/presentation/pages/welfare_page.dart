@@ -8,6 +8,7 @@ import '../../../../routes/app_router.dart';
 import '../../../../routes/app_routes.dart';
 import '../../../../shared/components/currency_balance_bar.dart';
 import '../../../../shared/components/empty_state.dart';
+import '../../../../shared/components/app_blurred_dialog.dart';
 import '../../../../shared/components/recharge_packages_section.dart';
 import '../../../../shared/components/vip_promo_banner.dart';
 import '../../../../shared/layouts/app_bottom_nav.dart';
@@ -21,6 +22,7 @@ import '../../domain/entities/welfare_page_content.dart';
 import '../components/daily_check_in_section.dart';
 import '../components/meal_check_in_section.dart';
 import '../components/reading_vip_progress_section.dart';
+import '../components/welfare_rules_dialog.dart';
 import '../components/welfare_task_list_section.dart';
 import '../components/welfare_page_header.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -112,7 +114,12 @@ class _WelfareView extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   SizedBox(height: statusBarHeight),
-                  const WelfarePageHeader(),
+                  WelfarePageHeader(
+                    onRechargeInfoTap: () => showAppBlurredDialog<void>(
+                      context: context,
+                      builder: (_) => const WelfareRulesDialog(),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -141,11 +148,18 @@ class _WelfareView extends StatelessWidget {
                 const SizedBox(height: AppSpacing.sm),
                 DailyCheckInSection(summary: content.checkInSummary),
                 const SizedBox(height: AppSpacing.sm),
-                MealCheckInSection(summary: content.mealCheckInSummary),
+                MealCheckInSection(
+                  summary: content.mealCheckInSummary,
+                  onVipClaimTap: () =>
+                      AppRouter.pushNamed(AppRoutes.membershipName),
+                ),
                 const SizedBox(height: AppSpacing.sm),
                 ReadingVipProgressSection(task: content.featuredReadingReward),
                 const SizedBox(height: AppSpacing.sm),
-                WelfareTaskListSection(summary: content.taskListSummary),
+                WelfareTaskListSection(
+                  summary: content.taskListSummary,
+                  onVipTap: () => AppRouter.pushNamed(AppRoutes.membershipName),
+                ),
                 const SizedBox(height: WelfarePage._bottomNavReserve),
               ]),
             ),

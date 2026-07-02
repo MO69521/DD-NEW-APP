@@ -542,7 +542,7 @@ abstract final class AppTextStyles {
     fontSize: 15,
     fontWeight: FontWeight.w400,
     color: AppColors.textOnDarkPlaceholder,
-    height: 1.75,
+    height: 1.9,
   );
 
   static const TextStyle bookDetailCatalogMeta = TextStyle(

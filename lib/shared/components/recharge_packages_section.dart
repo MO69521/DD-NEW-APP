@@ -189,6 +189,7 @@ class _RechargePackageCard extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(AppSpacing.xs),
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   SizedBox(
                     height: AppSizes.welfareRechargeIllustrationHeight,
@@ -202,7 +203,6 @@ class _RechargePackageCard extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const SizedBox(height: AppSpacing.xs),
                   Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -217,7 +217,6 @@ class _RechargePackageCard extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(height: AppSpacing.xs),
                   _RechargePriceButton(
                     priceYuan: package.priceYuan,
                     onTap: onPriceTap,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_radius.dart';
+import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../shared/widgets/app_icon.dart';
@@ -23,9 +24,7 @@ class SettingsMenuSection extends StatelessWidget {
         color: AppColors.surfaceCard,
         borderRadius: BorderRadius.circular(AppRadius.lg),
       ),
-      child: Column(
-        children: _buildRowsWithDividers(),
-      ),
+      child: Column(children: _buildRowsWithDividers()),
     );
   }
 
@@ -62,8 +61,7 @@ class SettingsMenuRow extends StatelessWidget {
   final SettingsMenuItem item;
   final VoidCallback? onTap;
 
-  bool get _hasSubtitle =>
-      item.subtitle != null && item.subtitle!.isNotEmpty;
+  bool get _hasSubtitle => item.subtitle != null && item.subtitle!.isNotEmpty;
 
   @override
   Widget build(BuildContext context) {
@@ -72,52 +70,54 @@ class SettingsMenuRow extends StatelessWidget {
       child: InkWell(
         onTap: onTap,
         child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: AppSpacing.md,
-            vertical: AppSpacing.sm,
-          ),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    AppText(
-                      item.label,
-                      style: AppTextStyles.bodyMedium.copyWith(
-                        color: AppColors.textOnDark,
-                      ),
-                    ),
-                    if (_hasSubtitle) ...[
-                      const SizedBox(height: AppSpacing.xxs),
+          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(
+              minHeight: AppSizes.settingsMenuRowMinHeight,
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
                       AppText(
-                        item.subtitle!,
-                        style: AppTextStyles.captionMdDarkMuted,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
+                        item.label,
+                        style: AppTextStyles.bodyMedium.copyWith(
+                          color: AppColors.textOnDark,
+                        ),
                       ),
+                      if (_hasSubtitle) ...[
+                        const SizedBox(height: AppSpacing.xxs),
+                        AppText(
+                          item.subtitle!,
+                          style: AppTextStyles.captionMdDarkMuted,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
                     ],
-                  ],
-                ),
-              ),
-              if (item.trailingText != null) ...[
-                AppText(
-                  item.trailingText!,
-                  style: AppTextStyles.bodyMedium.copyWith(
-                    color: AppColors.textOnDarkMuted,
                   ),
                 ),
-                const SizedBox(width: AppSpacing.xxs),
+                if (item.trailingText != null) ...[
+                  AppText(
+                    item.trailingText!,
+                    style: AppTextStyles.bodyMedium.copyWith(
+                      color: AppColors.textOnDarkMuted,
+                    ),
+                  ),
+                  const SizedBox(width: AppSpacing.xxs),
+                ],
+                const AppIcon(
+                  assetPath: 'assets/icons/arrow_right.svg',
+                  width: AppSpacing.sm,
+                  height: AppSpacing.sm,
+                  color: AppColors.textOnDarkPlaceholder,
+                ),
               ],
-              const AppIcon(
-                assetPath: 'assets/icons/arrow_right.svg',
-                width: AppSpacing.sm,
-                height: AppSpacing.sm,
-                color: AppColors.textOnDarkPlaceholder,
-              ),
-            ],
+            ),
           ),
         ),
       ),

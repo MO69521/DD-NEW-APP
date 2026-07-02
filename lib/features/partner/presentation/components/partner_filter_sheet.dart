@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
+import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_partner_colors.dart';
 import '../../../../core/theme/app_radius.dart';
 import '../../../../core/theme/app_sizes.dart';
@@ -58,7 +59,7 @@ class PartnerFilterSheet extends StatelessWidget {
         ),
         child: DecoratedBox(
           decoration: const BoxDecoration(
-            color: AppPartnerColors.surfaceGlass,
+            color: AppColors.dialogBackground,
             border: Border(
               top: BorderSide(color: AppPartnerColors.borderGlass),
             ),

@@ -15,13 +15,13 @@ class SettingsCubit extends Cubit<SettingsState> {
           repository ?? const SettingsRepositoryImpl(SettingsMockDataSource()),
       super(const SettingsState());
 
+  static const String _mockLatestVersion = '3.9.6.7';
+
   final SettingsRepository _repository;
 
   Future<void> load() async {
     emit(
-      state.copyWith(
-        ui: state.ui.copyWith(isLoading: true, clearError: true),
-      ),
+      state.copyWith(ui: state.ui.copyWith(isLoading: true, clearError: true)),
     );
 
     try {
@@ -49,14 +49,30 @@ class SettingsCubit extends Cubit<SettingsState> {
       case SettingsMenuAction.accountSettings:
         AppRouter.pushNamed(AppRoutes.accountSettingsName);
       case SettingsMenuAction.notifications:
+        AppRouter.pushNamed(AppRoutes.notificationSettingsName);
       case SettingsMenuAction.personalizedAds:
+        AppRouter.pushNamed(AppRoutes.personalizedAdsName);
       case SettingsMenuAction.readingPreferences:
+        AppRouter.pushNamed(AppRoutes.readingPreferencesName);
       case SettingsMenuAction.teenMode:
+        AppRouter.pushNamed(AppRoutes.teenModeName);
       case SettingsMenuAction.userAgreement:
+        AppRouter.pushNamed(
+          AppRoutes.settingsDocumentName,
+          pathParameters: {'type': 'user-agreement'},
+        );
       case SettingsMenuAction.privacyPolicy:
+        AppRouter.pushNamed(
+          AppRoutes.settingsDocumentName,
+          pathParameters: {'type': 'privacy-policy'},
+        );
       case SettingsMenuAction.thirdPartySharing:
+        AppRouter.pushNamed(
+          AppRoutes.settingsDocumentName,
+          pathParameters: {'type': 'third-party-sharing'},
+        );
       case SettingsMenuAction.versionUpdate:
-        _emitActionMessage('${_actionLabel(action)}功能即将上线');
+        _checkVersionUpdate();
     }
   }
 
@@ -75,6 +91,22 @@ class SettingsCubit extends Cubit<SettingsState> {
 
   void _emitActionMessage(String message) {
     emit(state.copyWith(ui: state.ui.copyWith(actionMessage: message)));
+  }
+
+  Future<void> _checkVersionUpdate() async {
+    final currentVersion = state.domain.content?.appVersion;
+    final isLatest = await _isLatestVersion(currentVersion);
+    if (isLatest) {
+      _emitActionMessage('已是最新版本');
+      return;
+    }
+
+    _emitActionMessage('发现新版本');
+  }
+
+  Future<bool> _isLatestVersion(String? currentVersion) async {
+    // Phase 1 使用 mock 版本号，后续接入应用商店/API 后替换这里的来源。
+    return currentVersion == _mockLatestVersion;
   }
 
   String _actionLabel(SettingsMenuAction action) {

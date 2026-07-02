@@ -48,6 +48,9 @@ abstract final class AppRadius {
   static const double membershipPlanCard = 10;
   static const double membershipCta = 26;
 
+  // 设置页
+  static const double settingsLogo = 24;
+
   // 伙伴页 / 探索
   static const double partnerCategoryChip = sm;
   static const double partnerCharacterCard = md;

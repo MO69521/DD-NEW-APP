@@ -81,7 +81,7 @@ class _EnergyRechargePurchaseDialogState
       insetPadding: const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
       child: Container(
         decoration: BoxDecoration(
-          color: AppColors.backgroundDark,
+          color: AppColors.dialogBackground,
           borderRadius: BorderRadius.circular(AppRadius.xl),
           border: Border.all(color: AppColors.borderGlass),
         ),
@@ -293,31 +293,21 @@ class _PaymentLogo extends StatelessWidget {
 
   final PaymentMethod method;
 
+  static const String _wechatAsset = 'assets/icons/payment/wechat_pay.png';
+  static const String _alipayAsset = 'assets/icons/payment/alipay.png';
+
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return AppAssetImage(
+      assetPath: method == PaymentMethod.wechat ? _wechatAsset : _alipayAsset,
       width: AppSizes.welfareRechargeInfoIconSize,
       height: AppSizes.welfareRechargeInfoIconSize,
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-        color: method == PaymentMethod.wechat
-            ? AppColors.success
-            : AppColors.primaryLight,
-        shape: BoxShape.circle,
-      ),
-      child: AppText(
-        method == PaymentMethod.wechat ? '微' : '支',
-        style: AppTextStyles.captionMd.copyWith(color: AppColors.textOnDark),
-      ),
     );
   }
 }
 
 class _AgreementFooter extends StatelessWidget {
-  const _AgreementFooter({
-    required this.agreementTitle,
-    this.onAgreementTap,
-  });
+  const _AgreementFooter({required this.agreementTitle, this.onAgreementTap});
 
   final String agreementTitle;
   final VoidCallback? onAgreementTap;

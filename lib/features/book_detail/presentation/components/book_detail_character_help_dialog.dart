@@ -59,7 +59,7 @@ class BookDetailCharacterHelpDialog extends StatelessWidget {
               child: Container(
                 padding: const EdgeInsets.all(AppSpacing.lg),
                 decoration: BoxDecoration(
-                  color: AppColors.backgroundDark,
+                  color: AppColors.dialogBackground,
                   borderRadius: BorderRadius.circular(AppRadius.xl),
                   border: Border.all(
                     color: AppColors.borderGlass,

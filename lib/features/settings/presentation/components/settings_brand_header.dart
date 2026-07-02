@@ -22,7 +22,7 @@ class SettingsBrandHeader extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         ClipRRect(
-          borderRadius: BorderRadius.circular(AppRadius.xl),
+          borderRadius: BorderRadius.circular(AppRadius.settingsLogo),
           child: Image.asset(
             _logoAssetPath,
             width: AppSizes.settingsLogoSize,

@@ -8,13 +8,13 @@ import 'app_blurred_chrome_bar.dart';
 import '../widgets/app_icon.dart';
 import '../widgets/app_text.dart';
 
-/// 顶栏右侧动作（圆形图标按钮）配置。
+/// 顶栏右侧动作（图标按钮）配置。
 class AppTopBarAction {
   const AppTopBarAction({
     this.iconAsset,
     this.label,
     this.onTap,
-    this.iconSize = AppSizes.topBarActionIconSize,
+    this.iconSize = AppSizes.topBarActionIconDisplaySize,
   }) : assert(
          iconAsset != null || label != null,
          'Either iconAsset or label must be provided',
@@ -74,11 +74,17 @@ class AppTopBar extends StatelessWidget {
             children: [
               if (title != null)
                 Center(
-                  child: AppText(
-                    title!,
-                    style: AppTextStyles.sectionTitleDark,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(
+                      maxWidth: AppSizes.topBarTitleMaxWidth,
+                    ),
+                    child: AppText(
+                      title!,
+                      style: AppTextStyles.sectionTitleDark,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.center,
+                    ),
                   ),
                 ),
               if (onBack != null)
@@ -105,15 +111,7 @@ class AppTopBar extends StatelessWidget {
                         if (action.label != null)
                           _TextButton(action: action)
                         else
-                          _CircleButton(
-                            onTap: action.onTap,
-                            child: AppIcon(
-                              assetPath: action.iconAsset!,
-                              width: action.iconSize,
-                              height: action.iconSize,
-                              color: AppColors.textOnDark,
-                            ),
-                          ),
+                          _ActionIconButton(action: action),
                       ],
                     ],
                   ),
@@ -147,6 +145,33 @@ class _TextButton extends StatelessWidget {
           action.label!,
           style: AppTextStyles.bodyMediumDark,
           maxLines: 1,
+        ),
+      ),
+    );
+  }
+}
+
+/// 右上角动作图标：无圆形底色，图标按原始设计尺寸展示，保留统一点击热区。
+class _ActionIconButton extends StatelessWidget {
+  const _ActionIconButton({required this.action});
+
+  final AppTopBarAction action;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: action.onTap,
+      behavior: HitTestBehavior.opaque,
+      child: SizedBox(
+        width: AppSizes.topBarCircleSize,
+        height: AppSizes.topBarCircleSize,
+        child: Center(
+          child: AppIcon(
+            assetPath: action.iconAsset!,
+            width: action.iconSize,
+            height: action.iconSize,
+            color: AppColors.textOnDark,
+          ),
         ),
       ),
     );

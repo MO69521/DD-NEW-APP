@@ -6,6 +6,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../routes/app_router.dart';
+import '../../../../shared/components/app_toast.dart';
 import '../../../../shared/components/app_top_bar.dart';
 import '../../../../shared/components/empty_state.dart';
 import '../../../../shared/widgets/app_button.dart';
@@ -29,9 +30,7 @@ class SettingsPage extends StatelessWidget {
       listener: (context, state) {
         final message = state.ui.actionMessage;
         if (message == null) return;
-        ScaffoldMessenger.of(context)
-          ..hideCurrentSnackBar()
-          ..showSnackBar(SnackBar(content: Text(message)));
+        AppToast.show(context, message);
         context.read<SettingsCubit>().consumeActionMessage();
       },
       builder: (context, state) {
@@ -96,42 +95,42 @@ class _SettingsView extends StatelessWidget {
             AppSpacing.xl,
           ),
           children: [
-                SettingsBrandHeader(appVersion: content.appVersion),
-                const SizedBox(height: AppSpacing.lg),
-                SettingsMenuSection(
-                  items: content.menuItems,
-                  onItemTap: cubit.onMenuItemTap,
-                ),
-                const SizedBox(height: AppSpacing.xl),
-                AppButton(
-                  label: '退出登录',
-                  variant: AppButtonVariant.outline,
-                  isExpanded: true,
-                  onPressed: cubit.onLogoutTap,
-                ),
-                const SizedBox(height: AppSpacing.md),
-                Center(
-                  child: GestureDetector(
-                    onTap: cubit.onDeleteAccountTap,
-                    behavior: HitTestBehavior.opaque,
-                    child: AppText(
-                      '不想用了？注销账号',
-                      style: AppTextStyles.bodyMedium.copyWith(
-                        color: AppColors.textOnDarkMuted,
-                      ),
-                    ),
+            SettingsBrandHeader(appVersion: content.appVersion),
+            const SizedBox(height: AppSpacing.lg),
+            SettingsMenuSection(
+              items: content.menuItems,
+              onItemTap: cubit.onMenuItemTap,
+            ),
+            const SizedBox(height: AppSpacing.xl),
+            AppButton(
+              label: '退出登录',
+              variant: AppButtonVariant.subtle,
+              isExpanded: true,
+              onPressed: cubit.onLogoutTap,
+            ),
+            const SizedBox(height: AppSpacing.md),
+            Center(
+              child: GestureDetector(
+                onTap: cubit.onDeleteAccountTap,
+                behavior: HitTestBehavior.opaque,
+                child: AppText(
+                  '不想用了？注销账号',
+                  style: AppTextStyles.bodyMedium.copyWith(
+                    color: AppColors.textOnDarkMuted,
                   ),
                 ),
-                const SizedBox(height: AppSpacing.xl),
-                Center(
-                  child: AppText(
-                    content.icpRecord,
-                    style: AppTextStyles.captionMdDarkMuted.copyWith(
-                      color: AppColors.textOnDarkPlaceholder,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
+              ),
+            ),
+            const SizedBox(height: AppSpacing.xl),
+            Center(
+              child: AppText(
+                content.icpRecord,
+                style: AppTextStyles.captionMdDarkMuted.copyWith(
+                  color: AppColors.textOnDarkPlaceholder,
                 ),
+                textAlign: TextAlign.center,
+              ),
+            ),
           ],
         ),
       ),

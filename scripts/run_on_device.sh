@@ -21,7 +21,15 @@ mkdir -p "$IOS_BUILD_LINK"
 ln -s "$IOS_BUILD_LINK" build/ios
 
 pick_device() {
-  flutter devices 2>/dev/null | rg -v "simulator|macos|chrome|Found|Checking|wireless|Run \"|If you expected|Visit http" | rg "•" | head -1 || true
+  flutter devices 2>/dev/null | awk '
+    /•/ &&
+    $0 !~ /simulator/ &&
+    $0 !~ /macos/ &&
+    $0 !~ /chrome/ {
+      print
+      exit
+    }
+  ' || true
 }
 
 wait_for_device() {

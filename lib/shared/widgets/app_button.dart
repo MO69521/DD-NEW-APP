@@ -17,6 +17,9 @@ enum AppButtonVariant {
   /// 暗色次操作（玻璃面板）。
   secondary,
 
+  /// 暗色弱强调面按钮（4% 白底，无描边）。
+  subtle,
+
   /// 描边按钮（透明底 + 细边框）。
   outline,
 }
@@ -46,26 +49,27 @@ class AppButton extends StatelessWidget {
   final Widget? leadingIcon;
 
   Color get _backgroundColor => switch (variant) {
-        AppButtonVariant.primary => AppColors.primary,
-        AppButtonVariant.accent => AppColors.accentYellow,
-        AppButtonVariant.secondary => AppColors.surfaceCard,
-        AppButtonVariant.outline => Colors.transparent,
-      };
+    AppButtonVariant.primary => AppColors.primary,
+    AppButtonVariant.accent => AppColors.accentYellow,
+    AppButtonVariant.secondary => AppColors.surfaceCard,
+    AppButtonVariant.subtle => AppColors.surfaceCard,
+    AppButtonVariant.outline => Colors.transparent,
+  };
 
   Color get _foregroundColor => switch (variant) {
-        AppButtonVariant.primary => AppColors.textOnPrimary,
-        AppButtonVariant.accent => AppColors.rankingSegmentedSelectedText,
-        AppButtonVariant.secondary => AppColors.textOnDark,
-        AppButtonVariant.outline => AppColors.textOnDark,
-      };
+    AppButtonVariant.primary => AppColors.textOnPrimary,
+    AppButtonVariant.accent => AppColors.rankingSegmentedSelectedText,
+    AppButtonVariant.secondary => AppColors.textOnDark,
+    AppButtonVariant.subtle => AppColors.textOnDark,
+    AppButtonVariant.outline => AppColors.textOnDark,
+  };
 
   bool get _hasBorder =>
       variant == AppButtonVariant.secondary ||
       variant == AppButtonVariant.outline;
 
-  double get _radius => variant == AppButtonVariant.primary
-      ? AppRadius.md
-      : AppRadius.full;
+  double get _radius =>
+      variant == AppButtonVariant.primary ? AppRadius.md : AppRadius.full;
 
   EdgeInsets get _padding => size == AppButtonSize.normal
       ? const EdgeInsets.symmetric(

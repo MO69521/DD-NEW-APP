@@ -85,9 +85,8 @@ class _FigmaMaskedHeroImage extends StatelessWidget {
             width: double.infinity,
             height: double.infinity,
             gaplessPlayback: true,
-            errorBuilder: (context, error, stackTrace) => const ColoredBox(
-              color: AppColors.backgroundDark,
-            ),
+            errorBuilder: (context, error, stackTrace) =>
+                const ColoredBox(color: AppColors.backgroundDark),
           ),
         ),
         const Positioned.fill(child: _HeroImageScrim()),
@@ -110,6 +109,7 @@ class _HeroImageScrim extends StatelessWidget {
           colors: [
             AppColors.gradientFadeStart,
             AppColors.gradientFadeMid,
+            AppColors.backgroundDark,
             AppColors.backgroundDark,
           ],
           stops: AppSizes.rankingHeroImageScrimStops,

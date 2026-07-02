@@ -158,14 +158,18 @@ class _StardustOptionBadge extends StatelessWidget {
         fit: StackFit.expand,
         children: [
           const AppAssetImage(assetPath: _assetPath, fit: BoxFit.fill),
-          Padding(
-            padding: const EdgeInsets.only(left: AppSpacing.sm),
+          Positioned(
+            left: AppSpacing.xs,
+            right: AppSpacing.xxs,
+            top: AppSpacing.xxsHalf,
+            bottom: AppSpacing.xxsHalf,
             child: Center(
               child: FittedBox(
                 fit: BoxFit.scaleDown,
                 child: AppText(
                   label,
                   style: AppTextStyles.welfareHotSaleBadge,
+                  textAlign: TextAlign.center,
                   maxLines: 1,
                   overflow: TextOverflow.visible,
                 ),

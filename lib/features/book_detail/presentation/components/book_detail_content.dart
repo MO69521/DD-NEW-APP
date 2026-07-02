@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_radius.dart';
 import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
+import '../../../../core/theme/app_text_styles.dart';
+import '../../../../routes/app_router.dart';
+import '../../../../shared/components/app_swipe_tab_switcher.dart';
+import '../../../../shared/widgets/app_text.dart';
 import '../../domain/entities/book_detail.dart';
 import '../../domain/entities/book_detail_tab.dart';
 import '../../domain/entities/book_discussion_filter.dart';
@@ -10,8 +16,7 @@ import 'book_detail_catalog_entry.dart';
 import 'book_detail_character_section.dart';
 import 'book_detail_discussion_section.dart';
 import 'book_detail_intro.dart';
-import 'book_detail_placeholder_view.dart';
-import 'book_detail_stats_bar.dart';
+import 'book_detail_recommendation_section.dart';
 import 'book_detail_summary_card.dart';
 import 'book_detail_tab_switcher.dart';
 import 'book_detail_update_section.dart';
@@ -30,6 +35,7 @@ class BookDetailContent extends StatelessWidget {
     required this.onDiscussionPostBodyTap,
     required this.onCatalogTap,
     required this.onCharacterFavTap,
+    required this.onRecommendationRefreshTap,
   });
 
   final BookDetail detail;
@@ -42,6 +48,7 @@ class BookDetailContent extends StatelessWidget {
   final ValueChanged<BookDiscussionPost> onDiscussionPostBodyTap;
   final VoidCallback onCatalogTap;
   final ValueChanged<String> onCharacterFavTap;
+  final VoidCallback onRecommendationRefreshTap;
 
   @override
   Widget build(BuildContext context) {
@@ -49,12 +56,6 @@ class BookDetailContent extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         BookDetailSummaryCard(detail: detail),
-        const SizedBox(height: AppSpacing.sm),
-        BookDetailStatsBar(
-          shelfCount: detail.shelfCount,
-          popularity: detail.popularity,
-          wordCount: detail.wordCount,
-        ),
         const SizedBox(height: AppSizes.bookDetailSectionGap),
         BookDetailTabSwitcher(
           selectedTab: selectedTab,
@@ -62,28 +63,37 @@ class BookDetailContent extends StatelessWidget {
           discussionCount: detail.discussionCount,
         ),
         const SizedBox(height: AppSizes.bookDetailSectionGap),
-        if (selectedTab == BookDetailTab.detail)
-          _DetailTabBody(
-            detail: detail,
-            onCatalogTap: onCatalogTap,
-            onCharacterFavTap: onCharacterFavTap,
-          )
-        else if (selectedTab == BookDetailTab.discussion)
-          BookDetailDiscussionSection(
-            selectedFilter: selectedDiscussionFilter,
-            posts: detail.discussionPosts,
-            onFilterSelected: onDiscussionFilterSelected,
-            onPostTap: onDiscussionPostTap,
-            onPostLikeTap: onDiscussionPostLikeTap,
-            onPostBodyTap: onDiscussionPostBodyTap,
-          )
-        else if (selectedTab == BookDetailTab.update)
-          BookDetailUpdateSection(entries: detail.updateEntries)
-        else
-          BookDetailPlaceholderView(label: selectedTab.label),
+        AppSwipeTabSwitcher(
+          selectedIndex: BookDetailTab.values.indexOf(selectedTab),
+          tabCount: BookDetailTab.values.length,
+          onIndexChanged: (index) => onTabSelected(BookDetailTab.values[index]),
+          child: _buildTabBody(),
+        ),
         const SizedBox(height: AppSpacing.xl),
       ],
     );
+  }
+
+  Widget _buildTabBody() {
+    return switch (selectedTab) {
+      BookDetailTab.detail => _DetailTabBody(
+        detail: detail,
+        onCatalogTap: onCatalogTap,
+        onCharacterFavTap: onCharacterFavTap,
+        onRecommendationRefreshTap: onRecommendationRefreshTap,
+      ),
+      BookDetailTab.discussion => BookDetailDiscussionSection(
+        selectedFilter: selectedDiscussionFilter,
+        posts: detail.discussionPosts,
+        onFilterSelected: onDiscussionFilterSelected,
+        onPostTap: onDiscussionPostTap,
+        onPostLikeTap: onDiscussionPostLikeTap,
+        onPostBodyTap: onDiscussionPostBodyTap,
+      ),
+      BookDetailTab.update => BookDetailUpdateSection(
+        entries: detail.updateEntries,
+      ),
+    };
   }
 }
 
@@ -92,11 +102,13 @@ class _DetailTabBody extends StatelessWidget {
     required this.detail,
     required this.onCatalogTap,
     required this.onCharacterFavTap,
+    required this.onRecommendationRefreshTap,
   });
 
   final BookDetail detail;
   final VoidCallback onCatalogTap;
   final ValueChanged<String> onCharacterFavTap;
+  final VoidCallback onRecommendationRefreshTap;
 
   @override
   Widget build(BuildContext context) {
@@ -114,7 +126,59 @@ class _DetailTabBody extends StatelessWidget {
           characters: detail.characters,
           onCharacterFavTap: onCharacterFavTap,
         ),
+        const SizedBox(height: AppSizes.bookDetailSectionGap),
+        BookDetailRecommendationSection(
+          title: '作者其他作品',
+          books: detail.authorOtherBooks,
+          actionLabel: '查看全部',
+          onBookTap: AppRouter.goBookDetail,
+        ),
+        const SizedBox(height: AppSizes.bookDetailSectionGap),
+        BookDetailRecommendationSection(
+          title: '猜你喜欢',
+          books: detail.recommendedBooks,
+          actionLabel: '换一换',
+          actionIconAsset: 'assets/icons/book_detail/refresh.svg',
+          onActionTap: onRecommendationRefreshTap,
+          onBookTap: AppRouter.goBookDetail,
+        ),
+        const SizedBox(height: AppSizes.bookDetailSectionGap),
+        _BookDetailLegalInfo(detail: detail),
       ],
+    );
+  }
+}
+
+class _BookDetailLegalInfo extends StatelessWidget {
+  const _BookDetailLegalInfo({required this.detail});
+
+  final BookDetail detail;
+
+  @override
+  Widget build(BuildContext context) {
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: AppColors.surfaceCard,
+        borderRadius: BorderRadius.circular(AppRadius.lg),
+        border: Border.all(color: AppColors.borderGlass),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(AppSpacing.md),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            AppText(
+              detail.listedAtText,
+              style: AppTextStyles.captionMdDarkMuted,
+            ),
+            const SizedBox(height: AppSpacing.sm),
+            AppText(
+              detail.copyrightText,
+              style: AppTextStyles.captionMdDarkMuted,
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

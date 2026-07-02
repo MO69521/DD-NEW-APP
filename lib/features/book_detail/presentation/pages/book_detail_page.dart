@@ -190,6 +190,8 @@ class _BookDetailView extends StatelessWidget {
                             onCatalogTap: () => _openCatalog(context),
                             onCharacterFavTap: (_) =>
                                 _comingSoon(context, '收藏和表白'),
+                            onRecommendationRefreshTap:
+                                cubit.refreshRecommendations,
                           ),
                         ),
                       ),
@@ -206,6 +208,7 @@ class _BookDetailView extends StatelessWidget {
                 enabled: topBlurEnabled,
                 child: AppTopBar(
                   statusBarHeight: statusBar,
+                  title: topBlurEnabled ? detail.title : null,
                   showScrim: topBlurEnabled,
                   chromeBlurEnabled: false,
                   onBack: () => AppRouter.pop(),

@@ -66,6 +66,7 @@ flutter:
     - assets/icons/nav/
     - assets/icons/welfare/
     - assets/icons/ranking/
+    - assets/icons/book_detail/
     - assets/images/welfare/
     - assets/images/welfare/slices/
     - assets/images/bookshelf/
@@ -75,6 +76,7 @@ flutter:
     - assets/icons/search/
     - assets/icons/membership/
     - assets/icons/account_settings/
+    - assets/icons/payment/
     - assets/images/membership/
     - assets/images/partner/
     - assets/images/splash/

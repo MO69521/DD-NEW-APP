@@ -59,7 +59,7 @@ class _CatalogDrawerPanel extends StatelessWidget {
         AppSizes.bookDetailCatalogDrawerWidthRatio;
 
     return Material(
-      color: AppColors.backgroundDark,
+      color: AppColors.dialogBackground,
       child: SizedBox(
         width: drawerWidth,
         child: SafeArea(

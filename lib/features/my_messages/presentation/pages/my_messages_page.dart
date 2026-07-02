@@ -5,10 +5,12 @@ import '../../../../core/theme/app_layout.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../routes/app_router.dart';
+import '../../../../shared/components/app_swipe_tab_switcher.dart';
 import '../../../../shared/components/app_top_bar.dart';
 import '../../../../shared/layouts/app_page_chrome.dart';
 import '../../application/my_messages_cubit.dart';
 import '../../application/my_messages_state.dart';
+import '../../domain/entities/my_message_tab.dart';
 import '../components/my_messages_empty_view.dart';
 import '../components/my_messages_tab_bar.dart';
 
@@ -46,7 +48,21 @@ class MyMessagesPage extends StatelessWidget {
             const SizedBox(height: AppSpacing.sm),
           ],
         ),
-        body: const MyMessagesEmptyView(),
+        body: BlocBuilder<MyMessagesCubit, MyMessagesState>(
+          buildWhen: (previous, current) =>
+              previous.interaction.selectedTab !=
+              current.interaction.selectedTab,
+          builder: (context, state) {
+            const tabs = MyMessageTab.values;
+            return AppSwipeTabSwitcher(
+              selectedIndex: tabs.indexOf(state.interaction.selectedTab),
+              tabCount: tabs.length,
+              onIndexChanged: (index) =>
+                  context.read<MyMessagesCubit>().onTabSelected(tabs[index]),
+              child: const MyMessagesEmptyView(),
+            );
+          },
+        ),
       ),
     );
   }

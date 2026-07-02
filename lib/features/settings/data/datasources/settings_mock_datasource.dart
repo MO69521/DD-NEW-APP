@@ -20,10 +20,6 @@ class SettingsMockDataSource {
       subtitle: '去打开通知，书籍更新第一时间提醒你哦～',
     ),
     SettingsMenuItem(
-      action: SettingsMenuAction.accountSettings,
-      label: '账号设置',
-    ),
-    SettingsMenuItem(
       action: SettingsMenuAction.personalizedAds,
       label: '个性化广告',
     ),
@@ -36,21 +32,12 @@ class SettingsMockDataSource {
       label: '青少年模式',
       trailingText: '未开启',
     ),
-    SettingsMenuItem(
-      action: SettingsMenuAction.userAgreement,
-      label: '用户协议',
-    ),
-    SettingsMenuItem(
-      action: SettingsMenuAction.privacyPolicy,
-      label: '隐私政策',
-    ),
+    SettingsMenuItem(action: SettingsMenuAction.userAgreement, label: '用户协议'),
+    SettingsMenuItem(action: SettingsMenuAction.privacyPolicy, label: '隐私政策'),
     SettingsMenuItem(
       action: SettingsMenuAction.thirdPartySharing,
       label: '第三方服务共享清单',
     ),
-    SettingsMenuItem(
-      action: SettingsMenuAction.versionUpdate,
-      label: '版本更新',
-    ),
+    SettingsMenuItem(action: SettingsMenuAction.versionUpdate, label: '版本更新'),
   ];
 }

@@ -8,6 +8,7 @@ import '../core/domain/entities/commerce_entities.dart';
 import '../core/domain/entities/book.dart';
 import '../features/account_settings/index.dart';
 import '../features/book_detail/index.dart';
+import '../features/card_pack/index.dart';
 import '../features/category/index.dart';
 import '../features/currency_wallet/index.dart';
 import '../features/editor_pick/index.dart';
@@ -17,6 +18,8 @@ import '../features/my_messages/index.dart';
 import '../features/membership/index.dart';
 import '../features/ranking/index.dart';
 import '../features/search/index.dart';
+import '../features/settings/data/datasources/settings_document_mock_datasource.dart';
+import '../features/settings/domain/entities/settings_document.dart';
 import '../features/splash/index.dart';
 import 'app_routes.dart';
 import 'pages/main_tab_shell_page.dart';
@@ -158,6 +161,11 @@ abstract final class AppRouter {
           ),
         ),
         GoRoute(
+          path: AppRoutes.cardPack,
+          name: AppRoutes.cardPackName,
+          builder: (context, state) => const CardPackPage(),
+        ),
+        GoRoute(
           path: AppRoutes.helpFeedback,
           name: AppRoutes.helpFeedbackName,
           builder: (context, state) => BlocProvider(
@@ -182,6 +190,47 @@ abstract final class AppRouter {
             create: (_) => SettingsCubit()..load(),
             child: const SettingsPage(),
           ),
+        ),
+        GoRoute(
+          path: AppRoutes.notificationSettings,
+          name: AppRoutes.notificationSettingsName,
+          builder: (context, state) => BlocProvider(
+            create: (_) => NotificationSettingsCubit(),
+            child: const NotificationSettingsPage(),
+          ),
+        ),
+        GoRoute(
+          path: AppRoutes.personalizedAds,
+          name: AppRoutes.personalizedAdsName,
+          builder: (context, state) => BlocProvider(
+            create: (_) => PersonalizedAdsCubit(),
+            child: const PersonalizedAdsPage(),
+          ),
+        ),
+        GoRoute(
+          path: AppRoutes.readingPreferences,
+          name: AppRoutes.readingPreferencesName,
+          builder: (context, state) => BlocProvider(
+            create: (_) => ReadingPreferencesCubit(),
+            child: const ReadingPreferencesPage(),
+          ),
+        ),
+        GoRoute(
+          path: AppRoutes.teenMode,
+          name: AppRoutes.teenModeName,
+          builder: (context, state) => const TeenModePage(),
+        ),
+        GoRoute(
+          path: AppRoutes.settingsDocument,
+          name: AppRoutes.settingsDocumentName,
+          builder: (context, state) {
+            final type = SettingsDocumentType.fromSlug(
+              state.pathParameters['type'],
+            );
+            final document = const SettingsDocumentMockDataSource()
+                .fetchDocument(type);
+            return SettingsDocumentPage(document: document);
+          },
         ),
         GoRoute(
           path: AppRoutes.bookDetail,

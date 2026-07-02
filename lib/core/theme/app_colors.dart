@@ -31,6 +31,7 @@ abstract final class AppColors {
 
   static const Color surfaceGlass = Color(0x14FFFFFF);
   static const Color surfaceCard = Color(0x0AFFFFFF);
+  static const Color dialogBackground = Color(0xFF131820);
   static const Color accentYellow = Color(0xFFFFE847);
   static const Color textOnDark = Color(0xFFFFFFFF);
   static const Color textOnDarkMuted = Color(0x80FFFFFF);

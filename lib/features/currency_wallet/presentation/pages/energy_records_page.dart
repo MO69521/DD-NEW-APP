@@ -10,6 +10,7 @@ import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../routes/app_router.dart';
+import '../../../../shared/components/app_swipe_tab_switcher.dart';
 import '../../../../shared/components/app_top_bar.dart';
 import '../../../../shared/components/empty_state.dart';
 import '../../../../shared/widgets/app_asset_image.dart';
@@ -36,53 +37,58 @@ class EnergyRecordsPage extends StatelessWidget {
           onBack: AppRouter.pop,
         ),
         body: BlocBuilder<EnergyRecordsCubit, EnergyRecordsState>(
-              builder: (context, state) {
-                if (state.phase == EnergyRecordsPhase.loading) {
-                  return const Center(child: CircularProgressIndicator());
-                }
+          builder: (context, state) {
+            if (state.phase == EnergyRecordsPhase.loading) {
+              return const Center(child: CircularProgressIndicator());
+            }
 
-                if (state.errorMessage != null) {
-                  return EmptyState(
-                    title: '加载失败',
-                    description: state.errorMessage,
-                    action: AppButton(
-                      label: '重试',
-                      onPressed: () =>
-                          context.read<EnergyRecordsCubit>().load(),
+            if (state.errorMessage != null) {
+              return EmptyState(
+                title: '加载失败',
+                description: state.errorMessage,
+                action: AppButton(
+                  label: '重试',
+                  onPressed: () => context.read<EnergyRecordsCubit>().load(),
+                ),
+              );
+            }
+
+            final content = state.content;
+            if (content == null) {
+              return const EmptyState(title: '暂无记录');
+            }
+
+            final records = switch (state.selectedTab) {
+              EnergyRecordsTab.recharge => content.rechargeRecords,
+              EnergyRecordsTab.other => content.otherRecords,
+            };
+            const tabs = EnergyRecordsTab.values;
+
+            return Padding(
+              padding: EdgeInsets.only(top: AppLayout.chromeTopHeight(context)),
+              child: Column(
+                children: [
+                  EnergyRecordsTabBar(
+                    selectedTab: state.selectedTab,
+                    onTabTap: context.read<EnergyRecordsCubit>().selectTab,
+                  ),
+                  Expanded(
+                    child: AppSwipeTabSwitcher(
+                      selectedIndex: tabs.indexOf(state.selectedTab),
+                      tabCount: tabs.length,
+                      onIndexChanged: (index) => context
+                          .read<EnergyRecordsCubit>()
+                          .selectTab(tabs[index]),
+                      child: records.isEmpty
+                          ? const EnergyRecordsEmptyView()
+                          : EnergyRecordsList(records: records),
                     ),
-                  );
-                }
-
-                final content = state.content;
-                if (content == null) {
-                  return const EmptyState(title: '暂无记录');
-                }
-
-                final records = switch (state.selectedTab) {
-                  EnergyRecordsTab.recharge => content.rechargeRecords,
-                  EnergyRecordsTab.other => content.otherRecords,
-                };
-
-                return Padding(
-                  padding: EdgeInsets.only(
-                    top: AppLayout.chromeTopHeight(context),
                   ),
-                  child: Column(
-                    children: [
-                      EnergyRecordsTabBar(
-                        selectedTab: state.selectedTab,
-                        onTabTap: context.read<EnergyRecordsCubit>().selectTab,
-                      ),
-                      Expanded(
-                        child: records.isEmpty
-                            ? const EnergyRecordsEmptyView()
-                            : EnergyRecordsList(records: records),
-                      ),
-                    ],
-                  ),
-                );
-              },
-            ),
+                ],
+              ),
+            );
+          },
+        ),
       ),
     );
   }

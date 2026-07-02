@@ -13,35 +13,49 @@ class BookDetailQuickReplySheet {
     BuildContext context, {
     required String authorName,
   }) async {
-    final controller = TextEditingController();
-    final text = await showModalBottomSheet<String>(
+    return showModalBottomSheet<String>(
       context: context,
       isScrollControlled: true,
-      backgroundColor: AppColors.backgroundDark,
+      backgroundColor: AppColors.dialogBackground,
       builder: (sheetContext) {
         final bottomInset = MediaQuery.viewInsetsOf(sheetContext).bottom;
         return _QuickReplySheetContent(
-          controller: controller,
           authorName: authorName,
           bottomInset: bottomInset,
         );
       },
     );
-    controller.dispose();
-    return text;
   }
 }
 
-class _QuickReplySheetContent extends StatelessWidget {
+class _QuickReplySheetContent extends StatefulWidget {
   const _QuickReplySheetContent({
-    required this.controller,
     required this.authorName,
     required this.bottomInset,
   });
 
-  final TextEditingController controller;
   final String authorName;
   final double bottomInset;
+
+  @override
+  State<_QuickReplySheetContent> createState() =>
+      _QuickReplySheetContentState();
+}
+
+class _QuickReplySheetContentState extends State<_QuickReplySheetContent> {
+  late final TextEditingController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,14 +64,14 @@ class _QuickReplySheetContent extends StatelessWidget {
         AppSpacing.md,
         AppSpacing.md,
         AppSpacing.md,
-        AppSpacing.md + bottomInset,
+        AppSpacing.md + widget.bottomInset,
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           AppText(
-            '回复 $authorName',
+            '回复 ${widget.authorName}',
             style: AppTextStyles.bookDetailSectionTitle,
           ),
           const SizedBox(height: AppSpacing.sm),
@@ -68,7 +82,7 @@ class _QuickReplySheetContent extends StatelessWidget {
               borderRadius: BorderRadius.circular(AppRadius.md),
             ),
             child: TextField(
-              controller: controller,
+              controller: _controller,
               autofocus: true,
               style: AppTextStyles.bookDetailDiscussionBody,
               decoration: InputDecoration(
@@ -85,7 +99,7 @@ class _QuickReplySheetContent extends StatelessWidget {
             alignment: Alignment.centerRight,
             child: TextButton(
               onPressed: () {
-                final text = controller.text.trim();
+                final text = _controller.text.trim();
                 if (text.isEmpty) return;
                 AppRouter.pop(text);
               },
