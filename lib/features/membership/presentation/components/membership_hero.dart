@@ -286,7 +286,8 @@ class _HeroSlideText extends StatelessWidget {
       children: [
         Row(
           mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.end,
+          crossAxisAlignment: CrossAxisAlignment.baseline,
+          textBaseline: TextBaseline.alphabetic,
           children: [
             AppText(
               slide.titlePrefix,

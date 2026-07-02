@@ -1,0 +1,28 @@
+---
+description: iCloud workspace workflow for iOS simulator previews
+alwaysApply: true
+---
+
+# iCloud iOS Simulator Workflow
+
+This project lives under an iCloud Drive path. When running iOS simulator previews directly from the workspace, Xcode/Flutter build artifacts can inherit macOS extended attributes such as `com.apple.provenance`, causing simulator codesign failures like:
+
+```text
+resource fork, Finder information, or similar detritus not allowed
+Failed to codesign .../Flutter.framework/Flutter
+```
+
+## Required Preview Flow
+
+- For `flutter run` on iOS simulators, first sync the current project to a non-iCloud temp path, then run from there.
+- Preferred temp path: `/tmp/diandian-sim-preview`.
+- Exclude generated/heavy folders: `.git`, `build`, `.dart_tool`.
+
+```bash
+rm -rf "/tmp/diandian-sim-preview"
+rsync -a --exclude='.git' --exclude='build' --exclude='.dart_tool' \
+  "<workspace>/" "/tmp/diandian-sim-preview/"
+flutter run -d <simulator-device-id>
+```
+
+Use the original workspace for edits. The temp copy is only for simulator build/run.

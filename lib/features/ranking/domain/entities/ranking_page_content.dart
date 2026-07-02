@@ -25,6 +25,31 @@ class RankingPageContent extends Equatable {
     return byChannel[channel] ?? byChannel[RankingChannel.all] ?? const [];
   }
 
+  /// 追加更多书籍到指定维度和频道。
+  RankingPageContent appendBooks(
+    RankingDimension dimension,
+    RankingChannel channel,
+    List<Book> newBooks,
+  ) {
+    final updated = Map<RankingDimension, Map<RankingChannel, List<Book>>>.from(
+      booksByDimensionChannel,
+    );
+
+    final channelMap = Map<RankingChannel, List<Book>>.from(
+      updated[dimension] ?? {},
+    );
+
+    final existingBooks = channelMap[channel] ?? [];
+    channelMap[channel] = [...existingBooks, ...newBooks];
+
+    updated[dimension] = channelMap;
+
+    return RankingPageContent(
+      brandTitle: brandTitle,
+      booksByDimensionChannel: updated,
+    );
+  }
+
   @override
   List<Object?> get props => [brandTitle, booksByDimensionChannel];
 }

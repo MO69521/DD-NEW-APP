@@ -12,15 +12,21 @@ class BookCover extends StatelessWidget {
     this.width,
     this.height,
     this.aspectRatio,
+    this.overlayColor,
+    this.topEndBadge,
   }) : assert(
-          (width != null && height != null) || aspectRatio != null,
-          'Provide width+height or aspectRatio',
-        );
+         (width != null && height != null) || aspectRatio != null,
+         'Provide width+height or aspectRatio',
+       );
 
   final String assetPath;
   final double? width;
   final double? height;
   final double? aspectRatio;
+  final Color? overlayColor;
+
+  /// 右上角叠加插槽（如封面状态角标），为空则不渲染。
+  final Widget? topEndBadge;
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +37,7 @@ class BookCover extends StatelessWidget {
       image = SizedBox(
         width: width,
         height: height,
-        child: _buildImage((width! * devicePixelRatio).round()),
+        child: _buildLayeredCover((width! * devicePixelRatio).round()),
       );
     } else if (aspectRatio != null) {
       image = AspectRatio(
@@ -42,12 +48,12 @@ class BookCover extends StatelessWidget {
             final cacheWidth = maxWidth.isFinite
                 ? (maxWidth * devicePixelRatio).round()
                 : null;
-            return _buildImage(cacheWidth);
+            return _buildLayeredCover(cacheWidth);
           },
         ),
       );
     } else {
-      image = _buildImage(null);
+      image = _buildLayeredCover(null);
     }
 
     return DecoratedBox(
@@ -62,6 +68,22 @@ class BookCover extends StatelessWidget {
         borderRadius: BorderRadius.circular(AppRadius.coverSm),
         child: image,
       ),
+    );
+  }
+
+  Widget _buildLayeredCover(int? cacheWidth) {
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        _buildImage(cacheWidth),
+        if (overlayColor != null) ColoredBox(color: overlayColor!),
+        if (topEndBadge != null)
+          Positioned(
+            top: AppSizes.bookCoverTagInsetTop,
+            right: AppSizes.bookCoverTagInsetRight,
+            child: topEndBadge!,
+          ),
+      ],
     );
   }
 

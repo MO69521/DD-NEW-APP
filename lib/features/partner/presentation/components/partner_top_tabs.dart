@@ -17,11 +17,13 @@ class PartnerTopTabs extends StatelessWidget {
     super.key,
     required this.selected,
     required this.messageUnreadCount,
+    this.interactionUnreadCount = 0,
     this.onSelected,
   });
 
   final PartnerTopTab selected;
   final int messageUnreadCount;
+  final int interactionUnreadCount;
   final ValueChanged<PartnerTopTab>? onSelected;
 
   @override
@@ -36,9 +38,11 @@ class PartnerTopTabs extends StatelessWidget {
           _PartnerTopTabItem(
             tab: tabs[i],
             isSelected: tabs[i] == selected,
-            badgeCount: tabs[i] == PartnerTopTab.message
-                ? messageUnreadCount
-                : 0,
+            badgeCount: switch (tabs[i]) {
+              PartnerTopTab.message => messageUnreadCount,
+              PartnerTopTab.interaction => interactionUnreadCount,
+              _ => 0,
+            },
             onTap: onSelected == null ? null : () => onSelected!(tabs[i]),
           ),
         ],

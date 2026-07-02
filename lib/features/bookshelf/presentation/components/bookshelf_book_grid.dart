@@ -4,6 +4,7 @@ import '../../../../core/domain/entities/book.dart';
 import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../shared/components/book_grid_card.dart';
+import 'bookshelf_selectable_book_card.dart';
 
 /// 书架书籍 3 列网格，卡片样式对齐书城编辑推荐。
 class BookshelfBookGrid extends StatelessWidget {
@@ -33,6 +34,9 @@ class BookshelfBookGrid extends StatelessWidget {
     required List<Book> books,
     required double gridWidth,
     ValueChanged<Book>? onBookTap,
+    bool isManaging = false,
+    Set<String> selectedBookIds = const {},
+    ValueChanged<Book>? onBookSelectionToggle,
   }) {
     if (books.isEmpty) {
       return const SliverToBoxAdapter(child: SizedBox.shrink());
@@ -47,19 +51,27 @@ class BookshelfBookGrid extends StatelessWidget {
         crossAxisSpacing: AppSpacing.md,
         mainAxisExtent: itemHeight,
       ),
-      delegate: SliverChildBuilderDelegate(
-        (context, index) {
-          final book = books[index];
-          return BookGridCard(
+      delegate: SliverChildBuilderDelegate((context, index) {
+        final book = books[index];
+        if (isManaging) {
+          return BookshelfSelectableBookCard(
             key: ValueKey(book.id),
-            title: book.title,
-            category: book.category,
-            coverAsset: book.coverAsset,
-            onTap: onBookTap == null ? null : () => onBookTap!(book),
+            book: book,
+            isManaging: isManaging,
+            isSelected: selectedBookIds.contains(book.id),
+            onTap: () => onBookSelectionToggle?.call(book),
           );
-        },
-        childCount: books.length,
-      ),
+        }
+
+        return BookGridCard(
+          key: ValueKey(book.id),
+          title: book.title,
+          category: book.category,
+          coverAsset: book.coverAsset,
+          coverTag: book.coverTag,
+          onTap: onBookTap == null ? null : () => onBookTap(book),
+        );
+      }, childCount: books.length),
     );
   }
 
@@ -89,6 +101,7 @@ class BookshelfBookGrid extends StatelessWidget {
               title: book.title,
               category: book.category,
               coverAsset: book.coverAsset,
+              coverTag: book.coverTag,
               onTap: onBookTap == null ? null : () => onBookTap!(book),
             );
           },

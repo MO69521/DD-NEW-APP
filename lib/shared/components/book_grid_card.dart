@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../core/domain/entities/book_cover_tag.dart';
 import 'book_card_variants.dart';
 
 /// Level 2 — 网格竖向书籍卡片（封面 + 标题 + 标签）。
@@ -9,12 +10,14 @@ class BookGridCard extends StatelessWidget {
     required this.title,
     required this.category,
     required this.coverAsset,
+    this.coverTag,
     this.onTap,
   });
 
   final String title;
   final String category;
   final String coverAsset;
+  final BookCoverTag? coverTag;
   final VoidCallback? onTap;
 
   @override
@@ -23,6 +26,7 @@ class BookGridCard extends StatelessWidget {
       title: title,
       category: category,
       coverAsset: coverAsset,
+      coverTag: coverTag,
       onTap: onTap,
     );
   }

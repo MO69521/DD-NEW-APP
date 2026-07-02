@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../core/theme/app_layout.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
@@ -8,6 +9,8 @@ import '../../../../routes/app_router.dart';
 import '../../../../routes/app_routes.dart';
 import '../../../../shared/components/empty_state.dart';
 import '../../../../shared/widgets/app_button.dart';
+import '../../../../shared/components/app_blurred_chrome_bar.dart';
+import '../../../../shared/layouts/app_scroll_blur_scope.dart';
 import '../../application/membership_cubit.dart';
 import '../../application/membership_state.dart';
 import '../../domain/entities/membership_page_content.dart';
@@ -98,90 +101,97 @@ class _MembershipView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<MembershipCubit>();
-    final topInset = MediaQuery.paddingOf(context).top;
-    final statusBarHeight =
-        topInset > 0 ? topInset : AppSizes.statusBarPlaceholderHeight;
+    final statusBarHeight = AppLayout.statusBarHeight(context);
     final bottomInset = MediaQuery.paddingOf(context).bottom;
     final renewHint = _selectedPlan.renewHint;
 
     return Scaffold(
       backgroundColor: AppColors.backgroundDark,
-      body: Stack(
-        children: [
-          SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                SizedBox(
-                  height: AppSizes.membershipHeroLayoutHeight,
-                  child: Stack(
-                    clipBehavior: Clip.none,
-                    children: [
-                      Positioned(
-                        top: 0,
-                        left: 0,
-                        right: 0,
-                        height: AppSizes.membershipHeroHeight,
-                        child: MembershipHero(slides: content.heroSlides),
-                      ),
-                      Positioned(
-                        left: AppSpacing.sm,
-                        right: AppSpacing.sm,
-                        top: AppSizes.membershipUserCardTop,
-                        child: MembershipUserCard(account: content.account),
-                      ),
-                    ],
+      body: AppScrollBlurScope(
+        builder: (context, topBlurEnabled) => Stack(
+          children: [
+            SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  SizedBox(
+                    height: AppSizes.membershipHeroLayoutHeight,
+                    child: Stack(
+                      clipBehavior: Clip.none,
+                      children: [
+                        Positioned(
+                          top: 0,
+                          left: 0,
+                          right: 0,
+                          height: AppSizes.membershipHeroHeight,
+                          child: MembershipHero(slides: content.heroSlides),
+                        ),
+                        Positioned(
+                          left: AppSpacing.sm,
+                          right: AppSpacing.sm,
+                          top: AppSizes.membershipUserCardTop,
+                          child: MembershipUserCard(account: content.account),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      const SizedBox(height: AppSizes.membershipHeroToPlanGap),
-                      MembershipPlanSelector(
-                        plans: content.plans,
-                        selectedPlanId: selectedPlanId,
-                        onSelect: cubit.selectPlan,
-                      ),
-                      const SizedBox(height: AppSpacing.lg),
-                      MembershipRenewHintSlot(hint: renewHint),
-                      MembershipPurchaseBar(
-                        priceText: _selectedPlan.priceText,
-                        agreementPrefix: content.agreementPrefix,
-                        agreementSuffix: content.agreementSuffix,
-                        agreements: content.agreements,
-                        isPurchasing: isPurchasing,
-                        onPurchase: cubit.purchase,
-                        onAgreementTap: (agreement) =>
-                            cubit.openAgreement(agreement.url),
-                      ),
-                      const SizedBox(height: AppSpacing.lg),
-                      MembershipBenefitsSection(benefits: content.benefits),
-                      const SizedBox(height: AppSpacing.sm),
-                      MembershipAutoRenewStatement(
-                        title: content.statementTitle,
-                        paragraphs: content.statementParagraphs,
-                      ),
-                      SizedBox(height: AppSpacing.xl + bottomInset),
-                    ],
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: AppSpacing.sm,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        const SizedBox(
+                          height: AppSizes.membershipHeroToPlanGap,
+                        ),
+                        MembershipPlanSelector(
+                          plans: content.plans,
+                          selectedPlanId: selectedPlanId,
+                          onSelect: cubit.selectPlan,
+                        ),
+                        const SizedBox(height: AppSpacing.lg),
+                        MembershipRenewHintSlot(hint: renewHint),
+                        MembershipPurchaseBar(
+                          priceText: _selectedPlan.priceText,
+                          agreementPrefix: content.agreementPrefix,
+                          agreementSuffix: content.agreementSuffix,
+                          agreements: content.agreements,
+                          isPurchasing: isPurchasing,
+                          onPurchase: cubit.purchase,
+                          onAgreementTap: (agreement) =>
+                              cubit.openAgreement(agreement.url),
+                        ),
+                        const SizedBox(height: AppSpacing.lg),
+                        MembershipBenefitsSection(benefits: content.benefits),
+                        const SizedBox(height: AppSpacing.sm),
+                        MembershipAutoRenewStatement(
+                          title: content.statementTitle,
+                          paragraphs: content.statementParagraphs,
+                        ),
+                        SizedBox(height: AppSpacing.xl + bottomInset),
+                      ],
+                    ),
                   ),
+                ],
+              ),
+            ),
+            Positioned(
+              top: 0,
+              left: 0,
+              right: 0,
+              child: AppBlurredChromeBar(
+                enabled: topBlurEnabled,
+                child: MembershipAppBar(
+                  statusBarHeight: statusBarHeight,
+                  onBack: AppRouter.pop,
+                  onRecordsTap: () =>
+                      AppRouter.pushNamed(AppRoutes.rechargeRecordsName),
                 ),
-              ],
+              ),
             ),
-          ),
-          Positioned(
-            top: 0,
-            left: 0,
-            right: 0,
-            child: MembershipAppBar(
-              statusBarHeight: statusBarHeight,
-              onBack: AppRouter.pop,
-              onRecordsTap: () =>
-                  AppRouter.pushNamed(AppRoutes.rechargeRecordsName),
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

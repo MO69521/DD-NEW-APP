@@ -42,7 +42,7 @@ abstract final class AppWelfareColors {
   static const Color hotSaleBadgeText = Color(0xFFFFFEF4);
   static const Color rechargePriceBg = Color(0x0AFFFFFF);
   static const Color originalPriceMuted = Color(0xFF9B9B9B);
-  static const Color moreBenefitsAction = Color(0xFFFFED63);
+  static const Color moreBenefitsAction = Color(0xFFFFE847);
 
   static const Color taskDivider = Color(0x0AFFFFFF);
   static const Color taskActionBg = Color(0x14FFFFFF);

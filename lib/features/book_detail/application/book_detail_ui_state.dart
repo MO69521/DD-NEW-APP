@@ -8,6 +8,8 @@ class BookDetailUiState extends Equatable {
     this.quickReplySuccessTick = 0,
     this.quickReplyErrorTick = 0,
     this.quickReplyErrorMessage,
+    this.shelfToastTick = 0,
+    this.shelfToastMessage,
   });
 
   final bool isLoading;
@@ -15,6 +17,10 @@ class BookDetailUiState extends Equatable {
   final int quickReplySuccessTick;
   final int quickReplyErrorTick;
   final String? quickReplyErrorMessage;
+
+  /// 加入/取消书架反馈计数（每次操作自增，驱动一次性 Toast）。
+  final int shelfToastTick;
+  final String? shelfToastMessage;
 
   BookDetailUiState copyWith({
     bool? isLoading,
@@ -24,6 +30,8 @@ class BookDetailUiState extends Equatable {
     int? quickReplyErrorTick,
     String? quickReplyErrorMessage,
     bool clearQuickReplyError = false,
+    int? shelfToastTick,
+    String? shelfToastMessage,
   }) {
     return BookDetailUiState(
       isLoading: isLoading ?? this.isLoading,
@@ -34,6 +42,8 @@ class BookDetailUiState extends Equatable {
       quickReplyErrorMessage: clearQuickReplyError
           ? null
           : quickReplyErrorMessage ?? this.quickReplyErrorMessage,
+      shelfToastTick: shelfToastTick ?? this.shelfToastTick,
+      shelfToastMessage: shelfToastMessage ?? this.shelfToastMessage,
     );
   }
 
@@ -44,5 +54,7 @@ class BookDetailUiState extends Equatable {
     quickReplySuccessTick,
     quickReplyErrorTick,
     quickReplyErrorMessage,
+    shelfToastTick,
+    shelfToastMessage,
   ];
 }

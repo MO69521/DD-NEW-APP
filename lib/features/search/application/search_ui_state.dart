@@ -8,22 +8,27 @@ class SearchUiState extends Equatable {
   const SearchUiState({
     this.phase = SearchPhase.empty,
     this.errorMessage,
+    this.isRecommendationsLoading = false,
   });
 
   final SearchPhase phase;
   final String? errorMessage;
+  final bool isRecommendationsLoading;
 
   SearchUiState copyWith({
     SearchPhase? phase,
     String? errorMessage,
+    bool? isRecommendationsLoading,
     bool clearError = false,
   }) {
     return SearchUiState(
       phase: phase ?? this.phase,
       errorMessage: clearError ? null : errorMessage ?? this.errorMessage,
+      isRecommendationsLoading:
+          isRecommendationsLoading ?? this.isRecommendationsLoading,
     );
   }
 
   @override
-  List<Object?> get props => [phase, errorMessage];
+  List<Object?> get props => [phase, errorMessage, isRecommendationsLoading];
 }

@@ -1,7 +1,6 @@
 import 'package:equatable/equatable.dart';
 
 import '../../../../core/domain/entities/book.dart';
-import '../domain/entities/bookshelf_tab.dart';
 import 'bookshelf_domain_state.dart';
 import 'bookshelf_interaction_state.dart';
 import 'bookshelf_ui_state.dart';
@@ -12,28 +11,28 @@ class BookshelfState extends Equatable {
     this.ui = const BookshelfUiState(),
     this.domain = const BookshelfDomainState(),
     this.interaction = const BookshelfInteractionState(),
-    this.paginatedBooksByTab = const {},
+    this.recommendationBooks = const [],
   });
 
   final BookshelfUiState ui;
   final BookshelfDomainState domain;
   final BookshelfInteractionState interaction;
-  final Map<BookshelfTab, List<Book>> paginatedBooksByTab;
+  final List<Book> recommendationBooks;
 
   BookshelfState copyWith({
     BookshelfUiState? ui,
     BookshelfDomainState? domain,
     BookshelfInteractionState? interaction,
-    Map<BookshelfTab, List<Book>>? paginatedBooksByTab,
+    List<Book>? recommendationBooks,
   }) {
     return BookshelfState(
       ui: ui ?? this.ui,
       domain: domain ?? this.domain,
       interaction: interaction ?? this.interaction,
-      paginatedBooksByTab: paginatedBooksByTab ?? this.paginatedBooksByTab,
+      recommendationBooks: recommendationBooks ?? this.recommendationBooks,
     );
   }
 
   @override
-  List<Object?> get props => [ui, domain, interaction, paginatedBooksByTab];
+  List<Object?> get props => [ui, domain, interaction, recommendationBooks];
 }

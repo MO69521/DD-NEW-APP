@@ -1,37 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../core/theme/app_sizes.dart';
-import '../../../../core/theme/app_spacing.dart';
-import '../../../../features/ranking/index.dart';
+import '../../../../core/theme/app_layout.dart';
+import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_durations.dart';
 import '../../../../routes/app_router.dart';
 import '../../../../routes/app_routes.dart';
 import '../../../../shared/components/empty_state.dart';
-import '../../../../shared/layouts/app_bottom_nav.dart';
+import '../../../../shared/layouts/app_page_chrome.dart';
+import '../../../../shared/layouts/main_tab_controller.dart';
 import '../../../../shared/widgets/app_button.dart';
 import '../../application/bookstore_cubit.dart';
 import '../../application/bookstore_state.dart';
-import '../../../../core/domain/entities/book.dart';
-import '../components/bookstore_search_header.dart';
-import '../components/editor_pick_section.dart';
-import '../components/guess_like_section.dart';
-import '../components/ranking_section.dart';
-import '../../../../core/theme/app_colors.dart';
-
-/// 书城榜单 Tab → 榜单详情页维度映射（飙升榜在详情页归入人气榜）。
-RankingDimension _rankingDimensionForTab(RankingTab tab) => switch (tab) {
-      RankingTab.recommend => RankingDimension.recommend,
-      RankingTab.popular => RankingDimension.popular,
-      RankingTab.rising => RankingDimension.popular,
-      RankingTab.completed => RankingDimension.completed,
-    };
+import '../../domain/entities/bookstore_top_tab.dart';
+import '../components/bookstore_page_header.dart';
+import '../components/bookstore_recommend_body.dart';
 
 /// 书城推荐页：仅渲染 state、触发 action。
 class BookstorePage extends StatelessWidget {
-  const BookstorePage({super.key});
+  const BookstorePage({
+    super.key,
+    required this.categoryTabBuilder,
+    required this.rankingTabBuilder,
+    this.mainTabController,
+  });
 
-  static const double _bottomNavReserve =
-      AppBottomNav.barHeight + AppSpacing.xl;
+  final WidgetBuilder categoryTabBuilder;
+  final WidgetBuilder rankingTabBuilder;
+  final MainTabController? mainTabController;
 
   @override
   Widget build(BuildContext context) {
@@ -60,175 +56,165 @@ class BookstorePage extends StatelessWidget {
           );
         }
 
-        return const _BookstoreView();
+        return _BookstoreView(
+          categoryTabBuilder: categoryTabBuilder,
+          rankingTabBuilder: rankingTabBuilder,
+          mainTabController: mainTabController,
+        );
       },
     );
   }
 }
 
-class _BookstoreView extends StatelessWidget {
-  const _BookstoreView();
+class _BookstoreView extends StatefulWidget {
+  const _BookstoreView({
+    required this.categoryTabBuilder,
+    required this.rankingTabBuilder,
+    this.mainTabController,
+  });
+
+  final WidgetBuilder categoryTabBuilder;
+  final WidgetBuilder rankingTabBuilder;
+  final MainTabController? mainTabController;
+
+  @override
+  State<_BookstoreView> createState() => _BookstoreViewState();
+}
+
+class _BookstoreViewState extends State<_BookstoreView> {
+  late final void Function() _bookstoreCategoryIntentListener;
+  late final PageController _pageController;
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController();
+    _bookstoreCategoryIntentListener = () {
+      if (!mounted) return;
+      context.read<BookstoreCubit>().switchTopTab(BookstoreTopTab.category);
+    };
+    widget.mainTabController?.addBookstoreCategoryIntentListener(
+      _bookstoreCategoryIntentListener,
+    );
+  }
+
+  @override
+  void dispose() {
+    widget.mainTabController?.removeBookstoreCategoryIntentListener(
+      _bookstoreCategoryIntentListener,
+    );
+    _pageController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final topInset = MediaQuery.paddingOf(context).top;
-    final statusBarHeight = topInset > 0
-        ? topInset
-        : AppSizes.statusBarPlaceholderHeight;
+    final statusBarHeight = AppLayout.statusBarHeight(context);
+    final cubit = context.read<BookstoreCubit>();
 
-    return Scaffold(
-      backgroundColor: AppColors.backgroundDark,
-      body: NotificationListener<ScrollNotification>(
-        onNotification: (notification) {
-          if (notification.metrics.axis != Axis.vertical) return false;
-          context.read<BookstoreCubit>().onScrollNearEnd(
-            notification.metrics.pixels,
-            notification.metrics.maxScrollExtent,
-          );
-          return false;
-        },
-        child: CustomScrollView(
-          slivers: [
-            SliverPersistentHeader(
-              pinned: true,
-              delegate: _BookstoreSearchHeaderDelegate(
-                height:
-                    statusBarHeight + AppSizes.bookstoreStickyHeaderHeight,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    SizedBox(height: statusBarHeight),
-                    BlocSelector<BookstoreCubit, BookstoreState, String>(
-                      selector: (state) => state.domain.searchPlaceholder,
-                      builder: (context, placeholder) {
-                        return BookstoreSearchHeader(
-                          placeholder: placeholder,
-                          onSearchTap: () =>
-                              AppRouter.pushNamed(AppRoutes.searchName),
-                          onCategoryTap: () =>
-                              AppRouter.pushNamed(AppRoutes.categoryName),
-                        );
-                      },
-                    ),
-                  ],
-                ),
+    return BlocListener<BookstoreCubit, BookstoreState>(
+      listenWhen: (previous, current) =>
+          previous.interaction.selectedTopTab !=
+          current.interaction.selectedTopTab,
+      listener: (context, state) {
+        if (!_pageController.hasClients) return;
+        _pageController.animateToPage(
+          state.interaction.selectedTopTab.index,
+          duration: AppDurations.normal,
+          curve: Curves.easeOut,
+        );
+      },
+      child: Scaffold(
+        backgroundColor: AppColors.backgroundDark,
+        body: BlocSelector<BookstoreCubit, BookstoreState, BookstoreTopTab>(
+          selector: (state) => state.interaction.selectedTopTab,
+          builder: (context, selectedTopTab) {
+            return AppPageChrome(
+              topBar: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SizedBox(height: statusBarHeight),
+                  BookstorePageHeader(
+                    selectedTopTab: selectedTopTab,
+                    onTopTabSelected: cubit.switchTopTab,
+                    onSearchTap: () =>
+                        AppRouter.pushNamed(AppRoutes.searchName),
+                  ),
+                ],
               ),
-            ),
-            SliverPadding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: AppSpacing.sm,
+              body: PageView(
+                controller: _pageController,
+                physics: const _BookstoreTopTabPagePhysics(),
+                onPageChanged: (index) {
+                  cubit.switchTopTab(BookstoreTopTab.values[index]);
+                },
+                children: [
+                  const BookstoreRecommendBody(),
+                  widget.categoryTabBuilder(context),
+                  widget.rankingTabBuilder(context),
+                ],
               ),
-              sliver: SliverList(
-                delegate: SliverChildListDelegate([
-                  const SizedBox(
-                    height: AppSizes.bookstoreHeaderToFirstSectionGap,
-                  ),
-                  BlocSelector<BookstoreCubit, BookstoreState, ({
-                    RankingTab selectedTab,
-                    Map<RankingTab, List<Book>> booksByTab,
-                  })>(
-                    selector: (state) => (
-                      selectedTab: state.interaction.selectedRankingTab,
-                      booksByTab: state.domain.rankingBooksByTab,
-                    ),
-                    builder: (context, data) {
-                      return RankingSection(
-                        booksByTab: data.booksByTab,
-                        selectedTab: data.selectedTab,
-                        onTabSelected: context
-                            .read<BookstoreCubit>()
-                            .switchRankingTab,
-                        onBookTap: AppRouter.goBookDetail,
-                        onFullListTap: () => AppRouter.pushNamed(
-                          AppRoutes.rankingName,
-                          extra: _rankingDimensionForTab(data.selectedTab),
-                        ),
-                      );
-                    },
-                  ),
-                  const SizedBox(height: AppSpacing.xl),
-                  BlocSelector<BookstoreCubit, BookstoreState, List<Book>>(
-                    selector: (state) => state.domain.editorPicks,
-                    builder: (context, books) {
-                      return EditorPickSection(
-                        books: books,
-                        onBookTap: AppRouter.goBookDetail,
-                      );
-                    },
-                  ),
-                  const SizedBox(height: AppSpacing.xl),
-                  BlocBuilder<BookstoreCubit, BookstoreState>(
-                    buildWhen: (previous, current) =>
-                        previous.guessLikeBooks != current.guessLikeBooks ||
-                        previous.ui.isLoadingMoreGuessLike !=
-                            current.ui.isLoadingMoreGuessLike,
-                    builder: (context, state) {
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          GuessLikeSection(
-                            books: state.guessLikeBooks,
-                            onBookTap: AppRouter.goBookDetail,
-                          ),
-                          if (state.ui.isLoadingMoreGuessLike) ...[
-                            const SizedBox(height: AppSpacing.md),
-                            const Center(
-                              child: SizedBox(
-                                width:
-                                    AppSizes.bookstoreLoadingIndicatorSize,
-                                height:
-                                    AppSizes.bookstoreLoadingIndicatorSize,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: AppSizes
-                                      .bookstoreLoadingIndicatorStrokeWidth,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ],
-                      );
-                    },
-                  ),
-                  const SizedBox(height: BookstorePage._bottomNavReserve),
-                ]),
-              ),
-            ),
-          ],
+            );
+          },
         ),
       ),
     );
   }
 }
 
-class _BookstoreSearchHeaderDelegate extends SliverPersistentHeaderDelegate {
-  const _BookstoreSearchHeaderDelegate({
-    required this.height,
-    required this.child,
-  });
-
-  final double height;
-  final Widget child;
+class _BookstoreTopTabPagePhysics extends PageScrollPhysics {
+  const _BookstoreTopTabPagePhysics({super.parent});
 
   @override
-  double get minExtent => height;
-
-  @override
-  double get maxExtent => height;
-
-  @override
-  Widget build(
-    BuildContext context,
-    double shrinkOffset,
-    bool overlapsContent,
-  ) {
-    return Container(
-      color: AppColors.backgroundDark,
-      child: child,
-    );
+  _BookstoreTopTabPagePhysics applyTo(ScrollPhysics? ancestor) {
+    return _BookstoreTopTabPagePhysics(parent: buildParent(ancestor));
   }
 
   @override
-  bool shouldRebuild(covariant _BookstoreSearchHeaderDelegate oldDelegate) {
-    return oldDelegate.height != height || oldDelegate.child != child;
+  SpringDescription get spring => SpringDescription.withDampingRatio(
+    mass: 0.7,
+    stiffness: 260,
+    ratio: 1.15,
+  );
+
+  @override
+  Simulation? createBallisticSimulation(
+    ScrollMetrics position,
+    double velocity,
+  ) {
+    if ((velocity <= 0.0 && position.pixels <= position.minScrollExtent) ||
+        (velocity >= 0.0 && position.pixels >= position.maxScrollExtent)) {
+      return super.createBallisticSimulation(position, velocity);
+    }
+
+    final tolerance = toleranceFor(position);
+    final page = position.pixels / position.viewportDimension;
+    final currentPage = page.round();
+    var targetPage = page;
+
+    if (velocity < -tolerance.velocity) {
+      targetPage -= 0.5;
+    } else if (velocity > tolerance.velocity) {
+      targetPage += 0.5;
+    }
+
+    final nearestTarget = targetPage.round();
+    final clampedTarget = nearestTarget.clamp(currentPage - 1, currentPage + 1);
+    final targetPixels = (clampedTarget * position.viewportDimension).clamp(
+      position.minScrollExtent,
+      position.maxScrollExtent,
+    );
+
+    if ((targetPixels - position.pixels).abs() < tolerance.distance) {
+      return null;
+    }
+
+    return ScrollSpringSimulation(
+      spring,
+      position.pixels,
+      targetPixels.toDouble(),
+      velocity,
+      tolerance: tolerance,
+    );
   }
 }

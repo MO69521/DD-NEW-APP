@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'app_colors.dart';
 import 'app_membership_colors.dart';
 import 'app_partner_colors.dart';
+import 'app_sizes.dart';
 import 'app_welfare_colors.dart';
 
 /// 全局文字样式 token，禁止在 UI 中写死 fontSize / fontWeight。
@@ -61,6 +62,13 @@ abstract final class AppTextStyles {
     fontWeight: FontWeight.w500,
     color: AppColors.textSecondary,
     height: 1.4,
+  );
+
+  static const TextStyle bookshelfEmptyMessage = TextStyle(
+    fontSize: 14,
+    fontWeight: FontWeight.w400,
+    color: AppColors.bookshelfEmptyText,
+    height: 1.0,
   );
 
   static const TextStyle labelSm = TextStyle(
@@ -190,7 +198,7 @@ abstract final class AppTextStyles {
 
   static TextStyle get navLabelActiveDark => captionSm.copyWith(
     fontWeight: FontWeight.w500,
-    color: AppColors.navActiveText,
+    color: AppColors.textOnDark,
   );
 
   static TextStyle get navLabelInactiveDark => captionSm.copyWith(
@@ -283,13 +291,37 @@ abstract final class AppTextStyles {
     height: 1.0,
   );
 
-  /// 能量充值「更多福利」入口（Figma · 12px #FFED63）。
+  /// 能量充值「更多福利」入口（Figma · 12px #FFE847）。
   static TextStyle get welfareRechargeMoreAction => captionMd.copyWith(
     fontSize: 12,
     fontWeight: FontWeight.w400,
     color: AppWelfareColors.moreBenefitsAction,
     height: 1.0,
   );
+
+  /// 能量充值支付弹窗标题（购买 + 赠送）。
+  static TextStyle get rechargePurchaseDialogTitle => bodyMedium.copyWith(
+    fontSize: 14,
+    fontWeight: FontWeight.w500,
+    color: AppColors.textOnDark,
+    height: 1.4,
+  );
+
+  /// 能量充值支付弹窗大号价格。
+  static TextStyle get rechargePurchaseDialogPrice => headlineMedium.copyWith(
+    fontSize: AppSizes.rechargePurchaseDialogPriceFontSize,
+    fontWeight: FontWeight.w600,
+    color: AppWelfareColors.accentOrange,
+    height: 1.2,
+  );
+
+  /// 能量充值支付弹窗协议区文案。
+  static TextStyle get rechargePurchaseDialogAgreement =>
+      captionMd.copyWith(color: AppColors.textOnDarkMuted, height: 1.4);
+
+  /// 能量充值支付弹窗协议链接。
+  static TextStyle get rechargePurchaseDialogAgreementLink =>
+      rechargePurchaseDialogAgreement.copyWith(color: AppColors.textOnDark);
 
   static TextStyle get welfareCheckInCumulativeLabel => labelMedium.copyWith(
     color: AppWelfareColors.checkInCumulativeLabel,
@@ -401,14 +433,14 @@ abstract final class AppTextStyles {
   static const TextStyle rankingChannelActive = TextStyle(
     fontSize: 14,
     fontWeight: FontWeight.w500,
-    color: AppColors.rankingSegmentedSelectedText,
+    color: AppColors.segmentedSelectedText,
     height: 1.0,
   );
 
   static const TextStyle rankingChannelInactive = TextStyle(
     fontSize: 14,
     fontWeight: FontWeight.w400,
-    color: AppColors.textOnDarkPlaceholder,
+    color: AppColors.segmentedUnselectedText,
     height: 1.0,
   );
 
@@ -434,6 +466,22 @@ abstract final class AppTextStyles {
     height: 1.0,
   );
 
+  /// 书籍详情摘要卡：标签行 / 连载数据行。
+  static const TextStyle bookDetailSummaryMeta = TextStyle(
+    fontSize: 11,
+    fontWeight: FontWeight.w400,
+    color: AppColors.textOnDarkPlaceholder,
+    height: 1.35,
+  );
+
+  /// 书籍详情摘要卡标题（左图右文，较顶栏叠字略小）。
+  static const TextStyle bookDetailSummaryTitle = TextStyle(
+    fontSize: 16,
+    fontWeight: FontWeight.w600,
+    color: AppColors.textOnDark,
+    height: 1.4,
+  );
+
   static const TextStyle bookDetailStatValue = TextStyle(
     fontSize: 24,
     fontWeight: FontWeight.w700,
@@ -451,28 +499,28 @@ abstract final class AppTextStyles {
   static const TextStyle bookDetailTabSelected = TextStyle(
     fontSize: 14,
     fontWeight: FontWeight.w500,
-    color: AppColors.rankingSegmentedSelectedText,
+    color: AppColors.segmentedSelectedText,
     height: 1.0,
   );
 
   static const TextStyle bookDetailTabUnselected = TextStyle(
     fontSize: 14,
     fontWeight: FontWeight.w400,
-    color: AppColors.textOnDarkPlaceholder,
+    color: AppColors.segmentedUnselectedText,
     height: 1.0,
   );
 
   static const TextStyle bookDetailTabCount = TextStyle(
     fontSize: 11,
     fontWeight: FontWeight.w400,
-    color: AppColors.textOnDarkPlaceholder,
+    color: AppColors.segmentedUnselectedText,
     height: 1.0,
   );
 
   static const TextStyle bookDetailTabCountSelected = TextStyle(
     fontSize: 11,
     fontWeight: FontWeight.w400,
-    color: AppColors.navActiveText,
+    color: AppColors.segmentedSelectedText,
     height: 1.0,
   );
 
@@ -687,18 +735,37 @@ abstract final class AppTextStyles {
     height: 1.0,
   );
 
-  static const TextStyle searchResultTitle = TextStyle(
+  /// 大封面横向书卡标题（分类 / 榜单 / 搜索 / 编辑推荐共用）。
+  static const TextStyle bookCardLargeTitle = TextStyle(
     fontSize: 16,
     fontWeight: FontWeight.w500,
     color: AppColors.textOnDark,
     height: 1.4,
   );
 
-  static const TextStyle searchResultDescription = TextStyle(
+  /// 大封面横向书卡简介。
+  static const TextStyle bookCardLargeDescription = TextStyle(
     fontSize: 13,
     fontWeight: FontWeight.w400,
     color: AppColors.textOnDarkMuted,
     height: 1.6,
+  );
+
+  /// 封面右上角状态角标文字（Figma 1335:12223）；颜色随变体覆盖。
+  static const TextStyle bookCoverTagLabel = TextStyle(
+    fontSize: 11,
+    fontWeight: FontWeight.w400,
+    color: AppColors.textOnDark,
+    height: 1.0,
+  );
+
+  /// 轻提示 Toast 文案（主黄底 + 深色字，加粗，无下划线）。
+  static const TextStyle toastMessage = TextStyle(
+    fontSize: 14,
+    fontWeight: FontWeight.w700,
+    color: AppColors.navActiveText,
+    height: 1.4,
+    decoration: TextDecoration.none,
   );
 
   static const TextStyle searchEmptyCaption = TextStyle(
@@ -870,6 +937,13 @@ abstract final class AppTextStyles {
     height: 1.0,
   );
 
+  static const TextStyle categoryFilterSecondarySelected = TextStyle(
+    fontSize: 14,
+    fontWeight: FontWeight.w500,
+    color: AppColors.categoryFilterSecondarySelectedText,
+    height: 1.0,
+  );
+
   static const TextStyle categoryFilterUnselected = TextStyle(
     fontSize: 14,
     fontWeight: FontWeight.w400,
@@ -1022,6 +1096,90 @@ abstract final class AppTextStyles {
     fontSize: 14,
     fontWeight: FontWeight.w600,
     color: AppPartnerColors.primary,
+    height: 1.0,
+  );
+
+  static const TextStyle partnerMessageCharacterName = TextStyle(
+    fontSize: 16,
+    fontWeight: FontWeight.w600,
+    color: AppPartnerColors.textPrimary,
+    height: 1.2,
+  );
+
+  static const TextStyle partnerMessagePreview = TextStyle(
+    fontSize: 14,
+    fontWeight: FontWeight.w400,
+    color: AppPartnerColors.textSecondary,
+    height: 1.3,
+  );
+
+  static const TextStyle partnerMessageTimestamp = TextStyle(
+    fontSize: 12,
+    fontWeight: FontWeight.w400,
+    color: AppPartnerColors.textTertiary,
+    height: 1.0,
+  );
+
+  static const TextStyle partnerAffectionBadge = TextStyle(
+    fontSize: 10,
+    fontWeight: FontWeight.w600,
+    color: AppPartnerColors.textOnPrimary,
+    height: 1.0,
+  );
+
+  static const TextStyle partnerInteractionCharacterName = TextStyle(
+    fontSize: 18,
+    fontWeight: FontWeight.w700,
+    color: AppPartnerColors.textPrimary,
+    height: 1.2,
+  );
+
+  static const TextStyle partnerInteractionUpgradeHint = TextStyle(
+    fontSize: 11,
+    fontWeight: FontWeight.w400,
+    color: AppPartnerColors.textSecondary,
+    height: 1.2,
+  );
+
+  static const TextStyle partnerInteractionSideActionLabel = TextStyle(
+    fontSize: 11,
+    fontWeight: FontWeight.w400,
+    color: AppPartnerColors.textPrimary,
+    height: 1.0,
+  );
+
+  static const TextStyle partnerInteractionBottomActionLabel = TextStyle(
+    fontSize: 13,
+    fontWeight: FontWeight.w600,
+    color: AppPartnerColors.textOnPrimary,
+    height: 1.0,
+  );
+
+  static const TextStyle partnerInteractionChatActionLabel = TextStyle(
+    fontSize: 14,
+    fontWeight: FontWeight.w700,
+    color: AppPartnerColors.textOnPrimary,
+    height: 1.0,
+  );
+
+  static const TextStyle partnerInteractionAiPlotBadge = TextStyle(
+    fontSize: 9,
+    fontWeight: FontWeight.w600,
+    color: AppPartnerColors.textOnPrimary,
+    height: 1.0,
+  );
+
+  static const TextStyle partnerInteractionPageIndicator = TextStyle(
+    fontSize: 12,
+    fontWeight: FontWeight.w500,
+    color: AppPartnerColors.textPrimary,
+    height: 1.0,
+  );
+
+  static const TextStyle partnerInteractionReviewLabel = TextStyle(
+    fontSize: 12,
+    fontWeight: FontWeight.w500,
+    color: AppPartnerColors.textPrimary,
     height: 1.0,
   );
 }

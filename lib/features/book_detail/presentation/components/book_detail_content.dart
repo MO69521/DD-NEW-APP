@@ -6,15 +6,14 @@ import '../../domain/entities/book_detail.dart';
 import '../../domain/entities/book_detail_tab.dart';
 import '../../domain/entities/book_discussion_filter.dart';
 import '../../domain/entities/book_discussion_post.dart';
-import 'book_detail_author_row.dart';
 import 'book_detail_catalog_entry.dart';
 import 'book_detail_character_section.dart';
 import 'book_detail_discussion_section.dart';
 import 'book_detail_intro.dart';
 import 'book_detail_placeholder_view.dart';
 import 'book_detail_stats_bar.dart';
+import 'book_detail_summary_card.dart';
 import 'book_detail_tab_switcher.dart';
-import 'book_detail_title_tags.dart';
 import 'book_detail_update_section.dart';
 
 /// 书籍详情正文区：头部信息 + Tab 内容。
@@ -49,12 +48,7 @@ class BookDetailContent extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        BookDetailTitleTags(title: detail.title, tags: detail.tags),
-        const SizedBox(height: AppSpacing.sm),
-        BookDetailAuthorRow(
-          author: detail.author,
-          avatarAsset: detail.authorAvatarAsset,
-        ),
+        BookDetailSummaryCard(detail: detail),
         const SizedBox(height: AppSpacing.sm),
         BookDetailStatsBar(
           shelfCount: detail.shelfCount,

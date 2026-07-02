@@ -26,6 +26,41 @@ class BookshelfPageHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = context.appColors;
+    if (isManaging) {
+      return SizedBox(
+        height: AppSizes.bookshelfHeaderHeight,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm),
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              Center(
+                child: AppText(
+                  '书架管理',
+                  style: AppTextStyles.titleMediumDark.copyWith(
+                    color: colors.textPrimary,
+                  ),
+                ),
+              ),
+              Align(
+                alignment: Alignment.centerRight,
+                child: GestureDetector(
+                  onTap: onManageTap,
+                  behavior: HitTestBehavior.opaque,
+                  child: AppText(
+                    '完成',
+                    style: AppTextStyles.bookshelfManageAction.copyWith(
+                      color: colors.textPlaceholder,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
     return SizedBox(
       height: AppSizes.bookshelfHeaderHeight,
       child: Padding(

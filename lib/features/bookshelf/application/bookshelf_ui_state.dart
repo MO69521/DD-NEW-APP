@@ -1,32 +1,30 @@
 import 'package:equatable/equatable.dart';
 
-import '../domain/entities/bookshelf_tab.dart';
-
 /// UI 状态：加载与错误。
 class BookshelfUiState extends Equatable {
   const BookshelfUiState({
     this.isLoading = false,
     this.isLoadingMore = false,
-    this.loadMorePageByTab = const {},
+    this.recommendationPage = 0,
     this.errorMessage,
   });
 
   final bool isLoading;
   final bool isLoadingMore;
-  final Map<BookshelfTab, int> loadMorePageByTab;
+  final int recommendationPage;
   final String? errorMessage;
 
   BookshelfUiState copyWith({
     bool? isLoading,
     bool? isLoadingMore,
-    Map<BookshelfTab, int>? loadMorePageByTab,
+    int? recommendationPage,
     String? errorMessage,
     bool clearError = false,
   }) {
     return BookshelfUiState(
       isLoading: isLoading ?? this.isLoading,
       isLoadingMore: isLoadingMore ?? this.isLoadingMore,
-      loadMorePageByTab: loadMorePageByTab ?? this.loadMorePageByTab,
+      recommendationPage: recommendationPage ?? this.recommendationPage,
       errorMessage: clearError ? null : (errorMessage ?? this.errorMessage),
     );
   }
@@ -35,7 +33,7 @@ class BookshelfUiState extends Equatable {
   List<Object?> get props => [
     isLoading,
     isLoadingMore,
-    loadMorePageByTab,
+    recommendationPage,
     errorMessage,
   ];
 }

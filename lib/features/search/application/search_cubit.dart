@@ -12,9 +12,41 @@ class SearchCubit extends Cubit<SearchState> {
   SearchCubit({SearchRepository? repository})
       : _repository =
             repository ?? const SearchRepositoryImpl(SearchMockDataSource()),
-        super(const SearchState());
+        super(const SearchState()) {
+    loadRecommendations();
+  }
 
   final SearchRepository _repository;
+
+  Future<void> loadRecommendations() async {
+    emit(
+      state.copyWith(
+        ui: state.ui.copyWith(
+          isRecommendationsLoading: true,
+          clearError: true,
+        ),
+      ),
+    );
+
+    try {
+      final recommendations = await _repository.fetchRecommendations();
+      emit(
+        state.copyWith(
+          ui: state.ui.copyWith(isRecommendationsLoading: false),
+          domain: state.domain.copyWith(recommendations: recommendations),
+        ),
+      );
+    } catch (error) {
+      emit(
+        state.copyWith(
+          ui: state.ui.copyWith(
+            isRecommendationsLoading: false,
+            errorMessage: error.toString(),
+          ),
+        ),
+      );
+    }
+  }
 
   Future<void> search(String rawQuery) async {
     final query = rawQuery.trim();
@@ -37,7 +69,7 @@ class SearchCubit extends Cubit<SearchState> {
           ui: state.ui.copyWith(
             phase: results.isEmpty ? SearchPhase.noResult : SearchPhase.results,
           ),
-          domain: SearchDomainState(results: results),
+          domain: state.domain.copyWith(results: results),
         ),
       );
     } catch (error) {
@@ -47,16 +79,23 @@ class SearchCubit extends Cubit<SearchState> {
             phase: SearchPhase.empty,
             errorMessage: error.toString(),
           ),
-          domain: const SearchDomainState(),
+          domain: state.domain.copyWith(results: const []),
         ),
       );
     }
   }
 
-  /// 清空关键词，回到空态。
+  /// 清空关键词，回到默认推荐列表。
   void clear() {
     emit(
-      const SearchState(),
+      SearchState(
+        ui: state.ui.copyWith(
+          phase: SearchPhase.empty,
+          clearError: true,
+          isRecommendationsLoading: false,
+        ),
+        domain: SearchDomainState(recommendations: state.domain.recommendations),
+      ),
     );
   }
 }

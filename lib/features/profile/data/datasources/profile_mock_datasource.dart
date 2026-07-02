@@ -13,7 +13,7 @@ class ProfileMockDataSource {
       user: UserProfile(
         userId: '1013971429',
         nickname: '宇宙无敌美少女',
-        avatarUrl: _mockAvatarUrl,
+        avatarUrl: '',
         partnerAvatarUrls: _mockPartnerAvatarUrls,
       ),
       currencyBalances: CurrencyMockData.welfareBalances,
@@ -24,14 +24,11 @@ class ProfileMockDataSource {
     );
   }
 
-  static const String _mockAvatarUrl =
-      'https://www.figma.com/api/mcp/asset/c27ff5ed-ffc6-410c-aa1d-d24cd1f916d8';
-
   static const List<String> _mockPartnerAvatarUrls = [
-    'https://www.figma.com/api/mcp/asset/f682d089-6a2c-4182-954d-a72de60d5644',
-    'https://www.figma.com/api/mcp/asset/2ed48e6d-0f6d-48c8-a091-2698e01f94ce',
-    'https://www.figma.com/api/mcp/asset/4be6be72-6cff-4993-89bb-b2c654f68d6a',
-    'https://www.figma.com/api/mcp/asset/23a56a99-4ca1-4c7d-a9c1-b19daad27efe',
+    '',
+    '',
+    '',
+    '',
   ];
 
   static const int _vipMonthlyEnergy = 13710;

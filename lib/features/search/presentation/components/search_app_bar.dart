@@ -41,6 +41,11 @@ class _SearchAppBarState extends State<SearchAppBar> {
   void initState() {
     super.initState();
     _controller = TextEditingController(text: widget.initialQuery);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        _focusNode.requestFocus();
+      }
+    });
   }
 
   @override
@@ -61,7 +66,6 @@ class _SearchAppBarState extends State<SearchAppBar> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: AppColors.backgroundDark,
       padding: EdgeInsets.only(top: widget.statusBarHeight),
       child: SizedBox(
         height: AppSizes.topBarHeight,

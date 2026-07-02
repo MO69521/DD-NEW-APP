@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 
+import '../../core/domain/entities/book_cover_tag.dart';
 import '../../core/theme/app_sizes.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../widgets/app_text.dart';
 import '../widgets/book_cover.dart';
 import '../../core/theme/app_colors.dart';
+import 'book_cover_tag_badge.dart';
 
 /// 网格变体：上图下文。
 class BookCardVertical extends StatelessWidget {
@@ -14,17 +16,18 @@ class BookCardVertical extends StatelessWidget {
     required this.title,
     required this.category,
     required this.coverAsset,
+    this.coverTag,
     this.onTap,
   });
 
   final String title;
   final String category;
   final String coverAsset;
+  final BookCoverTag? coverTag;
   final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
-
     return GestureDetector(
       onTap: onTap,
       behavior: HitTestBehavior.opaque,
@@ -34,6 +37,9 @@ class BookCardVertical extends StatelessWidget {
           BookCover(
             assetPath: coverAsset,
             aspectRatio: AppSizes.bookCoverGridAspectRatio,
+            topEndBadge: coverTag == null
+                ? null
+                : BookCoverTagBadge(tag: coverTag!),
           ),
           const SizedBox(height: AppSizes.bookGridCoverToTextGap),
           _BookCardTextContent(
@@ -119,7 +125,6 @@ class BookCardHorizontal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return GestureDetector(
       onTap: onTap,
       behavior: HitTestBehavior.opaque,

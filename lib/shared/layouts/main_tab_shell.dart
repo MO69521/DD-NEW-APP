@@ -13,11 +13,13 @@ class MainTabShell extends StatefulWidget {
     required this.pages,
     this.initialIndex = 0,
     this.controller,
+    this.hideBottomNav = false,
   });
 
   final List<Widget> pages;
   final int initialIndex;
   final MainTabController? controller;
+  final bool hideBottomNav;
 
   @override
   State<MainTabShell> createState() => _MainTabShellState();
@@ -65,19 +67,18 @@ class _MainTabShellState extends State<MainTabShell> {
       backgroundColor: AppColors.backgroundDark,
       body: Stack(
         children: [
-          IndexedStack(
-            index: _selectedIndex,
-            children: widget.pages,
-          ),
-          Positioned(
-            left: 0,
-            right: 0,
-            bottom: 0,
-            child: AppBottomNav(
-              selectedIndex: _selectedIndex,
-              onTabChanged: _onTabChanged,
+          IndexedStack(index: _selectedIndex, children: widget.pages),
+          if (!widget.hideBottomNav)
+            Positioned(
+              left: 0,
+              right: 0,
+              bottom: 0,
+              child: AppBottomNav(
+                selectedIndex: _selectedIndex,
+                onTabChanged: _onTabChanged,
+                style: AppBottomNavStyle.fullWidthSolid,
+              ),
             ),
-          ),
         ],
       ),
     );

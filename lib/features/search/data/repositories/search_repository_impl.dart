@@ -1,3 +1,4 @@
+import '../../domain/entities/search_recommendation_item.dart';
 import '../../domain/entities/search_result_item.dart';
 import '../../domain/repositories/search_repository.dart';
 import '../datasources/search_mock_datasource.dart';
@@ -11,4 +12,8 @@ class SearchRepositoryImpl implements SearchRepository {
   @override
   Future<List<SearchResultItem>> search(String query) =>
       _dataSource.search(query);
+
+  @override
+  Future<List<SearchRecommendationItem>> fetchRecommendations() =>
+      _dataSource.fetchRecommendations();
 }

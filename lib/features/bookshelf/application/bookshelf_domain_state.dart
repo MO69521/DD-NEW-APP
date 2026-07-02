@@ -12,7 +12,10 @@ class BookshelfDomainState extends Equatable {
 
   int get todayReadingMinutes => content?.todayReadingMinutes ?? 0;
 
-  List<Book> bookSeedFor(BookshelfTab tab) => content?.booksFor(tab) ?? const [];
+  List<Book> bookSeedFor(BookshelfTab tab) =>
+      content?.booksFor(tab) ?? const [];
+
+  List<Book> get recommendationSeed => content?.recommendationBooks ?? const [];
 
   BookshelfDomainState copyWith({BookshelfPageContent? content}) {
     return BookshelfDomainState(content: content ?? this.content);

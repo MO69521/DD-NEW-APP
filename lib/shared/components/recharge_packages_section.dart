@@ -15,12 +15,14 @@ class RechargePackagesSection extends StatelessWidget {
   const RechargePackagesSection({
     super.key,
     required this.packages,
+    this.selectedPackageId,
     this.onPackageTap,
     this.onMoreTap,
     this.detailPageBuilder,
   });
 
   final List<RechargePackage> packages;
+  final String? selectedPackageId;
   final ValueChanged<RechargePackage>? onPackageTap;
   final VoidCallback? onMoreTap;
 
@@ -53,6 +55,7 @@ class RechargePackagesSection extends StatelessWidget {
             builder: (context, constraints) {
               const crossAxisCount = 3;
               const spacing = AppSpacing.xs;
+              final reserveSelectionBorder = selectedPackageId != null;
               final itemWidth =
                   (constraints.maxWidth - spacing * (crossAxisCount - 1)) /
                   crossAxisCount;
@@ -76,6 +79,8 @@ class RechargePackagesSection extends StatelessWidget {
                           )
                         : _RechargePackageCard(
                             package: package,
+                            isSelected: package.id == selectedPackageId,
+                            reserveSelectionBorder: reserveSelectionBorder,
                             onPriceTap: onPackageTap == null
                                 ? null
                                 : () => onPackageTap!(package),
@@ -148,77 +153,90 @@ class _RechargeSectionHeader extends StatelessWidget {
 }
 
 class _RechargePackageCard extends StatelessWidget {
-  const _RechargePackageCard({required this.package, this.onPriceTap});
+  const _RechargePackageCard({
+    required this.package,
+    this.isSelected = false,
+    this.reserveSelectionBorder = false,
+    this.onPriceTap,
+  });
 
   final RechargePackage package;
+  final bool isSelected;
+  final bool reserveSelectionBorder;
   final VoidCallback? onPriceTap;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: AppSizes.welfareRechargeCardHeight,
-      decoration: BoxDecoration(
-        color: AppColors.surfaceCard,
-        borderRadius: BorderRadius.circular(AppRadius.sm),
-        border: Border.all(
-          color: AppColors.borderGlass,
-          width: AppSizes.hairline,
+    return GestureDetector(
+      onTap: onPriceTap,
+      behavior: HitTestBehavior.opaque,
+      child: Container(
+        height: AppSizes.welfareRechargeCardHeight,
+        decoration: BoxDecoration(
+          color: AppColors.surfaceCard,
+          borderRadius: BorderRadius.circular(AppRadius.sm),
+          border: Border.all(
+            color: isSelected ? AppColors.accentYellow : AppColors.borderGlass,
+            width: reserveSelectionBorder
+                ? AppSizes.borderWidthEmphasis
+                : AppSizes.hairline,
+          ),
         ),
-      ),
-      clipBehavior: Clip.none,
-      child: Stack(
         clipBehavior: Clip.none,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(AppSpacing.xs),
-            child: Column(
-              children: [
-                SizedBox(
-                  height: AppSizes.welfareRechargeIllustrationHeight,
-                  width: AppSizes.welfareRechargeIllustrationWidth,
-                  child: Center(
-                    child: AppAssetImage(
-                      assetPath: package.illustrationAsset,
-                      height: AppSizes.welfareRechargeIllustrationHeight,
-                      width: AppSizes.welfareRechargeIllustrationWidth,
-                      fit: BoxFit.contain,
+        child: Stack(
+          clipBehavior: Clip.none,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(AppSpacing.xs),
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: AppSizes.welfareRechargeIllustrationHeight,
+                    width: AppSizes.welfareRechargeIllustrationWidth,
+                    child: Center(
+                      child: AppAssetImage(
+                        assetPath: package.illustrationAsset,
+                        height: AppSizes.welfareRechargeIllustrationHeight,
+                        width: AppSizes.welfareRechargeIllustrationWidth,
+                        fit: BoxFit.contain,
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(height: AppSpacing.xs),
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    AppText(
-                      '${package.energyAmount}',
-                      style: AppTextStyles.welfareRechargeEnergyAmount,
-                    ),
-                    const SizedBox(width: AppSpacing.xxs),
-                    AppText(
-                      '${package.originalAmount}',
-                      style: AppTextStyles.welfareRechargeOriginalAmount,
-                    ),
-                  ],
-                ),
-                const SizedBox(height: AppSpacing.xs),
-                _RechargePriceButton(
-                  priceYuan: package.priceYuan,
-                  onTap: onPriceTap,
-                ),
-              ],
-            ),
-          ),
-          if (package.badgeLabel != null && package.badgeLabel!.isNotEmpty)
-            const Positioned(
-              right: -AppSpacing.xxsHalf,
-              top: -AppSpacing.xxsHalf,
-              child: AppAssetImage(
-                assetPath: 'assets/images/welfare/recharge_hot_badge.png',
-                width: AppSizes.welfareRechargeHotBadgeWidth,
-                height: AppSizes.welfareRechargeHotBadgeHeight,
+                  const SizedBox(height: AppSpacing.xs),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      AppText(
+                        '${package.energyAmount}',
+                        style: AppTextStyles.welfareRechargeEnergyAmount,
+                      ),
+                      const SizedBox(width: AppSpacing.xxs),
+                      AppText(
+                        '${package.originalAmount}',
+                        style: AppTextStyles.welfareRechargeOriginalAmount,
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: AppSpacing.xs),
+                  _RechargePriceButton(
+                    priceYuan: package.priceYuan,
+                    onTap: onPriceTap,
+                  ),
+                ],
               ),
             ),
-        ],
+            if (package.badgeLabel != null && package.badgeLabel!.isNotEmpty)
+              const Positioned(
+                top: -AppSpacing.xxsHalf,
+                right: -AppSpacing.xxs,
+                child: AppAssetImage(
+                  assetPath: 'assets/images/welfare/recharge_hot_badge.png',
+                  width: AppSizes.welfareRechargeHotBadgeWidth,
+                  height: AppSizes.welfareRechargeHotBadgeHeight,
+                ),
+              ),
+          ],
+        ),
       ),
     );
   }
@@ -242,9 +260,7 @@ class _RechargePriceButton extends StatelessWidget {
           height: AppSizes.welfareRechargePriceButtonHeight,
           decoration: BoxDecoration(
             color: AppColors.surfaceCard,
-            borderRadius: BorderRadius.circular(
-              AppRadius.welfareRechargePrice,
-            ),
+            borderRadius: BorderRadius.circular(AppRadius.welfareRechargePrice),
           ),
           padding: const EdgeInsets.symmetric(
             horizontal: AppSpacing.lg,

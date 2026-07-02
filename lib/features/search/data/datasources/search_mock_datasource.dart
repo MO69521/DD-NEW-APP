@@ -1,5 +1,6 @@
 import '../../../../core/domain/entities/book.dart';
 import '../../domain/entities/book_serialization_status.dart';
+import '../../domain/entities/search_recommendation_item.dart';
 import '../../domain/entities/search_result_item.dart';
 
 /// Mock 数据源：Phase 1 静态数据，Phase 2 替换为 API datasource。
@@ -8,6 +9,29 @@ class SearchMockDataSource {
 
   /// 模拟网络延迟（毫秒）。
   static const int _mockLatencyMs = 320;
+  static const int _recommendationLatencyMs = 200;
+
+  Future<List<SearchRecommendationItem>> fetchRecommendations() async {
+    await Future<void>.delayed(
+      const Duration(milliseconds: _recommendationLatencyMs),
+    );
+
+    return [
+      for (var i = 0; i < _recommendationTemplates.length; i++)
+        SearchRecommendationItem(
+          book: Book(
+            id: 'search_recommend_${i + 1}',
+            title: _recommendationTemplates[i].title,
+            category: _recommendationTemplates[i].tags.join(' · '),
+            coverAsset: _recommendationTemplates[i].cover,
+          ),
+          badgeLabel: _recommendationTemplates[i].badge,
+          tags: _recommendationTemplates[i].tags,
+          description: _recommendationTemplates[i].description,
+          author: _recommendationTemplates[i].author,
+        ),
+    ];
+  }
 
   Future<List<SearchResultItem>> search(String query) async {
     await Future<void>.delayed(const Duration(milliseconds: _mockLatencyMs));
@@ -29,6 +53,63 @@ class SearchMockDataSource {
         ),
     ];
   }
+
+  static const List<_RecommendationTemplate> _recommendationTemplates = [
+    _RecommendationTemplate(
+      title: '被病娇囚禁后：我混成了团宠',
+      tags: ['生存', '病娇', '美强惨', '反派'],
+      description: '【追逐监禁+生存+团宠】一夜间，成为反派病娇的白月光，'
+          '并被他囚禁在地下室中！你意外发现，自己绑定了生存系统……',
+      author: '野眠',
+      badge: '更新',
+      cover: 'assets/covers/cover_01.png',
+    ),
+    _RecommendationTemplate(
+      title: '一夜成孕：不婚总裁乖乖臣服',
+      tags: ['生存', '病娇', '美强惨', '反派'],
+      description: '睡了亿万总裁后你溜了，再次见面，你成了高冷总裁的贴身秘书，'
+          '每天都在担心掉马甲，直到天才萌宝出生，宫家……',
+      author: '白桃乌龙',
+      badge: '完结',
+      cover: 'assets/covers/cover_02.png',
+    ),
+    _RecommendationTemplate(
+      title: '豪门少爷：哥哥们太爱我了怎办',
+      tags: ['生存', '病娇', '美强惨', '反派'],
+      description: '这是一个小白兔掉进狼窝，被吃干抹净的故事。你家与顾家打定了'
+          '娃娃亲，可谁知两家都生了男孩。你父母双亡……',
+      author: '宅宅在家',
+      badge: '更新',
+      cover: 'assets/covers/cover_03.png',
+    ),
+    _RecommendationTemplate(
+      title: '清冷仙尊他破戒了',
+      tags: ['仙侠', '纯爱', '苏爽', '修罗场'],
+      description: '【先婚后爱+双洁+追妻火葬场】身为美貌仙尊，他从不近女色，'
+          '直到那个魔界小公主缠了上来……',
+      author: '青衫渡',
+      badge: '完结',
+      cover: 'assets/covers/cover_04.png',
+    ),
+    _RecommendationTemplate(
+      title: '退婚后我惊艳全场',
+      tags: ['古代', '重生', '豪门', '爽文'],
+      description: '【重生+打脸+逆袭】上一世被渣男贱女害得家破人亡，重活一世，'
+          '她要让所有人血债血偿……',
+      author: '一盏离茶',
+      badge: '更新',
+      cover: 'assets/covers/cover_05.png',
+    ),
+    _RecommendationTemplate(
+      title: '我在异世开酒楼',
+      tags: ['玄幻', '种田', '轻松', '美食'],
+      description: '【种田+美食+轻松日常】穿越到异世界，没有金手指，只有一手'
+          '好厨艺，那就把酒楼开成全城第一吧！',
+      author: '炊烟袅袅',
+      badge: '连载',
+      cover: 'assets/covers/cover_06.png',
+    ),
+  ];
 
   static const List<_SearchTemplate> _templates = [
     _SearchTemplate(
@@ -80,6 +161,24 @@ class SearchMockDataSource {
       cover: 'assets/covers/cover_06.png',
     ),
   ];
+}
+
+class _RecommendationTemplate {
+  const _RecommendationTemplate({
+    required this.title,
+    required this.tags,
+    required this.description,
+    required this.author,
+    required this.badge,
+    required this.cover,
+  });
+
+  final String title;
+  final List<String> tags;
+  final String description;
+  final String author;
+  final String badge;
+  final String cover;
 }
 
 class _SearchTemplate {

@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../core/theme/app_layout.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_sizes.dart';
 import '../../../../routes/app_router.dart';
+import '../../../../shared/components/app_blurred_chrome_bar.dart';
 import '../../../../shared/components/app_top_bar.dart';
+import '../../../../shared/components/app_toast.dart';
 import '../../../../shared/components/empty_state.dart';
+import '../../../../shared/layouts/app_scroll_blur_scope.dart';
 import '../../../../shared/widgets/app_button.dart';
 import '../../application/book_detail_cubit.dart';
 import '../../application/book_detail_state.dart';
@@ -29,7 +33,8 @@ class BookDetailPage extends StatelessWidget {
       listenWhen: (previous, current) =>
           previous.ui.quickReplySuccessTick !=
               current.ui.quickReplySuccessTick ||
-          previous.ui.quickReplyErrorTick != current.ui.quickReplyErrorTick,
+          previous.ui.quickReplyErrorTick != current.ui.quickReplyErrorTick ||
+          previous.ui.shelfToastTick != current.ui.shelfToastTick,
       listener: (context, state) {
         if (state.ui.quickReplySuccessTick > 0) {
           ScaffoldMessenger.of(context)
@@ -41,6 +46,10 @@ class BookDetailPage extends StatelessWidget {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(SnackBar(content: Text(quickReplyError)));
+        }
+        final shelfToast = state.ui.shelfToastMessage;
+        if (state.ui.shelfToastTick > 0 && shelfToast != null) {
+          AppToast.show(context, shelfToast);
         }
       },
       child: BlocBuilder<BookDetailCubit, BookDetailState>(
@@ -131,10 +140,7 @@ class _BookDetailView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<BookDetailCubit>();
-    final topInset = MediaQuery.paddingOf(context).top;
-    final statusBar = topInset > 0
-        ? topInset
-        : AppSizes.statusBarPlaceholderHeight;
+    final statusBar = AppLayout.statusBarHeight(context);
 
     return Scaffold(
       backgroundColor: AppColors.backgroundDark,
@@ -145,67 +151,75 @@ class _BookDetailView extends StatelessWidget {
         onGiftTap: () => _comingSoon(context, '送心'),
         onReadTap: () => _comingSoon(context, '阅读器'),
       ),
-      body: Stack(
-        children: [
-          CustomScrollView(
-            slivers: [
-              SliverToBoxAdapter(
-                child: Stack(
-                  children: [
-                    Positioned(
-                      top: 0,
-                      left: 0,
-                      right: 0,
-                      child: BookDetailHeroCover(coverAsset: detail.coverAsset),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        top: AppSizes.bookDetailContentTopOffset,
-                        left: AppSizes.bookDetailContentHInset,
-                        right: AppSizes.bookDetailContentHInset,
+      body: AppScrollBlurScope(
+        builder: (context, topBlurEnabled) => Stack(
+          children: [
+            CustomScrollView(
+              clipBehavior: Clip.none,
+              slivers: [
+                SliverToBoxAdapter(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      BookDetailHeroCover(coverAsset: detail.coverAsset),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: AppSizes.bookDetailContentHInset,
+                        ),
+                        child: Transform.translate(
+                          offset: const Offset(
+                            0,
+                            -AppSizes.bookDetailContentHeroOverlap,
+                          ),
+                          child: BookDetailContent(
+                            detail: detail,
+                            selectedTab: selectedTab,
+                            selectedDiscussionFilter: selectedDiscussionFilter,
+                            onTabSelected: cubit.switchTab,
+                            onDiscussionFilterSelected:
+                                cubit.switchDiscussionFilter,
+                            onDiscussionPostTap: (post) =>
+                                AppRouter.pushBookDiscussionDetail(
+                                  bookId: detail.id,
+                                  post: post,
+                                ),
+                            onDiscussionPostLikeTap: (post) =>
+                                cubit.toggleDiscussionPostLike(post.id),
+                            onDiscussionPostBodyTap: (post) =>
+                                _openQuickReply(context, post),
+                            onCatalogTap: () => _openCatalog(context),
+                            onCharacterFavTap: (_) =>
+                                _comingSoon(context, '收藏和表白'),
+                          ),
+                        ),
                       ),
-                      child: BookDetailContent(
-                        detail: detail,
-                        selectedTab: selectedTab,
-                        selectedDiscussionFilter: selectedDiscussionFilter,
-                        onTabSelected: cubit.switchTab,
-                        onDiscussionFilterSelected:
-                            cubit.switchDiscussionFilter,
-                        onDiscussionPostTap: (post) =>
-                            AppRouter.pushBookDiscussionDetail(
-                              bookId: detail.id,
-                              post: post,
-                            ),
-                        onDiscussionPostLikeTap: (post) =>
-                            cubit.toggleDiscussionPostLike(post.id),
-                        onDiscussionPostBodyTap: (post) =>
-                            _openQuickReply(context, post),
-                        onCatalogTap: () => _openCatalog(context),
-                        onCharacterFavTap: (_) => _comingSoon(context, '收藏和表白'),
-                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            Positioned(
+              top: 0,
+              left: 0,
+              right: 0,
+              child: AppBlurredChromeBar(
+                enabled: topBlurEnabled,
+                child: AppTopBar(
+                  statusBarHeight: statusBar,
+                  showScrim: topBlurEnabled,
+                  chromeBlurEnabled: false,
+                  onBack: () => AppRouter.pop(),
+                  actions: [
+                    AppTopBarAction(
+                      iconAsset: 'assets/icons/ranking/share.svg',
+                      onTap: () => _comingSoon(context, '分享'),
                     ),
                   ],
                 ),
               ),
-            ],
-          ),
-          Positioned(
-            top: 0,
-            left: 0,
-            right: 0,
-            child: AppTopBar(
-              statusBarHeight: statusBar,
-              showScrim: true,
-              onBack: () => AppRouter.pop(),
-              actions: [
-                AppTopBarAction(
-                  iconAsset: 'assets/icons/ranking/share.svg',
-                  onTap: () => _comingSoon(context, '分享'),
-                ),
-              ],
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

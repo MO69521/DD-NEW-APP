@@ -5,6 +5,7 @@ import '../../../core/theme/app_sizes.dart';
 import '../data/datasources/bookstore_mock_datasource.dart';
 import '../data/repositories/bookstore_repository_impl.dart';
 import '../../../../core/domain/entities/book.dart';
+import '../domain/entities/bookstore_top_tab.dart';
 import '../domain/repositories/bookstore_repository.dart';
 import 'bookstore_domain_state.dart';
 import 'bookstore_state.dart';
@@ -12,14 +13,17 @@ import 'bookstore_state.dart';
 /// application 层状态管理，state 仅在此层创建与修改。
 class BookstoreCubit extends Cubit<BookstoreState> {
   BookstoreCubit({BookstoreRepository? repository})
-    : _repository = repository ??
+    : _repository =
+          repository ??
           const BookstoreRepositoryImpl(BookstoreMockDataSource()),
       super(const BookstoreState());
 
   final BookstoreRepository _repository;
 
   Future<void> load() async {
-    emit(state.copyWith(ui: state.ui.copyWith(isLoading: true, clearError: true)));
+    emit(
+      state.copyWith(ui: state.ui.copyWith(isLoading: true, clearError: true)),
+    );
 
     try {
       final content = await _repository.fetchPageContent();
@@ -40,6 +44,15 @@ class BookstoreCubit extends Cubit<BookstoreState> {
         ),
       );
     }
+  }
+
+  void switchTopTab(BookstoreTopTab tab) {
+    if (tab == state.interaction.selectedTopTab) return;
+    emit(
+      state.copyWith(
+        interaction: state.interaction.copyWith(selectedTopTab: tab),
+      ),
+    );
   }
 
   void switchRankingTab(RankingTab tab) {
@@ -77,6 +90,7 @@ class BookstoreCubit extends Cubit<BookstoreState> {
         title: source.title,
         category: source.category,
         coverAsset: source.coverAsset,
+        coverTag: source.coverTag,
       );
     });
 

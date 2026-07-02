@@ -30,4 +30,23 @@ abstract final class CurrencyConfig {
       CurrencyType.stardust => '星尘',
     };
   }
+
+  static String slug(CurrencyType type) {
+    return switch (type) {
+      CurrencyType.energy => 'energy',
+      CurrencyType.wishStar => 'wish-star',
+      CurrencyType.love => 'love',
+      CurrencyType.stardust => 'stardust',
+    };
+  }
+
+  static CurrencyType? fromSlug(String? slug) {
+    return switch (slug) {
+      'energy' => CurrencyType.energy,
+      'wish-star' => CurrencyType.wishStar,
+      'love' => CurrencyType.love,
+      'stardust' => CurrencyType.stardust,
+      _ => null,
+    };
+  }
 }

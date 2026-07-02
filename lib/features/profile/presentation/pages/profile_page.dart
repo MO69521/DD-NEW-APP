@@ -2,12 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/constants/main_tab_config.dart';
+import '../../../../core/constants/bookshelf_tab_intent.dart';
+import '../../../../core/theme/app_layout.dart';
+import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_sizes.dart';
 import '../../../../routes/app_router.dart';
 import '../../../../routes/app_routes.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../shared/components/currency_balance_bar.dart';
 import '../../../../shared/components/empty_state.dart';
+import '../../../../shared/components/energy_recharge_purchase_dialog.dart';
 import '../../../../shared/components/recharge_packages_section.dart';
 import '../../../../shared/components/vip_promo_banner.dart';
 import '../../../../shared/layouts/app_bottom_nav.dart';
@@ -18,9 +22,9 @@ import '../../application/profile_state.dart';
 import '../../domain/entities/profile_page_content.dart';
 import '../components/profile_hero_header.dart';
 import '../components/profile_shortcut_grid.dart';
-import '../../../../core/theme/app_colors.dart';
+import '../../domain/entities/profile_menu_item.dart';
 
-/// 我的页（Figma 205:3998）：仅渲染 state、触发 action。
+/// 我的页（Figma 697:12323）：仅渲染 state、触发 action。
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key, this.mainTabController});
 
@@ -74,10 +78,7 @@ class ProfilePage extends StatelessWidget {
 }
 
 class _ProfileView extends StatelessWidget {
-  const _ProfileView({
-    required this.content,
-    this.mainTabController,
-  });
+  const _ProfileView({required this.content, this.mainTabController});
 
   final ProfilePageContent content;
   final MainTabController? mainTabController;
@@ -85,75 +86,128 @@ class _ProfileView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<ProfileCubit>();
+    final heroBackgroundHeight = AppLayout.figmaFrameHeight(
+      context,
+      AppSizes.profileHeroHeight,
+    );
 
     return Scaffold(
       backgroundColor: AppColors.backgroundDark,
-      body: CustomScrollView(
-        slivers: [
-          SliverToBoxAdapter(
-            child: Stack(
-              clipBehavior: Clip.none,
-              children: [
-                Positioned(
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  bottom: 0,
-                  child: ProfileHeroBackground(
-                    avatarUrl: content.user.avatarUrl,
-                  ),
-                ),
-                ProfileHeroHeader(
-                  user: content.user,
-                  onSettingsTap: cubit.onSettingsTap,
-                  onPartnersTap: cubit.onPartnersTap,
-                  showBackground: false,
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(
-                    top: AppSizes.profileContentOverlapTop,
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(
-                      AppSpacing.insetMd,
-                      AppSpacing.sm,
-                      AppSpacing.insetMd,
-                      ProfilePage._bottomNavReserve,
-                    ),
-                    child: Column(
+      body: Stack(
+        children: [
+          CustomScrollView(
+            slivers: [
+              SliverToBoxAdapter(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Stack(
+                      clipBehavior: Clip.none,
                       children: [
-                        CurrencyBalanceBar(
-                          balances: content.currencyBalances,
-                        ),
-                        const SizedBox(height: AppSpacing.sm),
-                        if (!content.user.isVip)
-                          VipPromoBanner(
-                            monthlyEnergy: content.vipMonthlyEnergy,
-                            priceYuan: content.vipPriceYuan,
-                            onTap: () {
-                              cubit.onVipPromoTap();
-                              AppRouter.pushNamed(AppRoutes.membershipName);
-                            },
-                          ),
-                        if (!content.user.isVip)
-                          const SizedBox(height: AppSpacing.sm),
-                        RechargePackagesSection(
-                          packages: content.rechargePackages,
-                          onMoreTap: () => mainTabController?.switchTo(
-                            MainTabConfig.welfareIndex,
+                        Positioned(
+                          top: 0,
+                          left: 0,
+                          right: 0,
+                          height: heroBackgroundHeight,
+                          child: ProfileHeroBackground(
+                            avatarUrl: content.user.avatarUrl,
                           ),
                         ),
-                        const SizedBox(height: AppSpacing.sm),
-                        ProfileShortcutGrid(
-                          items: content.menuItems,
-                          onItemTap: cubit.onMenuTap,
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            ProfileHeroHeader(
+                              user: content.user,
+                              onProfileTap: cubit.onProfileTap,
+                              onPartnersTap: cubit.onPartnersTap,
+                              showBackground: false,
+                              showMessagesButton: false,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: AppSpacing.sm,
+                              ),
+                              child: Transform.translate(
+                                offset: const Offset(
+                                  0,
+                                  -AppSizes.profileBalanceBarHeroOverlap,
+                                ),
+                                child: CurrencyBalanceBar(
+                                  balances: content.currencyBalances,
+                                  onCurrencyTap: cubit.onCurrencyTap,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
-                  ),
+                    Transform.translate(
+                      offset: const Offset(
+                        0,
+                        -AppSizes.profileBalanceBarHeroOverlap,
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(
+                          AppSpacing.insetMd,
+                          AppSizes.profileBalanceBarToVipGap,
+                          AppSpacing.insetMd,
+                          ProfilePage._bottomNavReserve,
+                        ),
+                        child: Column(
+                          children: [
+                            if (!content.user.isVip)
+                              VipPromoBanner(
+                                monthlyEnergy: content.vipMonthlyEnergy,
+                                priceYuan: content.vipPriceYuan,
+                                onTap: () {
+                                  cubit.onVipPromoTap();
+                                  AppRouter.pushNamed(AppRoutes.membershipName);
+                                },
+                              ),
+                            if (!content.user.isVip)
+                              const SizedBox(height: AppSpacing.sm),
+                            RechargePackagesSection(
+                              packages: content.rechargePackages,
+                              onPackageTap: (package) =>
+                                  EnergyRechargePurchaseDialog.show(
+                                context,
+                                package: package,
+                              ),
+                              onMoreTap: () => mainTabController?.switchTo(
+                                MainTabConfig.welfareIndex,
+                              ),
+                            ),
+                            const SizedBox(height: AppSpacing.sm),
+                            ProfileShortcutGrid(
+                              items: content.menuItems,
+                              onItemTap: (action) {
+                                if (action ==
+                                    ProfileMenuAction.readingHistory) {
+                                  mainTabController?.openBookshelfTab(
+                                    BookshelfTabIntent.history,
+                                  );
+                                  return;
+                                }
+                                cubit.onMenuTap(action);
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ],
+              ),
+            ],
+          ),
+          Positioned(
+            top: AppLayout.figmaFrameTop(
+              context,
+              AppSizes.profileHeroSettingsTop,
             ),
+            right: AppSpacing.md,
+            child: ProfileMessagesButton(onTap: cubit.onMessagesTap),
           ),
         ],
       ),

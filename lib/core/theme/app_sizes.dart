@@ -4,6 +4,7 @@ abstract final class AppSizes {
   static const double hairline = 0.5;
   static const double borderWidthEmphasis = 1.5;
   static const double iconSm = 14;
+  static const double splashLogoSize = 100;
 
   // ── 通用二级页顶栏 (AppTopBar) ──
   static const double topBarHeight = 44;
@@ -11,6 +12,7 @@ abstract final class AppSizes {
   static const double topBarBackIconWidth = 14;
   static const double topBarBackIconHeight = 20;
   static const double topBarActionIconSize = 19;
+  static const double dialogBackgroundBlurSigma = 64;
 
   // ── 通用按钮 (AppButton) ──
   static const double buttonPaddingHNormal = 24;
@@ -25,8 +27,10 @@ abstract final class AppSizes {
   static const double glassBlurSigma = 8;
   static const double statusBarPlaceholderHeight = 44;
   static const double bookstoreHeaderVerticalInset = 2;
-  static const double bookstoreStickyHeaderHeight =
-      searchBarHeight + bookstoreHeaderVerticalInset * 2;
+  static const double chromeBarBlurSigma = 24;
+  static const double bookstoreTopHeaderHeight = 44;
+  static const double bookstoreSearchIconSize = 20;
+  static const double bookstoreStickyHeaderHeight = bookstoreTopHeaderHeight;
   static const double bookstoreHeaderToFirstSectionGap = 20;
   static const double bookstoreLoadMoreTriggerOffset = 240;
   static const double bookstoreLoadingIndicatorSize = 20;
@@ -82,6 +86,7 @@ abstract final class AppSizes {
   static const double welfareRechargeIllustrationWidth = 76;
   static const double welfareRechargeHotBadgeWidth = 33;
   static const double welfareRechargeHotBadgeHeight = 18;
+  static const double stardustExchangeBadgeWidth = 48;
   static const double welfareRechargePriceButtonHeight = 28;
   static const double welfareCheckInMilestoneHeight = 70;
   static const double welfareCheckInProgressLineHeight = 4;
@@ -117,6 +122,12 @@ abstract final class AppSizes {
   static const double welfareVipCtaPaddingVertical = 6;
   static const double welfareVipCtaBorderWidth = 0.8;
   static const double welfareRechargeInfoIconSize = 24;
+
+  // ── 能量充值支付确认弹窗 ──
+  static const double rechargePurchaseDialogEnergyIconSize = 16;
+  static const double rechargePurchaseDialogCloseIconSize = 20;
+  static const double rechargePurchaseDialogPriceFontSize = 28;
+
   static const double welfareCheckInRewardIconSize = 24;
   static const double welfareCheckInSmallRewardIconSize = 12;
   static const double welfareTaskActionHeight = 30;
@@ -159,12 +170,38 @@ abstract final class AppSizes {
   static const double bookshelfClaimWelfareCtaPaddingHorizontal = 11;
   static const double bookshelfClaimWelfareCtaPaddingVertical = 7;
   static const double bookshelfManageActionFontSize = 14;
+  static const double bookshelfSelectionCheckIconSize = 16;
+  static const double selectionMarkCheckStrokeWidth = 1.6;
+  static const double bookshelfEmptyBlockWidth = 200;
+  static const double bookshelfEmptyIllustrationSize = 150;
+  static const double bookshelfEmptyTopPadding = 18;
+  static const double bookshelfEmptyIllustrationToTextGap = 18;
+  static const double bookshelfEmptyTextToActionGap = 30;
+  static const double bookshelfEmptyBottomPadding = 8;
+
+  // ── 封面右上角状态角标（Figma 1335:12223） ──
+  static const double bookCoverTagInsetTop = 8;
+  static const double bookCoverTagInsetRight = 8.5;
+
+  // ── 轻提示 Toast ──
+  static const double toastPaddingHorizontal = 20;
+  static const double toastPaddingVertical = 12;
+  static const double toastHorizontalMargin = 48;
 
   // ── 我的页 (Figma 205:3998) ──
   static const double profileHeroHeight = 375;
-  static const double profileContentOverlapTop = 196;
+
+  /// 无背景 Hero 区高度：余额条顶边 (200) + 叠入 Hero 的 overlap (24) = 224。
+  static const double profileHeroCompactHeight = 224;
+
+  /// 余额条向上叠入 Hero 渐变的视觉偏移（文档流仍在其下方）。
+  static const double profileBalanceBarHeroOverlap = 24;
+
+  /// 余额条与 VIP 横幅间距（Figma 697:12412 → 697:12468）。
+  static const double profileBalanceBarToVipGap = 16;
   static const double profileAvatarSize = 80;
   static const double profileSettingsButtonSize = 32;
+  static const double profileMessagesIconSize = 18;
   static const double profilePartnerAvatarSize = 24;
   static const double profilePartnerAvatarGap = 6;
   static const double profileShortcutIconSize = 32;
@@ -181,18 +218,78 @@ abstract final class AppSizes {
     1.0,
   ];
 
-  // ── 榜单详情页 (Figma 220:8376) ──
-  /// hero 内容高度（设计 200 - 状态栏 44）。
-  static const double rankingHeroContentHeight = 156;
+  // ── 账号设置页 ──
+  static const double accountSettingsRowHeight = 52;
+  static const double accountSettingsAvatarSize = 40;
+  static const double accountSettingsBindingIconSize = 24;
 
-  /// 顶部分段相对状态栏底部的偏移（设计 190 - 44）。
-  static const double rankingSegmentedTopOffset = 146;
+  // ── 我的消息页 ──
+  static const double myMessagesEmptyIllustrationSize = 120;
+  static const double myMessagesEmptyIconSize = 48;
+  static const int myMessagesEmptyTopFlex = 2;
+  static const int myMessagesEmptyBottomFlex = 3;
 
-  /// 书单主体相对状态栏底部的偏移（设计 244 - 44）。
-  static const double rankingBodyTopOffset = 200;
+  // ── 设置页 ──
+  static const double settingsLogoSize = 72;
 
-  /// hero 标题块距 hero 底部内边距（设计：标题块底 152，hero 高 200）。
-  static const double rankingHeroTitleBottomInset = 48;
+  // ── 榜单详情页头图（Figma 1297:741 完整榜单）──
+  static const double rankingHeroDesignWidth = 375;
+  static const double rankingHeroDesignHeight = 160;
+  static const double rankingHeroAspectRatio =
+      rankingHeroDesignWidth / rankingHeroDesignHeight;
+
+  /// 头图插画蒙版可见高度（Figma 1297:826 mask 130）。
+  static const double rankingHeroImageMaskHeight = 130;
+
+  /// 插画相对头图容器的高度比例（Figma 234.38%）。
+  static const double rankingHeroImageHeightScale = 2.3438;
+
+  /// 插画相对头图容器的顶部偏移比例（Figma -127.76%）。
+  static const double rankingHeroImageTopOffsetRatio = -1.2776;
+
+  /// 标题块尺寸与定位。
+  static const double rankingHeroTitleBlockHeight = 61;
+  static const double rankingHeroTitleBlockCenterOffset = 47.5;
+  static const double rankingHeroTitleMainHeight = 38;
+  static const double rankingHeroSubtitleTop = 44;
+
+  /// 顶部标题栏到底部头图标题块的视觉间距。
+  static const double rankingHeroTitleBarGap = 8;
+
+  /// 分段控件吸附后距离顶部标题栏的视觉间距。
+  static const double rankingStickyControlsTopGap = 8;
+
+  static const double rankingHeroTitleBlockTop =
+      bookstoreTopHeaderHeight + rankingHeroTitleBarGap;
+  static const double rankingHeroTitleBlockBottom =
+      rankingHeroTitleBlockTop + rankingHeroTitleBlockHeight;
+
+  /// 标题块到底部分段的视觉间距。
+  static const double rankingHeroTitleToSegmentedGap = 8;
+
+  /// 频道分段相对帧顶 Y：标题块底部 + 标准间距。
+  static const double rankingSegmentedFrameTop =
+      rankingHeroTitleBlockBottom + rankingHeroTitleToSegmentedGap;
+
+  /// 频道分段控件实际高度（outer padding×2 + item padding×2 + 14px 文本行高）。
+  static const double rankingSegmentedHeight =
+      rankingSegmentedOuterPadding * 2 +
+      rankingSegmentedItemPaddingVertical * 2 +
+      14;
+
+  /// 频道分段底部到书单主体顶部的视觉间距。
+  static const double rankingSegmentedToBodyGap = 16;
+
+  /// 书单主体相对帧顶 Y，按分段控件实际高度 + 视觉间距推导。
+  static const double rankingBodyFrameTop =
+      rankingSegmentedFrameTop +
+      rankingSegmentedHeight +
+      rankingSegmentedToBodyGap;
+
+  /// 频道分段宽度与水平居中偏移（Figma 351px，center +6px）。
+  static const double rankingSegmentedDesignWidth = 351;
+  static const double rankingSegmentedCenterOffsetX = 6;
+
   static const double rankingHeroTitleToSubtitleGap = 8;
   static const double rankingHeroDecorationGap = 8;
 
@@ -209,6 +306,20 @@ abstract final class AppSizes {
   /// 头图背景蒙版渐变停靠点（顶部压暗 → 透出插画 → 底部融暗）。
   static const List<double> rankingHeroScrimStops = [0.0, 0.32, 0.72, 1.0];
 
+  /// 头图底部融暗渐变停靠点。
+  static const List<double> rankingHeroImageScrimStops = [0.0, 0.72, 0.9, 1.0];
+
+  /// 头图封面人物焦点（归一化 0~1，宽屏裁切时保持面部区域）。
+  static const double rankingHeroFocalX = 0.5;
+  static const double rankingHeroFocalY = 0.32;
+
+  /// 书籍封面作头图时的 [Alignment] 分量（Figma 1297:826 裁切区域）。
+  static const double rankingHeroCoverAlignmentX = 0.5;
+  static const double rankingHeroCoverAlignmentY = 0.35;
+
+  /// 宽屏头图至少保留的封面顶部露出比例（含人物面部，约 15%~45% 区域）。
+  static const double rankingHeroMinRevealHeightRatio = 0.38;
+
   static const double rankingSegmentedOuterPadding = 2;
   static const double rankingSegmentedItemPaddingVertical = 10;
   static const double rankingSegmentedBlurSigma = 12;
@@ -216,19 +327,38 @@ abstract final class AppSizes {
   static const double rankingDimensionRailWidth = 76;
   static const double rankingDimensionItemPaddingVertical = 16;
   static const double rankingDimensionItemPaddingHorizontal = 12;
+
+  /// 右侧榜单列表顶部内边距；与左侧榜单维度导航顶端对齐。
+  static const double rankingBookListTopPadding = 0;
+
+  /// 单项占位高度（padding×2 + 选中态字号行高），供指示条滑动计算。
+  static const double rankingDimensionItemSlotHeight = 52;
   static const double rankingDimensionIndicatorWidth = 3;
   static const double rankingDimensionIndicatorHeight = 16;
 
-  static const double rankingBookRowCoverWidth = 80;
-  static const double rankingBookRowCoverHeight = 109;
-  static const double rankingBookRowTitleCategoryGap = 12;
-
   // ── 书籍详情页 (Figma 183:1874) ──
-  static const double bookDetailHeroHeight = 509;
+  /// 顶部氛围头图设计尺寸 375×190，固定比例自适应屏宽。
+  static const double bookDetailHeroDesignWidth = 375;
+  static const double bookDetailHeroDesignHeight = 190;
+  static const double bookDetailHeroAspectRatio =
+      bookDetailHeroDesignWidth / bookDetailHeroDesignHeight;
 
-  /// 内容区起始 Y（设计 456），上方透出 hero 壁纸并叠压其底部渐隐区。
-  static const double bookDetailContentTopOffset = 456;
+  /// 底部渐隐层占头图高度比例（拉长过渡带）。
+  static const double bookDetailHeroScrimHeightRatio = 0.82;
+  static const List<double> bookDetailHeroScrimStops = [
+    0.0,
+    0.18,
+    0.42,
+    0.64,
+    0.82,
+    1.0,
+  ];
+
+  static const double bookDetailContentHeroOverlap = 16;
+
   static const double bookDetailContentHInset = 12;
+  static const double bookDetailSummaryCoverWidth = 96;
+  static const double bookDetailSummaryCoverHeight = 128;
   static const double bookDetailSectionGap = 24;
   static const double bookDetailGlassBlurSigma = 12;
 
@@ -261,6 +391,9 @@ abstract final class AppSizes {
   static const double bookDetailCharCoverHeight = 179;
   static const double bookDetailCharFavPaddingH = 24;
   static const double bookDetailCharFavPaddingV = 6;
+  static const double bookDetailCharacterHelpDialogWidthRatio = 0.84;
+  static const double bookDetailCharacterHelpDialogMaxHeightRatio = 0.62;
+  static const double bookDetailCharacterHelpCloseSize = 32;
   static const double bookDetailSectionHintIconSize = 12;
   static const double bookDetailDiscussionAvatarSize = 28;
   static const double bookDetailDiscussionListAvatarSize = 24;
@@ -296,14 +429,17 @@ abstract final class AppSizes {
   static const double searchAppBarBackIconHeight = 20;
   static const double searchInputIconSize = 16;
 
-  static const double searchResultCoverWidth = 84;
-  static const double searchResultCoverHeight = 112;
-  static const double searchResultRowVerticalPadding = 16;
-  static const double searchResultCoverToTextGap = 12;
-  static const double searchResultTitleToTagsGap = 8;
-  static const double searchResultTagsToDescGap = 8;
-  static const double searchResultTitleToAddGap = 8;
-  static const double searchResultAddIconSize = 22;
+  // ── 大封面横向书卡（分类 / 榜单 / 搜索 / 编辑推荐共用） ──
+  static const double bookCardLargeCoverWidth = 128;
+  static const double bookCardLargeCoverAspectRatio = 3 / 4;
+  static const double bookCardLargeCoverHeight =
+      bookCardLargeCoverWidth / bookCardLargeCoverAspectRatio;
+  static const double bookCardLargeRowVerticalPadding = 16;
+  static const double bookCardLargeCoverToTextGap = 12;
+  static const double bookCardLargeTitleToMetaGap = 8;
+  static const double bookCardLargeMetaToDescGap = 8;
+  static const double bookCardLargeTitleToTrailingGap = 8;
+  static const double bookCardLargeTrailingIconSize = 22;
 
   static const double searchEmptyIllustrationSize = 160;
   static const double searchEmptyIconSize = 56;
@@ -433,8 +569,50 @@ abstract final class AppSizes {
   static const double partnerLoadingIndicatorStrokeWidth = 2;
   static const double partnerFilterSheetOptionHeight = 48;
 
+  // 消息 Tab
+  static const double partnerMessageAvatarSize = 52;
+  static const double partnerMessageRowMinHeight = 72;
+  static const double partnerMessageAffectionBadgeHeight = 18;
+  static const double partnerMessageAffectionIconSize = 10;
+  static const double partnerMessageAffectionBadgePaddingH = 6;
+  static const double partnerMessageUnreadBadgeMinSize = 16;
+  static const double partnerMessageUnreadBadgePaddingH = 4;
+  static const double partnerMessageHeaderGradientHeight = 100;
+  static const double partnerHeaderToMessageListGap = 4;
+  static const double partnerMessageAvatarToContentGap = 12;
+  static const double partnerMessageNameToPreviewGap = 4;
+  static const double partnerMessageTimestampMinWidth = 48;
+
+  // 互动 Tab
+  static const double partnerInteractionSideActionSize = 44;
+  static const double partnerInteractionSideActionIconSize = 22;
+  static const double partnerInteractionSideActionSpacing = 14;
+  static const double partnerInteractionSideActionLabelGap = 4;
+  static const double partnerInteractionConfideActionSize = 56;
+  static const double partnerInteractionChatActionSize = 72;
+  static const double partnerInteractionBottomActionGap = 8;
+  static const double partnerInteractionReviewButtonHeight = 32;
+  static const double partnerInteractionReviewButtonPaddingH = 12;
+  static const double partnerInteractionCharacterCardPaddingH = 12;
+  static const double partnerInteractionCharacterCardPaddingV = 8;
+  static const double partnerInteractionCharacterCardRadius = 12;
+  static const double partnerInteractionPageIndicatorPaddingH = 10;
+  static const double partnerInteractionPageIndicatorPaddingV = 4;
+  static const double partnerInteractionSceneBottomFadeHeight = 120;
+  static const double partnerInteractionOverlayHorizontalInset = 12;
+  static const double partnerInteractionOverlayTopInset = 8;
+  static const double partnerInteractionOverlayBelowHeaderGap = 8;
+  static const double partnerInteractionOverlayBottomInset = 96;
+
+  /// 顶栏（状态栏 + Tab）高度，用于全屏背景下 overlay 避让。
+  static double partnerInteractionHeaderOverlayHeight(double statusBarHeight) {
+    return statusBarHeight + partnerHeaderHeight;
+  }
+
   // ── 分类页（深色态） ──
   static const double categoryFilterGroupSpacing = 20;
+  static const double categoryFilterDividerTopGap = 14;
+  static const double categoryFilterDividerBottomGap = 16;
   static const double categoryFilterChipSpacing = 16;
   static const double categoryFilterChipRunSpacing = 14;
   static const double categoryFilterChipLabelToUnderlineGap = 4;
@@ -442,4 +620,15 @@ abstract final class AppSizes {
   static const double categoryFilterUnderlineHeight = 3;
   static const double categoryFilterSectionVerticalPadding = 16;
   static const double categoryHeaderToFilterGap = 8;
+
+  // ── 帮助与反馈页 ──
+  static const double helpFeedbackTabBarReserveHeight = 40;
+  static const double helpFeedbackBannerHeight = 120;
+  static const double helpFeedbackQuestionMarkSize = 36;
+  static const double helpFeedbackIssueTypeRadioSize = 18;
+  static const double helpFeedbackInputMinHeight = 48;
+  static const double helpFeedbackDescriptionMinHeight = 164;
+  static const double helpFeedbackUploadBoxSize = 64;
+  static const int helpFeedbackDescriptionMaxLines = 6;
+  static const int helpFeedbackDescriptionMaxLength = 300;
 }

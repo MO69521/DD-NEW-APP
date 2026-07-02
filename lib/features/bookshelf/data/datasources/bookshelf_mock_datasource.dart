@@ -13,6 +13,7 @@ class BookshelfMockDataSource {
         BookshelfTab.shelf: _shelfBooks,
         BookshelfTab.history: _historyBooks,
       },
+      recommendationBooks: _recommendationBooks,
     );
   }
 
@@ -53,24 +54,6 @@ class BookshelfMockDataSource {
       category: '玄幻种田',
       coverAsset: 'assets/covers/cover_06.png',
     ),
-    Book(
-      id: 's7',
-      title: '全网都在磕我们 CP',
-      category: '娱乐圈',
-      coverAsset: 'assets/covers/cover_01.png',
-    ),
-    Book(
-      id: 's8',
-      title: '王爷他又吃醋了',
-      category: '古言甜宠',
-      coverAsset: 'assets/covers/cover_02.png',
-    ),
-    Book(
-      id: 's9',
-      title: '快穿之反派逆袭',
-      category: '快穿爽文',
-      coverAsset: 'assets/covers/cover_03.png',
-    ),
   ];
 
   static const List<Book> _historyBooks = [
@@ -109,6 +92,57 @@ class BookshelfMockDataSource {
       title: '我在末世开超市',
       category: '末世爽文',
       coverAsset: 'assets/covers/cover_03.png',
+    ),
+  ];
+
+  static const List<Book> _recommendationBooks = [
+    Book(
+      id: 'br1',
+      title: '全网都在磕我们 CP',
+      category: '娱乐圈',
+      coverAsset: 'assets/covers/cover_01.png',
+      summary: '顶流女星和冷面影帝被迫同台，营业综艺里每一次对视都被全网放大。',
+      annotations: ['甜宠', '娱乐圈', '双向暗恋'],
+    ),
+    Book(
+      id: 'br2',
+      title: '王爷他又吃醋了',
+      category: '古言甜宠',
+      coverAsset: 'assets/covers/cover_02.png',
+      summary: '穿成和亲公主后，她只想躺平赚钱，却被傲娇王爷日日盯上。',
+      annotations: ['古言', '轻松', '先婚后爱'],
+    ),
+    Book(
+      id: 'br3',
+      title: '快穿之反派逆袭',
+      category: '快穿爽文',
+      coverAsset: 'assets/covers/cover_03.png',
+      summary: '绑定系统后，她穿进崩坏世界，替每个反派改写命运。',
+      annotations: ['快穿', '爽文', '系统'],
+    ),
+    Book(
+      id: 'br4',
+      title: '清冷仙尊他破戒了',
+      category: '仙侠言情',
+      coverAsset: 'assets/covers/cover_04.png',
+      summary: '人人敬畏的仙尊为护她入红尘，也第一次有了私心。',
+      annotations: ['仙侠', '师徒', '救赎'],
+    ),
+    Book(
+      id: 'br5',
+      title: '退婚后我惊艳全场',
+      category: '豪门爽文',
+      coverAsset: 'assets/covers/cover_05.png',
+      summary: '被退婚当天，她摘下面具亮出马甲，整个豪门圈都慌了。',
+      annotations: ['豪门', '马甲', '逆袭'],
+    ),
+    Book(
+      id: 'br6',
+      title: '我在无限流里开店',
+      category: '无限流',
+      coverAsset: 'assets/covers/cover_06.png',
+      summary: '别人忙着逃生，她在副本门口开起小店，连 Boss 都排队下单。',
+      annotations: ['无限流', '经营', '脑洞'],
     ),
   ];
 }

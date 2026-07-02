@@ -57,6 +57,68 @@ features/<name>/
 
 UI 只做：渲染 state、触发 action
 
+### 3.1 状态栏留白（强制）
+
+所有**页面级** UI（二级页、Tab 根页、带顶栏的全屏页）顶部必须预留系统状态栏高度，与一级 Tab 页视觉一致。
+
+**标准写法（二级页 + `AppTopBar`）：**
+
+```dart
+final statusBarHeight = AppLayout.statusBarHeight(context);
+
+AppTopBar(
+  statusBarHeight: statusBarHeight,
+  title: '...',
+  onBack: AppRouter.pop,
+)
+```
+
+**规则：**
+
+- ✔ 统一使用 `AppLayout.statusBarHeight(context)`（见 `lib/core/theme/app_layout.dart`）
+- ✔ 原生 iOS/Android：无 safe area inset 时回退 `AppSizes.statusBarPlaceholderHeight`（44）
+- ✔ Web 桌面预览：无 inset 时为 **0**，不显示 phantom 状态栏空白
+- ✔ 移动端浏览器若有刘海 safe area，仍使用真实 inset
+- ✔ 使用 `AppTopBar` 时**必须**传入 `statusBarHeight`（含 loading / error 态若展示顶栏）
+- ✔ Tab 根页自定义 Hero / Header 时，首行内容顶边 = `statusBarHeight + 设计稿内边距`（见 `profileHeroUserInfoTop` 等 token）
+- ❌ 禁止在各页面重复写 `topInset > 0 ? topInset : AppSizes.statusBarPlaceholderHeight`
+- ❌ 禁止顶栏/标题/返回钮直接贴屏幕物理顶边（`SafeArea` 单独包裹而不传 `AppTopBar.statusBarHeight` 视为不合规）
+
+**参考实现：** `editor_pick_page.dart`、`account_settings_page.dart`、`membership_page.dart`
+
+### 3.2 弹窗背景模糊（强制）
+
+所有 `Dialog` / 居中弹窗弹出后，弹窗背后的页面内容必须有背景模糊效果。
+
+**标准写法：**
+
+```dart
+showAppBlurredDialog(
+  context: context,
+  builder: (_) => YourDialog(...),
+)
+```
+
+**规则：**
+
+- ✔ 统一使用 `lib/shared/components/app_blurred_dialog.dart` 的 `showAppBlurredDialog`
+- ✔ blur 强度使用 `AppSizes.dialogBackgroundBlurSigma`
+- ✔ 弹窗本体仍按组件层级放置：通用弹窗进 `shared/components`，业务弹窗进 `features/*/presentation/components`
+- ❌ 禁止 feature 内直接调用 `showDialog` 但不加 blur
+- ❌ 禁止在弹窗中写死 `ImageFilter.blur(sigmaX: 12, sigmaY: 12)`
+
+### 3.3 卡片层级（强制）
+
+信息分组卡片内若包含多行列表项，禁止再给每一行套独立卡片背景。
+
+**标准写法：**
+
+- ✔ 外层使用一个 section/card 容器承载标题与内容
+- ✔ 内部列表项使用 `Padding` / `Row` / `Column` 渲染
+- ✔ 行与行之间使用 `Divider` 或细分割线分隔
+- ❌ 禁止 `Card/Container(surfaceCard + radius)` 内再嵌 `Card/Container(surfaceCard + radius)`
+- ❌ 禁止为了区分列表项重复叠加圆角背景；如需强调单个操作，使用按钮/标签而不是整行卡片
+
 ## 4. 组件分级
 
 | Level | 位置 | 说明 |
@@ -116,6 +178,7 @@ list 必须 builder；避免全局 rebuild；state 局部订阅；大 widget mem
 3. 是否可复用 shared
 4. 是否写死样式
 5. 是否引入跨 feature 依赖
+6. **页面顶部是否已预留状态栏高度**（§3.1，含 Web placeholder 回退）
 
 ## 14. 强制重构触发
 

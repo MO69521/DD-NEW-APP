@@ -3,7 +3,7 @@ import 'package:equatable/equatable.dart';
 import '../domain/entities/partner_sort_mode.dart';
 import '../domain/entities/partner_top_tab.dart';
 
-/// 交互状态：顶栏 Tab、标签、排序、筛选。
+/// 交互状态：顶栏 Tab、标签、排序、筛选、互动场景索引。
 class PartnerInteractionState extends Equatable {
   const PartnerInteractionState({
     this.topTab = PartnerTopTab.explore,
@@ -11,6 +11,7 @@ class PartnerInteractionState extends Equatable {
     this.sortMode = PartnerSortMode.hot,
     this.selectedFilterIndex = 0,
     this.isFilterSheetOpen = false,
+    this.interactionSceneIndex = 0,
   });
 
   final PartnerTopTab topTab;
@@ -18,6 +19,7 @@ class PartnerInteractionState extends Equatable {
   final PartnerSortMode sortMode;
   final int selectedFilterIndex;
   final bool isFilterSheetOpen;
+  final int interactionSceneIndex;
 
   PartnerInteractionState copyWith({
     PartnerTopTab? topTab,
@@ -25,6 +27,7 @@ class PartnerInteractionState extends Equatable {
     PartnerSortMode? sortMode,
     int? selectedFilterIndex,
     bool? isFilterSheetOpen,
+    int? interactionSceneIndex,
   }) {
     return PartnerInteractionState(
       topTab: topTab ?? this.topTab,
@@ -33,6 +36,8 @@ class PartnerInteractionState extends Equatable {
       sortMode: sortMode ?? this.sortMode,
       selectedFilterIndex: selectedFilterIndex ?? this.selectedFilterIndex,
       isFilterSheetOpen: isFilterSheetOpen ?? this.isFilterSheetOpen,
+      interactionSceneIndex:
+          interactionSceneIndex ?? this.interactionSceneIndex,
     );
   }
 
@@ -43,5 +48,6 @@ class PartnerInteractionState extends Equatable {
         sortMode,
         selectedFilterIndex,
         isFilterSheetOpen,
+        interactionSceneIndex,
       ];
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../core/theme/app_layout.dart';
 import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../routes/app_router.dart';
@@ -11,6 +12,8 @@ import '../../../../shared/components/recharge_packages_section.dart';
 import '../../../../shared/components/vip_promo_banner.dart';
 import '../../../../shared/layouts/app_bottom_nav.dart';
 import '../../../../shared/widgets/app_button.dart';
+import '../../../../shared/components/app_blurred_chrome_bar.dart';
+import '../../../../shared/layouts/app_chrome_blur.dart';
 import '../../application/welfare_cubit.dart';
 import '../../application/welfare_state.dart';
 import '../../domain/entities/welfare_models.dart';
@@ -20,7 +23,6 @@ import '../components/meal_check_in_section.dart';
 import '../components/reading_vip_progress_section.dart';
 import '../components/welfare_task_list_section.dart';
 import '../components/welfare_page_header.dart';
-import 'recharge_detail_page.dart';
 import '../../../../core/theme/app_colors.dart';
 
 /// 福利中心页（Figma 294:4943）：仅渲染 state、触发 action。
@@ -95,10 +97,8 @@ class _WelfareView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final topInset = MediaQuery.paddingOf(context).top;
-    final statusBarHeight = topInset > 0
-        ? topInset
-        : AppSizes.statusBarPlaceholderHeight;
+    final statusBarHeight = AppLayout.statusBarHeight(context);
+    final cubit = context.read<WelfareCubit>();
 
     return Scaffold(
       backgroundColor: AppColors.backgroundDark,
@@ -122,24 +122,21 @@ class _WelfareView extends StatelessWidget {
             sliver: SliverList(
               delegate: SliverChildListDelegate([
                 const SizedBox(height: AppSpacing.md),
-                CurrencyBalanceBar(balances: content.currencyBalances),
+                CurrencyBalanceBar(
+                  balances: content.currencyBalances,
+                  onCurrencyTap: cubit.onCurrencyTap,
+                ),
                 const SizedBox(height: AppSpacing.sm),
                 VipPromoBanner(
                   monthlyEnergy: content.vipMonthlyEnergy,
                   priceYuan: content.vipPriceYuan,
-                  onTap: () =>
-                      AppRouter.pushNamed(AppRoutes.membershipName),
+                  onTap: () => AppRouter.pushNamed(AppRoutes.membershipName),
                 ),
                 const SizedBox(height: AppSpacing.sm),
                 RechargePackagesSection(
                   packages: content.rechargePackages,
                   onPackageTap: onRechargePackageTap,
                   onMoreTap: onRechargeMoreTap,
-                  detailPageBuilder: (context, package, closeContainer) =>
-                      RechargeDetailPage(
-                        package: package,
-                        onClose: closeContainer,
-                      ),
                 ),
                 const SizedBox(height: AppSpacing.sm),
                 DailyCheckInSection(summary: content.checkInSummary),
@@ -177,7 +174,13 @@ class _WelfareHeaderDelegate extends SliverPersistentHeaderDelegate {
     double shrinkOffset,
     bool overlapsContent,
   ) {
-    return Container(color: AppColors.backgroundDark, child: child);
+    return AppBlurredChromeBar(
+      enabled: AppChromeBlur.shouldBlurForSliver(
+        shrinkOffset: shrinkOffset,
+        overlapsContent: overlapsContent,
+      ),
+      child: child,
+    );
   }
 
   @override

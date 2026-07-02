@@ -6,21 +6,33 @@ import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../shared/widgets/app_text.dart';
 
-/// L3 — 单个筛选标签：选中 = 白字加粗 + 黄色下划线。
+enum CategoryFilterChipEmphasis { primary, secondary }
+
+/// L3 — 单个筛选标签：支持主分类强强调与次级筛选轻强调。
 class CategoryFilterChip extends StatelessWidget {
   const CategoryFilterChip({
     super.key,
     required this.label,
     required this.selected,
+    this.emphasis = CategoryFilterChipEmphasis.primary,
     this.onTap,
   });
 
   final String label;
   final bool selected;
+  final CategoryFilterChipEmphasis emphasis;
   final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
+    final selectedStyle = switch (emphasis) {
+      CategoryFilterChipEmphasis.primary =>
+        AppTextStyles.categoryFilterSelected,
+      CategoryFilterChipEmphasis.secondary =>
+        AppTextStyles.categoryFilterSecondarySelected,
+    };
+    final showsUnderline = emphasis == CategoryFilterChipEmphasis.primary;
+
     return GestureDetector(
       onTap: onTap,
       behavior: HitTestBehavior.opaque,
@@ -30,7 +42,7 @@ class CategoryFilterChip extends StatelessWidget {
           AppText(
             label,
             style: selected
-                ? AppTextStyles.categoryFilterSelected
+                ? selectedStyle
                 : AppTextStyles.categoryFilterUnselected,
           ),
           const SizedBox(
@@ -40,7 +52,9 @@ class CategoryFilterChip extends StatelessWidget {
             width: AppSizes.categoryFilterUnderlineWidth,
             height: AppSizes.categoryFilterUnderlineHeight,
             decoration: BoxDecoration(
-              color: selected ? AppColors.accentYellow : Colors.transparent,
+              color: selected && showsUnderline
+                  ? AppColors.accentYellow
+                  : Colors.transparent,
               borderRadius: BorderRadius.circular(AppRadius.full),
             ),
           ),

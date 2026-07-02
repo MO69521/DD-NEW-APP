@@ -27,6 +27,13 @@
 - [ ] 无写死 `Color(...)`、`fontSize:` 数值、`EdgeInsets` 数值、`BorderRadius.circular` 数值（`core/theme` 除外）
 - [ ] UI 仅渲染 state、触发 action，无业务判断下沉不当
 
+### 3.1 状态栏留白
+
+- [ ] 页面顶栏未贴物理顶边；已预留状态栏高度
+- [ ] `AppTopBar` 已传入 `statusBarHeight`
+- [ ] 使用 `AppLayout.statusBarHeight(context)`，非 inline `topInset` 或裸 `MediaQuery.padding.top`
+- [ ] loading / error 态若含顶栏，同样遵守 §3.1
+
 ## 4. 组件分级
 
 - [ ] L1 → `shared/widgets/`
@@ -86,6 +93,7 @@
 3. [ ] 是否应复用 shared？
 4. [ ] 是否写死样式？
 5. [ ] 是否引入跨 feature 依赖？
+6. [ ] **页面顶部是否预留状态栏高度（§3.1）？**
 
 ## 14. 强制重构触发（出现则需修复）
 

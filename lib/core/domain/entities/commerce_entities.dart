@@ -8,6 +8,18 @@ enum CurrencyType {
   stardust,
 }
 
+/// 能量充值支付方式（跨 feature 共享）。
+enum PaymentMethod { wechat, alipay }
+
+extension PaymentMethodLabel on PaymentMethod {
+  String get label {
+    return switch (this) {
+      PaymentMethod.wechat => '微信支付',
+      PaymentMethod.alipay => '支付宝支付',
+    };
+  }
+}
+
 class CurrencyBalance extends Equatable {
   const CurrencyBalance({required this.type, required this.amount});
 

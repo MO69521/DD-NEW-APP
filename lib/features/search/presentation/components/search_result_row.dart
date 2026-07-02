@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/domain/entities/book.dart';
+import '../../../../core/domain/entities/book_cover_tag.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_sizes.dart';
-import '../../../../shared/components/book_card_search_result.dart';
+import '../../../../shared/components/book_card_large_row.dart';
 import '../../../../shared/widgets/app_icon.dart';
+import '../../domain/entities/book_serialization_status.dart';
 import '../../domain/entities/search_result_item.dart';
-import 'book_status_badge.dart';
 
-/// L3 — 搜索结果行：把 [SearchResultItem] 映射到共享布局
-/// [BookCardSearchResult]，注入状态角标与加入书架操作（feature 业务）。
+/// L3 — 搜索结果行：映射到共享 [BookCardLargeRow]。
 class SearchResultRow extends StatelessWidget {
   const SearchResultRow({
     super.key,
@@ -22,14 +22,19 @@ class SearchResultRow extends StatelessWidget {
   final void Function(Book book)? onTap;
   final void Function(Book book)? onAddToShelf;
 
+  BookCoverTag _coverTagFor(BookSerializationStatus status) => switch (status) {
+    BookSerializationStatus.serializing => BookCoverTag.serializing,
+    BookSerializationStatus.completed => BookCoverTag.completed,
+  };
+
   @override
   Widget build(BuildContext context) {
-    return BookCardSearchResult(
+    return BookCardLargeRow(
       coverAsset: item.book.coverAsset,
       title: item.book.title,
       meta: item.audienceTags.join(' / '),
       description: item.description,
-      leadingBadge: BookStatusBadge(status: item.status),
+      coverTag: _coverTagFor(item.status),
       trailing: _AddToShelfButton(
         onTap: onAddToShelf == null ? null : () => onAddToShelf!(item.book),
       ),
@@ -52,8 +57,8 @@ class _AddToShelfButton extends StatelessWidget {
       behavior: HitTestBehavior.opaque,
       child: const AppIcon(
         assetPath: _addIconAsset,
-        width: AppSizes.searchResultAddIconSize,
-        height: AppSizes.searchResultAddIconSize,
+        width: AppSizes.bookCardLargeTrailingIconSize,
+        height: AppSizes.bookCardLargeTrailingIconSize,
         color: AppColors.textOnDarkPlaceholder,
       ),
     );

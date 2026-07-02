@@ -13,12 +13,14 @@ class PartnerPageHeader extends StatelessWidget {
     super.key,
     required this.selectedTopTab,
     required this.messageUnreadCount,
+    this.interactionUnreadCount = 0,
     this.onTopTabSelected,
     this.onSearchTap,
   });
 
   final PartnerTopTab selectedTopTab;
   final int messageUnreadCount;
+  final int interactionUnreadCount;
   final ValueChanged<PartnerTopTab>? onTopTabSelected;
   final VoidCallback? onSearchTap;
 
@@ -33,6 +35,7 @@ class PartnerPageHeader extends StatelessWidget {
             PartnerTopTabs(
               selected: selectedTopTab,
               messageUnreadCount: messageUnreadCount,
+              interactionUnreadCount: interactionUnreadCount,
               onSelected: onTopTabSelected,
             ),
             const Spacer(),

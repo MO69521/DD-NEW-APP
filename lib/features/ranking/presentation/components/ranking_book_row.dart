@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/domain/entities/book.dart';
-import '../../../../core/theme/app_sizes.dart';
-import '../../../../core/theme/app_spacing.dart';
-import '../../../../core/theme/app_text_styles.dart';
-import '../../../../shared/widgets/app_text.dart';
-import '../../../../shared/widgets/book_cover.dart';
+import '../../../../shared/components/book_card_large_row.dart';
 
-/// 榜单书行（Figma 220:8539）：左封面 80x109 + 右标题/分类。
+/// L3 — 榜单书行：映射到共享 [BookCardLargeRow]（大封面 + 标题/分类）。
 class RankingBookRow extends StatelessWidget {
   const RankingBookRow({
     super.key,
@@ -20,45 +16,12 @@ class RankingBookRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return BookCardLargeRow(
+      coverAsset: book.coverAsset,
+      title: book.title,
+      meta: book.category,
+      titleMaxLines: 2,
       onTap: onTap,
-      behavior: HitTestBehavior.opaque,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          BookCover(
-            assetPath: book.coverAsset,
-            width: AppSizes.rankingBookRowCoverWidth,
-            height: AppSizes.rankingBookRowCoverHeight,
-          ),
-          const SizedBox(width: AppSpacing.xs),
-          Expanded(
-            child: SizedBox(
-              height: AppSizes.rankingBookRowCoverHeight,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  AppText(
-                    book.title,
-                    style: AppTextStyles.bookTitleDark,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(
-                    height: AppSizes.rankingBookRowTitleCategoryGap,
-                  ),
-                  AppText(
-                    book.category,
-                    style: AppTextStyles.bookTagDark,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
     );
   }
 }

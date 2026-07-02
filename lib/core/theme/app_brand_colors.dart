@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 abstract final class AppBrandColors {
   // ── 全局深色壳 ──
   static const Color backgroundDark = Color(0xFF090E17);
-  static const Color accent = Color(0xFFFFED63);
+  static const Color accent = Color(0xFFFFE847);
   static const Color textOnDark = Color(0xFFFFFFFF);
 
   // ── 浅色主题（预留）──

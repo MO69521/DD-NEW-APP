@@ -1,4 +1,5 @@
 import '../../../../core/domain/entities/book.dart';
+import '../../../../core/domain/entities/book_cover_tag.dart';
 import '../../domain/entities/bookstore_page_content.dart';
 
 /// Mock 数据源：Phase 1 静态数据，Phase 2 替换为 API datasource。
@@ -177,36 +178,42 @@ class BookstoreMockDataSource {
       title: '病态沉溺：少将军柔软可妻',
       category: '病娇总裁',
       coverAsset: 'assets/covers/cover_02.png',
+      coverTag: BookCoverTag.completed,
     ),
     Book(
       id: 'e2',
       title: '病态沉溺：少将军柔软可妻',
       category: '病娇总裁',
       coverAsset: 'assets/covers/cover_03.png',
+      coverTag: BookCoverTag.updated,
     ),
     Book(
       id: 'e3',
       title: '病态沉溺：少将军柔软可妻',
       category: '病娇总裁',
       coverAsset: 'assets/covers/cover_05.png',
+      coverTag: BookCoverTag.completed,
     ),
     Book(
       id: 'e4',
       title: '病态沉溺：少将军柔软可妻',
       category: '病娇总裁',
       coverAsset: 'assets/covers/cover_04.png',
+      coverTag: BookCoverTag.updated,
     ),
     Book(
       id: 'e5',
       title: '病态沉溺：少将军柔软可妻',
       category: '病娇总裁',
       coverAsset: 'assets/covers/cover_01.png',
+      coverTag: BookCoverTag.completed,
     ),
     Book(
       id: 'e6',
       title: '病态沉溺：少将军柔软可妻',
       category: '病娇总裁',
       coverAsset: 'assets/covers/cover_06.png',
+      coverTag: BookCoverTag.updated,
     ),
   ];
 
@@ -218,6 +225,7 @@ class BookstoreMockDataSource {
       coverAsset: 'assets/covers/cover_01.png',
       summary: '在这个充满竞争的商业世界里，病娇总裁李昊天以其独特魅力吸引众多追随者。',
       annotations: ['纯爱', '升级流', '系统', '开局巅峰', '脑洞'],
+      coverTag: BookCoverTag.updated,
     ),
     Book(
       id: 'g2',
@@ -226,6 +234,7 @@ class BookstoreMockDataSource {
       coverAsset: 'assets/covers/cover_02.png',
       summary: '在这个充满竞争的商业世界里，病娇总裁李昊天以其独特魅力吸引众多追随者。',
       annotations: ['纯爱', '升级流', '系统', '开局巅峰', '脑洞'],
+      coverTag: BookCoverTag.completed,
     ),
     Book(
       id: 'g3',
@@ -234,6 +243,7 @@ class BookstoreMockDataSource {
       coverAsset: 'assets/covers/cover_03.png',
       summary: '在这个充满竞争的商业世界里，病娇总裁李昊天以其独特魅力吸引众多追随者。',
       annotations: ['纯爱', '升级流', '系统', '开局巅峰', '脑洞'],
+      coverTag: BookCoverTag.updated,
     ),
     Book(
       id: 'g4',
@@ -242,6 +252,7 @@ class BookstoreMockDataSource {
       coverAsset: 'assets/covers/cover_04.png',
       summary: '在这个充满竞争的商业世界里，病娇总裁李昊天以其独特魅力吸引众多追随者。',
       annotations: ['纯爱', '升级流', '系统', '开局巅峰', '脑洞'],
+      coverTag: BookCoverTag.completed,
     ),
     Book(
       id: 'g5',
@@ -250,6 +261,7 @@ class BookstoreMockDataSource {
       coverAsset: 'assets/covers/cover_05.png',
       summary: '在这个充满竞争的商业世界里，病娇总裁李昊天以其独特魅力吸引众多追随者。',
       annotations: ['纯爱', '升级流', '系统', '开局巅峰', '脑洞'],
+      coverTag: BookCoverTag.updated,
     ),
     Book(
       id: 'g6',
@@ -258,6 +270,7 @@ class BookstoreMockDataSource {
       coverAsset: 'assets/covers/cover_06.png',
       summary: '在这个充满竞争的商业世界里，病娇总裁李昊天以其独特魅力吸引众多追随者。',
       annotations: ['纯爱', '升级流', '系统', '开局巅峰', '脑洞'],
+      coverTag: BookCoverTag.completed,
     ),
   ];
 }

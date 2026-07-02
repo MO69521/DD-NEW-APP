@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_sizes.dart';
 import '../../domain/entities/category_filter.dart';
 import 'category_filter_chip.dart';
@@ -23,11 +24,18 @@ class CategoryFilterSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         for (var g = 0; g < groups.length; g++) ...[
-          if (g > 0)
+          if (g == 1) ...[
+            const SizedBox(height: AppSizes.categoryFilterDividerTopGap),
+            const _CategoryFilterDivider(),
+            const SizedBox(height: AppSizes.categoryFilterDividerBottomGap),
+          ] else if (g > 1)
             const SizedBox(height: AppSizes.categoryFilterGroupSpacing),
           _FilterGroupRow(
             group: groups[g],
             selectedIndex: selectedIndexFor(groups[g].id),
+            emphasis: g == 0
+                ? CategoryFilterChipEmphasis.primary
+                : CategoryFilterChipEmphasis.secondary,
             onSelect: onSelect,
           ),
         ],
@@ -36,15 +44,30 @@ class CategoryFilterSection extends StatelessWidget {
   }
 }
 
+class _CategoryFilterDivider extends StatelessWidget {
+  const _CategoryFilterDivider();
+
+  @override
+  Widget build(BuildContext context) {
+    return const SizedBox(
+      width: double.infinity,
+      height: AppSizes.hairline,
+      child: ColoredBox(color: AppColors.dividerOnDark),
+    );
+  }
+}
+
 class _FilterGroupRow extends StatelessWidget {
   const _FilterGroupRow({
     required this.group,
     required this.selectedIndex,
+    required this.emphasis,
     this.onSelect,
   });
 
   final CategoryFilterGroup group;
   final int selectedIndex;
+  final CategoryFilterChipEmphasis emphasis;
   final void Function(String groupId, int index)? onSelect;
 
   @override
@@ -57,6 +80,7 @@ class _FilterGroupRow extends StatelessWidget {
           CategoryFilterChip(
             label: group.options[i],
             selected: i == selectedIndex,
+            emphasis: emphasis,
             onTap: onSelect == null ? null : () => onSelect!(group.id, i),
           ),
       ],

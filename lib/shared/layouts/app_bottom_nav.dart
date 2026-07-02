@@ -4,13 +4,15 @@ import 'package:flutter/material.dart';
 
 import '../../core/constants/main_tab_config.dart';
 import '../../core/theme/app_colors.dart';
-import '../../core/theme/app_durations.dart';
 import '../../core/theme/app_radius.dart';
 import '../../core/theme/app_sizes.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text_styles.dart';
+import '../components/app_blurred_chrome_bar.dart';
 import '../widgets/app_nav_icon.dart';
 import '../widgets/app_text.dart';
+
+enum AppBottomNavStyle { fullWidthSolid, glassCapsule }
 
 /// App Shell 底部 5 Tab 导航栏。
 class AppBottomNav extends StatelessWidget {
@@ -19,11 +21,15 @@ class AppBottomNav extends StatelessWidget {
     this.items = MainTabConfig.items,
     this.selectedIndex = 0,
     this.onTabChanged,
+    this.style = AppBottomNavStyle.fullWidthSolid,
+    this.blurEnabled = true,
   });
 
   final List<MainTabItem> items;
   final int selectedIndex;
   final ValueChanged<int>? onTabChanged;
+  final AppBottomNavStyle style;
+  final bool blurEnabled;
 
   static const double barHeight = AppSizes.bottomNavBarHeight;
 
@@ -39,58 +45,76 @@ class AppBottomNav extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final capsuleRadius = BorderRadius.circular(AppRadius.navOuter);
+    final navCapsule = _buildNavCapsule(capsuleRadius);
 
-    final navCapsule = Container(
+    final bottomBar = switch (style) {
+      AppBottomNavStyle.fullWidthSolid => _buildSolidBottomBar(navCapsule),
+      AppBottomNavStyle.glassCapsule => _buildGlassCapsuleBottomBar(
+        capsuleRadius,
+        navCapsule,
+      ),
+    };
+
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: SizedBox(width: double.infinity, child: bottomBar),
+    );
+  }
+
+  Widget _buildNavCapsule(BorderRadius capsuleRadius) {
+    final isGlassCapsule = style == AppBottomNavStyle.glassCapsule;
+
+    return Container(
       width: double.infinity,
       height: AppSizes.bottomNavCapsuleHeight,
-      padding: const EdgeInsets.all(AppSpacing.xxs),
+      padding: isGlassCapsule
+          ? const EdgeInsets.all(AppSpacing.xxs)
+          : EdgeInsets.zero,
       decoration: BoxDecoration(
-        color: AppColors.navBarBackground,
+        color: isGlassCapsule ? AppColors.navBarBackground : Colors.transparent,
         borderRadius: capsuleRadius,
-        border: Border.all(
-          color: AppColors.borderGlass,
-          width: AppSizes.hairline,
-        ),
+        border: isGlassCapsule
+            ? Border.all(color: AppColors.borderGlass, width: AppSizes.hairline)
+            : null,
       ),
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          final itemWidth = constraints.maxWidth / items.length;
-
-          return Stack(
-            children: [
-              AnimatedPositioned(
-                duration: AppDurations.normal,
-                curve: Curves.easeInOut,
-                left: itemWidth * selectedIndex,
-                width: itemWidth,
-                top: 0,
-                bottom: 0,
-                child: DecoratedBox(
-                  decoration: BoxDecoration(
-                    color: AppColors.navActiveBackground,
-                    borderRadius: BorderRadius.circular(AppRadius.navInner),
-                  ),
-                ),
+      child: Row(
+        children: [
+          for (var index = 0; index < items.length; index++)
+            Expanded(
+              child: _NavTabItem(
+                item: items[index],
+                isSelected: index == selectedIndex,
+                onTap: () => onTabChanged?.call(index),
               ),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: List.generate(items.length, (index) {
-                  return Expanded(
-                    child: _NavTabItem(
-                      item: items[index],
-                      isSelected: index == selectedIndex,
-                      onTap: () => onTabChanged?.call(index),
-                    ),
-                  );
-                }),
-              ),
-            ],
-          );
-        },
+            ),
+        ],
       ),
     );
+  }
 
-    final bottomFade = DecoratedBox(
+  Widget _buildSolidBottomBar(Widget navCapsule) {
+    return AppBlurredChromeBar(
+      enabled: blurEnabled,
+      child: SafeArea(
+        top: false,
+        left: false,
+        right: false,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            navCapsule,
+            const SizedBox(height: AppSizes.bottomNavBottomInset),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildGlassCapsuleBottomBar(
+    BorderRadius capsuleRadius,
+    Widget navCapsule,
+  ) {
+    return DecoratedBox(
       decoration: const BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topCenter,
@@ -126,14 +150,6 @@ class AppBottomNav extends StatelessWidget {
         ),
       ),
     );
-
-    return Align(
-      alignment: Alignment.bottomCenter,
-      child: SizedBox(
-        width: double.infinity,
-        child: bottomFade,
-      ),
-    );
   }
 }
 
@@ -166,20 +182,13 @@ class _NavTabItem extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                AppNavIcon(
-                  item: item,
-                  isSelected: isSelected,
-                ),
+                AppNavIcon(item: item, isSelected: isSelected),
                 SizedBox(height: AppSizes.bottomNavIconLabelGap),
                 AppText(
                   item.label,
                   style: isSelected
-                      ? AppTextStyles.navLabelActiveDark.copyWith(
-                          color: AppColors.navActiveText,
-                        )
-                      : AppTextStyles.navLabelInactiveDark.copyWith(
-                          color: AppColors.iconMutedSecondary,
-                        ),
+                      ? AppTextStyles.navLabelActiveDark
+                      : AppTextStyles.navLabelInactiveDark,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),

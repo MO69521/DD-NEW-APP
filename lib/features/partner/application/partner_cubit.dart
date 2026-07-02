@@ -6,6 +6,8 @@ import '../data/datasources/partner_mock_datasource.dart';
 import '../data/repositories/partner_repository_impl.dart';
 import '../domain/entities/partner_character.dart';
 import '../domain/entities/partner_collection_status.dart';
+import '../domain/entities/partner_conversation.dart';
+import '../domain/entities/partner_interaction_scene.dart';
 import '../domain/entities/partner_sort_mode.dart';
 import '../domain/entities/partner_top_tab.dart';
 import '../domain/repositories/partner_repository.dart';
@@ -28,10 +30,11 @@ class PartnerCubit extends Cubit<PartnerState> {
     try {
       final content = await _repository.fetchPageContent();
       final interaction = const PartnerInteractionState();
-      final visible = _filterCharacters(
+      final visibleCharacters = _filterCharacters(
         characters: content.characters,
         interaction: interaction,
       );
+      final visibleConversations = _sortConversations(content.conversations);
 
       emit(
         state.copyWith(
@@ -39,8 +42,15 @@ class PartnerCubit extends Cubit<PartnerState> {
           domain: PartnerDomainState(
             content: content,
             seedCharacters: List.unmodifiable(content.characters),
-            visibleCharacters: visible,
+            visibleCharacters: visibleCharacters,
+            seedConversations: List.unmodifiable(content.conversations),
+            visibleConversations: visibleConversations,
+            seedInteractionScenes:
+                List.unmodifiable(content.interactionScenes),
+            visibleInteractionScenes:
+                List.unmodifiable(content.interactionScenes),
             messageUnreadCount: content.messageUnreadCount,
+            interactionUnreadCount: content.interactionUnreadCount,
           ),
           interaction: interaction,
         ),
@@ -60,7 +70,50 @@ class PartnerCubit extends Cubit<PartnerState> {
   void switchTopTab(PartnerTopTab tab) {
     if (tab == state.interaction.topTab) return;
     final interaction = state.interaction.copyWith(topTab: tab);
-    _emitFiltered(interaction);
+
+    if (tab == PartnerTopTab.message) {
+      final baseConversations =
+          state.domain.content?.conversations ?? const [];
+      emit(
+        state.copyWith(
+          interaction: interaction.copyWith(interactionSceneIndex: 0),
+          ui: state.ui.copyWith(page: 0),
+          domain: state.domain.copyWith(
+            seedConversations: List.unmodifiable(baseConversations),
+            visibleConversations: _sortConversations(baseConversations),
+          ),
+        ),
+      );
+      return;
+    }
+
+    if (tab == PartnerTopTab.interaction) {
+      final baseScenes = state.domain.content?.interactionScenes ?? const [];
+      emit(
+        state.copyWith(
+          interaction: interaction.copyWith(interactionSceneIndex: 0),
+          ui: state.ui.copyWith(page: 0),
+          domain: state.domain.copyWith(
+            seedInteractionScenes: List.unmodifiable(baseScenes),
+            visibleInteractionScenes: List.unmodifiable(baseScenes),
+          ),
+        ),
+      );
+      return;
+    }
+
+    emit(
+      state.copyWith(
+        interaction: interaction.copyWith(interactionSceneIndex: 0),
+        ui: state.ui.copyWith(page: 0),
+        domain: state.domain.copyWith(
+          visibleCharacters: _filterCharacters(
+            characters: state.domain.seedCharacters,
+            interaction: interaction,
+          ),
+        ),
+      ),
+    );
   }
 
   void selectCategory(int index) {
@@ -100,8 +153,68 @@ class PartnerCubit extends Cubit<PartnerState> {
     _emitFiltered(interaction);
   }
 
+  void onInteractionPageChanged(int index) {
+    if (index == state.interaction.interactionSceneIndex) return;
+    emit(
+      state.copyWith(
+        interaction: state.interaction.copyWith(interactionSceneIndex: index),
+      ),
+    );
+
+    final scenes = state.domain.visibleInteractionScenes;
+    if (scenes.isEmpty) return;
+    if (index >= scenes.length - 2) {
+      loadMoreInteractionScenes();
+    }
+  }
+
+  Future<void> loadMoreInteractionScenes() async {
+    if (state.ui.isLoadingMore) return;
+    final seed = state.domain.seedInteractionScenes;
+    if (seed.isEmpty) return;
+
+    emit(state.copyWith(ui: state.ui.copyWith(isLoadingMore: true)));
+    await Future<void>.delayed(AppDurations.normal);
+
+    final nextPage = state.ui.page + 1;
+    final offset = nextPage * seed.length;
+    final moreScenes = List<PartnerInteractionScene>.generate(seed.length, (i) {
+      final source = seed[i];
+      return PartnerInteractionScene(
+        id: 'partner_scene_more_${offset + i + 1}',
+        characterId: source.characterId,
+        characterName: source.characterName,
+        backgroundAsset: source.backgroundAsset,
+        affectionLevel: source.affectionLevel,
+        upgradeHint: source.upgradeHint,
+        sceneIndex: source.sceneIndex,
+        totalScenes: source.totalScenes,
+      );
+    });
+
+    emit(
+      state.copyWith(
+        ui: state.ui.copyWith(isLoadingMore: false, page: nextPage),
+        domain: state.domain.copyWith(
+          seedInteractionScenes: [
+            ...state.domain.seedInteractionScenes,
+            ...moreScenes,
+          ],
+          visibleInteractionScenes: [
+            ...state.domain.visibleInteractionScenes,
+            ...moreScenes,
+          ],
+        ),
+      ),
+    );
+  }
+
   void onScrollNearEnd(double pixels, double maxScrollExtent) {
     if (maxScrollExtent <= 0) return;
+
+    // 内容高度不足一屏时 maxScrollExtent 很小，会导致 triggerOffset 为负并误触发 loadMore。
+    if (maxScrollExtent < AppSizes.partnerLoadMoreTriggerOffset) return;
+
     final triggerOffset =
         maxScrollExtent - AppSizes.partnerLoadMoreTriggerOffset;
     if (pixels >= triggerOffset) {
@@ -110,8 +223,19 @@ class PartnerCubit extends Cubit<PartnerState> {
   }
 
   Future<void> loadMore() async {
+    if (state.ui.isLoadingMore) return;
+
+    if (state.interaction.topTab == PartnerTopTab.message) {
+      await _loadMoreConversations();
+      return;
+    }
+
+    await _loadMoreCharacters();
+  }
+
+  Future<void> _loadMoreCharacters() async {
     final seed = state.domain.seedCharacters;
-    if (state.ui.isLoadingMore || seed.isEmpty) return;
+    if (seed.isEmpty) return;
 
     emit(state.copyWith(ui: state.ui.copyWith(isLoadingMore: true)));
     await Future<void>.delayed(AppDurations.normal);
@@ -152,15 +276,58 @@ class PartnerCubit extends Cubit<PartnerState> {
     );
   }
 
+  Future<void> _loadMoreConversations() async {
+    final seed = state.domain.seedConversations;
+    if (seed.isEmpty) return;
+
+    emit(state.copyWith(ui: state.ui.copyWith(isLoadingMore: true)));
+    await Future<void>.delayed(AppDurations.normal);
+
+    final nextPage = state.ui.page + 1;
+    final offset = nextPage * seed.length;
+    final moreConversations =
+        List<PartnerConversation>.generate(seed.length, (index) {
+      final source = seed[index];
+      return PartnerConversation(
+        id: 'partner_conv_more_${offset + index + 1}',
+        characterId: source.characterId,
+        characterName: source.characterName,
+        avatarAsset: source.avatarAsset,
+        affectionLevel: source.affectionLevel,
+        lastMessagePreview: source.lastMessagePreview,
+        lastMessageAt: source.lastMessageAt,
+        unreadCount: source.unreadCount,
+      );
+    });
+
+    final merged = [
+      ...state.domain.visibleConversations,
+      ...moreConversations,
+    ];
+
+    emit(
+      state.copyWith(
+        ui: state.ui.copyWith(isLoadingMore: false, page: nextPage),
+        domain: state.domain.copyWith(
+          seedConversations: [
+            ...state.domain.seedConversations,
+            ...moreConversations,
+          ],
+          visibleConversations: _sortConversations(merged),
+        ),
+      ),
+    );
+  }
+
   void _emitFiltered(PartnerInteractionState interaction) {
-    final filtered = _filterCharacters(
+    final filteredCharacters = _filterCharacters(
       characters: state.domain.seedCharacters,
       interaction: interaction,
     );
     emit(
       state.copyWith(
         interaction: interaction,
-        domain: state.domain.copyWith(visibleCharacters: filtered),
+        domain: state.domain.copyWith(visibleCharacters: filteredCharacters),
       ),
     );
   }
@@ -204,5 +371,13 @@ class PartnerCubit extends Cubit<PartnerState> {
       return List.unmodifiable(list);
     }
     return List.unmodifiable(list);
+  }
+
+  List<PartnerConversation> _sortConversations(
+    List<PartnerConversation> conversations,
+  ) {
+    final sorted = [...conversations]
+      ..sort((a, b) => b.lastMessageAt.compareTo(a.lastMessageAt));
+    return List.unmodifiable(sorted);
   }
 }

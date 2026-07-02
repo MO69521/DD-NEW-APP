@@ -7,21 +7,25 @@ class BookshelfInteractionState extends Equatable {
   const BookshelfInteractionState({
     this.selectedTab = BookshelfTab.shelf,
     this.isManaging = false,
+    this.selectedBookIds = const {},
   });
 
   final BookshelfTab selectedTab;
   final bool isManaging;
+  final Set<String> selectedBookIds;
 
   BookshelfInteractionState copyWith({
     BookshelfTab? selectedTab,
     bool? isManaging,
+    Set<String>? selectedBookIds,
   }) {
     return BookshelfInteractionState(
       selectedTab: selectedTab ?? this.selectedTab,
       isManaging: isManaging ?? this.isManaging,
+      selectedBookIds: selectedBookIds ?? this.selectedBookIds,
     );
   }
 
   @override
-  List<Object?> get props => [selectedTab, isManaging];
+  List<Object?> get props => [selectedTab, isManaging, selectedBookIds];
 }

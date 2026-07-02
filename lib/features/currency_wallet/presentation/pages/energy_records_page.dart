@@ -1,0 +1,278 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../../../core/constants/currency_config.dart';
+import '../../../../core/domain/entities/commerce_entities.dart';
+import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_layout.dart';
+import '../../../../core/theme/app_radius.dart';
+import '../../../../core/theme/app_sizes.dart';
+import '../../../../core/theme/app_spacing.dart';
+import '../../../../core/theme/app_text_styles.dart';
+import '../../../../routes/app_router.dart';
+import '../../../../shared/components/app_top_bar.dart';
+import '../../../../shared/components/empty_state.dart';
+import '../../../../shared/widgets/app_asset_image.dart';
+import '../../../../shared/widgets/app_button.dart';
+import '../../../../shared/widgets/app_text.dart';
+import '../../../../shared/layouts/app_page_chrome.dart';
+import '../../application/energy_records_cubit.dart';
+import '../../application/energy_records_state.dart';
+import '../../domain/entities/currency_wallet_page_content.dart';
+
+class EnergyRecordsPage extends StatelessWidget {
+  const EnergyRecordsPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final statusBarHeight = AppLayout.statusBarHeight(context);
+
+    return Scaffold(
+      backgroundColor: AppColors.backgroundDark,
+      body: AppPageChrome(
+        topBar: AppTopBar(
+          statusBarHeight: statusBarHeight,
+          title: '充值记录',
+          onBack: AppRouter.pop,
+        ),
+        body: BlocBuilder<EnergyRecordsCubit, EnergyRecordsState>(
+              builder: (context, state) {
+                if (state.phase == EnergyRecordsPhase.loading) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+
+                if (state.errorMessage != null) {
+                  return EmptyState(
+                    title: '加载失败',
+                    description: state.errorMessage,
+                    action: AppButton(
+                      label: '重试',
+                      onPressed: () =>
+                          context.read<EnergyRecordsCubit>().load(),
+                    ),
+                  );
+                }
+
+                final content = state.content;
+                if (content == null) {
+                  return const EmptyState(title: '暂无记录');
+                }
+
+                final records = switch (state.selectedTab) {
+                  EnergyRecordsTab.recharge => content.rechargeRecords,
+                  EnergyRecordsTab.other => content.otherRecords,
+                };
+
+                return Padding(
+                  padding: EdgeInsets.only(
+                    top: AppLayout.chromeTopHeight(context),
+                  ),
+                  child: Column(
+                    children: [
+                      EnergyRecordsTabBar(
+                        selectedTab: state.selectedTab,
+                        onTabTap: context.read<EnergyRecordsCubit>().selectTab,
+                      ),
+                      Expanded(
+                        child: records.isEmpty
+                            ? const EnergyRecordsEmptyView()
+                            : EnergyRecordsList(records: records),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+      ),
+    );
+  }
+}
+
+class EnergyRecordsTabBar extends StatelessWidget {
+  const EnergyRecordsTabBar({
+    super.key,
+    required this.selectedTab,
+    required this.onTabTap,
+  });
+
+  final EnergyRecordsTab selectedTab;
+  final ValueChanged<EnergyRecordsTab> onTabTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: const BoxDecoration(
+        color: AppColors.backgroundDark,
+        border: Border(
+          bottom: BorderSide(
+            color: AppColors.borderGlass,
+            width: AppSizes.hairline,
+          ),
+        ),
+      ),
+      child: Row(
+        children: [
+          for (final tab in EnergyRecordsTab.values)
+            Expanded(
+              child: _EnergyRecordsTabItem(
+                tab: tab,
+                isSelected: tab == selectedTab,
+                onTap: () => onTabTap(tab),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+class _EnergyRecordsTabItem extends StatelessWidget {
+  const _EnergyRecordsTabItem({
+    required this.tab,
+    required this.isSelected,
+    required this.onTap,
+  });
+
+  final EnergyRecordsTab tab;
+  final bool isSelected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      behavior: HitTestBehavior.opaque,
+      child: SizedBox(
+        height: AppSizes.topBarHeight,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            AppText(
+              tab.label,
+              style:
+                  (isSelected
+                          ? AppTextStyles.bodyMediumDark
+                          : AppTextStyles.bodyMediumDarkMuted)
+                      .copyWith(
+                        fontWeight: isSelected
+                            ? FontWeight.w600
+                            : FontWeight.w400,
+                      ),
+            ),
+            const SizedBox(height: AppSpacing.xs),
+            Container(
+              width: AppSizes.tabIndicatorWidth,
+              height: AppSizes.tabIndicatorHeight,
+              decoration: BoxDecoration(
+                color: isSelected ? AppColors.accentYellow : Colors.transparent,
+                borderRadius: BorderRadius.circular(AppRadius.full),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class EnergyRecordsList extends StatelessWidget {
+  const EnergyRecordsList({super.key, required this.records});
+
+  final List<CurrencyLedgerRecord> records;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.separated(
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.md,
+        vertical: AppSpacing.md,
+      ),
+      itemBuilder: (context, index) {
+        return EnergyRecordRow(record: records[index]);
+      },
+      separatorBuilder: (context, index) =>
+          const Divider(height: AppSpacing.lg, color: AppColors.borderGlass),
+      itemCount: records.length,
+    );
+  }
+}
+
+class EnergyRecordRow extends StatelessWidget {
+  const EnergyRecordRow({super.key, required this.record});
+
+  final CurrencyLedgerRecord record;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              AppText(record.title, style: AppTextStyles.bodyMediumDark),
+              const SizedBox(height: AppSpacing.xxs),
+              AppText(
+                record.timeLabel,
+                style: AppTextStyles.bodyMediumDarkMuted,
+              ),
+            ],
+          ),
+        ),
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            AppText(
+              record.amountDelta > 0
+                  ? '+${record.amountDelta}'
+                  : '${record.amountDelta}',
+              style: AppTextStyles.titleMediumDark.copyWith(
+                color: AppColors.bookDetailUpdateTextHighlighted,
+              ),
+            ),
+            const SizedBox(width: AppSpacing.xxs),
+            AppAssetImage(
+              assetPath: CurrencyConfig.iconAsset(CurrencyType.energy),
+              width: AppSizes.welfareCurrencyIconSize,
+              height: AppSizes.welfareCurrencyIconSize,
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+class EnergyRecordsEmptyView extends StatelessWidget {
+  const EnergyRecordsEmptyView({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            width: AppSizes.myMessagesEmptyIllustrationSize,
+            height: AppSizes.myMessagesEmptyIllustrationSize,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: AppColors.surfaceCard,
+              shape: BoxShape.circle,
+              border: Border.all(color: AppColors.borderGlass),
+            ),
+            child: AppText(
+              '!',
+              style: AppTextStyles.displayLarge.copyWith(
+                color: AppColors.accentYellow,
+              ),
+            ),
+          ),
+          const SizedBox(height: AppSpacing.md),
+          AppText('暂无记录', style: AppTextStyles.bodyMediumDarkMuted),
+        ],
+      ),
+    );
+  }
+}

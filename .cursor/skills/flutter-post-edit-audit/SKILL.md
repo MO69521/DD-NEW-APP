@@ -49,6 +49,7 @@ bash .cursor/skills/flutter-post-edit-audit/scripts/audit.sh
 | **组件** | 新组件级别是否正确（L1 shared/widgets、L2 shared/components、L3 feature） |
 | **状态** | state 是否在 application 层；UI 是否直接改 state 字段 |
 | **路由** | 是否使用 `Navigator.push` 而非 `AppRouter` |
+| **状态栏留白** | 页面顶栏是否预留状态栏高度；`AppTopBar` 是否传入带 placeholder 回退的 `statusBarHeight`（§3.1） |
 | **性能** | List 是否用 builder；是否不必要的全局 rebuild |
 
 ### Step 4 — 处理问题
@@ -77,6 +78,7 @@ bash .cursor/skills/flutter-post-edit-audit/scripts/audit.sh
 | 组件分级 | ✅ |
 | 状态管理 | ✅ |
 | 路由 | ✅ |
+| 状态栏留白 | ✅ |
 | 代码体量 | ✅ |
 
 **变更文件：** `path/to/file.dart`, ...
@@ -145,6 +147,27 @@ rg 'Navigator\.(push|pop|of)' lib --glob '*.dart' | rg -v 'app_router'
 
 # domain 层 Flutter 依赖
 rg "import 'package:flutter" lib/features/*/domain --glob '*.dart'
+```
+
+## 状态栏留白专项（§3.1）
+
+变更文件若含 `AppTopBar` 或 `presentation/pages/*_page.dart`，必须核对：
+
+```dart
+final statusBarHeight = AppLayout.statusBarHeight(context);
+```
+
+违规示例：
+
+```dart
+// ❌ Web 预览会多出 44px 空白（应使用 AppLayout）
+final statusBarHeight = topInset > 0 ? topInset : AppSizes.statusBarPlaceholderHeight;
+
+// ❌ 原生无 inset 时顶栏贴顶
+final statusBarHeight = MediaQuery.paddingOf(context).top;
+
+// ❌ 未传 statusBarHeight
+AppTopBar(title: '...', onBack: AppRouter.pop)
 ```
 
 ## 注意事项

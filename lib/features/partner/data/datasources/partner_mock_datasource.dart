@@ -1,5 +1,7 @@
 import '../../domain/entities/partner_character.dart';
 import '../../domain/entities/partner_collection_status.dart';
+import '../../domain/entities/partner_conversation.dart';
+import '../../domain/entities/partner_interaction_scene.dart';
 import '../../domain/entities/partner_page_content.dart';
 import '../../domain/entities/partner_top_tab.dart';
 
@@ -12,12 +14,150 @@ class PartnerMockDataSource {
   Future<PartnerPageContent> fetchPageContent() async {
     await Future<void>.delayed(const Duration(milliseconds: _mockLatencyMs));
 
+    final conversations = _buildConversations();
+    final messageUnreadCount = conversations.fold<int>(
+      0,
+      (sum, item) => sum + item.unreadCount,
+    );
+
     return PartnerPageContent(
       categoryTags: _categoryTags,
       characters: _characters,
-      messageUnreadCount: 1,
+      conversations: conversations,
+      interactionScenes: _interactionScenes,
+      messageUnreadCount: messageUnreadCount,
+      interactionUnreadCount: 120,
       filterOptions: _filterOptions,
     );
+  }
+
+  static List<PartnerConversation> _buildConversations() {
+    final now = DateTime.now();
+    const preview =
+        '林子杰放下手中的相机，略微抬头，眼神中带着一丝不易察觉的疑惑……';
+
+    return [
+      PartnerConversation(
+        id: 'c1',
+        characterId: 'char_luzhaoheng',
+        characterName: '陆昭衡',
+        avatarAsset: _portrait1,
+        affectionLevel: 27,
+        lastMessagePreview: preview,
+        lastMessageAt: DateTime(now.year, now.month, now.day, 8, 32),
+        unreadCount: 1,
+      ),
+      PartnerConversation(
+        id: 'c2',
+        characterId: 'char_wenchengyu',
+        characterName: '温承宇',
+        avatarAsset: _portrait2,
+        affectionLevel: 89,
+        lastMessagePreview: preview,
+        lastMessageAt: DateTime(now.year, now.month, now.day, 14, 16),
+        unreadCount: 16,
+      ),
+      PartnerConversation(
+        id: 'c3',
+        characterId: 'char_samuel',
+        characterName: '塞缪尔',
+        avatarAsset: _portrait3,
+        affectionLevel: 8,
+        lastMessagePreview: preview,
+        lastMessageAt: now.subtract(const Duration(days: 2)),
+        unreadCount: 2,
+      ),
+      PartnerConversation(
+        id: 'c4',
+        characterId: 'char_shengxiangyang',
+        characterName: '盛向阳',
+        avatarAsset: _portrait1,
+        affectionLevel: 45,
+        lastMessagePreview: '逃？你觉得你能逃到哪里去？',
+        lastMessageAt: now.subtract(const Duration(days: 3)),
+        unreadCount: 0,
+      ),
+      PartnerConversation(
+        id: 'c5',
+        characterId: 'char_shiqi',
+        characterName: '时致',
+        avatarAsset: _portrait3,
+        affectionLevel: 62,
+        lastMessagePreview: '光太亮的地方，不适合你。',
+        lastMessageAt: now.subtract(const Duration(days: 5)),
+        unreadCount: 3,
+      ),
+      PartnerConversation(
+        id: 'c6',
+        characterId: 'char_shenqingci',
+        characterName: '沈清辞',
+        avatarAsset: _portrait2,
+        affectionLevel: 15,
+        lastMessagePreview: '别靠太近，我会失控。',
+        lastMessageAt: now.subtract(const Duration(days: 7)),
+        unreadCount: 0,
+      ),
+      PartnerConversation(
+        id: 'c7',
+        characterId: 'char_gubeichen',
+        characterName: '顾北辰',
+        avatarAsset: _portrait3,
+        affectionLevel: 33,
+        lastMessagePreview: '放学别走，我有话跟你说。',
+        lastMessageAt: now.subtract(const Duration(days: 12)),
+        unreadCount: 5,
+      ),
+      PartnerConversation(
+        id: 'c8',
+        characterId: 'char_jiangxubai',
+        characterName: '江叙白',
+        avatarAsset: _portrait2,
+        affectionLevel: 71,
+        lastMessagePreview: '伤口交给我，别自己忍着。',
+        lastMessageAt: now.subtract(const Duration(days: 20)),
+        unreadCount: 0,
+      ),
+      PartnerConversation(
+        id: 'c9',
+        characterId: 'char_fuchenzhou',
+        characterName: '傅沉舟',
+        avatarAsset: _portrait1,
+        affectionLevel: 54,
+        lastMessagePreview: '合同签了，就别想跑。',
+        lastMessageAt: now.subtract(const Duration(days: 35)),
+        unreadCount: 12,
+      ),
+      PartnerConversation(
+        id: 'c10',
+        characterId: 'char_linixingye',
+        characterName: '林星野',
+        avatarAsset: _portrait3,
+        affectionLevel: 96,
+        lastMessagePreview: '舞台下，你也只能看我一个人。',
+        lastMessageAt: now.subtract(const Duration(days: 45)),
+        unreadCount: 8,
+      ),
+      PartnerConversation(
+        id: 'c11',
+        characterId: 'char_wenrenheng',
+        characterName: '闻人珩',
+        avatarAsset: _portrait4,
+        affectionLevel: 41,
+        lastMessagePreview: '钥匙在我手里，你哪儿也去不了。',
+        lastMessageAt: now.subtract(const Duration(days: 60)),
+        unreadCount: 0,
+      ),
+      PartnerConversation(
+        id: 'c12',
+        characterId: 'char_peiji',
+        characterName: '裴寂',
+        avatarAsset: _portrait4,
+        affectionLevel: 22,
+        lastMessagePreview: '游戏规则，从现在起由我定。',
+        lastMessageAt: now.subtract(const Duration(days: 90)),
+        unreadCount: 1,
+      ),
+    ];
   }
 
   static const List<String> _categoryTags = [
@@ -190,103 +330,68 @@ class PartnerMockDataSource {
       collectionStatus: PartnerCollectionStatus.collected,
       topTab: PartnerTopTab.explore,
     ),
-    // ── 消息 ──
-    PartnerCharacter(
-      id: 'p13',
-      name: '谢临川',
-      eraTitle: '温柔时代',
-      quote: '累了就歇一歇，我在这。',
-      sourceTitle: '穿书后我成了团宠',
-      traitTags: ['温柔', '穿书'],
-      followerCount: '8.9万粉丝',
-      coverAsset: _portrait1,
-      collectionStatus: PartnerCollectionStatus.collected,
-      topTab: PartnerTopTab.message,
+  ];
+
+  static const List<PartnerInteractionScene> _interactionScenes = [
+    PartnerInteractionScene(
+      id: 'is1',
+      characterId: 'char_linchu',
+      characterName: '林初',
+      backgroundAsset: _portrait1,
+      affectionLevel: 12,
+      upgradeHint: '再表白238就升级啦',
+      sceneIndex: 14,
+      totalScenes: 19,
     ),
-    PartnerCharacter(
-      id: 'p14',
-      name: '秦夜',
-      eraTitle: '潜伏时代',
-      quote: '别出声，有人来了。',
-      sourceTitle: '暗夜王座：权臣的私有物',
-      traitTags: ['冷淡', '悬疑'],
-      followerCount: '4.2万粉丝',
-      coverAsset: _portrait3,
-      collectionStatus: PartnerCollectionStatus.uncollected,
-      topTab: PartnerTopTab.message,
+    PartnerInteractionScene(
+      id: 'is2',
+      characterId: 'char_huoyan',
+      characterName: '霍言',
+      backgroundAsset: _portrait2,
+      affectionLevel: 28,
+      upgradeHint: '再表白156就升级啦',
+      sceneIndex: 3,
+      totalScenes: 12,
     ),
-    PartnerCharacter(
-      id: 'p15',
-      name: '程澈',
-      eraTitle: '破晓时代',
-      quote: '天亮之前，再待一会儿。',
-      sourceTitle: '校园心动日记',
-      traitTags: ['少年感', '温柔'],
-      followerCount: '3.6万粉丝',
-      coverAsset: _portrait2,
-      collectionStatus: PartnerCollectionStatus.collected,
-      topTab: PartnerTopTab.message,
+    PartnerInteractionScene(
+      id: 'is3',
+      characterId: 'char_jiyuchuan',
+      characterName: '季屿川',
+      backgroundAsset: _portrait3,
+      affectionLevel: 45,
+      upgradeHint: '再表白89就升级啦',
+      sceneIndex: 7,
+      totalScenes: 15,
     ),
-    PartnerCharacter(
-      id: 'p16',
-      name: '宋怀真',
-      eraTitle: '旧梦时代',
-      quote: '如果重来一次，我还会找到你。',
-      sourceTitle: '重生之嫡女归来',
-      traitTags: ['温柔', '重生'],
-      followerCount: '6.8万粉丝',
-      coverAsset: _portrait4,
-      collectionStatus: PartnerCollectionStatus.uncollected,
-      topTab: PartnerTopTab.message,
+    PartnerInteractionScene(
+      id: 'is4',
+      characterId: 'char_yanchangfeng',
+      characterName: '燕长风',
+      backgroundAsset: _portrait4,
+      affectionLevel: 8,
+      upgradeHint: '再表白312就升级啦',
+      sceneIndex: 1,
+      totalScenes: 10,
     ),
-    // ── 互动 ──
-    PartnerCharacter(
-      id: 'p17',
-      name: '霍言',
-      eraTitle: '霸总时代',
-      quote: '我的时间很贵，但给你免费。',
-      sourceTitle: '偏执大佬的掌心宠',
-      traitTags: ['霸总', '豪门'],
-      followerCount: '10.5万粉丝',
-      coverAsset: _portrait1,
-      collectionStatus: PartnerCollectionStatus.uncollected,
-      topTab: PartnerTopTab.interaction,
+    PartnerInteractionScene(
+      id: 'is5',
+      characterId: 'char_mingyue',
+      characterName: '明越',
+      backgroundAsset: _portrait1,
+      affectionLevel: 67,
+      upgradeHint: '再表白42就升级啦',
+      sceneIndex: 9,
+      totalScenes: 11,
     ),
-    PartnerCharacter(
-      id: 'p18',
-      name: '季屿川',
-      eraTitle: '潮汐时代',
-      quote: '靠近一点，我不咬人……大概。',
-      sourceTitle: '病态沉溺：少将军柔软可妻',
-      traitTags: ['病娇', '温柔'],
-      followerCount: '7.9万粉丝',
-      coverAsset: _portrait2,
-      collectionStatus: PartnerCollectionStatus.collected,
-      topTab: PartnerTopTab.interaction,
-    ),
-    PartnerCharacter(
-      id: 'p19',
-      name: '燕长风',
-      eraTitle: '长锋时代',
-      quote: '剑出鞘时，我只为你回头。',
-      sourceTitle: '清冷仙尊他破戒了',
-      traitTags: ['仙侠', '少年感'],
-      followerCount: '5.4万粉丝',
-      coverAsset: _portrait3,
-      collectionStatus: PartnerCollectionStatus.uncollected,
-      topTab: PartnerTopTab.interaction,
-    ),
-    PartnerCharacter(
-      id: 'p20',
-      name: '明越',
-      eraTitle: '越界时代',
-      quote: '这次换我主动越界。',
-      sourceTitle: '顶流秘密恋人',
-      traitTags: ['娱乐圈', '疯批'],
-      followerCount: '8.0万粉丝',
-      coverAsset: _portrait4,
-      collectionStatus: PartnerCollectionStatus.collected,
-      topTab: PartnerTopTab.interaction,
+    PartnerInteractionScene(
+      id: 'is6',
+      characterId: 'char_shengxiangyang',
+      characterName: '盛向阳',
+      backgroundAsset: _portrait3,
+      affectionLevel: 33,
+      upgradeHint: '再表白178就升级啦',
+      sceneIndex: 5,
+      totalScenes: 18,
     ),
   ];
 }

@@ -3,6 +3,10 @@ abstract final class AppDurations {
   static const Duration fast = Duration(milliseconds: 150);
   static const Duration normal = Duration(milliseconds: 300);
   static const Duration slow = Duration(milliseconds: 500);
+  static const Duration splashHold = Duration(milliseconds: 1600);
+
+  /// 轻提示 Toast 停留时长（不含淡入淡出）。
+  static const Duration toastVisible = Duration(milliseconds: 1500);
 
   /// 容器转换（卡片放大为全屏）转场时长，兼顾丝滑与不拖沓。
   static const Duration containerTransform = Duration(milliseconds: 450);

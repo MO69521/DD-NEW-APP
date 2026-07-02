@@ -128,7 +128,34 @@ while IFS= read -r file; do
   esac
 done <<< "$CHANGED_FILES"
 
-# --- 6. File size ---
+# --- 6. Status bar inset (§3.1) ---
+echo ""
+echo "--- Status bar inset check (§3.1) ---"
+while IFS= read -r file; do
+  [ -f "$file" ] || continue
+  case "$file" in
+    lib/features/*/presentation/pages/*|lib/features/*/presentation/pages/*)
+      if rg -q "AppTopBar\(" "$file" 2>/dev/null; then
+        if ! rg -q "statusBarHeight" "$file" 2>/dev/null; then
+          report_issue "$file: AppTopBar without statusBarHeight — see §3.1"
+        elif rg -n "statusBarHeight\s*=\s*MediaQuery\.paddingOf\(context\)\.top\s*;" "$file" 2>/dev/null; then
+          report_issue "$file: statusBarHeight must use AppLayout.statusBarHeight — see §3.1"
+        elif rg -q "statusBarHeight:\s*MediaQuery\.paddingOf\(context\)\.top" "$file" 2>/dev/null; then
+          report_issue "$file: inline statusBarHeight must use AppLayout.statusBarHeight — see §3.1"
+        elif rg -q "AppLayout\.statusBarHeight" "$file" 2>/dev/null; then
+          :
+        elif rg -q "statusBarPlaceholderHeight" "$file" 2>/dev/null || \
+             rg -q "topInset > 0" "$file" 2>/dev/null; then
+          report_issue "$file: use AppLayout.statusBarHeight(context) instead of inline fallback — see §3.1"
+        elif rg -q "statusBarHeight" "$file" 2>/dev/null; then
+          report_warning "$file: statusBarHeight present — manually confirm §3.1 placeholder fallback"
+        fi
+      fi
+      ;;
+  esac
+done <<< "$CHANGED_FILES"
+
+# --- 7. File size ---
 echo ""
 echo "--- File size check ---"
 while IFS= read -r file; do

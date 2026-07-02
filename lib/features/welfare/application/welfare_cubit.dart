@@ -1,5 +1,9 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../core/constants/currency_config.dart';
+import '../../../core/domain/entities/commerce_entities.dart';
+import '../../../routes/app_router.dart';
+import '../../../routes/app_routes.dart';
 import '../data/datasources/welfare_mock_datasource.dart';
 import '../data/repositories/welfare_repository_impl.dart';
 import '../domain/repositories/welfare_repository.dart';
@@ -38,5 +42,12 @@ class WelfareCubit extends Cubit<WelfareState> {
         ),
       );
     }
+  }
+
+  void onCurrencyTap(CurrencyType type) {
+    AppRouter.pushNamed(
+      AppRoutes.currencyWalletName,
+      pathParameters: {'type': CurrencyConfig.slug(type)},
+    );
   }
 }

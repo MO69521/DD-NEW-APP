@@ -8,19 +8,42 @@ class RankingMockDataSource {
   const RankingMockDataSource();
 
   static const String _brandTitle = '点点穿书';
+  static const int _pageSize = 10;
 
   Future<RankingPageContent> fetchPageContent() async {
     return RankingPageContent(
       brandTitle: _brandTitle,
       booksByDimensionChannel: {
         for (final dimension in RankingDimension.values)
-          dimension: _channelsFor(dimension),
+          dimension: _channelsFor(dimension, page: 1),
       },
     );
   }
 
-  Map<RankingChannel, List<Book>> _channelsFor(RankingDimension dimension) {
-    final all = _booksFor(dimension);
+  /// 加载更多书籍（分页）。
+  Future<List<Book>> fetchMoreBooks({
+    required RankingDimension dimension,
+    required RankingChannel channel,
+    required int page,
+  }) async {
+    // 模拟网络延迟
+    await Future.delayed(const Duration(milliseconds: 500));
+
+    final allBooks = _booksFor(dimension, page: page);
+
+    if (channel == RankingChannel.all) {
+      return allBooks;
+    }
+
+    // 女频 / 男频子集
+    return _subset(allBooks, channel);
+  }
+
+  Map<RankingChannel, List<Book>> _channelsFor(
+    RankingDimension dimension, {
+    required int page,
+  }) {
+    final all = _booksFor(dimension, page: page);
     return {
       RankingChannel.all: all,
       // 女频 / 男频先以子集模拟，接真实接口时替换为分频道返回。
@@ -37,16 +60,21 @@ class RankingMockDataSource {
     ];
   }
 
-  List<Book> _booksFor(RankingDimension dimension) {
+  List<Book> _booksFor(RankingDimension dimension, {required int page}) {
     final prefix = dimension.name;
+    final startIndex = (page - 1) * _pageSize;
+
     return [
-      for (var i = 0; i < _templates.length; i++)
-        Book(
-          id: '${prefix}_${i + 1}',
-          title: _templates[i].$1,
-          category: _templates[i].$2,
-          coverAsset: _templates[i].$3,
-        ),
+      for (var i = 0; i < _pageSize; i++)
+        () {
+          final templateIndex = (startIndex + i) % _templates.length;
+          return Book(
+            id: '${prefix}_${startIndex + i + 1}',
+            title: _templates[templateIndex].$1,
+            category: _templates[templateIndex].$2,
+            coverAsset: _templates[templateIndex].$3,
+          );
+        }(),
     ];
   }
 

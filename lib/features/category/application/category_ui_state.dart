@@ -8,12 +8,16 @@ class CategoryUiState extends Equatable {
   const CategoryUiState({
     this.phase = CategoryPhase.loading,
     this.errorMessage,
+    this.isRefreshing = false,
     this.isLoadingMore = false,
     this.page = 0,
   });
 
   final CategoryPhase phase;
   final String? errorMessage;
+
+  /// 筛选项切换后，列表局部刷新进行中。
+  final bool isRefreshing;
 
   /// 上拉加载更多进行中。
   final bool isLoadingMore;
@@ -25,17 +29,25 @@ class CategoryUiState extends Equatable {
     CategoryPhase? phase,
     String? errorMessage,
     bool clearError = false,
+    bool? isRefreshing,
     bool? isLoadingMore,
     int? page,
   }) {
     return CategoryUiState(
       phase: phase ?? this.phase,
       errorMessage: clearError ? null : errorMessage ?? this.errorMessage,
+      isRefreshing: isRefreshing ?? this.isRefreshing,
       isLoadingMore: isLoadingMore ?? this.isLoadingMore,
       page: page ?? this.page,
     );
   }
 
   @override
-  List<Object?> get props => [phase, errorMessage, isLoadingMore, page];
+  List<Object?> get props => [
+    phase,
+    errorMessage,
+    isRefreshing,
+    isLoadingMore,
+    page,
+  ];
 }

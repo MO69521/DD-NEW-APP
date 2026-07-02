@@ -4,23 +4,31 @@ import 'package:equatable/equatable.dart';
 class RankingUiState extends Equatable {
   const RankingUiState({
     this.isLoading = false,
+    this.isLoadingMore = false,
+    this.hasMoreData = true,
     this.errorMessage,
   });
 
   final bool isLoading;
+  final bool isLoadingMore;
+  final bool hasMoreData;
   final String? errorMessage;
 
   RankingUiState copyWith({
     bool? isLoading,
+    bool? isLoadingMore,
+    bool? hasMoreData,
     String? errorMessage,
     bool clearError = false,
   }) {
     return RankingUiState(
       isLoading: isLoading ?? this.isLoading,
+      isLoadingMore: isLoadingMore ?? this.isLoadingMore,
+      hasMoreData: hasMoreData ?? this.hasMoreData,
       errorMessage: clearError ? null : errorMessage ?? this.errorMessage,
     );
   }
 
   @override
-  List<Object?> get props => [isLoading, errorMessage];
+  List<Object?> get props => [isLoading, isLoadingMore, hasMoreData, errorMessage];
 }

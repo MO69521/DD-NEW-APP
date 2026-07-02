@@ -49,4 +49,38 @@ abstract final class AppPartnerColors {
 
   /// chip / 按钮 pressed 遮罩。
   static const Color chipPressedOverlay = Color(0x33FFFFFF);
+
+  // ── 消息 Tab ──
+  /// 顶栏下方粉紫光晕渐变顶色。
+  static const Color messageHeaderGlowTop = Color(0x4DFF4D88);
+
+  /// 顶栏下方粉紫光晕渐变过渡色。
+  static const Color messageHeaderGlowMid = Color(0x1FB8A4FF);
+
+  /// 会话行分隔线。
+  static const Color messageRowDivider = Color(0x14FFFFFF);
+
+  /// 好感度徽章背景。
+  static const Color affectionBadgeBg = primary;
+
+  // ── 互动 Tab ──
+  static const Color interactionHeaderBg = Color(0x99331E25);
+
+  static const Color interactionHeaderGradientEnd = Color(0x00000000);
+
+  static const Color interactionCharacterCardBg = Color(0x80090E17);
+
+  static const Color interactionSideActionBg = Color(0x66090E17);
+
+  static const Color interactionReviewButtonBg = Color(0xCC3D3428);
+
+  static const Color interactionPageIndicatorBg = Color(0x99090E17);
+
+  static const Color interactionConfideButton = primary;
+
+  static const Color interactionChatButton = Color(0xFFD4A853);
+
+  static const Color interactionSceneBottomFade = Color(0x99090E17);
+
+  static const Color interactionAiPlotBadgeBg = Color(0xFFFF4D88);
 }

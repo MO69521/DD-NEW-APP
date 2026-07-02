@@ -54,7 +54,7 @@ class BookDetailBottomBar extends StatelessWidget {
                         icon: isInShelf
                             ? Icons.bookmark
                             : Icons.bookmark_border,
-                        label: isInShelf ? '已在书架' : '加入书架',
+                        label: isInShelf ? '已加入书架' : '加入书架',
                         onTap: onShelfTap,
                       ),
                     ),
