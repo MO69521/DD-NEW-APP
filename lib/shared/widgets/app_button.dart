@@ -25,7 +25,7 @@ enum AppButtonVariant {
 }
 
 /// 按钮尺寸。
-enum AppButtonSize { normal, small }
+enum AppButtonSize { normal, small, compact }
 
 /// L1 — 统一按钮，支持多视觉变体与尺寸。
 class AppButton extends StatelessWidget {
@@ -71,15 +71,20 @@ class AppButton extends StatelessWidget {
   double get _radius =>
       variant == AppButtonVariant.primary ? AppRadius.md : AppRadius.full;
 
-  EdgeInsets get _padding => size == AppButtonSize.normal
-      ? const EdgeInsets.symmetric(
-          horizontal: AppSizes.buttonPaddingHNormal,
-          vertical: AppSizes.buttonPaddingVNormal,
-        )
-      : const EdgeInsets.symmetric(
-          horizontal: AppSizes.buttonPaddingHSmall,
-          vertical: AppSizes.buttonPaddingVSmall,
-        );
+  EdgeInsets get _padding => switch (size) {
+    AppButtonSize.normal => const EdgeInsets.symmetric(
+      horizontal: AppSizes.buttonPaddingHNormal,
+      vertical: AppSizes.buttonPaddingVNormal,
+    ),
+    AppButtonSize.small => const EdgeInsets.symmetric(
+      horizontal: AppSizes.buttonPaddingHSmall,
+      vertical: AppSizes.buttonPaddingVSmall,
+    ),
+    AppButtonSize.compact => const EdgeInsets.symmetric(
+      horizontal: AppSizes.buttonPaddingHNormal,
+      vertical: AppSizes.buttonPaddingVSmall,
+    ),
+  };
 
   TextStyle get _textStyle {
     final base = size == AppButtonSize.normal
@@ -126,6 +131,7 @@ class AppButton extends StatelessWidget {
     // 不会被拉伸至父级最大高度（否则 accent CTA 会撑满整屏）。
     content = Align(
       alignment: Alignment.center,
+      widthFactor: isExpanded ? null : 1.0,
       heightFactor: 1.0,
       child: content,
     );

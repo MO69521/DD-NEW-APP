@@ -196,18 +196,29 @@ class _AgeOption extends StatelessWidget {
       behavior: HitTestBehavior.opaque,
       child: DecoratedBox(
         decoration: BoxDecoration(
-          color: selected ? AppColors.accentYellow : AppColors.surfaceCard,
+          color: selected
+              ? AppColors.segmentedSelectedFill
+              : AppColors.surfaceCard,
           borderRadius: BorderRadius.circular(AppRadius.full),
+          border: Border.all(
+            color: selected
+                ? AppColors.segmentedSelectedBorder
+                : AppColors.borderGlass,
+            width: AppSizes.hairline,
+          ),
         ),
-        child: SizedBox(
-          height: AppSizes.settingsNotificationRowMinHeight,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppSpacing.md,
+            vertical: AppSpacing.xs,
+          ),
           child: Center(
             child: AppText(
               age.label,
               style: AppTextStyles.bodyMedium.copyWith(
                 color: selected
-                    ? AppColors.rankingSegmentedSelectedText
-                    : AppColors.textOnDark,
+                    ? AppColors.accentYellow
+                    : AppColors.textOnDarkMuted,
               ),
             ),
           ),

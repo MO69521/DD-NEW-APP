@@ -23,6 +23,7 @@ class BookCardLargeRow extends StatelessWidget {
     this.coverWidth = AppSizes.bookCardLargeCoverWidth,
     this.coverHeight = AppSizes.bookCardLargeCoverHeight,
     this.coverTag,
+    this.leadingBadge,
     this.trailing,
     this.padding = const EdgeInsets.symmetric(
       vertical: AppSizes.bookCardLargeRowVerticalPadding,
@@ -49,6 +50,9 @@ class BookCardLargeRow extends StatelessWidget {
   /// 封面右上角状态角标（更新 / 完结 / 连载），为空则不展示。
   final BookCoverTag? coverTag;
 
+  /// 封面左上角业务角标（如排行名次），为空则不展示。
+  final Widget? leadingBadge;
+
   /// 行尾操作插槽（如加入书架）。
   final Widget? trailing;
   final EdgeInsetsGeometry padding;
@@ -64,13 +68,20 @@ class BookCardLargeRow extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            BookCover(
-              assetPath: coverAsset,
-              width: coverWidth,
-              height: coverHeight,
-              topEndBadge: coverTag == null
-                  ? null
-                  : BookCoverTagBadge(tag: coverTag!),
+            Stack(
+              clipBehavior: Clip.none,
+              children: [
+                BookCover(
+                  assetPath: coverAsset,
+                  width: coverWidth,
+                  height: coverHeight,
+                  topEndBadge: coverTag == null
+                      ? null
+                      : BookCoverTagBadge(tag: coverTag!),
+                ),
+                if (leadingBadge != null)
+                  Positioned(top: 0, left: 0, child: leadingBadge!),
+              ],
             ),
             const SizedBox(width: AppSizes.bookCardLargeCoverToTextGap),
             Expanded(

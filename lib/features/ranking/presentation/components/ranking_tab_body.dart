@@ -284,6 +284,7 @@ class _RankingBookSliverList extends StatelessWidget {
                 Expanded(
                   child: _RankingBookListItem(
                     book: book,
+                    rank: index + 1,
                     showDivider: index > 0,
                     onTap: () => onBookTap(book),
                   ),
@@ -300,17 +301,19 @@ class _RankingBookSliverList extends StatelessWidget {
 class _RankingBookListItem extends StatelessWidget {
   const _RankingBookListItem({
     required this.book,
+    required this.rank,
     required this.showDivider,
     required this.onTap,
   });
 
   final Book book;
+  final int rank;
   final bool showDivider;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
-    final row = RankingBookRow(book: book, onTap: onTap);
+    final row = RankingBookRow(book: book, rank: rank, onTap: onTap);
     if (!showDivider) return row;
 
     return Column(

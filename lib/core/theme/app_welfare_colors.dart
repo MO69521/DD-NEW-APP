@@ -36,6 +36,8 @@ abstract final class AppWelfareColors {
   static const Color checkInMilestoneLabel = Color(0x99FFFFFF);
   static const Color checkInCtaSolid = Color(0xFFFCE64D);
   static const Color checkInCtaTextDark = Color(0xFF202020);
+  static const Color checkInCtaSweepEdge = Color(0x00FFFFFF);
+  static const Color checkInCtaSweepHighlight = Color(0x80FFFFFF);
 
   static const Color subtitleMuted = Color(0xFF8C8C8C);
   static const Color hotSaleBadge = Color(0xFFFF6B6B);

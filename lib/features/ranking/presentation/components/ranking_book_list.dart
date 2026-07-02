@@ -42,6 +42,7 @@ class RankingBookList extends StatelessWidget {
       itemBuilder: (context, index) {
         final row = RankingBookRow(
           book: books[index],
+          rank: index + 1,
           onTap: onBookTap == null ? null : () => onBookTap!(books[index]),
         );
         if (index == 0) return row;

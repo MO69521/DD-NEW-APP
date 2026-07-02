@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/theme/app_durations.dart';
 import '../../../../core/theme/app_radius.dart';
 import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
@@ -56,42 +57,157 @@ class DailyCheckInSection extends StatelessWidget {
           const SizedBox(height: AppSpacing.lg),
           CheckInCalendar(days: summary.weekDays),
           const SizedBox(height: AppSpacing.lg),
-          GestureDetector(
+          _AnimatedCheckInCta(
+            rewardEnergy: summary.todayRewardEnergy,
             onTap: onCheckInTap,
-            behavior: HitTestBehavior.opaque,
-            child: Container(
-              width: double.infinity,
-              padding: const EdgeInsets.symmetric(
-                horizontal: AppSizes.welfareCheckInCtaPaddingHorizontal,
-                vertical: AppSizes.welfareCheckInCtaPaddingVertical,
-              ),
-              decoration: BoxDecoration(
-                color: AppWelfareColors.checkInCtaSolid,
-                borderRadius: BorderRadius.circular(
-                  AppRadius.welfareCheckInCta,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _AnimatedCheckInCta extends StatefulWidget {
+  const _AnimatedCheckInCta({required this.rewardEnergy, this.onTap});
+
+  final int rewardEnergy;
+  final VoidCallback? onTap;
+
+  @override
+  State<_AnimatedCheckInCta> createState() => _AnimatedCheckInCtaState();
+}
+
+class _AnimatedCheckInCtaState extends State<_AnimatedCheckInCta>
+    with TickerProviderStateMixin {
+  late final AnimationController _breathController;
+  late final AnimationController _sweepController;
+  late final Animation<double> _breathScale;
+
+  @override
+  void initState() {
+    super.initState();
+    _breathController = AnimationController(
+      vsync: this,
+      duration: AppDurations.membershipCtaBreath,
+    )..repeat(reverse: true);
+    _sweepController = AnimationController(
+      vsync: this,
+      duration: AppDurations.membershipCtaSweep,
+    )..repeat();
+    _breathScale =
+        Tween<double>(
+          begin: AppSizes.membershipCtaBreathScaleMin,
+          end: AppSizes.membershipCtaBreathScaleMax,
+        ).animate(
+          CurvedAnimation(parent: _breathController, curve: Curves.easeInOut),
+        );
+  }
+
+  @override
+  void dispose() {
+    _breathController.dispose();
+    _sweepController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ScaleTransition(
+      scale: _breathScale,
+      child: GestureDetector(
+        onTap: widget.onTap,
+        behavior: HitTestBehavior.opaque,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(AppRadius.welfareCheckInCta),
+          child: DecoratedBox(
+            decoration: const BoxDecoration(
+              color: AppWelfareColors.checkInCtaSolid,
+            ),
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                Positioned.fill(
+                  child: _CheckInCtaSweepOverlay(animation: _sweepController),
                 ),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  AppText(
-                    '立即签到',
-                    style: AppTextStyles.welfareCtaText.copyWith(
-                      color: AppWelfareColors.checkInCtaTextDark,
-                    ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AppSizes.welfareCheckInCtaPaddingHorizontal,
+                    vertical: AppSizes.welfareCheckInCtaPaddingVertical,
                   ),
-                  const SizedBox(width: AppSpacing.xxsHalf),
-                  AppText(
-                    '+${summary.todayRewardEnergy}能量',
-                    style: AppTextStyles.welfareCtaText.copyWith(
-                      color: AppWelfareColors.checkInCtaTextDark,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      AppText(
+                        '立即签到',
+                        style: AppTextStyles.welfareCtaText.copyWith(
+                          color: AppWelfareColors.checkInCtaTextDark,
+                        ),
+                      ),
+                      const SizedBox(width: AppSpacing.xxsHalf),
+                      AppText(
+                        '+${widget.rewardEnergy}能量',
+                        style: AppTextStyles.welfareCtaText.copyWith(
+                          color: AppWelfareColors.checkInCtaTextDark,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _CheckInCtaSweepOverlay extends StatelessWidget {
+  const _CheckInCtaSweepOverlay({required this.animation});
+
+  final Animation<double> animation;
+
+  @override
+  Widget build(BuildContext context) {
+    return IgnorePointer(
+      child: AnimatedBuilder(
+        animation: animation,
+        builder: (context, child) {
+          return LayoutBuilder(
+            builder: (context, constraints) {
+              final buttonWidth = constraints.maxWidth;
+              final bandWidth =
+                  buttonWidth * AppSizes.membershipCtaSweepBandWidthRatio;
+              final travelDistance = buttonWidth + bandWidth;
+              final offsetX = -bandWidth + travelDistance * animation.value;
+
+              return Stack(
+                clipBehavior: Clip.hardEdge,
+                children: [
+                  Transform.translate(
+                    offset: Offset(offsetX, 0),
+                    child: Container(
+                      width: bandWidth,
+                      height: constraints.maxHeight,
+                      decoration: const BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.centerLeft,
+                          end: Alignment.centerRight,
+                          colors: [
+                            AppWelfareColors.checkInCtaSweepEdge,
+                            AppWelfareColors.checkInCtaSweepHighlight,
+                            AppWelfareColors.checkInCtaSweepEdge,
+                          ],
+                          stops: [0, 0.5, 1],
+                        ),
+                      ),
                     ),
                   ),
                 ],
-              ),
-            ),
-          ),
-        ],
+              );
+            },
+          );
+        },
       ),
     );
   }

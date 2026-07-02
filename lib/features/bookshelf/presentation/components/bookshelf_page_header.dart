@@ -36,7 +36,7 @@ class BookshelfPageHeader extends StatelessWidget {
             children: [
               Center(
                 child: AppText(
-                  '书架管理',
+                  selectedTab == BookshelfTab.history ? '管理阅读历史' : '书架管理',
                   style: AppTextStyles.titleMediumDark.copyWith(
                     color: colors.textPrimary,
                   ),

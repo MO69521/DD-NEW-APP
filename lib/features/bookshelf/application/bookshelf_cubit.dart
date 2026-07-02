@@ -98,7 +98,6 @@ class BookshelfCubit extends Cubit<BookshelfState> {
 
   void toggleBookSelection(Book book) {
     if (!state.interaction.isManaging) return;
-    if (state.interaction.selectedTab != BookshelfTab.shelf) return;
 
     final selected = Set<String>.of(state.interaction.selectedBookIds);
     if (selected.contains(book.id)) {
@@ -118,20 +117,20 @@ class BookshelfCubit extends Cubit<BookshelfState> {
 
   void toggleSelectAll() {
     if (!state.interaction.isManaging) return;
-    if (state.interaction.selectedTab != BookshelfTab.shelf) return;
 
-    final shelfBookIds = state.domain
-        .bookSeedFor(BookshelfTab.shelf)
+    final tab = state.interaction.selectedTab;
+    final bookIds = state.domain
+        .bookSeedFor(tab)
         .map((book) => book.id)
         .toSet();
     final shouldSelectAll =
-        state.interaction.selectedBookIds.length != shelfBookIds.length;
+        state.interaction.selectedBookIds.length != bookIds.length;
 
     emit(
       state.copyWith(
         interaction: state.interaction.copyWith(
           selectedBookIds: shouldSelectAll
-              ? Set.unmodifiable(shelfBookIds)
+              ? Set.unmodifiable(bookIds)
               : const {},
         ),
       ),
@@ -142,9 +141,31 @@ class BookshelfCubit extends Cubit<BookshelfState> {
     final selectedIds = state.interaction.selectedBookIds;
     if (selectedIds.isEmpty) return;
 
-    _membershipService.removeAll(selectedIds);
+    final selectedTab = state.interaction.selectedTab;
+    if (selectedTab == BookshelfTab.shelf) {
+      _membershipService.removeAll(selectedIds);
+      emit(
+        state.copyWith(
+          interaction: state.interaction.copyWith(selectedBookIds: const {}),
+        ),
+      );
+      return;
+    }
+
+    final content = state.domain.content;
+    if (content == null) return;
+    final nextBooksByTab = {
+      ...content.booksByTab,
+      selectedTab: content
+          .booksFor(selectedTab)
+          .where((book) => !selectedIds.contains(book.id))
+          .toList(growable: false),
+    };
     emit(
       state.copyWith(
+        domain: state.domain.copyWith(
+          content: content.copyWith(booksByTab: nextBooksByTab),
+        ),
         interaction: state.interaction.copyWith(selectedBookIds: const {}),
       ),
     );
@@ -207,9 +228,9 @@ class BookshelfCubit extends Cubit<BookshelfState> {
 
     final nextContent = _contentWithShelfBooks(content, shelfBooks);
     final nextShelfIds = shelfBooks.map((book) => book.id).toSet();
-    final nextSelectedIds = state.interaction.selectedBookIds
-        .where(nextShelfIds.contains)
-        .toSet();
+    final nextSelectedIds = state.interaction.selectedTab == BookshelfTab.shelf
+        ? state.interaction.selectedBookIds.where(nextShelfIds.contains).toSet()
+        : state.interaction.selectedBookIds;
 
     final shelfChanged = !_sameBookIds(
       content.booksFor(BookshelfTab.shelf),

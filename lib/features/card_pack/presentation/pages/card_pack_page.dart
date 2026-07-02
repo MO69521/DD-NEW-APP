@@ -52,6 +52,7 @@ class CardPackPage extends StatelessWidget {
               AppButton(
                 label: '点击刷新',
                 variant: AppButtonVariant.accent,
+                size: AppButtonSize.compact,
                 onPressed: () {},
               ),
               const Spacer(flex: AppSizes.cardPackEmptyBottomFlex),

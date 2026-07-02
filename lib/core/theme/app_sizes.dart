@@ -35,7 +35,7 @@ abstract final class AppSizes {
   static const double bookstoreTopHeaderHeight = 44;
   static const double bookstoreSearchIconSize = 20;
   static const double bookstoreStickyHeaderHeight = bookstoreTopHeaderHeight;
-  static const double bookstoreHeaderToFirstSectionGap = 20;
+  static const double bookstoreHeaderToFirstSectionGap = 8;
   static const double bookstoreLoadMoreTriggerOffset = 240;
   static const double bookstoreLoadingIndicatorSize = 20;
   static const double bookstoreLoadingIndicatorStrokeWidth = 2;
@@ -66,6 +66,8 @@ abstract final class AppSizes {
   static const int rankingGridMaxItems = 6;
   static const double rankingRowCoverWidth = 74;
   static const double bookCoverRankingAspectRatio = 132 / 179;
+  static const double rankingTopBadgeSize = 24;
+  static const double rankingMutedBadgeSize = 20;
   static const double rankingCompactTextBlockHeight = 66;
 
   // ── 书籍封面 ──
