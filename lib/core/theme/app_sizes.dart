@@ -58,6 +58,9 @@ abstract final class AppSizes {
   // ── 榜单 (Figma 456:12299) ──
   static const double tabIndicatorWidth = 24;
   static const double tabIndicatorHeight = 3;
+  static const double tabSlotWidthSm = 55;
+  static const double tabSlotWidthMd = 72;
+  static const double rankingTabSlotWidth = 55;
   static const double rankingHeaderActionTopInset = 5;
   static const double rankingHeaderActionBottomInset = 4;
   static const double rankingFullListIconSize = 12;
@@ -405,7 +408,7 @@ abstract final class AppSizes {
   static const double bookDetailCharCoverWidth = 132;
   static const double bookDetailCharCoverHeight = 179;
   static const double bookDetailCharFavPaddingH = 24;
-  static const double bookDetailCharFavPaddingV = 6;
+  static const double bookDetailCharFavPaddingV = 8;
   static const double bookDetailCharacterHelpDialogWidthRatio = 0.84;
   static const double bookDetailCharacterHelpDialogMaxHeightRatio = 0.62;
   static const double bookDetailCharacterHelpCloseSize = 32;
@@ -419,6 +422,7 @@ abstract final class AppSizes {
   static const double bookDetailDiscussionFilterPaddingH = 16;
   static const double bookDetailDiscussionFilterPaddingV = 6;
   static const double bookDetailDiscussionListGap = 22;
+  static const double bookDetailDiscussionShortListBottomReserveFactor = 0.55;
   static const double bookDiscussionDetailReplyAvatarSize = 24;
   static const double bookDiscussionDetailReplyItemGap = 14;
   static const double bookDiscussionDetailInputBarHeight = 52;
@@ -449,7 +453,7 @@ abstract final class AppSizes {
   static const double searchInputIconSize = 16;
 
   // ── 大封面横向书卡（分类 / 榜单 / 搜索 / 编辑推荐共用） ──
-  static const double bookCardLargeCoverWidth = 128;
+  static const double bookCardLargeCoverWidth = 96;
   static const double bookCardLargeCoverAspectRatio = 3 / 4;
   static const double bookCardLargeCoverHeight =
       bookCardLargeCoverWidth / bookCardLargeCoverAspectRatio;

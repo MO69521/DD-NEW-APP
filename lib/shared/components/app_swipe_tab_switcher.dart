@@ -1,47 +1,109 @@
 import 'package:flutter/material.dart';
 
+import '../../core/theme/app_durations.dart';
 import '../../core/theme/app_sizes.dart';
 
-/// Level 2 — Tab 内容区左右滑动切换手势包裹层。
+/// Level 2 — Tab 内容区左右滑动切换。
 ///
-/// 包裹任意内容（含内部纵向滚动视图），识别水平快滑手势并切换到相邻 Tab：
-/// - 向左滑 → 下一个 Tab；
-/// - 向右滑 → 上一个 Tab。
-///
-/// 仅负责手势，不改动内容布局；越界方向不触发。内部横向可滚动组件（如横向
-/// 列表）在手势竞技中优先，故不会误触。
-class AppSwipeTabSwitcher extends StatelessWidget {
+/// 使用 PageView 实现与首页一致的跟手滑动效果；落页后通过 [onIndexChanged]
+/// 同步外部 tab state。
+class AppSwipeTabSwitcher extends StatefulWidget {
   const AppSwipeTabSwitcher({
     super.key,
-    required this.child,
+    this.child,
+    this.children,
     required this.selectedIndex,
-    required this.tabCount,
     required this.onIndexChanged,
+    this.tabCount,
     this.enabled = true,
-  });
+  }) : assert(
+         child != null || children != null,
+         'Either child or children must be provided',
+       );
 
-  final Widget child;
+  /// 自适应高度内容使用 [child]，仅提供左右滑手势。
+  final Widget? child;
+
+  /// 有界内容使用 [children]，通过 PageView 获得与首页一致的跟手切换。
+  final List<Widget>? children;
   final int selectedIndex;
-  final int tabCount;
   final ValueChanged<int> onIndexChanged;
+  final int? tabCount;
 
   /// 为 false 时仅透传内容，不启用滑动（如分类页只允许点击切换）。
   final bool enabled;
 
   @override
+  State<AppSwipeTabSwitcher> createState() => _AppSwipeTabSwitcherState();
+}
+
+class _AppSwipeTabSwitcherState extends State<AppSwipeTabSwitcher> {
+  late final PageController _pageController;
+  bool _isSyncingFromPageView = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController(initialPage: widget.selectedIndex);
+  }
+
+  @override
+  void didUpdateWidget(covariant AppSwipeTabSwitcher oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (_isSyncingFromPageView ||
+        widget.selectedIndex == oldWidget.selectedIndex) {
+      return;
+    }
+    if (!_pageController.hasClients) return;
+    _pageController.animateToPage(
+      widget.selectedIndex,
+      duration: AppDurations.normal,
+      curve: Curves.easeOutCubic,
+    );
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    if (!enabled || tabCount <= 1) return child;
+    final children = widget.children;
+    if (children == null) return _buildGestureOnly(widget.child!);
+    if (children.isEmpty) return const SizedBox.shrink();
+    if (!widget.enabled || children.length <= 1) {
+      final index = widget.selectedIndex.clamp(0, children.length - 1) as int;
+      return children[index];
+    }
+
+    return PageView(
+      controller: _pageController,
+      physics: const PageScrollPhysics(),
+      onPageChanged: (index) {
+        _isSyncingFromPageView = true;
+        widget.onIndexChanged(index);
+        _isSyncingFromPageView = false;
+      },
+      children: children,
+    );
+  }
+
+  Widget _buildGestureOnly(Widget child) {
+    if (!widget.enabled) return child;
 
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onHorizontalDragEnd: (details) {
         final velocity = details.primaryVelocity ?? 0;
         if (velocity.abs() < AppSizes.swipeTabVelocityThreshold) return;
-
-        // 向左滑动（负速度）→ 下一个；向右滑动（正速度）→ 上一个。
-        final nextIndex = velocity < 0 ? selectedIndex + 1 : selectedIndex - 1;
-        if (nextIndex < 0 || nextIndex >= tabCount) return;
-        onIndexChanged(nextIndex);
+        final nextIndex = velocity < 0
+            ? widget.selectedIndex + 1
+            : widget.selectedIndex - 1;
+        final maxCount = widget.tabCount ?? 1;
+        if (nextIndex < 0 || nextIndex >= maxCount) return;
+        widget.onIndexChanged(nextIndex);
       },
       child: child,
     );

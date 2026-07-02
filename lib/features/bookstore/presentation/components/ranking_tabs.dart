@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/theme/app_radius.dart';
 import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/theme/app_theme_context.dart';
+import '../../../../shared/components/elastic_tab_indicator.dart';
 import '../../../../shared/widgets/app_text.dart';
 import '../../../../core/domain/entities/book.dart';
 
@@ -24,22 +24,38 @@ class RankingTabs extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tabs = RankingTab.values;
+    final slotWidth = AppSizes.rankingTabSlotWidth;
+    final slotPitch = slotWidth + AppSpacing.md;
 
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       physics: const BouncingScrollPhysics(),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          for (var i = 0; i < tabs.length; i++) ...[
-            if (i > 0) const SizedBox(width: AppSpacing.md),
-            _RankingTabItem(
-              tab: tabs[i],
-              isSelected: tabs[i] == selected,
-              onTap: () => onSelected(tabs[i]),
+      child: SizedBox(
+        width: slotWidth * tabs.length + AppSpacing.md * (tabs.length - 1),
+        child: Stack(
+          clipBehavior: Clip.none,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                for (var i = 0; i < tabs.length; i++) ...[
+                  if (i > 0) const SizedBox(width: AppSpacing.md),
+                  _RankingTabItem(
+                    tab: tabs[i],
+                    isSelected: tabs[i] == selected,
+                    width: slotWidth,
+                    onTap: () => onSelected(tabs[i]),
+                  ),
+                ],
+              ],
+            ),
+            ElasticTabIndicator(
+              selectedIndex: tabs.indexOf(selected),
+              slotWidth: slotWidth,
+              slotPitch: slotPitch,
             ),
           ],
-        ],
+        ),
       ),
     );
   }
@@ -49,11 +65,13 @@ class _RankingTabItem extends StatelessWidget {
   const _RankingTabItem({
     required this.tab,
     required this.isSelected,
+    required this.width,
     required this.onTap,
   });
 
   final RankingTab tab;
   final bool isSelected;
+  final double width;
   final VoidCallback? onTap;
 
   @override
@@ -63,31 +81,23 @@ class _RankingTabItem extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       behavior: HitTestBehavior.opaque,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          AppText(
+      child: SizedBox(
+        width: width,
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: AppSpacing.xs),
+          child: AppText(
             tab.label,
-            style: (isSelected
-                    ? AppTextStyles.tabActiveDark
-                    : AppTextStyles.tabInactiveDark)
-                .copyWith(
-              color: isSelected ? colors.textPrimary : colors.textMuted,
-            ),
+            style:
+                (isSelected
+                        ? AppTextStyles.tabActiveDark
+                        : AppTextStyles.tabInactiveDark)
+                    .copyWith(
+                      color: isSelected ? colors.textPrimary : colors.textMuted,
+                    ),
+            maxLines: 1,
+            textAlign: TextAlign.center,
           ),
-          const SizedBox(height: AppSpacing.xs),
-          Container(
-            width: AppSizes.tabIndicatorWidth,
-            height: AppSizes.tabIndicatorHeight,
-            decoration: BoxDecoration(
-              color: isSelected
-                  ? colors.accent
-                  : colors.accent.withValues(alpha: 0),
-              borderRadius: BorderRadius.circular(AppRadius.md),
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }

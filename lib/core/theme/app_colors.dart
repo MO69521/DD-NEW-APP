@@ -57,6 +57,7 @@ abstract final class AppColors {
   static const Color bookDetailUpdateText = Color(0xD9FFFFFF);
   static const Color bookDetailUpdateTextHighlighted = Color(0xFFF0B16A);
   static const Color bookDetailUpdateSectionBackground = Color(0x0DFFFFFF);
+  static const Color bookDetailCharFavBackground = Color(0x0AFFE847);
   static const Color guessLikeCardBackground = Color(0x0DFFFFFF);
   static const Color guessLikeTagBackground = Color(0x0AFFFFFF);
   static const Color guessLikeTagBorder = Color(0x0AFFFFFF);

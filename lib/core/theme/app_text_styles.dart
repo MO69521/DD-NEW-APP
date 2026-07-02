@@ -583,7 +583,7 @@ abstract final class AppTextStyles {
   static const TextStyle bookDetailCharFav = TextStyle(
     fontSize: 12,
     fontWeight: FontWeight.w500,
-    color: AppColors.textOnDark,
+    color: AppColors.accentYellow,
     height: 1.0,
   );
 

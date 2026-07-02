@@ -37,6 +37,9 @@ class BookDetailDiscussionSection extends StatelessWidget {
               post.filters.contains(selectedFilter),
         )
         .toList(growable: false);
+    final needsScrollReserve =
+        selectedFilter != BookDiscussionFilter.all &&
+        visiblePosts.length < posts.length;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -82,6 +85,12 @@ class BookDetailDiscussionSection extends StatelessWidget {
                   const SizedBox(height: AppSizes.bookDetailDiscussionListGap),
               ],
             ],
+          ),
+        if (needsScrollReserve)
+          SizedBox(
+            height:
+                MediaQuery.sizeOf(context).height *
+                AppSizes.bookDetailDiscussionShortListBottomReserveFactor,
           ),
       ],
     );

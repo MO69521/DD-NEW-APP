@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_colors.dart';
-import '../../../../core/theme/app_radius.dart';
 import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
+import '../../../../shared/components/elastic_tab_indicator.dart';
 import '../../../../shared/widgets/app_text.dart';
 import '../../domain/entities/help_feedback_tab.dart';
 
@@ -21,21 +21,38 @@ class HelpFeedbackTabBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const tabs = HelpFeedbackTab.values;
+    const slotWidth = AppSizes.tabSlotWidthMd;
+    const slotPitch = slotWidth + AppSpacing.xl;
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          for (final tab in HelpFeedbackTab.values) ...[
-            _HelpFeedbackTabItem(
-              tab: tab,
-              isSelected: tab == selected,
-              onTap: () => onSelected(tab),
+      child: SizedBox(
+        width: slotWidth * tabs.length + AppSpacing.xl * (tabs.length - 1),
+        child: Stack(
+          clipBehavior: Clip.none,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                for (var i = 0; i < tabs.length; i++) ...[
+                  if (i > 0) const SizedBox(width: AppSpacing.xl),
+                  _HelpFeedbackTabItem(
+                    tab: tabs[i],
+                    isSelected: tabs[i] == selected,
+                    width: slotWidth,
+                    onTap: () => onSelected(tabs[i]),
+                  ),
+                ],
+              ],
             ),
-            if (tab != HelpFeedbackTab.values.last)
-              const SizedBox(width: AppSpacing.xl),
+            ElasticTabIndicator(
+              selectedIndex: tabs.indexOf(selected),
+              slotWidth: slotWidth,
+              slotPitch: slotPitch,
+            ),
           ],
-        ],
+        ),
       ),
     );
   }
@@ -45,11 +62,13 @@ class _HelpFeedbackTabItem extends StatelessWidget {
   const _HelpFeedbackTabItem({
     required this.tab,
     required this.isSelected,
+    required this.width,
     required this.onTap,
   });
 
   final HelpFeedbackTab tab;
   final bool isSelected;
+  final double width;
   final VoidCallback onTap;
 
   @override
@@ -57,10 +76,11 @@ class _HelpFeedbackTabItem extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       behavior: HitTestBehavior.opaque,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          AppText(
+      child: SizedBox(
+        width: width,
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: AppSpacing.xs),
+          child: AppText(
             tab.label,
             style:
                 (isSelected
@@ -71,19 +91,10 @@ class _HelpFeedbackTabItem extends StatelessWidget {
                           ? AppColors.textOnDark
                           : AppColors.textOnDarkMuted,
                     ),
+            maxLines: 1,
+            textAlign: TextAlign.center,
           ),
-          const SizedBox(height: AppSpacing.xs),
-          Container(
-            width: AppSizes.tabIndicatorWidth,
-            height: AppSizes.tabIndicatorHeight,
-            decoration: BoxDecoration(
-              color: isSelected
-                  ? AppColors.accentYellow
-                  : AppColors.gradientFadeStart,
-              borderRadius: BorderRadius.circular(AppRadius.md),
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }

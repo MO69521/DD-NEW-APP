@@ -89,7 +89,7 @@ class BookDetailPage extends StatelessWidget {
   }
 }
 
-class _BookDetailView extends StatelessWidget {
+class _BookDetailView extends StatefulWidget {
   const _BookDetailView({
     required this.detail,
     required this.selectedTab,
@@ -101,6 +101,45 @@ class _BookDetailView extends StatelessWidget {
   final BookDetailTab selectedTab;
   final BookDiscussionFilter selectedDiscussionFilter;
   final bool isInShelf;
+
+  @override
+  State<_BookDetailView> createState() => _BookDetailViewState();
+}
+
+class _BookDetailViewState extends State<_BookDetailView> {
+  late final ScrollController _scrollController;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = ScrollController();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _preserveScrollOffsetWhile(VoidCallback action) {
+    if (!_scrollController.hasClients) {
+      action();
+      return;
+    }
+
+    final offset = _scrollController.offset;
+    action();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted || !_scrollController.hasClients) return;
+      final target = offset.clamp(
+        _scrollController.position.minScrollExtent,
+        _scrollController.position.maxScrollExtent,
+      );
+      if ((_scrollController.offset - target).abs() > AppSizes.hairline) {
+        _scrollController.jumpTo(target);
+      }
+    });
+  }
 
   void _comingSoon(BuildContext context, String label) {
     ScaffoldMessenger.of(context)
@@ -126,8 +165,12 @@ class _BookDetailView extends StatelessWidget {
   void _openCatalog(BuildContext context) {
     BookDetailCatalogDrawer.show(
       context,
-      detail: detail,
+      detail: widget.detail,
       onChapterTap: (chapter) {
+        if (chapter.isLocked) {
+          AppToast.show(context, '读完前一张即可解锁');
+          return;
+        }
         AppRouter.pop();
         if (!context.mounted) return;
         ScaffoldMessenger.of(context)
@@ -145,8 +188,8 @@ class _BookDetailView extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.backgroundDark,
       bottomNavigationBar: BookDetailBottomBar(
-        isInShelf: isInShelf,
-        giftCount: detail.giftCount,
+        isInShelf: widget.isInShelf,
+        giftCount: widget.detail.giftCount,
         onShelfTap: cubit.toggleShelf,
         onGiftTap: () => _comingSoon(context, '送心'),
         onReadTap: () => _comingSoon(context, '阅读器'),
@@ -155,13 +198,14 @@ class _BookDetailView extends StatelessWidget {
         builder: (context, topBlurEnabled) => Stack(
           children: [
             CustomScrollView(
+              controller: _scrollController,
               clipBehavior: Clip.none,
               slivers: [
                 SliverToBoxAdapter(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      BookDetailHeroCover(coverAsset: detail.coverAsset),
+                      BookDetailHeroCover(coverAsset: widget.detail.coverAsset),
                       Padding(
                         padding: const EdgeInsets.symmetric(
                           horizontal: AppSizes.bookDetailContentHInset,
@@ -172,15 +216,18 @@ class _BookDetailView extends StatelessWidget {
                             -AppSizes.bookDetailContentHeroOverlap,
                           ),
                           child: BookDetailContent(
-                            detail: detail,
-                            selectedTab: selectedTab,
-                            selectedDiscussionFilter: selectedDiscussionFilter,
+                            detail: widget.detail,
+                            selectedTab: widget.selectedTab,
+                            selectedDiscussionFilter:
+                                widget.selectedDiscussionFilter,
                             onTabSelected: cubit.switchTab,
-                            onDiscussionFilterSelected:
-                                cubit.switchDiscussionFilter,
+                            onDiscussionFilterSelected: (filter) =>
+                                _preserveScrollOffsetWhile(
+                                  () => cubit.switchDiscussionFilter(filter),
+                                ),
                             onDiscussionPostTap: (post) =>
                                 AppRouter.pushBookDiscussionDetail(
-                                  bookId: detail.id,
+                                  bookId: widget.detail.id,
                                   post: post,
                                 ),
                             onDiscussionPostLikeTap: (post) =>
@@ -208,7 +255,7 @@ class _BookDetailView extends StatelessWidget {
                 enabled: topBlurEnabled,
                 child: AppTopBar(
                   statusBarHeight: statusBar,
-                  title: topBlurEnabled ? detail.title : null,
+                  title: topBlurEnabled ? widget.detail.title : null,
                   showScrim: topBlurEnabled,
                   chromeBlurEnabled: false,
                   onBack: () => AppRouter.pop(),

@@ -8,6 +8,7 @@ export 'components/app_swipe_tab_switcher.dart';
 export 'components/app_toast.dart';
 export 'components/app_top_bar.dart';
 export 'components/book_card_variants.dart';
+export 'components/elastic_tab_indicator.dart';
 export 'components/empty_state.dart';
 export 'components/glass_chip_button.dart';
 export 'components/section_header.dart';

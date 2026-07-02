@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_colors.dart';
-import '../../../../core/theme/app_radius.dart';
 import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
+import '../../../../shared/components/elastic_tab_indicator.dart';
 import '../../../../shared/widgets/app_text.dart';
 import '../../domain/entities/my_message_tab.dart';
 
@@ -22,20 +22,36 @@ class MyMessagesTabBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tabs = MyMessageTab.values;
+    const slotWidth = AppSizes.tabSlotWidthSm;
+    const slotPitch = slotWidth + AppSpacing.lg;
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
-      child: Row(
-        children: [
-          for (var i = 0; i < tabs.length; i++) ...[
-            if (i > 0) const SizedBox(width: AppSpacing.lg),
-            _MyMessagesTabItem(
-              tab: tabs[i],
-              isSelected: tabs[i] == selected,
-              onTap: () => onSelected(tabs[i]),
+      child: SizedBox(
+        width: slotWidth * tabs.length + AppSpacing.lg * (tabs.length - 1),
+        child: Stack(
+          clipBehavior: Clip.none,
+          children: [
+            Row(
+              children: [
+                for (var i = 0; i < tabs.length; i++) ...[
+                  if (i > 0) const SizedBox(width: AppSpacing.lg),
+                  _MyMessagesTabItem(
+                    tab: tabs[i],
+                    isSelected: tabs[i] == selected,
+                    width: slotWidth,
+                    onTap: () => onSelected(tabs[i]),
+                  ),
+                ],
+              ],
+            ),
+            ElasticTabIndicator(
+              selectedIndex: tabs.indexOf(selected),
+              slotWidth: slotWidth,
+              slotPitch: slotPitch,
             ),
           ],
-        ],
+        ),
       ),
     );
   }
@@ -45,11 +61,13 @@ class _MyMessagesTabItem extends StatelessWidget {
   const _MyMessagesTabItem({
     required this.tab,
     required this.isSelected,
+    required this.width,
     required this.onTap,
   });
 
   final MyMessageTab tab;
   final bool isSelected;
+  final double width;
   final VoidCallback onTap;
 
   @override
@@ -57,33 +75,25 @@ class _MyMessagesTabItem extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       behavior: HitTestBehavior.opaque,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          AppText(
+      child: SizedBox(
+        width: width,
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: AppSpacing.xs),
+          child: AppText(
             tab.label,
-            style: (isSelected
-                    ? AppTextStyles.tabActiveDark
-                    : AppTextStyles.tabInactiveDark)
-                .copyWith(
-              color: isSelected
-                  ? AppColors.textOnDark
-                  : AppColors.textOnDarkMuted,
-            ),
+            style:
+                (isSelected
+                        ? AppTextStyles.tabActiveDark
+                        : AppTextStyles.tabInactiveDark)
+                    .copyWith(
+                      color: isSelected
+                          ? AppColors.textOnDark
+                          : AppColors.textOnDarkMuted,
+                    ),
+            maxLines: 1,
+            textAlign: TextAlign.center,
           ),
-          const SizedBox(height: AppSpacing.xs),
-          Container(
-            width: AppSizes.tabIndicatorWidth,
-            height: AppSizes.tabIndicatorHeight,
-            decoration: BoxDecoration(
-              color: isSelected
-                  ? AppColors.accentYellow
-                  : AppColors.accentYellow.withValues(alpha: 0),
-              borderRadius: BorderRadius.circular(AppRadius.md),
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }

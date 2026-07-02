@@ -100,34 +100,31 @@ class _LoadedHelpFeedbackBody extends StatelessWidget {
     final cubit = context.read<HelpFeedbackCubit>();
     const tabs = HelpFeedbackTab.values;
 
-    final tabBody = switch (state.selectedTab) {
-      HelpFeedbackTab.faq => HelpFeedbackFaqView(
-        groups: content.faqGroups,
-        onQuestionTap: (question) => AppRouter.pushNamed(
-          AppRoutes.helpFeedbackFaqDetailName,
-          extra: question,
-        ),
-      ),
-      HelpFeedbackTab.feedback => HelpFeedbackFormView(
-        issueTypes: content.issueTypes,
-        selectedIssueTypeId: state.selectedIssueTypeId,
-        description: state.description,
-        errorMessage: state.errorMessage,
-        submitMessage: state.submitMessage,
-        onIssueTypeSelected: cubit.selectIssueType,
-        onDescriptionChanged: cubit.updateDescription,
-        onBookNameChanged: cubit.updateBookName,
-        onPhoneChanged: cubit.updatePhone,
-        onQqChanged: cubit.updateQq,
-        onSubmit: cubit.submitFeedback,
-      ),
-    };
-
     return AppSwipeTabSwitcher(
       selectedIndex: tabs.indexOf(state.selectedTab),
-      tabCount: tabs.length,
       onIndexChanged: (index) => cubit.selectTab(tabs[index]),
-      child: tabBody,
+      children: [
+        HelpFeedbackFaqView(
+          groups: content.faqGroups,
+          onQuestionTap: (question) => AppRouter.pushNamed(
+            AppRoutes.helpFeedbackFaqDetailName,
+            extra: question,
+          ),
+        ),
+        HelpFeedbackFormView(
+          issueTypes: content.issueTypes,
+          selectedIssueTypeId: state.selectedIssueTypeId,
+          description: state.description,
+          errorMessage: state.errorMessage,
+          submitMessage: state.submitMessage,
+          onIssueTypeSelected: cubit.selectIssueType,
+          onDescriptionChanged: cubit.updateDescription,
+          onBookNameChanged: cubit.updateBookName,
+          onPhoneChanged: cubit.updatePhone,
+          onQqChanged: cubit.updateQq,
+          onSubmit: cubit.submitFeedback,
+        ),
+      ],
     );
   }
 }

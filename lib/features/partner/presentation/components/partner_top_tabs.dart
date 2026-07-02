@@ -6,6 +6,7 @@ import '../../../../core/theme/app_radius.dart';
 import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
+import '../../../../shared/components/elastic_tab_indicator.dart';
 import '../../../../shared/widgets/app_text.dart';
 import '../../domain/entities/partner_top_tab.dart';
 
@@ -29,24 +30,41 @@ class PartnerTopTabs extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tabs = PartnerTopTab.values;
+    const slotWidth = AppSizes.tabSlotWidthSm;
+    const slotPitch = slotWidth + AppSpacing.md;
 
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        for (var i = 0; i < tabs.length; i++) ...[
-          if (i > 0) const SizedBox(width: AppSpacing.md),
-          _PartnerTopTabItem(
-            tab: tabs[i],
-            isSelected: tabs[i] == selected,
-            badgeCount: switch (tabs[i]) {
-              PartnerTopTab.message => messageUnreadCount,
-              PartnerTopTab.interaction => interactionUnreadCount,
-              _ => 0,
-            },
-            onTap: onSelected == null ? null : () => onSelected!(tabs[i]),
+    return SizedBox(
+      width: slotWidth * tabs.length + AppSpacing.md * (tabs.length - 1),
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              for (var i = 0; i < tabs.length; i++) ...[
+                if (i > 0) const SizedBox(width: AppSpacing.md),
+                _PartnerTopTabItem(
+                  tab: tabs[i],
+                  isSelected: tabs[i] == selected,
+                  width: slotWidth,
+                  badgeCount: switch (tabs[i]) {
+                    PartnerTopTab.message => messageUnreadCount,
+                    PartnerTopTab.interaction => interactionUnreadCount,
+                    _ => 0,
+                  },
+                  onTap: onSelected == null ? null : () => onSelected!(tabs[i]),
+                ),
+              ],
+            ],
+          ),
+          ElasticTabIndicator(
+            selectedIndex: tabs.indexOf(selected),
+            slotWidth: slotWidth,
+            slotPitch: slotPitch,
+            color: AppPartnerColors.tagPurple,
           ),
         ],
-      ],
+      ),
     );
   }
 }
@@ -55,12 +73,14 @@ class _PartnerTopTabItem extends StatelessWidget {
   const _PartnerTopTabItem({
     required this.tab,
     required this.isSelected,
+    required this.width,
     required this.badgeCount,
     this.onTap,
   });
 
   final PartnerTopTab tab;
   final bool isSelected;
+  final double width;
   final int badgeCount;
   final VoidCallback? onTap;
 
@@ -69,23 +89,25 @@ class _PartnerTopTabItem extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       behavior: HitTestBehavior.opaque,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Row(
+      child: SizedBox(
+        width: width,
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: AppSpacing.xs),
+          child: Row(
             mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               AppText(
                 tab.label,
-                style: (isSelected
-                        ? AppTextStyles.tabActiveDark
-                        : AppTextStyles.tabInactiveDark)
-                    .copyWith(
-                  color: isSelected
-                      ? AppColors.textOnDark
-                      : AppColors.textOnDarkMuted,
-                ),
+                style:
+                    (isSelected
+                            ? AppTextStyles.tabActiveDark
+                            : AppTextStyles.tabInactiveDark)
+                        .copyWith(
+                          color: isSelected
+                              ? AppColors.textOnDark
+                              : AppColors.textOnDarkMuted,
+                        ),
               ),
               if (badgeCount > 0) ...[
                 const SizedBox(width: AppSpacing.xxs),
@@ -93,18 +115,7 @@ class _PartnerTopTabItem extends StatelessWidget {
               ],
             ],
           ),
-          const SizedBox(height: AppSpacing.xs),
-          Container(
-            width: AppSizes.tabIndicatorWidth,
-            height: AppSizes.tabIndicatorHeight,
-            decoration: BoxDecoration(
-              color: isSelected
-                  ? AppPartnerColors.tagPurple
-                  : AppPartnerColors.tagPurple.withValues(alpha: 0),
-              borderRadius: BorderRadius.circular(AppRadius.md),
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }

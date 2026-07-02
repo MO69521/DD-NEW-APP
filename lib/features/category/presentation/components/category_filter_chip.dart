@@ -15,12 +15,14 @@ class CategoryFilterChip extends StatelessWidget {
     required this.label,
     required this.selected,
     this.emphasis = CategoryFilterChipEmphasis.primary,
+    this.showUnderline = true,
     this.onTap,
   });
 
   final String label;
   final bool selected;
   final CategoryFilterChipEmphasis emphasis;
+  final bool showUnderline;
   final VoidCallback? onTap;
 
   @override
@@ -45,19 +47,19 @@ class CategoryFilterChip extends StatelessWidget {
                 ? selectedStyle
                 : AppTextStyles.categoryFilterUnselected,
           ),
-          const SizedBox(
-            height: AppSizes.categoryFilterChipLabelToUnderlineGap,
-          ),
-          Container(
-            width: AppSizes.categoryFilterUnderlineWidth,
-            height: AppSizes.categoryFilterUnderlineHeight,
-            decoration: BoxDecoration(
-              color: selected && showsUnderline
-                  ? AppColors.accentYellow
-                  : Colors.transparent,
-              borderRadius: BorderRadius.circular(AppRadius.full),
+          if (showsUnderline && showUnderline) ...[
+            const SizedBox(
+              height: AppSizes.categoryFilterChipLabelToUnderlineGap,
             ),
-          ),
+            Container(
+              width: AppSizes.categoryFilterUnderlineWidth,
+              height: AppSizes.categoryFilterUnderlineHeight,
+              decoration: BoxDecoration(
+                color: selected ? AppColors.accentYellow : Colors.transparent,
+                borderRadius: BorderRadius.circular(AppRadius.full),
+              ),
+            ),
+          ],
         ],
       ),
     );

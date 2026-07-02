@@ -11,6 +11,7 @@ import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../routes/app_router.dart';
 import '../../../../shared/components/app_swipe_tab_switcher.dart';
+import '../../../../shared/components/elastic_tab_indicator.dart';
 import '../../../../shared/components/app_top_bar.dart';
 import '../../../../shared/components/empty_state.dart';
 import '../../../../shared/widgets/app_asset_image.dart';
@@ -58,10 +59,6 @@ class EnergyRecordsPage extends StatelessWidget {
               return const EmptyState(title: '暂无记录');
             }
 
-            final records = switch (state.selectedTab) {
-              EnergyRecordsTab.recharge => content.rechargeRecords,
-              EnergyRecordsTab.other => content.otherRecords,
-            };
             const tabs = EnergyRecordsTab.values;
 
             return Padding(
@@ -75,13 +72,19 @@ class EnergyRecordsPage extends StatelessWidget {
                   Expanded(
                     child: AppSwipeTabSwitcher(
                       selectedIndex: tabs.indexOf(state.selectedTab),
-                      tabCount: tabs.length,
                       onIndexChanged: (index) => context
                           .read<EnergyRecordsCubit>()
                           .selectTab(tabs[index]),
-                      child: records.isEmpty
-                          ? const EnergyRecordsEmptyView()
-                          : EnergyRecordsList(records: records),
+                      children: [
+                        content.rechargeRecords.isEmpty
+                            ? const EnergyRecordsEmptyView()
+                            : EnergyRecordsList(
+                                records: content.rechargeRecords,
+                              ),
+                        content.otherRecords.isEmpty
+                            ? const EnergyRecordsEmptyView()
+                            : EnergyRecordsList(records: content.otherRecords),
+                      ],
                     ),
                   ),
                 ],
@@ -116,17 +119,34 @@ class EnergyRecordsTabBar extends StatelessWidget {
           ),
         ),
       ),
-      child: Row(
-        children: [
-          for (final tab in EnergyRecordsTab.values)
-            Expanded(
-              child: _EnergyRecordsTabItem(
-                tab: tab,
-                isSelected: tab == selectedTab,
-                onTap: () => onTabTap(tab),
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          const tabs = EnergyRecordsTab.values;
+          final slotWidth = constraints.maxWidth / tabs.length;
+
+          return Stack(
+            children: [
+              Row(
+                children: [
+                  for (final tab in tabs)
+                    Expanded(
+                      child: _EnergyRecordsTabItem(
+                        tab: tab,
+                        isSelected: tab == selectedTab,
+                        onTap: () => onTabTap(tab),
+                      ),
+                    ),
+                ],
               ),
-            ),
-        ],
+              ElasticTabIndicator(
+                selectedIndex: tabs.indexOf(selectedTab),
+                slotWidth: slotWidth,
+                slotPitch: slotWidth,
+                radius: AppRadius.full,
+              ),
+            ],
+          );
+        },
       ),
     );
   }
@@ -165,15 +185,7 @@ class _EnergyRecordsTabItem extends StatelessWidget {
                             : FontWeight.w400,
                       ),
             ),
-            const SizedBox(height: AppSpacing.xs),
-            Container(
-              width: AppSizes.tabIndicatorWidth,
-              height: AppSizes.tabIndicatorHeight,
-              decoration: BoxDecoration(
-                color: isSelected ? AppColors.accentYellow : Colors.transparent,
-                borderRadius: BorderRadius.circular(AppRadius.full),
-              ),
-            ),
+            const SizedBox(height: AppSpacing.xs + AppSizes.tabIndicatorHeight),
           ],
         ),
       ),

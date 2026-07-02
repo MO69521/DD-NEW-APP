@@ -64,7 +64,7 @@ class _FavButton extends StatelessWidget {
           vertical: AppSizes.bookDetailCharFavPaddingV,
         ),
         decoration: BoxDecoration(
-          color: AppColors.surfaceCard,
+          color: AppColors.bookDetailCharFavBackground,
           borderRadius: BorderRadius.circular(AppRadius.bookDetailCharFav),
         ),
         child: const AppText(

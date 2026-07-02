@@ -75,16 +75,16 @@ class _PartnerView extends StatelessWidget {
     return BlocSelector<PartnerCubit, PartnerState, PartnerTopTab>(
       selector: (state) => state.interaction.topTab,
       builder: (context, topTab) {
-        final content = topTab == PartnerTopTab.interaction
-            ? const _PartnerInteractionView()
-            : const _PartnerScrollView();
         return AppSwipeTabSwitcher(
           selectedIndex: topTab.index,
-          tabCount: PartnerTopTab.values.length,
           onIndexChanged: (index) => context.read<PartnerCubit>().switchTopTab(
             PartnerTopTab.values[index],
           ),
-          child: content,
+          children: const [
+            _PartnerScrollView(),
+            _PartnerScrollView(),
+            _PartnerInteractionView(),
+          ],
         );
       },
     );

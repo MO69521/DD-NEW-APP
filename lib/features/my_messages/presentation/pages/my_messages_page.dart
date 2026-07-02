@@ -56,10 +56,13 @@ class MyMessagesPage extends StatelessWidget {
             const tabs = MyMessageTab.values;
             return AppSwipeTabSwitcher(
               selectedIndex: tabs.indexOf(state.interaction.selectedTab),
-              tabCount: tabs.length,
               onIndexChanged: (index) =>
                   context.read<MyMessagesCubit>().onTabSelected(tabs[index]),
-              child: const MyMessagesEmptyView(),
+              children: const [
+                MyMessagesEmptyView(),
+                MyMessagesEmptyView(),
+                MyMessagesEmptyView(),
+              ],
             );
           },
         ),

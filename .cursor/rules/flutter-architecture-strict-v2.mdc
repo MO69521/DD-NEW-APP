@@ -119,6 +119,60 @@ showAppBlurredDialog(
 - ❌ 禁止 `Card/Container(surfaceCard + radius)` 内再嵌 `Card/Container(surfaceCard + radius)`
 - ❌ 禁止为了区分列表项重复叠加圆角背景；如需强调单个操作，使用按钮/标签而不是整行卡片
 
+### 3.4 Tab 内容左右切换（强制）
+
+同级 Tab（如 `书架 / 阅读历史`、消息页 Tab、记录页 Tab）支持左右滑动时，必须采用首页同款跟手过渡：**顶部 Tab / Header 固定不动，仅 Tab 下方内容区域横向滑动切换**。
+
+**标准写法：**
+
+```dart
+AppSwipeTabSwitcher(
+  selectedIndex: selectedIndex,
+  onIndexChanged: (index) => cubit.switchTab(tabs[index]),
+  children: [
+    FirstTabBody(),
+    SecondTabBody(),
+  ],
+)
+```
+
+**规则：**
+
+- ✔ 优先使用 `lib/shared/components/app_swipe_tab_switcher.dart`
+- ✔ 有固定高度/Expanded 约束的内容区传 `children`，使用 PageView 跟手切换
+- ✔ 顶部 Tab、页面 Header、管理按钮等 chrome 必须放在 `AppSwipeTabSwitcher` 外层，保持固定
+- ✔ 每个 Tab 内容若包含纵向滚动，应使用独立 `ScrollController`
+- ✔ 自适应高度内容（如详情页正文内嵌 Tab）可传 `child + tabCount`，仅启用左右滑动手势，避免无界高度 PageView
+- ❌ 禁止只监听 `onHorizontalDragEnd` 后直接切 state 造成硬切
+- ❌ 禁止把整个页面（含顶部 Tab/Header）放进 PageView，导致整页滑走
+
+### 3.5 Tab 选中指示器动效（强制）
+
+横向 Tab 底部黄色选中线条需要位移动效时，必须采用统一的“平移 + 宽度拉伸回弹”效果：线条位置平滑移动，移动初期先拉长，随后快速恢复默认长度。
+
+**标准写法：**
+
+```dart
+Stack(
+  children: [
+    Row(children: tabItems),
+    ElasticTabIndicator(
+      selectedIndex: selectedIndex,
+      slotWidth: slotWidth,
+      slotPitch: slotWidth + AppSpacing.md,
+    ),
+  ],
+)
+```
+
+**规则：**
+
+- ✔ 统一使用 `lib/shared/components/elastic_tab_indicator.dart`
+- ✔ Tab item 文案可独立变色；指示器必须是单独一层，不要每个 tab 自己画线
+- ✔ `slotWidth` / `slotPitch` 必须与 tab item 布局一致，避免指示器中心点偏移
+- ❌ 禁止使用多个透明/显示切换的 `Container` 模拟选中线条
+- ❌ 禁止给线条位置使用弹性回弹曲线；弹性只作用于宽度拉伸恢复
+
 ## 4. 组件分级
 
 | Level | 位置 | 说明 |
