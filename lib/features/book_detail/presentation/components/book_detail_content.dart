@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/theme/app_colors.dart';
-import '../../../../core/theme/app_radius.dart';
 import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
@@ -139,6 +137,7 @@ class _DetailTabBody extends StatelessWidget {
           books: detail.recommendedBooks,
           actionLabel: '换一换',
           actionIconAsset: 'assets/icons/book_detail/refresh.svg',
+          rotateActionIconOnTap: true,
           onActionTap: onRecommendationRefreshTap,
           onBookTap: AppRouter.goBookDetail,
         ),
@@ -156,29 +155,19 @@ class _BookDetailLegalInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: AppColors.surfaceCard,
-        borderRadius: BorderRadius.circular(AppRadius.lg),
-        border: Border.all(color: AppColors.borderGlass),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(AppSpacing.md),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            AppText(
-              detail.listedAtText,
-              style: AppTextStyles.captionMdDarkMuted,
-            ),
-            const SizedBox(height: AppSpacing.sm),
-            AppText(
-              detail.copyrightText,
-              style: AppTextStyles.captionMdDarkMuted,
-            ),
-          ],
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        AppText(
+          detail.listedAtText,
+          style: AppTextStyles.authAgreementDarkMuted,
         ),
-      ),
+        const SizedBox(height: AppSpacing.sm),
+        AppText(
+          detail.copyrightText,
+          style: AppTextStyles.authAgreementDarkMuted,
+        ),
+      ],
     );
   }
 }

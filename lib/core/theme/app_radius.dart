@@ -8,6 +8,10 @@ abstract final class AppRadius {
   static const double full = 999;
 
   static const double coverSm = 6;
+
+  /// 通用 CTA / 胶囊按钮圆角（多处 26 的单一真源）。
+  static const double cta = 26;
+
   static const double rankingFullListAction = 22;
   static const double searchBar = 35;
   static const double navOuter = 47;
@@ -15,10 +19,10 @@ abstract final class AppRadius {
 
   static const double welfareVipBanner = 10;
   static const double welfareTaskBubble = 9;
-  static const double welfareCheckInSection = 16;
+  static const double welfareCheckInSection = lg;
   static const double welfareVipCta = 23;
-  static const double welfareCheckInCta = 26;
-  static const double welfareRechargePrice = 26;
+  static const double welfareCheckInCta = cta;
+  static const double welfareRechargePrice = cta;
   static const double welfareRechargeMoreAction = 22;
 
   static const double bookshelfReadingBanner = 45;
@@ -33,23 +37,23 @@ abstract final class AppRadius {
   static const double bookDetailTabBar = 46;
   static const double bookDetailTabItem = 50;
   static const double bookDetailCatalog = 10;
-  static const double bookDetailCatalogDrawerCover = 6;
-  static const double bookDetailReadCta = 26;
-  static const double bookDetailCharFav = 26;
-  static const double bookDetailDiscussionCard = 12;
-  static const double bookDetailDiscussionReply = 8;
+  static const double bookDetailCatalogDrawerCover = coverSm;
+  static const double bookDetailReadCta = cta;
+  static const double bookDetailCharFav = cta;
+  static const double bookDetailDiscussionCard = md;
+  static const double bookDetailDiscussionReply = sm;
   static const double bookDetailDiscussionFilter = 20;
 
   // 搜索页（深色态）
-  static const double searchStatusBadge = 4;
+  static const double searchStatusBadge = xs;
 
   // 会员页 (Figma 927:725)
-  static const double membershipCard = 16;
+  static const double membershipCard = lg;
   static const double membershipPlanCard = 10;
-  static const double membershipCta = 26;
+  static const double membershipCta = cta;
 
   // 设置页
-  static const double settingsLogo = 24;
+  static const double settingsLogo = xl;
 
   // 伙伴页 / 探索
   static const double partnerCategoryChip = sm;

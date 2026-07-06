@@ -5,7 +5,8 @@ import '../../core/theme/app_sizes.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text_styles.dart';
 import 'app_blurred_chrome_bar.dart';
-import '../widgets/app_icon.dart';
+import 'app_top_bar_icon_button.dart';
+import 'app_top_bar_text_button.dart';
 import '../widgets/app_text.dart';
 
 /// 顶栏右侧动作（图标按钮）配置。
@@ -59,8 +60,8 @@ class AppTopBar extends StatelessWidget {
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: [
-                  AppColors.rankingHeroScrimMid,
-                  AppColors.gradientFadeStart,
+                  AppColors.topBarHeroScrimStart,
+                  AppColors.topBarHeroScrimEnd,
                 ],
               ),
             )
@@ -90,14 +91,11 @@ class AppTopBar extends StatelessWidget {
               if (onBack != null)
                 Align(
                   alignment: Alignment.centerLeft,
-                  child: _CircleButton(
+                  child: AppTopBarIconButton(
                     onTap: onBack,
-                    child: AppIcon(
-                      assetPath: backIconAsset,
-                      width: AppSizes.topBarBackIconWidth,
-                      height: AppSizes.topBarBackIconHeight,
-                      color: AppColors.textOnDark,
-                    ),
+                    iconAsset: backIconAsset,
+                    iconWidth: AppSizes.topBarBackIconWidth,
+                    iconHeight: AppSizes.topBarBackIconHeight,
                   ),
                 ),
               if (actions.isNotEmpty)
@@ -109,7 +107,11 @@ class AppTopBar extends StatelessWidget {
                       for (final action in actions) ...[
                         const SizedBox(width: AppSpacing.xs),
                         if (action.label != null)
-                          _TextButton(action: action)
+                          AppTopBarTextButton(
+                            label: action.label!,
+                            style: AppTextStyles.bodyMediumDark,
+                            onTap: action.onTap,
+                          )
                         else
                           _ActionIconButton(action: action),
                       ],
@@ -126,32 +128,7 @@ class AppTopBar extends StatelessWidget {
   }
 }
 
-class _TextButton extends StatelessWidget {
-  const _TextButton({required this.action});
-
-  final AppTopBarAction action;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: action.onTap,
-      behavior: HitTestBehavior.opaque,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: AppSpacing.xs,
-          vertical: AppSpacing.xs,
-        ),
-        child: AppText(
-          action.label!,
-          style: AppTextStyles.bodyMediumDark,
-          maxLines: 1,
-        ),
-      ),
-    );
-  }
-}
-
-/// 右上角动作图标：无圆形底色，图标按原始设计尺寸展示，保留统一点击热区。
+/// 右上角动作图标：图标按原始设计尺寸展示，保留统一点击热区。
 class _ActionIconButton extends StatelessWidget {
   const _ActionIconButton({required this.action});
 
@@ -159,46 +136,11 @@ class _ActionIconButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return AppTopBarIconButton(
       onTap: action.onTap,
-      behavior: HitTestBehavior.opaque,
-      child: SizedBox(
-        width: AppSizes.topBarCircleSize,
-        height: AppSizes.topBarCircleSize,
-        child: Center(
-          child: AppIcon(
-            assetPath: action.iconAsset!,
-            width: action.iconSize,
-            height: action.iconSize,
-            color: AppColors.textOnDark,
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _CircleButton extends StatelessWidget {
-  const _CircleButton({required this.child, this.onTap});
-
-  final Widget child;
-  final VoidCallback? onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      behavior: HitTestBehavior.opaque,
-      child: Container(
-        width: AppSizes.topBarCircleSize,
-        height: AppSizes.topBarCircleSize,
-        alignment: Alignment.center,
-        decoration: const BoxDecoration(
-          color: AppColors.overlayScrim,
-          shape: BoxShape.circle,
-        ),
-        child: child,
-      ),
+      iconAsset: action.iconAsset!,
+      iconWidth: action.iconSize,
+      iconHeight: action.iconSize,
     );
   }
 }

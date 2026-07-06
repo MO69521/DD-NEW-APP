@@ -26,6 +26,8 @@
 - [ ] 使用 `AppColors`、`AppSpacing`、`AppRadius`、`AppTextStyles`、`AppDurations`
 - [ ] 无写死 `Color(...)`、`fontSize:` 数值、`EdgeInsets` 数值、`BorderRadius.circular` 数值（`core/theme` 除外）
 - [ ] UI 仅渲染 state、触发 action，无业务判断下沉不当
+- [ ] 已对照 [design-system/README.md](../../../design-system/README.md)；字号/行高/字重/颜色/间距/圆角均在规范档位内
+- [ ] 无规范外新增 token/值/色系；如需超出，已停下并向用户确认、并同步更新规范文档（见 SKILL「设计规范治理」）
 
 ### 3.1 状态栏留白
 

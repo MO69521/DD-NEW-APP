@@ -13,6 +13,7 @@ import '../../application/bookstore_state.dart';
 import '../../domain/entities/bookstore_top_tab.dart';
 import '../components/editor_pick_section.dart';
 import '../components/guess_like_section.dart';
+import '../components/limited_free_section.dart';
 import '../components/ranking_section.dart';
 
 /// 书城「推荐」Tab 滚动内容：推荐榜 + 编辑推荐 + 猜你喜欢。
@@ -63,6 +64,19 @@ class BookstoreRecommendBody extends StatelessWidget {
                       onBookTap: AppRouter.goBookDetail,
                       onFullListTap: () =>
                           cubit.switchTopTab(BookstoreTopTab.ranking),
+                    );
+                  },
+                ),
+                const SizedBox(height: AppSpacing.xl),
+                BlocSelector<BookstoreCubit, BookstoreState, List<Book>>(
+                  selector: (state) => state.domain.editorPicks,
+                  builder: (context, books) {
+                    return LimitedFreeSection(
+                      books: books,
+                      onMoreTap: () => AppRouter.pushNamed(
+                        AppRoutes.editorPickName,
+                      ),
+                      onBookTap: AppRouter.goBookDetail,
                     );
                   },
                 ),

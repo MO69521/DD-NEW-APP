@@ -103,7 +103,14 @@ class _BookstoreViewState extends State<_BookstoreView> {
   @override
   void initState() {
     super.initState();
-    _pageController = PageController();
+    _pageController = PageController(
+      initialPage: context
+          .read<BookstoreCubit>()
+          .state
+          .interaction
+          .selectedTopTab
+          .index,
+    );
     _bookstoreCategoryIntentListener = () {
       if (!mounted) return;
       context.read<BookstoreCubit>().switchTopTab(BookstoreTopTab.category);

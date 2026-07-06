@@ -22,27 +22,27 @@ abstract final class MainTabConfig {
     MainTabItem(
       label: '书城',
       iconAsset: 'assets/icons/nav/bookstore_inactive.svg',
-      selectedIconAsset: 'assets/icons/nav/bookstore_active.png',
+      selectedIconAsset: 'assets/icons/nav/bookstore_active.svg',
     ),
     MainTabItem(
       label: '福利',
-      iconAsset: 'assets/icons/nav/welfare_inactive.png',
-      selectedIconAsset: 'assets/icons/nav/welfare_active.png',
+      iconAsset: 'assets/icons/nav/welfare_inactive.svg',
+      selectedIconAsset: 'assets/icons/nav/welfare_active.svg',
     ),
     MainTabItem(
       label: '伙伴',
-      iconAsset: 'assets/icons/nav/partner_inactive.png',
-      selectedIconAsset: 'assets/icons/nav/partner_active.png',
+      iconAsset: 'assets/icons/nav/partner_inactive.svg',
+      selectedIconAsset: 'assets/icons/nav/partner_active.svg',
     ),
     MainTabItem(
       label: '书架',
-      iconAsset: 'assets/icons/nav/bookshelf_inactive.png',
-      selectedIconAsset: 'assets/icons/nav/bookshelf_active.png',
+      iconAsset: 'assets/icons/nav/bookshelf_inactive.svg',
+      selectedIconAsset: 'assets/icons/nav/bookshelf_active.svg',
     ),
     MainTabItem(
       label: '我的',
-      iconAsset: 'assets/icons/nav/profile_inactive.png',
-      selectedIconAsset: 'assets/icons/nav/profile_active.png',
+      iconAsset: 'assets/icons/nav/profile_inactive.svg',
+      selectedIconAsset: 'assets/icons/nav/profile_active.svg',
     ),
   ];
 }

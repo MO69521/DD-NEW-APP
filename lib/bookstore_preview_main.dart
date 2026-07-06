@@ -10,7 +10,8 @@ import 'routes/app_routes.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   AppRouter.setInitialLocation(
-    '${AppRoutes.home}?tab=${MainTabConfig.bookstoreIndex}',
+    '${AppRoutes.home}?tab=${MainTabConfig.bookstoreIndex}'
+    '&bookstoreTopTab=ranking',
   );
   await SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
   SystemChrome.setSystemUIOverlayStyle(

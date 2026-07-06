@@ -77,6 +77,8 @@ abstract final class AppRouter {
               initialIndex: initialIndex.clamp(0, maxIndex),
               initialBookshelfTabIntent:
                   state.uri.queryParameters['bookshelfTab'],
+              initialBookstoreTopTabIntent:
+                  state.uri.queryParameters['bookstoreTopTab'],
             );
           },
         ),

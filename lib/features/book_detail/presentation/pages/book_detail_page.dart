@@ -82,6 +82,7 @@ class BookDetailPage extends StatelessWidget {
             selectedDiscussionFilter:
                 state.interaction.selectedDiscussionFilter,
             isInShelf: state.interaction.isInShelf,
+            isGiftSent: state.interaction.isGiftSent,
           );
         },
       ),
@@ -95,12 +96,14 @@ class _BookDetailView extends StatefulWidget {
     required this.selectedTab,
     required this.selectedDiscussionFilter,
     required this.isInShelf,
+    required this.isGiftSent,
   });
 
   final BookDetail detail;
   final BookDetailTab selectedTab;
   final BookDiscussionFilter selectedDiscussionFilter;
   final bool isInShelf;
+  final bool isGiftSent;
 
   @override
   State<_BookDetailView> createState() => _BookDetailViewState();
@@ -189,9 +192,10 @@ class _BookDetailViewState extends State<_BookDetailView> {
       backgroundColor: AppColors.backgroundDark,
       bottomNavigationBar: BookDetailBottomBar(
         isInShelf: widget.isInShelf,
+        isGiftSent: widget.isGiftSent,
         giftCount: widget.detail.giftCount,
         onShelfTap: cubit.toggleShelf,
-        onGiftTap: () => _comingSoon(context, '送心'),
+        onGiftTap: cubit.sendHeart,
         onReadTap: () => _comingSoon(context, '阅读器'),
       ),
       body: AppScrollBlurScope(
@@ -206,40 +210,37 @@ class _BookDetailViewState extends State<_BookDetailView> {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       BookDetailHeroCover(coverAsset: widget.detail.coverAsset),
+                      const SizedBox(
+                        height: AppSizes.bookDetailContentHeroOverlap,
+                      ),
                       Padding(
                         padding: const EdgeInsets.symmetric(
                           horizontal: AppSizes.bookDetailContentHInset,
                         ),
-                        child: Transform.translate(
-                          offset: const Offset(
-                            0,
-                            -AppSizes.bookDetailContentHeroOverlap,
-                          ),
-                          child: BookDetailContent(
-                            detail: widget.detail,
-                            selectedTab: widget.selectedTab,
-                            selectedDiscussionFilter:
-                                widget.selectedDiscussionFilter,
-                            onTabSelected: cubit.switchTab,
-                            onDiscussionFilterSelected: (filter) =>
-                                _preserveScrollOffsetWhile(
-                                  () => cubit.switchDiscussionFilter(filter),
-                                ),
-                            onDiscussionPostTap: (post) =>
-                                AppRouter.pushBookDiscussionDetail(
-                                  bookId: widget.detail.id,
-                                  post: post,
-                                ),
-                            onDiscussionPostLikeTap: (post) =>
-                                cubit.toggleDiscussionPostLike(post.id),
-                            onDiscussionPostBodyTap: (post) =>
-                                _openQuickReply(context, post),
-                            onCatalogTap: () => _openCatalog(context),
-                            onCharacterFavTap: (_) =>
-                                _comingSoon(context, '收藏和表白'),
-                            onRecommendationRefreshTap:
-                                cubit.refreshRecommendations,
-                          ),
+                        child: BookDetailContent(
+                          detail: widget.detail,
+                          selectedTab: widget.selectedTab,
+                          selectedDiscussionFilter:
+                              widget.selectedDiscussionFilter,
+                          onTabSelected: cubit.switchTab,
+                          onDiscussionFilterSelected: (filter) =>
+                              _preserveScrollOffsetWhile(
+                                () => cubit.switchDiscussionFilter(filter),
+                              ),
+                          onDiscussionPostTap: (post) =>
+                              AppRouter.pushBookDiscussionDetail(
+                                bookId: widget.detail.id,
+                                post: post,
+                              ),
+                          onDiscussionPostLikeTap: (post) =>
+                              cubit.toggleDiscussionPostLike(post.id),
+                          onDiscussionPostBodyTap: (post) =>
+                              _openQuickReply(context, post),
+                          onCatalogTap: () => _openCatalog(context),
+                          onCharacterFavTap: (_) =>
+                              _comingSoon(context, '收藏和表白'),
+                          onRecommendationRefreshTap:
+                              cubit.refreshRecommendations,
                         ),
                       ),
                     ],
@@ -256,7 +257,7 @@ class _BookDetailViewState extends State<_BookDetailView> {
                 child: AppTopBar(
                   statusBarHeight: statusBar,
                   title: topBlurEnabled ? widget.detail.title : null,
-                  showScrim: topBlurEnabled,
+                  showScrim: true,
                   chromeBlurEnabled: false,
                   onBack: () => AppRouter.pop(),
                   actions: [

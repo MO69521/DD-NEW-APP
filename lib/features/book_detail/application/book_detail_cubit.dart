@@ -110,17 +110,37 @@ class BookDetailCubit extends Cubit<BookDetailState> {
       _fallbackIsInShelf = false;
       _membershipService.remove(bookId);
       _syncShelfState();
-      _emitShelfToast('已取消加入书架');
+      _emitActionToast('已取消加入书架');
       return;
     }
 
     final book = _bookForShelf();
     if (book == null) return;
     _membershipService.add(book);
-    _emitShelfToast('加入成功');
+    _emitActionToast('加入成功');
   }
 
-  void _emitShelfToast(String message) {
+  void sendHeart() {
+    if (state.interaction.isGiftSent) {
+      _emitActionToast('一天只能送一颗小心心哦，明天再来吧');
+      return;
+    }
+
+    final detail = state.domain.detail;
+    if (detail == null) return;
+
+    emit(
+      state.copyWith(
+        domain: state.domain.copyWith(
+          detail: detail.copyWith(giftCount: _incrementCount(detail.giftCount)),
+        ),
+        interaction: state.interaction.copyWith(isGiftSent: true),
+      ),
+    );
+    _emitActionToast('这部作品的热度值又提升了');
+  }
+
+  void _emitActionToast(String message) {
     emit(
       state.copyWith(
         ui: state.ui.copyWith(
@@ -129,6 +149,12 @@ class BookDetailCubit extends Cubit<BookDetailState> {
         ),
       ),
     );
+  }
+
+  String _incrementCount(String value) {
+    final count = int.tryParse(value.trim());
+    if (count == null) return value;
+    return '${count + 1}';
   }
 
   Book? _bookForShelf() {

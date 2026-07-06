@@ -7,23 +7,18 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../routes/app_router.dart';
-import '../../../../routes/app_routes.dart';
 import '../../../../shared/components/empty_state.dart';
 import '../../../../shared/widgets/app_button.dart';
 import '../../../../shared/layouts/app_bottom_nav.dart';
-import '../../../../shared/components/app_blurred_chrome_bar.dart';
 import '../../../../shared/layouts/app_scroll_blur_scope.dart';
-import '../../../../shared/widgets/app_icon.dart';
-import '../../../../shared/widgets/app_text.dart';
-import '../../../../core/theme/app_text_styles.dart';
 import '../../application/ranking_cubit.dart';
 import '../../application/ranking_state.dart';
 import 'ranking_book_row.dart';
 import 'ranking_channel_segmented.dart';
 import 'ranking_dimension_rail.dart';
-import 'ranking_hero_banner.dart';
+import 'ranking_top_chrome.dart';
 
-/// 榜单 Tab 主体：hero + 维度 rail + 书籍列表。
+/// 榜单 Tab 主体：频道筛选 + 维度 rail + 书籍列表。
 ///
 /// [embedded] 为 `true` 时用于书城页内嵌入（无返回顶栏、无 statusBar 偏移）。
 class RankingTabBody extends StatelessWidget {
@@ -82,7 +77,7 @@ class _RankingTabContent extends StatelessWidget {
   }
 }
 
-class _RankingTabStack extends StatefulWidget {
+class _RankingTabStack extends StatelessWidget {
   const _RankingTabStack({
     required this.state,
     required this.embedded,
@@ -94,52 +89,15 @@ class _RankingTabStack extends StatefulWidget {
   final bool topBlurEnabled;
 
   @override
-  State<_RankingTabStack> createState() => _RankingTabStackState();
-}
-
-class _RankingTabStackState extends State<_RankingTabStack> {
-  late final ScrollController _scrollController;
-  double _scrollOffset = 0;
-
-  @override
-  void initState() {
-    super.initState();
-    _scrollController = ScrollController();
-    _scrollController.addListener(_updatePinnedFromController);
-  }
-
-  @override
-  void dispose() {
-    _scrollController
-      ..removeListener(_updatePinnedFromController)
-      ..dispose();
-    super.dispose();
-  }
-
-  void _updatePinnedFromController() {
-    _updateScrollOffset(_scrollController.offset);
-  }
-
-  void _updateScrollOffset(double scrollOffset) {
-    if ((scrollOffset - _scrollOffset).abs() < AppSizes.hairline) return;
-    if (mounted) {
-      setState(() => _scrollOffset = scrollOffset);
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
     final cubit = context.read<RankingCubit>();
-    final statusBar = widget.embedded
-        ? 0.0
-        : AppLayout.statusBarHeight(context);
+    final statusBar = embedded ? 0.0 : AppLayout.statusBarHeight(context);
 
-    final dimension = widget.state.interaction.selectedDimension;
-    final channel = widget.state.interaction.selectedChannel;
-    final books = widget.state.domain.booksFor(dimension, channel);
-    final title = '${widget.state.domain.brandTitle} ${dimension.titleSuffix}';
+    final dimension = state.interaction.selectedDimension;
+    final channel = state.interaction.selectedChannel;
+    final books = state.domain.booksFor(dimension, channel);
 
-    final bottomScrollPadding = widget.embedded
+    final bottomScrollPadding = embedded
         ? AppBottomNav.barHeight + AppSpacing.xl
         : 0.0;
 
@@ -148,15 +106,11 @@ class _RankingTabStackState extends State<_RankingTabStack> {
         final width = constraints.maxWidth;
         final topChromeHeight = AppLayout.chromeTopHeight(
           context,
-          barHeight: widget.embedded
+          barHeight: embedded
               ? AppSizes.bookstoreTopHeaderHeight
               : AppSizes.topBarHeight,
         );
         final fixedTop = topChromeHeight + AppSizes.rankingStickyControlsTopGap;
-        final segmentedTop = AppLayout.rankingScaledDesignY(
-          width,
-          AppSizes.rankingSegmentedFrameTop,
-        );
         final segmentedWidth = AppLayout.rankingScaledDesignX(
           width,
           AppSizes.rankingSegmentedDesignWidth,
@@ -172,31 +126,16 @@ class _RankingTabStackState extends State<_RankingTabStack> {
             fixedTop +
             AppSizes.rankingSegmentedHeight +
             AppSizes.rankingSegmentedToBodyGap;
-        final headerHeight =
-            segmentedTop +
-            AppSizes.rankingSegmentedHeight +
-            AppSizes.rankingSegmentedToBodyGap;
-        final floatingSegmentedTop = (segmentedTop - _scrollOffset)
-            .clamp(fixedTop, segmentedTop)
-            .toDouble();
-        final floatingRailTop = (headerHeight - _scrollOffset)
-            .clamp(pinnedRailTop, headerHeight)
-            .toDouble();
+        final headerHeight = pinnedRailTop;
 
         return ColoredBox(
           color: AppColors.backgroundDark,
           child: Stack(
             children: [
               CustomScrollView(
-                controller: _scrollController,
                 physics: const BouncingScrollPhysics(),
                 slivers: [
-                  SliverToBoxAdapter(
-                    child: _RankingScrollHeader(
-                      title: title,
-                      subtitle: dimension.subtitle,
-                    ),
-                  ),
+                  SliverToBoxAdapter(child: SizedBox(height: headerHeight)),
                   _RankingBookSliverList(
                     books: books,
                     bottomScrollPadding: bottomScrollPadding,
@@ -205,7 +144,7 @@ class _RankingTabStackState extends State<_RankingTabStack> {
                 ],
               ),
               Positioned(
-                top: floatingSegmentedTop,
+                top: fixedTop,
                 left: segmentedLeft,
                 width: segmentedWidth,
                 child: RankingChannelSegmented(
@@ -214,21 +153,21 @@ class _RankingTabStackState extends State<_RankingTabStack> {
                 ),
               ),
               Positioned(
-                top: floatingRailTop,
+                top: pinnedRailTop,
                 left: 0,
                 child: RankingDimensionRail(
                   selected: dimension,
                   onSelected: cubit.selectDimension,
                 ),
               ),
-              if (!widget.embedded)
+              if (!embedded)
                 Positioned(
                   top: 0,
                   left: 0,
                   right: 0,
-                  child: _RankingTopChrome(
+                  child: RankingTopChrome(
                     statusBarHeight: statusBar,
-                    blurEnabled: widget.topBlurEnabled,
+                    blurEnabled: topBlurEnabled,
                   ),
                 ),
             ],
@@ -322,137 +261,6 @@ class _RankingBookListItem extends StatelessWidget {
         const SizedBox(height: AppSpacing.md),
         row,
       ],
-    );
-  }
-}
-
-/// 可随列表滚动的头图 + 频道筛选区（Figma 1297:741）。
-class _RankingScrollHeader extends StatelessWidget {
-  const _RankingScrollHeader({required this.title, required this.subtitle});
-
-  final String title;
-  final String subtitle;
-
-  @override
-  Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final width = constraints.maxWidth;
-        final segmentedTop = AppLayout.rankingScaledDesignY(
-          width,
-          AppSizes.rankingSegmentedFrameTop,
-        );
-        final headerHeight =
-            segmentedTop +
-            AppSizes.rankingSegmentedHeight +
-            AppSizes.rankingSegmentedToBodyGap;
-
-        return SizedBox(
-          height: headerHeight,
-          child: Stack(
-            clipBehavior: Clip.hardEdge,
-            children: [
-              Positioned(
-                top: 0,
-                left: 0,
-                right: 0,
-                child: RankingHeroBanner(title: title, subtitle: subtitle),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-}
-
-class _RankingTopChrome extends StatelessWidget {
-  const _RankingTopChrome({
-    required this.statusBarHeight,
-    required this.blurEnabled,
-  });
-
-  final double statusBarHeight;
-  final bool blurEnabled;
-
-  static const String _searchIconAsset = 'assets/icons/search.svg';
-
-  @override
-  Widget build(BuildContext context) {
-    return AppBlurredChromeBar(
-      enabled: blurEnabled,
-      child: Padding(
-        padding: EdgeInsets.only(top: statusBarHeight),
-        child: SizedBox(
-          height: AppSizes.bookstoreTopHeaderHeight,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm),
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                const _RankingTopTabs(),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: GestureDetector(
-                    onTap: () => AppRouter.pushNamed(AppRoutes.searchName),
-                    behavior: HitTestBehavior.opaque,
-                    child: const AppIcon(
-                      assetPath: _searchIconAsset,
-                      width: AppSizes.bookstoreSearchIconSize,
-                      height: AppSizes.bookstoreSearchIconSize,
-                      color: AppColors.textOnDarkMuted,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _RankingTopTabs extends StatelessWidget {
-  const _RankingTopTabs();
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: const [
-        _RankingTopTab(
-          label: '推荐',
-          style: AppTextStyles.tabInactiveDark,
-          route: AppRoutes.home,
-        ),
-        SizedBox(width: AppSpacing.md),
-        _RankingTopTab(
-          label: '分类',
-          style: AppTextStyles.tabInactiveDark,
-          route: AppRoutes.category,
-        ),
-        SizedBox(width: AppSpacing.md),
-        _RankingTopTab(label: '排行', style: AppTextStyles.tabActiveDark),
-      ],
-    );
-  }
-}
-
-class _RankingTopTab extends StatelessWidget {
-  const _RankingTopTab({required this.label, required this.style, this.route});
-
-  final String label;
-  final TextStyle style;
-  final String? route;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: route == null ? null : () => AppRouter.go(route!),
-      behavior: HitTestBehavior.opaque,
-      child: AppText(label, style: style),
     );
   }
 }

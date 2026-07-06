@@ -11,6 +11,13 @@ description: >-
 每次完成 Flutter/Dart 代码修改后，**必须**执行本审计，再向用户汇报结果。
 
 规范全文：[flutter-architecture-strict-v2.mdc](../../rules/flutter-architecture-strict-v2.mdc)
+设计 token 基线（唯一权威）：[design-system/README.md](../../../design-system/README.md)
+
+## 设计规范治理（强制）
+
+- 涉及颜色 / 字号 / 行高 / 字重 / 间距 / 圆角的改动，**必须先对照** `design-system/README.md`。
+- **严禁擅自新增或修改 token / 档位 / 规范。** 收敛去重（把重复字面量指向已有 token、值不变）可直接做；一旦需要**新增字面量 / 新 token / 新档位 / 新色系**（超出规范），**必须停止，先向用户说明用途与建议值并取得确认**，落地后**同步更新** `design-system/README.md`。
+- `--dart-define=THEME` 换色系时，不得改动 `dark`（默认）分支源值。
 
 ## 触发时机
 
@@ -36,6 +43,18 @@ bash .cursor/skills/flutter-post-edit-audit/scripts/audit.sh
 ```
 
 脚本返回非 0 时，进入 Step 4 修复后重跑，直至通过或明确列出无法自动修复项。
+
+### Step 2.5 — 设计规范对照（强制）
+
+```bash
+bash .cursor/skills/flutter-post-edit-audit/scripts/design-system-check.sh
+```
+
+- 脚本列出本次改动在 token 层新增的颜色 / 字号 / 行高字面量与新 token 名。
+- 逐项对照 [design-system/README.md](../../../design-system/README.md)：
+  - 若属**收敛去重**（新增只是把重复值指向已有 token、值不变）→ 可继续。
+  - 若属**规范外新增**（新值 / 新档位 / 新 token / 新色系）→ **停止**，在报告中列出并**向用户说明用途 + 建议值，取得确认后**才落地，并同步更新规范文档。
+- 退出码 2 表示检测到 token 层新增，需人工判定；0 表示无新增。
 
 ### Step 3 — 人工核对清单
 
@@ -73,6 +92,7 @@ bash .cursor/skills/flutter-post-edit-audit/scripts/audit.sh
 | 检查项 | 结果 |
 |--------|------|
 | Design Token | ✅ 无写死样式；新增 token（如有）已登记于 `lib/core/theme/` |
+| 设计规范对照 | ✅ 已对照 `design-system/README.md`；无规范外新增（或已获用户确认并更新文档） |
 | Feature 分层 | ✅ |
 | 依赖方向 | ✅ |
 | 组件分级 | ✅ |

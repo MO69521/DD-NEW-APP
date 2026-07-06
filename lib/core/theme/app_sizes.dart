@@ -9,6 +9,8 @@ abstract final class AppSizes {
   // ── 通用二级页顶栏 (AppTopBar) ──
   static const double topBarHeight = 44;
   static const double topBarCircleSize = 32;
+  static const double topBarIconFrameSize = 32;
+  static const double topBarIconFrameBlurSigma = 12;
   static const double topBarBackIconWidth = 14;
   static const double topBarBackIconHeight = 20;
   static const double topBarActionIconSize = 19;
@@ -48,6 +50,8 @@ abstract final class AppSizes {
   static const double bottomNavBottomInset = 4;
   static const double bottomNavBlurSigma = 12;
   static const double bottomNavIconSize = 26;
+  static const double bottomNavSelectedIconPeakScale = 1.18;
+  static const double bottomNavSelectedIconDipScale = 0.92;
   static const double bottomNavItemHeight = 42;
   static const double bottomNavIconLabelGap = 2;
   static const double bottomNavItemContentTopInset = 0;
@@ -213,7 +217,6 @@ abstract final class AppSizes {
   /// 余额条与 VIP 横幅间距（Figma 697:12412 → 697:12468）。
   static const double profileBalanceBarToVipGap = 16;
   static const double profileAvatarSize = 80;
-  static const double profileSettingsButtonSize = 32;
   static const double profileMessagesIconSize = 18;
   static const double profilePartnerAvatarSize = 24;
   static const double profilePartnerAvatarGap = 6;
@@ -355,29 +358,20 @@ abstract final class AppSizes {
   static const double rankingDimensionIndicatorHeight = 16;
 
   // ── 书籍详情页 (Figma 183:1874) ──
-  /// 顶部氛围头图设计尺寸 375×190，固定比例自适应屏宽。
+  /// 顶部氛围头图设计尺寸 375×219，固定比例自适应屏宽。
   static const double bookDetailHeroDesignWidth = 375;
-  static const double bookDetailHeroDesignHeight = 190;
+  static const double bookDetailHeroDesignHeight = 219;
   static const double bookDetailHeroAspectRatio =
       bookDetailHeroDesignWidth / bookDetailHeroDesignHeight;
 
-  /// 底部渐隐层占头图高度比例（拉长过渡带）。
-  static const double bookDetailHeroScrimHeightRatio = 0.82;
-  static const List<double> bookDetailHeroScrimStops = [
-    0.0,
-    0.18,
-    0.42,
-    0.64,
-    0.82,
-    1.0,
-  ];
-
+  /// 头图与下方内容的垂直间距。
   static const double bookDetailContentHeroOverlap = 16;
 
   static const double bookDetailContentHInset = 12;
   static const double bookDetailSummaryCoverWidth = 96;
   static const double bookDetailSummaryCoverHeight = 128;
   static const double bookDetailSectionGap = 24;
+  static const double bookDetailRecommendationActionIconSize = 16;
   static const double bookDetailGlassBlurSigma = 12;
 
   static const double bookDetailTopBarHeight = 44;

@@ -85,37 +85,37 @@ class ProfileMockDataSource {
     ProfileMenuItem(
       action: ProfileMenuAction.readingHistory,
       label: '阅读历史',
-      iconAsset: 'assets/icons/profile/reading_history.png',
+      iconAsset: 'assets/icons/profile/reading_history.svg',
     ),
     ProfileMenuItem(
       action: ProfileMenuAction.helpFeedback,
       label: '帮助与反馈',
-      iconAsset: 'assets/icons/profile/help_feedback.png',
+      iconAsset: 'assets/icons/profile/help_feedback.svg',
     ),
     ProfileMenuItem(
       action: ProfileMenuAction.qqGroup,
       label: 'QQ群:406584',
-      iconAsset: 'assets/icons/profile/qq_group.png',
+      iconAsset: 'assets/icons/profile/qq_group.svg',
     ),
     ProfileMenuItem(
       action: ProfileMenuAction.settings,
       label: '设置',
-      iconAsset: 'assets/icons/profile/settings.png',
+      iconAsset: 'assets/icons/profile/settings.svg',
     ),
     ProfileMenuItem(
       action: ProfileMenuAction.cardPack,
       label: '我的卡包',
-      iconAsset: 'assets/icons/profile/card_pack.png',
+      iconAsset: 'assets/icons/profile/card_pack.svg',
     ),
     ProfileMenuItem(
       action: ProfileMenuAction.dressUp,
       label: '装扮中心',
-      iconAsset: 'assets/icons/profile/dress_up.png',
+      iconAsset: 'assets/icons/profile/dress_up.svg',
     ),
     ProfileMenuItem(
       action: ProfileMenuAction.cardAlbum,
       label: '我的卡册',
-      iconAsset: 'assets/icons/profile/card_album.png',
+      iconAsset: 'assets/icons/profile/card_album.svg',
     ),
   ];
 }

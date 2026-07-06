@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
-import '../../../../shared/widgets/app_icon.dart';
+import '../../../../shared/components/app_top_bar_icon_button.dart';
 import '../../domain/entities/bookstore_top_tab.dart';
 import 'bookstore_top_tabs.dart';
 
@@ -30,7 +29,7 @@ class BookstorePageHeader extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm),
         child: Row(
           children: [
-            SizedBox(width: AppSizes.bookstoreSearchIconSize),
+            const SizedBox(width: AppSizes.topBarIconFrameSize),
             Expanded(
               child: Center(
                 child: BookstoreTopTabs(
@@ -54,15 +53,11 @@ class _SearchIconButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return AppTopBarIconButton(
       onTap: onTap,
-      behavior: HitTestBehavior.opaque,
-      child: AppIcon(
-        assetPath: BookstorePageHeader.searchIconAsset,
-        width: AppSizes.bookstoreSearchIconSize,
-        height: AppSizes.bookstoreSearchIconSize,
-        color: AppColors.textOnDark,
-      ),
+      iconAsset: BookstorePageHeader.searchIconAsset,
+      iconWidth: AppSizes.bookstoreSearchIconSize,
+      iconHeight: AppSizes.bookstoreSearchIconSize,
     );
   }
 }

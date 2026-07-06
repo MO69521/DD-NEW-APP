@@ -91,6 +91,7 @@ class BookDetail extends Equatable {
     List<BookCatalogChapter>? catalogChapters,
     List<Book>? authorOtherBooks,
     List<Book>? recommendedBooks,
+    String? giftCount,
     String? listedAtText,
     String? copyrightText,
   }) {
@@ -110,7 +111,7 @@ class BookDetail extends Equatable {
       discussionPosts: discussionPosts ?? this.discussionPosts,
       updateEntries: updateEntries ?? this.updateEntries,
       catalogChapters: catalogChapters ?? this.catalogChapters,
-      giftCount: giftCount,
+      giftCount: giftCount ?? this.giftCount,
       characters: characters,
       listedAtText: listedAtText ?? this.listedAtText,
       copyrightText: copyrightText ?? this.copyrightText,

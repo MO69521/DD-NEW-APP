@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../../core/theme/app_partner_colors.dart';
 import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
-import '../../../../shared/widgets/app_icon.dart';
+import '../../../../shared/components/app_top_bar_icon_button.dart';
 import '../../domain/entities/partner_top_tab.dart';
 import 'partner_top_tabs.dart';
 
@@ -67,11 +67,11 @@ class _SearchButtonState extends State<_SearchButton> {
       onTapCancel: () => setState(() => _pressed = false),
       onTap: widget.onTap,
       behavior: HitTestBehavior.opaque,
-      child: AppIcon(
-        assetPath: 'assets/icons/search.svg',
-        width: AppSizes.partnerSearchIconSize,
-        height: AppSizes.partnerSearchIconSize,
-        color: _pressed
+      child: AppTopBarIconButton(
+        iconAsset: 'assets/icons/search.svg',
+        iconWidth: AppSizes.partnerSearchIconSize,
+        iconHeight: AppSizes.partnerSearchIconSize,
+        iconColor: _pressed
             ? AppPartnerColors.primaryLight
             : AppPartnerColors.iconMuted,
       ),

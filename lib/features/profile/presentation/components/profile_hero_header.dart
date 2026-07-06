@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_layout.dart';
-import '../../../../core/theme/app_radius.dart';
 import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
-import '../../../../shared/widgets/app_icon.dart';
+import '../../../../shared/components/app_top_bar_icon_button.dart';
 import '../../../../shared/widgets/app_network_avatar.dart';
 import '../../../../shared/widgets/app_text.dart';
 import '../../domain/entities/user_profile.dart';
@@ -235,29 +234,11 @@ class ProfileMessagesButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return AppTopBarIconButton(
       onTap: onTap,
-      behavior: HitTestBehavior.opaque,
-      child: SizedBox(
-        width: AppSizes.profileSettingsButtonSize,
-        height: AppSizes.profileSettingsButtonSize,
-        child: DecoratedBox(
-          decoration: BoxDecoration(
-            color: AppColors.overlayScrim,
-            borderRadius: BorderRadius.circular(AppRadius.xl),
-          ),
-          child: Center(
-            child: SizedBox.square(
-              dimension: AppSizes.profileMessagesIconSize,
-              child: AppIcon(
-                assetPath: 'assets/icons/profile/settings_gear.svg',
-                width: AppSizes.profileMessagesIconSize,
-                height: AppSizes.profileMessagesIconSize,
-              ),
-            ),
-          ),
-        ),
-      ),
+      iconAsset: 'assets/icons/profile/settings_gear.svg',
+      iconWidth: AppSizes.profileMessagesIconSize,
+      iconHeight: AppSizes.profileMessagesIconSize,
     );
   }
 }

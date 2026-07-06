@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
 
+import 'app_brand_colors.dart';
 import 'app_colors.dart';
 
 /// 伙伴页（探索）专用色 token：深色基底 + 粉色强调 + 紫色标签。
+/// 品牌粉引用 [AppBrandColors]、中性 / 背景 tint 引用 [AppColors]；
+/// 粉紫透明度 tint 等本页独有色保留字面量。
 abstract final class AppPartnerColors {
   // ── 粉色强调系（主色 #FF4D88）──
-  static const Color primary = Color(0xFFFF4D88);
-  static const Color primaryLight = Color(0xFFFF7AA8);
-  static const Color primaryDark = Color(0xFFE03D74);
+  static const Color primary = AppBrandColors.partnerPrimary;
+  static const Color primaryLight = AppBrandColors.partnerPrimaryLight;
+  static const Color primaryDark = AppBrandColors.partnerPrimaryDark;
   static const Color primaryDisabled = Color(0x4DFF4D88);
   static const Color primaryMutedBg = Color(0x1FFF4D88);
   static const Color primarySubtleBg = Color(0x14FF4D88);
-  static const Color textOnPrimary = Color(0xFFFFFFFF);
+  static const Color textOnPrimary = AppColors.white100;
 
   // ── 紫色标签系（卡片人设 tag）──
   static const Color tagPurple = Color(0xFFB8A4FF);
@@ -22,10 +25,10 @@ abstract final class AppPartnerColors {
 
   // ── 页面大背景（Figma 1022:1062，独立色体系）──
   /// 全屏渐变顶色：深酒红棕 #331E25。
-  static const Color pageBackgroundTop = Color(0xFF331E25);
+  static const Color pageBackgroundTop = AppBrandColors.partnerPageBackgroundTop;
 
-  /// 全屏渐变底色：深蓝黑 #090E17。
-  static const Color pageBackgroundBottom = Color(0xFF090E17);
+  /// 全屏渐变底色：深蓝黑 #090E17（随 THEME 换色系）。
+  static const Color pageBackgroundBottom = AppColors.backgroundDark;
 
   // ── 深色中性系（复用全局）──
   static const Color background = pageBackgroundBottom;
@@ -39,7 +42,7 @@ abstract final class AppPartnerColors {
   static const Color overlayScrim = AppColors.overlayScrim;
 
   // ── 角标 ──
-  static const Color badgeUncollectedBg = Color(0x99090E17);
+  static const Color badgeUncollectedBg = AppColors.bgTint60;
 
   /// 封面叠加标题阴影。
   static const Color coverTitleShadow = Color(0x80000000);
@@ -48,7 +51,7 @@ abstract final class AppPartnerColors {
   static const Color cardPressedOverlay = Color(0x1AFFFFFF);
 
   /// chip / 按钮 pressed 遮罩。
-  static const Color chipPressedOverlay = Color(0x33FFFFFF);
+  static const Color chipPressedOverlay = AppColors.white20;
 
   // ── 消息 Tab ──
   /// 顶栏下方粉紫光晕渐变顶色。
@@ -58,7 +61,7 @@ abstract final class AppPartnerColors {
   static const Color messageHeaderGlowMid = Color(0x1FB8A4FF);
 
   /// 会话行分隔线。
-  static const Color messageRowDivider = Color(0x14FFFFFF);
+  static const Color messageRowDivider = AppColors.white08;
 
   /// 好感度徽章背景。
   static const Color affectionBadgeBg = primary;
@@ -66,7 +69,7 @@ abstract final class AppPartnerColors {
   // ── 互动 Tab ──
   static const Color interactionHeaderBg = Color(0x99331E25);
 
-  static const Color interactionHeaderGradientEnd = Color(0x00000000);
+  static const Color interactionHeaderGradientEnd = AppColors.black00;
 
   static const Color interactionCharacterCardBg = Color(0x80090E17);
 
@@ -74,13 +77,13 @@ abstract final class AppPartnerColors {
 
   static const Color interactionReviewButtonBg = Color(0xCC3D3428);
 
-  static const Color interactionPageIndicatorBg = Color(0x99090E17);
+  static const Color interactionPageIndicatorBg = AppColors.bgTint60;
 
   static const Color interactionConfideButton = primary;
 
   static const Color interactionChatButton = Color(0xFFD4A853);
 
-  static const Color interactionSceneBottomFade = Color(0x99090E17);
+  static const Color interactionSceneBottomFade = AppColors.bgTint60;
 
-  static const Color interactionAiPlotBadgeBg = Color(0xFFFF4D88);
+  static const Color interactionAiPlotBadgeBg = AppBrandColors.partnerPrimary;
 }

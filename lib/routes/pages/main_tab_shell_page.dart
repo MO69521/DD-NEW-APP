@@ -28,10 +28,12 @@ class MainTabShellPage extends StatefulWidget {
     super.key,
     this.initialIndex = 0,
     this.initialBookshelfTabIntent,
+    this.initialBookstoreTopTabIntent,
   });
 
   final int initialIndex;
   final String? initialBookshelfTabIntent;
+  final String? initialBookstoreTopTabIntent;
 
   @override
   State<MainTabShellPage> createState() => _MainTabShellPageState();
@@ -53,9 +55,21 @@ class _MainTabShellPageState extends State<MainTabShellPage> {
 
   @override
   Widget build(BuildContext context) {
+    final initialBookstoreTopTab = _parseBookstoreTopTab(
+      widget.initialBookstoreTopTabIntent,
+    );
+
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (_) => BookstoreCubit()..load()),
+        BlocProvider(
+          create: (_) {
+            final cubit = BookstoreCubit();
+            if (initialBookstoreTopTab != null) {
+              cubit.switchTopTab(initialBookstoreTopTab);
+            }
+            return cubit..load();
+          },
+        ),
         BlocProvider(create: (_) => WelfareCubit()..load()),
         BlocProvider(create: (_) => PartnerCubit()..load()),
         BlocProvider(create: (_) => BookshelfCubit()..load()),
@@ -109,5 +123,13 @@ class _MainTabShellPageState extends State<MainTabShellPage> {
         },
       ),
     );
+  }
+
+  BookstoreTopTab? _parseBookstoreTopTab(String? intent) {
+    if (intent == null || intent.isEmpty) return null;
+    for (final tab in BookstoreTopTab.values) {
+      if (tab.name == intent) return tab;
+    }
+    return null;
   }
 }

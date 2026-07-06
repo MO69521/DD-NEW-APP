@@ -5,8 +5,8 @@ import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../shared/components/app_blurred_chrome_bar.dart';
+import '../../../../shared/widgets/app_asset_image.dart';
 import '../../../../shared/widgets/app_button.dart';
-import '../../../../shared/widgets/app_icon.dart';
 import '../../../../shared/widgets/app_text.dart';
 
 /// 底部固定操作栏：加入书架 / 送心 / 开始阅读（Figma 183:2036）。
@@ -14,6 +14,7 @@ class BookDetailBottomBar extends StatelessWidget {
   const BookDetailBottomBar({
     super.key,
     required this.isInShelf,
+    required this.isGiftSent,
     required this.giftCount,
     this.onShelfTap,
     this.onGiftTap,
@@ -21,6 +22,7 @@ class BookDetailBottomBar extends StatelessWidget {
   });
 
   final bool isInShelf;
+  final bool isGiftSent;
   final String giftCount;
   final VoidCallback? onShelfTap;
   final VoidCallback? onGiftTap;
@@ -52,19 +54,23 @@ class BookDetailBottomBar extends StatelessWidget {
                     children: [
                       Expanded(
                         child: _IconAction(
-                          iconAsset: _IconAction.shelfIconAsset,
-                          iconWidth: AppSizes.bookDetailShelfActionIconWidth,
-                          iconHeight: AppSizes.bookDetailShelfActionIconHeight,
-                          label: isInShelf ? '已加入书架' : '加入书架',
+                          iconAsset: isInShelf
+                              ? _IconAction.inShelfIconAsset
+                              : _IconAction.addToShelfIconAsset,
+                          iconWidth: AppSizes.bookDetailBottomIconSize,
+                          iconHeight: AppSizes.bookDetailBottomIconSize,
+                          label: isInShelf ? '已加书架' : '加入书架',
                           onTap: onShelfTap,
                         ),
                       ),
                       Expanded(
                         child: _IconAction(
-                          iconAsset: _IconAction.heartIconAsset,
-                          iconWidth: AppSizes.bookDetailHeartActionIconWidth,
-                          iconHeight: AppSizes.bookDetailHeartActionIconHeight,
-                          label: '送心',
+                          iconAsset: isGiftSent
+                              ? _IconAction.sentHeartIconAsset
+                              : _IconAction.heartIconAsset,
+                          iconWidth: AppSizes.bookDetailBottomIconSize,
+                          iconHeight: AppSizes.bookDetailBottomIconSize,
+                          label: isGiftSent ? '已送' : '送心',
                           badge: giftCount,
                           onTap: onGiftTap,
                         ),
@@ -101,10 +107,14 @@ class _IconAction extends StatelessWidget {
     this.onTap,
   });
 
-  static const String shelfIconAsset =
+  static const String addToShelfIconAsset =
       'assets/icons/book_detail/add_to_shelf.svg';
+  static const String inShelfIconAsset =
+      'assets/icons/book_detail/in_shelf.svg';
   static const String heartIconAsset =
       'assets/icons/book_detail/send_heart.svg';
+  static const String sentHeartIconAsset =
+      'assets/icons/book_detail/send_heart_sent.svg';
 
   final String iconAsset;
   final double iconWidth;
@@ -127,10 +137,11 @@ class _IconAction extends StatelessWidget {
               width: AppSizes.bookDetailBottomIconSize,
               height: AppSizes.bookDetailBottomIconSize,
               child: Center(
-                child: AppIcon(
+                child: AppAssetImage(
                   assetPath: iconAsset,
                   width: iconWidth,
                   height: iconHeight,
+                  fit: BoxFit.contain,
                 ),
               ),
             ),

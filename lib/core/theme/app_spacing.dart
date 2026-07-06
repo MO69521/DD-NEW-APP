@@ -1,6 +1,7 @@
 /// 全局间距 token，禁止在 UI 中写死 padding/margin 数值。
 abstract final class AppSpacing {
   static const double xxsHalf = 2;
+  static const double countdownValueInset = 3;
   static const double xxs = 4;
   static const double insetXs = 6;
   static const double xs = 8;
