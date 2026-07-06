@@ -6,6 +6,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../routes/app_router.dart';
+import '../../../../shared/components/app_blurred_dialog.dart';
 import '../../../../shared/components/app_toast.dart';
 import '../../../../shared/components/app_top_bar.dart';
 import '../../../../shared/components/empty_state.dart';
@@ -16,6 +17,7 @@ import '../../application/settings_cubit.dart';
 import '../../application/settings_state.dart';
 import '../../domain/entities/settings_page_content.dart';
 import '../components/settings_brand_header.dart';
+import '../components/settings_logout_confirm_dialog.dart';
 import '../components/settings_menu_section.dart';
 
 /// L3 页面 — 设置（深色主题）。
@@ -106,7 +108,10 @@ class _SettingsView extends StatelessWidget {
               label: '退出登录',
               variant: AppButtonVariant.subtle,
               isExpanded: true,
-              onPressed: cubit.onLogoutTap,
+              isLoading: context.select(
+                (SettingsCubit cubit) => cubit.state.ui.isLoggingOut,
+              ),
+              onPressed: () => _confirmLogout(context, cubit),
             ),
             const SizedBox(height: AppSpacing.md),
             Center(
@@ -135,5 +140,14 @@ class _SettingsView extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<void> _confirmLogout(BuildContext context, SettingsCubit cubit) async {
+    final confirmed = await showAppBlurredDialog<bool>(
+      context: context,
+      builder: (_) => const SettingsLogoutConfirmDialog(),
+    );
+    if (!context.mounted || confirmed != true) return;
+    await cubit.onLogoutTap();
   }
 }

@@ -31,6 +31,7 @@ class RankingBookRow extends StatelessWidget {
       description: book.summary,
       titleMaxLines: 2,
       leadingBadge: _RankingRowBadge(rank: rank),
+      padding: EdgeInsets.zero,
       onTap: onTap,
     );
   }

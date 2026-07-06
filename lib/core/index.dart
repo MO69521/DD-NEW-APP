@@ -1,9 +1,14 @@
 export 'constants/app_constants.dart';
+export 'domain/entities/auth_session.dart';
+export 'domain/entities/auth_user.dart';
 export 'domain/entities/book.dart';
-export 'domain/entities/book_cover_tag.dart';
 export 'domain/entities/book_cover_tag.dart';
 export 'domain/entities/commerce_entities.dart';
 export 'constants/main_tab_config.dart';
+export 'services/auth_failure.dart';
+export 'services/auth_service.dart';
+export 'services/auth_service_config.dart';
+export 'services/auth_session_service.dart';
 export 'services/bookshelf_membership_service.dart';
 export 'services/service_locator.dart';
 export 'theme/app_layout.dart';

@@ -5,16 +5,19 @@ import '../domain/entities/settings_page_content.dart';
 class SettingsUiState extends Equatable {
   const SettingsUiState({
     this.isLoading = false,
+    this.isLoggingOut = false,
     this.errorMessage,
     this.actionMessage,
   });
 
   final bool isLoading;
+  final bool isLoggingOut;
   final String? errorMessage;
   final String? actionMessage;
 
   SettingsUiState copyWith({
     bool? isLoading,
+    bool? isLoggingOut,
     String? errorMessage,
     String? actionMessage,
     bool clearError = false,
@@ -22,6 +25,7 @@ class SettingsUiState extends Equatable {
   }) {
     return SettingsUiState(
       isLoading: isLoading ?? this.isLoading,
+      isLoggingOut: isLoggingOut ?? this.isLoggingOut,
       errorMessage: clearError ? null : errorMessage ?? this.errorMessage,
       actionMessage: clearActionMessage
           ? null
@@ -30,7 +34,12 @@ class SettingsUiState extends Equatable {
   }
 
   @override
-  List<Object?> get props => [isLoading, errorMessage, actionMessage];
+  List<Object?> get props => [
+    isLoading,
+    isLoggingOut,
+    errorMessage,
+    actionMessage,
+  ];
 }
 
 class SettingsDomainState extends Equatable {

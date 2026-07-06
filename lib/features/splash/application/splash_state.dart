@@ -6,6 +6,10 @@ final class SplashInitial extends SplashState {
   const SplashInitial();
 }
 
-final class SplashCompleted extends SplashState {
-  const SplashCompleted();
+final class SplashAuthenticated extends SplashState {
+  const SplashAuthenticated();
+}
+
+final class SplashUnauthenticated extends SplashState {
+  const SplashUnauthenticated();
 }

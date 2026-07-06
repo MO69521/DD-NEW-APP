@@ -2,14 +2,12 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/domain/entities/book.dart';
 import '../../../../core/theme/app_layout.dart';
-import '../../../../core/theme/app_colors.dart';
-import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../shared/layouts/app_bottom_nav.dart';
 import '../../domain/entities/search_result_item.dart';
 import 'search_result_row.dart';
 
-/// L3 — 搜索结果列表（builder 渲染，行间分隔线）。
+/// L3 — 搜索结果列表（builder 渲染，行间 16px 间距）。
 class SearchResultList extends StatelessWidget {
   const SearchResultList({
     super.key,
@@ -34,11 +32,7 @@ class SearchResultList extends StatelessWidget {
         _bottomReserve,
       ),
       itemCount: items.length,
-      separatorBuilder: (_, _) => const Divider(
-        height: AppSizes.hairline,
-        thickness: AppSizes.hairline,
-        color: AppColors.borderGlass,
-      ),
+      separatorBuilder: (_, _) => const SizedBox(height: AppSpacing.md),
       itemBuilder: (context, index) {
         return SearchResultRow(
           item: items[index],

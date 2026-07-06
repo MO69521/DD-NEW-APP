@@ -285,7 +285,7 @@ class _RankingBookSliverList extends StatelessWidget {
                   child: _RankingBookListItem(
                     book: book,
                     rank: index + 1,
-                    showDivider: index > 0,
+                    showTopGap: index > 0,
                     onTap: () => onBookTap(book),
                   ),
                 ),
@@ -302,28 +302,24 @@ class _RankingBookListItem extends StatelessWidget {
   const _RankingBookListItem({
     required this.book,
     required this.rank,
-    required this.showDivider,
+    required this.showTopGap,
     required this.onTap,
   });
 
   final Book book;
   final int rank;
-  final bool showDivider;
+  final bool showTopGap;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
     final row = RankingBookRow(book: book, rank: rank, onTap: onTap);
-    if (!showDivider) return row;
+    if (!showTopGap) return row;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        const Divider(
-          height: AppSizes.hairline,
-          thickness: AppSizes.hairline,
-          color: AppColors.borderGlass,
-        ),
+        const SizedBox(height: AppSpacing.md),
         row,
       ],
     );

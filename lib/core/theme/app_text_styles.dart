@@ -141,6 +141,13 @@ abstract final class AppTextStyles {
     fontWeight: FontWeight.w500,
   );
 
+  /// 登录协议说明文本：11px 字号 + 8px 行间距。
+  static TextStyle get authAgreementDarkMuted => captionMd.copyWith(
+    color: AppColors.textOnDarkMuted,
+    fontWeight: FontWeight.w500,
+    height: 19 / 11,
+  );
+
   static const TextStyle tabActiveDark = TextStyle(
     fontSize: 18,
     fontWeight: FontWeight.w500,
@@ -191,6 +198,11 @@ abstract final class AppTextStyles {
     color: AppColors.accentYellow,
     fontWeight: FontWeight.w400,
     height: 1.0,
+  );
+
+  static TextStyle get authAgreementLinkDark => authAgreementDarkMuted.copyWith(
+    color: AppColors.textOnDark,
+    fontWeight: FontWeight.w500,
   );
 
   static TextStyle get searchPlaceholderDark =>

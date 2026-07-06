@@ -10,4 +10,5 @@ abstract final class AppSpacing {
   static const double lg = 24;
   static const double xl = 32;
   static const double xxl = 48;
+  static const double authTitleContentGap = 50;
 }

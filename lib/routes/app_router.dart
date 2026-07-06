@@ -7,6 +7,7 @@ import '../core/constants/main_tab_config.dart';
 import '../core/domain/entities/commerce_entities.dart';
 import '../core/domain/entities/book.dart';
 import '../features/account_settings/index.dart';
+import '../features/auth/index.dart';
 import '../features/book_detail/index.dart';
 import '../features/card_pack/index.dart';
 import '../features/category/index.dart';
@@ -55,6 +56,14 @@ abstract final class AppRouter {
           builder: (context, state) => BlocProvider(
             create: (_) => SplashCubit()..start(),
             child: const SplashPage(),
+          ),
+        ),
+        GoRoute(
+          path: AppRoutes.login,
+          name: AppRoutes.loginName,
+          builder: (context, state) => BlocProvider(
+            create: (_) => LoginCubit(),
+            child: const LoginPage(),
           ),
         ),
         GoRoute(

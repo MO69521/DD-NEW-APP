@@ -14,9 +14,14 @@ class SplashPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocListener<SplashCubit, SplashState>(
-      listenWhen: (previous, current) => current is SplashCompleted,
+      listenWhen: (previous, current) =>
+          current is SplashAuthenticated || current is SplashUnauthenticated,
       listener: (context, state) {
-        AppRouter.go(AppRoutes.home);
+        if (state is SplashAuthenticated) {
+          AppRouter.go(AppRoutes.home);
+          return;
+        }
+        AppRouter.go(AppRoutes.login);
       },
       child: const Scaffold(
         backgroundColor: AppColors.backgroundDark,

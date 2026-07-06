@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../core/services/service_locator.dart';
 import '../../../routes/app_router.dart';
 import '../../../routes/app_routes.dart';
 import '../data/datasources/settings_mock_datasource.dart';
@@ -76,8 +77,25 @@ class SettingsCubit extends Cubit<SettingsState> {
     }
   }
 
-  void onLogoutTap() {
-    _emitActionMessage('退出登录功能即将上线');
+  Future<void> onLogoutTap() async {
+    if (state.ui.isLoggingOut) return;
+
+    emit(
+      state.copyWith(
+        ui: state.ui.copyWith(isLoggingOut: true, clearActionMessage: true),
+      ),
+    );
+
+    try {
+      await ServiceLocator.authService.logout();
+    } catch (_) {
+      // 登出以清理本地会话为准，接口失败不阻塞回到登录页。
+    }
+
+    await ServiceLocator.authSession.clear();
+    if (isClosed) return;
+    emit(state.copyWith(ui: state.ui.copyWith(isLoggingOut: false)));
+    AppRouter.go(AppRoutes.login);
   }
 
   void onDeleteAccountTap() {
@@ -107,19 +125,5 @@ class SettingsCubit extends Cubit<SettingsState> {
   Future<bool> _isLatestVersion(String? currentVersion) async {
     // Phase 1 使用 mock 版本号，后续接入应用商店/API 后替换这里的来源。
     return currentVersion == _mockLatestVersion;
-  }
-
-  String _actionLabel(SettingsMenuAction action) {
-    return switch (action) {
-      SettingsMenuAction.notifications => '消息通知',
-      SettingsMenuAction.accountSettings => '账号设置',
-      SettingsMenuAction.personalizedAds => '个性化广告',
-      SettingsMenuAction.readingPreferences => '阅读偏好',
-      SettingsMenuAction.teenMode => '青少年模式',
-      SettingsMenuAction.userAgreement => '用户协议',
-      SettingsMenuAction.privacyPolicy => '隐私政策',
-      SettingsMenuAction.thirdPartySharing => '第三方服务共享清单',
-      SettingsMenuAction.versionUpdate => '版本更新',
-    };
   }
 }

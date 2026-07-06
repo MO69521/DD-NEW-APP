@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/domain/entities/book.dart';
-import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../shared/components/empty_state.dart';
 import 'ranking_book_row.dart';
 
-/// 右侧榜单书单：大封面书卡列表，行间分隔线。
+/// 右侧榜单书单：大封面书卡列表，行间 16px 间距。
 class RankingBookList extends StatelessWidget {
   const RankingBookList({
     super.key,
@@ -49,11 +48,7 @@ class RankingBookList extends StatelessWidget {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const Divider(
-              height: AppSizes.hairline,
-              thickness: AppSizes.hairline,
-              color: AppColors.borderGlass,
-            ),
+            const SizedBox(height: AppSpacing.md),
             row,
           ],
         );

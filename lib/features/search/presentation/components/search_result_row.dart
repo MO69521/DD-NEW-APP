@@ -38,6 +38,7 @@ class SearchResultRow extends StatelessWidget {
       trailing: _AddToShelfButton(
         onTap: onAddToShelf == null ? null : () => onAddToShelf!(item.book),
       ),
+      padding: EdgeInsets.zero,
       onTap: onTap == null ? null : () => onTap!(item.book),
     );
   }

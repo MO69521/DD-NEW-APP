@@ -33,6 +33,7 @@ class AppButton extends StatelessWidget {
     super.key,
     required this.label,
     this.onPressed,
+    this.onDisabledPressed,
     this.variant = AppButtonVariant.primary,
     this.size = AppButtonSize.normal,
     this.isLoading = false,
@@ -42,6 +43,7 @@ class AppButton extends StatelessWidget {
 
   final String label;
   final VoidCallback? onPressed;
+  final VoidCallback? onDisabledPressed;
   final AppButtonVariant variant;
   final AppButtonSize size;
   final bool isLoading;
@@ -56,6 +58,8 @@ class AppButton extends StatelessWidget {
     AppButtonVariant.outline => Colors.transparent,
   };
 
+  static const double _disabledForegroundOpacity = 0.4;
+
   Color get _foregroundColor => switch (variant) {
     AppButtonVariant.primary => AppColors.textOnPrimary,
     AppButtonVariant.accent => AppColors.rankingSegmentedSelectedText,
@@ -63,6 +67,11 @@ class AppButton extends StatelessWidget {
     AppButtonVariant.subtle => AppColors.textOnDark,
     AppButtonVariant.outline => AppColors.textOnDark,
   };
+
+  Color _foregroundColorFor(bool enabled) {
+    if (enabled || isLoading) return _foregroundColor;
+    return _foregroundColor.withValues(alpha: _disabledForegroundOpacity);
+  }
 
   bool get _hasBorder =>
       variant == AppButtonVariant.secondary ||
@@ -86,17 +95,19 @@ class AppButton extends StatelessWidget {
     ),
   };
 
-  TextStyle get _textStyle {
+  TextStyle _textStyleFor(bool enabled) {
     final base = size == AppButtonSize.normal
         ? AppTextStyles.buttonLabel16
         : AppTextStyles.bodyMedium.copyWith(fontWeight: FontWeight.w500);
-    return base.copyWith(color: _foregroundColor, height: 1.0);
+    return base.copyWith(color: _foregroundColorFor(enabled), height: 1.0);
   }
 
   @override
   Widget build(BuildContext context) {
     final enabled = !isLoading && onPressed != null;
+    final tapHandler = isLoading ? null : onPressed ?? onDisabledPressed;
     final radius = BorderRadius.circular(_radius);
+    final foregroundColor = _foregroundColorFor(enabled);
 
     Widget content = isLoading
         ? SizedBox(
@@ -104,7 +115,7 @@ class AppButton extends StatelessWidget {
             height: AppSizes.buttonLoadingIndicatorSize,
             child: CircularProgressIndicator(
               strokeWidth: AppSizes.bookstoreLoadingIndicatorStrokeWidth,
-              color: _foregroundColor,
+              color: foregroundColor,
             ),
           )
         : Row(
@@ -118,7 +129,7 @@ class AppButton extends StatelessWidget {
               Flexible(
                 child: AppText(
                   label,
-                  style: _textStyle,
+                  style: _textStyleFor(enabled),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   textAlign: TextAlign.center,
@@ -142,7 +153,7 @@ class AppButton extends StatelessWidget {
     return Material(
       color: Colors.transparent,
       child: InkWell(
-        onTap: enabled ? onPressed : null,
+        onTap: tapHandler,
         borderRadius: radius,
         child: Ink(
           decoration: BoxDecoration(

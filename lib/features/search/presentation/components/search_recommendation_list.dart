@@ -2,14 +2,12 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/domain/entities/book.dart';
 import '../../../../core/theme/app_layout.dart';
-import '../../../../core/theme/app_colors.dart';
-import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../shared/layouts/app_bottom_nav.dart';
 import '../../domain/entities/search_recommendation_item.dart';
 import 'search_recommendation_row.dart';
 
-/// L3 — 搜索默认推荐列表（builder 渲染，行间分隔线）。
+/// L3 — 搜索默认推荐列表（builder 渲染，行间 16px 间距）。
 class SearchRecommendationList extends StatelessWidget {
   const SearchRecommendationList({
     super.key,
@@ -32,16 +30,9 @@ class SearchRecommendationList extends StatelessWidget {
         _bottomReserve,
       ),
       itemCount: items.length,
-      separatorBuilder: (_, _) => const Divider(
-        height: AppSizes.hairline,
-        thickness: AppSizes.hairline,
-        color: AppColors.borderGlass,
-      ),
+      separatorBuilder: (_, _) => const SizedBox(height: AppSpacing.md),
       itemBuilder: (context, index) {
-        return SearchRecommendationRow(
-          item: items[index],
-          onTap: onItemTap,
-        );
+        return SearchRecommendationRow(item: items[index], onTap: onItemTap);
       },
     );
   }

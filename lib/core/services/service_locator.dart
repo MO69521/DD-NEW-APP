@@ -1,5 +1,10 @@
+import 'auth_service.dart';
+import 'auth_service_config.dart';
+import 'auth_session_service.dart';
 import 'bookshelf_membership_service.dart';
 import 'membership_status_service.dart';
+import 'mock_auth_service.dart';
+import 'rest_auth_service.dart';
 
 /// 全局服务注册入口，跨 feature 共享服务通过此处暴露。
 ///
@@ -9,6 +14,9 @@ abstract final class ServiceLocator {
 
   static MembershipStatusService? _membershipStatus;
   static BookshelfMembershipService? _bookshelfMembership;
+  static AuthSessionService? _authSession;
+  static AuthService? _authService;
+  static const AuthServiceConfig _authConfig = AuthServiceConfig();
 
   /// 会员状态共享服务（单例）。
   static MembershipStatusService get membershipStatus =>
@@ -18,10 +26,30 @@ abstract final class ServiceLocator {
   static BookshelfMembershipService get bookshelfMembership =>
       _bookshelfMembership ??= BookshelfMembershipService();
 
+  /// 登录会话共享服务（单例）。
+  static AuthSessionService get authSession =>
+      _authSession ??= InMemoryAuthSessionService();
+
+  /// 认证接口服务，可通过配置在 mock / rest 间切换。
+  static AuthService get authService =>
+      _authService ??= switch (_authConfig.environment) {
+        AuthEnvironment.mock => MockAuthService(
+          scenario: _authConfig.mockScenario,
+        ),
+        AuthEnvironment.rest => const RestAuthService(),
+      };
+
   static Future<void> init() async {
     if (_initialized) return;
     _membershipStatus ??= MockMembershipStatusService();
     _bookshelfMembership ??= BookshelfMembershipService();
+    _authSession ??= InMemoryAuthSessionService();
+    _authService ??= switch (_authConfig.environment) {
+      AuthEnvironment.mock => MockAuthService(
+        scenario: _authConfig.mockScenario,
+      ),
+      AuthEnvironment.rest => const RestAuthService(),
+    };
     _initialized = true;
   }
 }
