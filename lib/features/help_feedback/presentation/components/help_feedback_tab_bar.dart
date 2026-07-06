@@ -4,7 +4,6 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
-import '../../../../shared/components/elastic_tab_indicator.dart';
 import '../../../../shared/widgets/app_text.dart';
 import '../../domain/entities/help_feedback_tab.dart';
 
@@ -23,34 +22,23 @@ class HelpFeedbackTabBar extends StatelessWidget {
   Widget build(BuildContext context) {
     const tabs = HelpFeedbackTab.values;
     const slotWidth = AppSizes.tabSlotWidthMd;
-    const slotPitch = slotWidth + AppSpacing.xl;
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
       child: SizedBox(
         width: slotWidth * tabs.length + AppSpacing.xl * (tabs.length - 1),
-        child: Stack(
-          clipBehavior: Clip.none,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                for (var i = 0; i < tabs.length; i++) ...[
-                  if (i > 0) const SizedBox(width: AppSpacing.xl),
-                  _HelpFeedbackTabItem(
-                    tab: tabs[i],
-                    isSelected: tabs[i] == selected,
-                    width: slotWidth,
-                    onTap: () => onSelected(tabs[i]),
-                  ),
-                ],
-              ],
-            ),
-            ElasticTabIndicator(
-              selectedIndex: tabs.indexOf(selected),
-              slotWidth: slotWidth,
-              slotPitch: slotPitch,
-            ),
+            for (var i = 0; i < tabs.length; i++) ...[
+              if (i > 0) const SizedBox(width: AppSpacing.xl),
+              _HelpFeedbackTabItem(
+                tab: tabs[i],
+                isSelected: tabs[i] == selected,
+                width: slotWidth,
+                onTap: () => onSelected(tabs[i]),
+              ),
+            ],
           ],
         ),
       ),
@@ -78,22 +66,19 @@ class _HelpFeedbackTabItem extends StatelessWidget {
       behavior: HitTestBehavior.opaque,
       child: SizedBox(
         width: width,
-        child: Padding(
-          padding: const EdgeInsets.only(bottom: AppSpacing.xs),
-          child: AppText(
-            tab.label,
-            style:
-                (isSelected
-                        ? AppTextStyles.tabActiveDark
-                        : AppTextStyles.tabInactiveDark)
-                    .copyWith(
-                      color: isSelected
-                          ? AppColors.textOnDark
-                          : AppColors.textOnDarkMuted,
-                    ),
-            maxLines: 1,
-            textAlign: TextAlign.center,
-          ),
+        child: AppText(
+          tab.label,
+          style:
+              (isSelected
+                      ? AppTextStyles.tabActiveDark
+                      : AppTextStyles.tabInactiveDark)
+                  .copyWith(
+                    color: isSelected
+                        ? AppColors.textOnDark
+                        : AppColors.textOnDarkMuted,
+                  ),
+          maxLines: 1,
+          textAlign: TextAlign.center,
         ),
       ),
     );

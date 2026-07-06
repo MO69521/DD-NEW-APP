@@ -25,7 +25,7 @@ class SearchRecommendationList extends StatelessWidget {
     return ListView.separated(
       padding: EdgeInsets.fromLTRB(
         AppSpacing.md,
-        AppLayout.chromeTopHeight(context),
+        AppLayout.chromeTopHeight(context) + AppSpacing.md,
         AppSpacing.md,
         _bottomReserve,
       ),

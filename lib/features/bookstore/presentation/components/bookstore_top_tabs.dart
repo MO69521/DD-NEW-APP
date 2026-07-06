@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/theme/app_durations.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/theme/app_theme_context.dart';
+import '../../../../shared/components/elastic_tab_indicator.dart';
 import '../../domain/entities/bookstore_top_tab.dart';
 
 /// 书城顶栏一级 Tab（推荐 / 分类 / 排行）。
@@ -16,20 +16,56 @@ class BookstoreTopTabs extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tabs = BookstoreTopTab.values;
+    final textScaler = MediaQuery.textScalerOf(context);
+    final textStyle = AppTextStyles.tabActiveDark;
+    final slotWidth = _maxTabTextWidth(tabs, textStyle, textScaler);
+    final slotPitch = slotWidth + AppSpacing.md;
 
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        for (var i = 0; i < tabs.length; i++) ...[
-          if (i > 0) const SizedBox(width: AppSpacing.md),
-          _BookstoreTopTabItem(
-            tab: tabs[i],
-            isSelected: tabs[i] == selected,
-            onTap: onSelected == null ? null : () => onSelected!(tabs[i]),
+    return SizedBox(
+      width: slotWidth * tabs.length + AppSpacing.md * (tabs.length - 1),
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              for (var i = 0; i < tabs.length; i++) ...[
+                if (i > 0) const SizedBox(width: AppSpacing.md),
+                _BookstoreTopTabItem(
+                  tab: tabs[i],
+                  isSelected: tabs[i] == selected,
+                  width: slotWidth,
+                  onTap: onSelected == null ? null : () => onSelected!(tabs[i]),
+                ),
+              ],
+            ],
+          ),
+          ElasticTabIndicator(
+            selectedIndex: tabs.indexOf(selected),
+            slotWidth: slotWidth,
+            slotPitch: slotPitch,
           ),
         ],
-      ],
+      ),
     );
+  }
+
+  double _maxTabTextWidth(
+    List<BookstoreTopTab> tabs,
+    TextStyle style,
+    TextScaler textScaler,
+  ) {
+    var maxWidth = 0.0;
+    for (final tab in tabs) {
+      final painter = TextPainter(
+        text: TextSpan(text: tab.label, style: style),
+        textDirection: TextDirection.ltr,
+        maxLines: 1,
+        textScaler: textScaler,
+      )..layout();
+      if (painter.width > maxWidth) maxWidth = painter.width;
+    }
+    return maxWidth + AppSpacing.xs;
   }
 }
 
@@ -37,15 +73,14 @@ class _BookstoreTopTabItem extends StatelessWidget {
   const _BookstoreTopTabItem({
     required this.tab,
     required this.isSelected,
+    required this.width,
     this.onTap,
   });
 
   final BookstoreTopTab tab;
   final bool isSelected;
+  final double width;
   final VoidCallback? onTap;
-
-  static const double _selectedScale = 1.03;
-  static const double _unselectedScale = 0.98;
 
   @override
   Widget build(BuildContext context) {
@@ -61,15 +96,18 @@ class _BookstoreTopTabItem extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       behavior: HitTestBehavior.opaque,
-      child: AnimatedScale(
-        scale: isSelected ? _selectedScale : _unselectedScale,
-        duration: AppDurations.fast,
-        curve: Curves.easeOutCubic,
-        child: AnimatedDefaultTextStyle(
-          duration: AppDurations.fast,
-          curve: Curves.easeOutCubic,
-          style: style,
-          child: Text(tab.label),
+      child: SizedBox(
+        width: width,
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: AppSpacing.xs),
+          child: Text(
+            tab.label,
+            style: style,
+            textAlign: TextAlign.center,
+            maxLines: 1,
+            softWrap: false,
+            overflow: TextOverflow.visible,
+          ),
         ),
       ),
     );

@@ -17,6 +17,12 @@ class RankingBookGrid extends StatelessWidget {
   final List<Book> books;
   final ValueChanged<Book>? onBookTap;
 
+  static double get contentHeight {
+    final coverHeight =
+        AppSizes.rankingRowCoverWidth / AppSizes.bookCoverRankingAspectRatio;
+    return coverHeight * 3 + AppSpacing.md * 2;
+  }
+
   @override
   Widget build(BuildContext context) {
     final visibleBooks = books.take(AppSizes.rankingGridMaxItems).toList();

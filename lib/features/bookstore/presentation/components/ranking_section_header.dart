@@ -26,52 +26,44 @@ class RankingSectionHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Expanded(
-          child: RankingTabs(
-            selected: selectedTab,
-            onSelected: onTabSelected,
-          ),
+          child: RankingTabs(selected: selectedTab, onSelected: onTabSelected),
         ),
         const SizedBox(width: AppSpacing.xs),
-        Padding(
-          padding: const EdgeInsets.only(
-            top: AppSizes.rankingHeaderActionTopInset,
-            bottom: AppSizes.rankingHeaderActionBottomInset,
-          ),
-          child: GestureDetector(
-            onTap: onFullListTap,
-            behavior: HitTestBehavior.opaque,
-            child: Container(
-              padding: const EdgeInsets.only(
-                left: AppSpacing.sm,
-                right: AppSpacing.xs,
-                top: AppSpacing.insetXs,
-                bottom: AppSpacing.insetXs,
+        GestureDetector(
+          onTap: onFullListTap,
+          behavior: HitTestBehavior.opaque,
+          child: Container(
+            padding: const EdgeInsets.only(
+              left: AppSpacing.sm,
+              right: AppSpacing.xs,
+              top: AppSpacing.insetXs,
+              bottom: AppSpacing.insetXs,
+            ),
+            decoration: BoxDecoration(
+              color: AppColors.surfaceCard,
+              borderRadius: BorderRadius.circular(
+                AppRadius.rankingFullListAction,
               ),
-              decoration: BoxDecoration(
-                color: AppColors.surfaceCard,
-                borderRadius:
-                    BorderRadius.circular(AppRadius.rankingFullListAction),
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  AppText(
-                    '完整榜单',
-                    style: AppTextStyles.linkSmallDark.copyWith(
-                      color: AppColors.accentYellow,
-                    ),
-                  ),
-                  AppIcon(
-                    assetPath: 'assets/icons/arrow_right.svg',
-                    width: AppSizes.rankingFullListIconSize,
-                    height: AppSizes.rankingFullListIconSize,
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                AppText(
+                  '完整榜单',
+                  style: AppTextStyles.linkSmallDark.copyWith(
                     color: AppColors.accentYellow,
                   ),
-                ],
-              ),
+                ),
+                AppIcon(
+                  assetPath: 'assets/icons/arrow_right.svg',
+                  width: AppSizes.rankingFullListIconSize,
+                  height: AppSizes.rankingFullListIconSize,
+                  color: AppColors.accentYellow,
+                ),
+              ],
             ),
           ),
         ),

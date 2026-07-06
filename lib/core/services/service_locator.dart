@@ -1,3 +1,5 @@
+import '../domain/entities/auth_session.dart';
+import '../domain/entities/auth_user.dart';
 import 'auth_service.dart';
 import 'auth_service_config.dart';
 import 'auth_session_service.dart';
@@ -10,6 +12,11 @@ import 'rest_auth_service.dart';
 ///
 /// 后续可替换为 get_it / riverpod 等 DI 方案。
 abstract final class ServiceLocator {
+  static const bool _skipAuthForPreview = bool.fromEnvironment(
+    'SKIP_AUTH',
+    defaultValue: false,
+  );
+
   static bool _initialized = false;
 
   static MembershipStatusService? _membershipStatus;
@@ -43,7 +50,9 @@ abstract final class ServiceLocator {
     if (_initialized) return;
     _membershipStatus ??= MockMembershipStatusService();
     _bookshelfMembership ??= BookshelfMembershipService();
-    _authSession ??= InMemoryAuthSessionService();
+    _authSession ??= InMemoryAuthSessionService(
+      initialSession: _skipAuthForPreview ? _previewSession : null,
+    );
     _authService ??= switch (_authConfig.environment) {
       AuthEnvironment.mock => MockAuthService(
         scenario: _authConfig.mockScenario,
@@ -51,5 +60,19 @@ abstract final class ServiceLocator {
       AuthEnvironment.rest => const RestAuthService(),
     };
     _initialized = true;
+  }
+
+  static AuthSession get _previewSession {
+    return AuthSession(
+      accessToken: 'preview_access_token',
+      refreshToken: 'preview_refresh_token',
+      expiresAt: DateTime.now().add(const Duration(days: 30)),
+      user: const AuthUser(
+        id: 'preview-user',
+        phone: '13800000000',
+        nickname: '预览用户',
+        avatarUrl: 'https://i.pravatar.cc/150?img=32',
+      ),
+    );
   }
 }

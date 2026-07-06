@@ -39,7 +39,7 @@ class AppSwipeTabSwitcher extends StatefulWidget {
 
 class _AppSwipeTabSwitcherState extends State<AppSwipeTabSwitcher> {
   late final PageController _pageController;
-  bool _isSyncingFromPageView = false;
+  bool _isProgrammaticScroll = false;
 
   @override
   void initState() {
@@ -50,16 +50,21 @@ class _AppSwipeTabSwitcherState extends State<AppSwipeTabSwitcher> {
   @override
   void didUpdateWidget(covariant AppSwipeTabSwitcher oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (_isSyncingFromPageView ||
-        widget.selectedIndex == oldWidget.selectedIndex) {
+    if (widget.selectedIndex == oldWidget.selectedIndex) {
       return;
     }
     if (!_pageController.hasClients) return;
-    _pageController.animateToPage(
-      widget.selectedIndex,
-      duration: AppDurations.normal,
-      curve: Curves.easeOutCubic,
-    );
+    _isProgrammaticScroll = true;
+    _pageController
+        .animateToPage(
+          widget.selectedIndex,
+          duration: AppDurations.normal,
+          curve: Curves.easeOutCubic,
+        )
+        .whenComplete(() {
+          if (!mounted) return;
+          _isProgrammaticScroll = false;
+        });
   }
 
   @override
@@ -82,9 +87,8 @@ class _AppSwipeTabSwitcherState extends State<AppSwipeTabSwitcher> {
       controller: _pageController,
       physics: const PageScrollPhysics(),
       onPageChanged: (index) {
-        _isSyncingFromPageView = true;
+        if (_isProgrammaticScroll) return;
         widget.onIndexChanged(index);
-        _isSyncingFromPageView = false;
       },
       children: children,
     );

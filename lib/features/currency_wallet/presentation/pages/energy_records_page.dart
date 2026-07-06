@@ -11,7 +11,6 @@ import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../routes/app_router.dart';
 import '../../../../shared/components/app_swipe_tab_switcher.dart';
-import '../../../../shared/components/elastic_tab_indicator.dart';
 import '../../../../shared/components/app_top_bar.dart';
 import '../../../../shared/components/empty_state.dart';
 import '../../../../shared/widgets/app_asset_image.dart';
@@ -119,34 +118,17 @@ class EnergyRecordsTabBar extends StatelessWidget {
           ),
         ),
       ),
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          const tabs = EnergyRecordsTab.values;
-          final slotWidth = constraints.maxWidth / tabs.length;
-
-          return Stack(
-            children: [
-              Row(
-                children: [
-                  for (final tab in tabs)
-                    Expanded(
-                      child: _EnergyRecordsTabItem(
-                        tab: tab,
-                        isSelected: tab == selectedTab,
-                        onTap: () => onTabTap(tab),
-                      ),
-                    ),
-                ],
+      child: Row(
+        children: [
+          for (final tab in EnergyRecordsTab.values)
+            Expanded(
+              child: _EnergyRecordsTabItem(
+                tab: tab,
+                isSelected: tab == selectedTab,
+                onTap: () => onTabTap(tab),
               ),
-              ElasticTabIndicator(
-                selectedIndex: tabs.indexOf(selectedTab),
-                slotWidth: slotWidth,
-                slotPitch: slotWidth,
-                radius: AppRadius.full,
-              ),
-            ],
-          );
-        },
+            ),
+        ],
       ),
     );
   }
@@ -185,7 +167,6 @@ class _EnergyRecordsTabItem extends StatelessWidget {
                             : FontWeight.w400,
                       ),
             ),
-            const SizedBox(height: AppSpacing.xs + AppSizes.tabIndicatorHeight),
           ],
         ),
       ),

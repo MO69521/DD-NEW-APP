@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../../core/theme/app_radius.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/domain/entities/book.dart';
+import '../../../../shared/components/app_swipe_tab_switcher.dart';
 import 'ranking_book_grid.dart';
 import 'ranking_section_header.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -26,8 +27,7 @@ class RankingSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final visibleBooks =
-        booksByTab[selectedTab] ?? booksByTab[RankingTab.recommend] ?? const [];
+    final tabs = RankingTab.values;
 
     return Container(
       padding: const EdgeInsets.symmetric(
@@ -47,7 +47,20 @@ class RankingSection extends StatelessWidget {
             onFullListTap: onFullListTap,
           ),
           const SizedBox(height: AppSpacing.md),
-          RankingBookGrid(books: visibleBooks, onBookTap: onBookTap),
+          SizedBox(
+            height: RankingBookGrid.contentHeight,
+            child: AppSwipeTabSwitcher(
+              selectedIndex: tabs.indexOf(selectedTab),
+              onIndexChanged: (index) => onTabSelected(tabs[index]),
+              children: [
+                for (final tab in tabs)
+                  RankingBookGrid(
+                    books: booksByTab[tab] ?? const [],
+                    onBookTap: onBookTap,
+                  ),
+              ],
+            ),
+          ),
         ],
       ),
     );
