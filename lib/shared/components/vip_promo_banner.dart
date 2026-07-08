@@ -48,13 +48,29 @@ class VipPromoBanner extends StatelessWidget {
           child: Stack(
             clipBehavior: Clip.hardEdge,
             children: [
-              // 极光背景（粉紫色系）
+              // 最底层：粉色渐变打底（极光透明区域透出此背景）
+              Positioned.fill(
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.centerLeft,
+                      end: Alignment.centerRight,
+                      colors: [
+                        AppWelfareColors.vipBannerGradientStart,
+                        AppWelfareColors.vipBannerGradientEnd,
+                      ],
+                    ),
+                  ),
+                  child: const SizedBox.expand(),
+                ),
+              ),
+              // 极光（紫色）在粉色底上缓慢流动；深色区透出底层粉色
               Positioned.fill(
                 child: AuroraBackground(
                   colorStops: const [
-                    AppBrandColors.vipGradientStart,
+                    AppBrandColors.vipSelectedBorder,
                     AppBrandColors.vipGradientEnd,
-                    AppBrandColors.vipGradientStart,
+                    AppBrandColors.vipSelectedBorder,
                   ],
                   amplitude: 0.8,
                   blend: 0.6,

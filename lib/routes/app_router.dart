@@ -130,6 +130,15 @@ abstract final class AppRouter {
           ),
         ),
         GoRoute(
+          path: AppRoutes.membershipBenefitsDetail,
+          name: AppRoutes.membershipBenefitsDetailName,
+          builder: (context, state) {
+            final extra = state.extra;
+            final initialIndex = extra is int ? extra : 0;
+            return MembershipBenefitsDetailPage(initialIndex: initialIndex);
+          },
+        ),
+        GoRoute(
           path: AppRoutes.rechargeRecords,
           name: AppRoutes.rechargeRecordsName,
           builder: (context, state) => const RechargeRecordsPage(),

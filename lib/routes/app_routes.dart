@@ -28,6 +28,8 @@ abstract final class AppRoutes {
 
   static const String membership = '/membership';
   static const String membershipName = 'membership';
+  static const String membershipBenefitsDetail = '/membership/benefits';
+  static const String membershipBenefitsDetailName = 'membershipBenefitsDetail';
 
   static const String rechargeRecords = '/recharge-records';
   static const String rechargeRecordsName = 'rechargeRecords';
