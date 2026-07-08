@@ -146,7 +146,7 @@ abstract final class AppSizes {
   static const double welfareVipBadgeTextGap = 8;
   static const double welfareVipTextIconGap = 4;
   static const double welfareVipCtaPaddingHorizontal = 12;
-  static const double welfareVipCtaPaddingVertical = 6;
+  static const double welfareVipCtaPaddingVertical = 8;
   static const double welfareVipCtaBorderWidth = 0.8;
   static const double welfareRechargeInfoIconSize = 24;
 
