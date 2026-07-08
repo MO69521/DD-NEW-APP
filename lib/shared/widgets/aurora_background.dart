@@ -156,10 +156,9 @@ class _AuroraPainter extends CustomPainter {
 
 /// 着色器不可用时的静态渐变回退。
 class _AuroraFallback extends StatelessWidget {
-  const _AuroraFallback({required this.colors, this.child});
+  const _AuroraFallback({required this.colors});
 
   final List<Color> colors;
-  final Widget? child;
 
   @override
   Widget build(BuildContext context) {
@@ -178,7 +177,7 @@ class _AuroraFallback extends StatelessWidget {
           stops: const [0.0, 0.4, 1.0],
         ),
       ),
-      child: SizedBox.expand(child: child),
+      child: const SizedBox.expand(),
     );
   }
 }

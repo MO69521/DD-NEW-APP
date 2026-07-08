@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 
 import '../../core/constants/currency_config.dart';
 import '../../core/domain/entities/commerce_entities.dart';
+import '../../core/theme/app_brand_colors.dart';
 import '../../core/theme/app_radius.dart';
 import '../../core/theme/app_sizes.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../widgets/app_asset_image.dart';
 import '../widgets/app_text.dart';
+import '../widgets/aurora_background.dart';
 import '../../core/theme/app_welfare_colors.dart';
 
 /// L2 组件 — VIP 开通引导横幅（Figma 296:5304 / 386:2170）。
@@ -46,18 +48,18 @@ class VipPromoBanner extends StatelessWidget {
           child: Stack(
             clipBehavior: Clip.hardEdge,
             children: [
-              DecoratedBox(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.centerLeft,
-                    end: Alignment.centerRight,
-                    colors: [
-                      AppWelfareColors.vipBannerGradientStart,
-                      AppWelfareColors.vipBannerGradientEnd,
-                    ],
-                  ),
+              // 极光背景（粉紫色系）
+              Positioned.fill(
+                child: AuroraBackground(
+                  colorStops: const [
+                    AppBrandColors.vipGradientStart,
+                    AppBrandColors.vipGradientEnd,
+                    AppBrandColors.vipGradientStart,
+                  ],
+                  amplitude: 0.8,
+                  blend: 0.6,
+                  opacity: 1.0,
                 ),
-                child: const SizedBox.expand(),
               ),
               Positioned.fill(
                 child: Padding(

@@ -79,7 +79,7 @@ class _AppSwipeTabSwitcherState extends State<AppSwipeTabSwitcher> {
     if (children == null) return _buildGestureOnly(widget.child!);
     if (children.isEmpty) return const SizedBox.shrink();
     if (!widget.enabled || children.length <= 1) {
-      final index = widget.selectedIndex.clamp(0, children.length - 1) as int;
+      final index = widget.selectedIndex.clamp(0, children.length - 1);
       return children[index];
     }
 

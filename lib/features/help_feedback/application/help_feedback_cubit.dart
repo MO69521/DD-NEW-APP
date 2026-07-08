@@ -6,11 +6,10 @@ import 'help_feedback_state.dart';
 
 class HelpFeedbackCubit extends Cubit<HelpFeedbackState> {
   HelpFeedbackCubit({
-    HelpFeedbackMockDataSource dataSource = const HelpFeedbackMockDataSource(),
-  }) : _dataSource = dataSource,
-       super(const HelpFeedbackState());
+    this.dataSource = const HelpFeedbackMockDataSource(),
+  }) : super(const HelpFeedbackState());
 
-  final HelpFeedbackMockDataSource _dataSource;
+  final HelpFeedbackMockDataSource dataSource;
 
   Future<void> load() async {
     emit(
@@ -22,7 +21,7 @@ class HelpFeedbackCubit extends Cubit<HelpFeedbackState> {
     );
 
     try {
-      final content = await _dataSource.fetchPageContent();
+      final content = await dataSource.fetchPageContent();
       emit(
         state.copyWith(
           phase: HelpFeedbackPhase.loaded,
