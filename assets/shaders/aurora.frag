@@ -71,7 +71,7 @@ void main() {
   vec3 ramp = rampColor(uv.x);
 
   float height =
-    snoise(vec2(uv.x * 2.0 + uTime * 0.1, uTime * 0.25)) * 0.5 * uAmplitude;
+    snoise(vec2(uv.x * 2.0 + uTime * 0.06, uTime * 0.12)) * 0.5 * uAmplitude;
   height = exp(height);
   height = uv.y * 2.0 - height + 0.2;
 
@@ -84,6 +84,7 @@ void main() {
     intensity
   );
 
-  vec3 color = intensity * ramp;
-  fragColor = vec4(color * alpha, alpha);
+  // 颜色恒为紫色 ramp，仅用 alpha 勾勒极光形状：
+  // 深色区透出底层粉色背景，不再因 intensity 压暗而发黑。
+  fragColor = vec4(ramp * alpha, alpha);
 }
