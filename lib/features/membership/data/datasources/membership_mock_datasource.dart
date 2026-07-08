@@ -10,6 +10,7 @@ class MembershipMockDataSource {
   const MembershipMockDataSource();
 
   static const String _benefitIconBase = 'assets/icons/membership';
+  static const String _heroImageBase = 'assets/images/membership';
 
   List<MembershipHeroSlide> heroSlides() => const [
     MembershipHeroSlide(
@@ -18,6 +19,7 @@ class MembershipMockDataSource {
       titleSuffix: '能量',
       subtitlePrefix: '每天只要',
       subtitleValue: '0.2元',
+      imageAsset: '$_heroImageBase/hero_slide_crown.png',
     ),
     MembershipHeroSlide(
       titlePrefix: '阅读',
@@ -25,6 +27,7 @@ class MembershipMockDataSource {
       titleSuffix: '折',
       subtitlePrefix: '全场图书',
       subtitleValue: '享专属折扣',
+      imageAsset: '$_heroImageBase/hero_slide_discount.png',
     ),
     MembershipHeroSlide(
       titlePrefix: '签到',
@@ -32,13 +35,15 @@ class MembershipMockDataSource {
       titleSuffix: '奖励',
       subtitlePrefix: '每日签到',
       subtitleValue: '能量更多',
+      imageAsset: '$_heroImageBase/hero_slide_reward.png',
     ),
     MembershipHeroSlide(
-      titlePrefix: '专属',
-      titleHighlight: '尊贵',
-      titleSuffix: '身份',
-      subtitlePrefix: '金色昵称',
-      subtitleValue: '会员标识',
+      titlePrefix: '会员',
+      titleHighlight: '专属服装',
+      titleSuffix: '',
+      subtitlePrefix: '200+ 会员专属服装',
+      subtitleValue: '',
+      imageAsset: '$_heroImageBase/hero_slide_identity.png',
     ),
   ];
 

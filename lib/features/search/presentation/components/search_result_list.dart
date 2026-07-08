@@ -12,11 +12,13 @@ class SearchResultList extends StatelessWidget {
   const SearchResultList({
     super.key,
     required this.items,
+    this.inShelfBookIds = const {},
     this.onItemTap,
     this.onAddToShelf,
   });
 
   final List<SearchResultItem> items;
+  final Set<String> inShelfBookIds;
   final void Function(Book book)? onItemTap;
   final void Function(Book book)? onAddToShelf;
 
@@ -25,6 +27,7 @@ class SearchResultList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.separated(
+      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       padding: EdgeInsets.fromLTRB(
         AppSpacing.md,
         AppLayout.chromeTopHeight(context) + AppSpacing.md,
@@ -34,8 +37,10 @@ class SearchResultList extends StatelessWidget {
       itemCount: items.length,
       separatorBuilder: (_, _) => const SizedBox(height: AppSpacing.md),
       itemBuilder: (context, index) {
+        final item = items[index];
         return SearchResultRow(
-          item: items[index],
+          item: item,
+          isInShelf: inShelfBookIds.contains(item.book.id),
           onTap: onItemTap,
           onAddToShelf: onAddToShelf,
         );

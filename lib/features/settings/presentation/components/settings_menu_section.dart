@@ -73,7 +73,7 @@ class SettingsMenuRow extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
           child: ConstrainedBox(
             constraints: const BoxConstraints(
-              minHeight: AppSizes.settingsMenuRowMinHeight,
+              minHeight: AppSizes.listRowMinHeight,
             ),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,

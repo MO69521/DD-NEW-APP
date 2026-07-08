@@ -75,7 +75,7 @@ class BookDiscussionReplyInputBar extends StatelessWidget {
                   isSubmitting ? '发送中...' : '发送',
                   style: AppTextStyles.bodyMedium.copyWith(
                     color: canSend
-                        ? AppColors.primary
+                        ? AppColors.accentYellow
                         : AppColors.textOnDarkMuted,
                   ),
                 ),

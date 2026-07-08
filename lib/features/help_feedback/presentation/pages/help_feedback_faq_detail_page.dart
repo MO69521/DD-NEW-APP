@@ -30,9 +30,9 @@ class HelpFeedbackFaqDetailPage extends StatelessWidget {
         ),
         body: ListView(
           padding: EdgeInsets.fromLTRB(
-            AppSpacing.insetMd,
+            AppSpacing.md,
             AppLayout.chromeTopHeight(context) + AppSpacing.md,
-            AppSpacing.insetMd,
+            AppSpacing.md,
             AppSpacing.xl,
           ),
           children: [

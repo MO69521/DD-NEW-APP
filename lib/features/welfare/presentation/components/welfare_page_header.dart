@@ -4,12 +4,13 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
+import '../../../../shared/components/app_top_bar.dart';
 import '../../../../shared/components/app_top_bar_icon_button.dart';
 import '../../../../shared/widgets/app_text.dart';
 
 /// L3 组件 — 福利页吸顶标题栏（Figma 294:5201）。
 ///
-/// 居中「福利中心」18px 标题，右侧充值说明 icon。
+/// [AppTopBar] 的「居中标题 + 右侧图标」变体；blur/statusBar 由页面外层负责。
 /// Phase 3：`onRechargeInfoTap` 跳转充值说明页。
 class WelfarePageHeader extends StatelessWidget {
   const WelfarePageHeader({super.key, this.onRechargeInfoTap});
@@ -19,33 +20,22 @@ class WelfarePageHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return AppTopBar(
       height: AppSizes.welfareHeaderHeight,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm),
-        child: Stack(
-          alignment: Alignment.center,
-          children: [
-            Center(
-              child: AppText(
-                '福利中心',
-                style: AppTextStyles.sectionTitleDark.copyWith(
-                  color: AppColors.textOnDark,
-                ),
-                maxLines: 1,
-              ),
-            ),
-            Align(
-              alignment: Alignment.centerRight,
-              child: AppTopBarIconButton(
-                onTap: onRechargeInfoTap,
-                iconAsset: 'assets/icons/welfare/recharge_info.svg',
-                iconWidth: AppSizes.welfareRechargeInfoIconSize,
-                iconHeight: AppSizes.welfareRechargeInfoIconSize,
-              ),
-            ),
-          ],
+      horizontalPadding: AppSpacing.sm,
+      chromeBlurEnabled: false,
+      center: AppText(
+        '福利中心',
+        style: AppTextStyles.sectionTitleDark.copyWith(
+          color: AppColors.textOnDark,
         ),
+        maxLines: 1,
+      ),
+      trailing: AppTopBarIconButton(
+        onTap: onRechargeInfoTap,
+        iconAsset: 'assets/icons/welfare/recharge_info.svg',
+        iconWidth: AppSizes.welfareRechargeInfoIconSize,
+        iconHeight: AppSizes.welfareRechargeInfoIconSize,
       ),
     );
   }

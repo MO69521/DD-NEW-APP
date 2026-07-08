@@ -27,10 +27,6 @@ abstract final class AppColors {
   static const Color black60 = Color(0x99000000);
   static const Color black80 = Color(0xCC000000);
 
-  static const Color primary = Color(0xFF6B4EFF);
-  static const Color primaryLight = Color(0xFF9B8AFF);
-  static const Color primaryDark = Color(0xFF4A32CC);
-
   static const Color background = Color(0xFFF8F7FC);
   static const Color surface = Color(0xFFFFFFFF);
 
@@ -68,12 +64,29 @@ abstract final class AppColors {
 
   static const Color surfaceGlass = white08;
   static const Color surfaceCard = white04;
+  static const Color surfaceMuted = AppBrandColors.surfaceMuted;
+  static const Color auroraGlow = AppBrandColors.auroraGlow;
+  static const Color auroraEdge = AppBrandColors.auroraEdge;
   static const Color dialogBackground = AppBrandColors.dialogBackground;
   static const Color accentYellow = AppBrandColors.accent;
+
+  /// 礼花 / 庆祝动效多彩粒子配色（节日色，取品牌多色）。
+  static const List<Color> confettiPalette = [
+    AppBrandColors.accent, // 黄
+    AppBrandColors.vipGradientEnd, // 粉
+    AppBrandColors.brandBlueAccent, // 蓝
+    AppBrandColors.partnerPrimary, // 玫红
+    AppBrandColors.accentOrange, // 橙
+    AppBrandColors.success, // 绿
+  ];
+
   static const Color textOnDark = white100;
   static const Color textOnDarkMuted = white50;
   static const Color textOnDarkPlaceholder = white60;
   static const Color sectionActionIcon = white60;
+
+  /// 热门搜索置顶热词强调色（复用品牌橙）。
+  static const Color searchHotAccent = AppBrandColors.accentOrange;
   static const Color iconMuted = Color(0xFFB2B3BA);
   static const Color iconMutedSecondary = Color(0xFFABACB3);
   static const Color navActiveBackground = Color(0xFFFFFFFF);

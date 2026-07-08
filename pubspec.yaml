@@ -37,6 +37,7 @@ dependencies:
   go_router: ^15.1.2
   animations: ^2.2.0
   url_launcher: ^6.3.2
+  confetti: ^0.8.0
 
 dev_dependencies:
   flutter_test:
@@ -81,6 +82,7 @@ flutter:
     - assets/images/partner/
     - assets/images/splash/
     - assets/images/my_messages/
+    - assets/images/auth/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
@@ -88,22 +90,25 @@ flutter:
   # For details regarding adding assets from package dependencies, see
   # https://flutter.dev/to/asset-from-package
 
-  # To add custom fonts to your application, add a fonts section here,
-  # in this "flutter" section. Each entry in this list should have a
-  # "family" key with the font family name, and a "fonts" key with a
-  # list giving the asset and other descriptors for the font. For
-  # example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
-  #       - asset: fonts/Schyler-Italic.ttf
-  #         style: italic
-  #   - family: Trajan Pro
-  #     fonts:
-  #       - asset: fonts/TrajanPro.ttf
-  #       - asset: fonts/TrajanPro_Bold.ttf
-  #         weight: 700
+  # 定制数字字体 TCloudNumber：仅数字 / 标点 / 符号字形，
+  # 用于 ≥18px 字号（AppFontFamilies.number）。非覆盖字符（中文 / 字母）自动回退系统字体。
   #
+  # 字重桶整体上移一档（Light→500 / Regular→700 / Bold→900），
+  # 使数字字形比文本标称字重看起来轻一档（如 bold 文本的数字实际取 Regular 字形），
+  # 而中文 / 字母回退仍按标称字重渲染，不受影响。
+  fonts:
+    - family: TCloudNumber
+      fonts:
+        - asset: assets/fonts/TCloudNumber-Light.ttf
+          weight: 500
+        - asset: assets/fonts/TCloudNumber-Regular.ttf
+          weight: 700
+        - asset: assets/fonts/TCloudNumber-Bold.ttf
+          weight: 900
+
+  # 片元着色器：极光动画背景（AuroraBackground）。
+  shaders:
+    - assets/shaders/aurora.frag
+
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package

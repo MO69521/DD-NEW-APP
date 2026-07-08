@@ -55,7 +55,7 @@ class ReadingVipProgressSection extends StatelessWidget {
             task.description,
             style: AppTextStyles.welfareSubtitle.copyWith(
               color: AppWelfareColors.subtitleMuted,
-              height: 1.0,
+              height: AppLineHeights.none,
             ),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
@@ -215,12 +215,12 @@ class _ReadingProgressNode extends StatelessWidget {
                 : _ProgressDot(isActive: node.isActive || node.isReached),
           ),
         ),
-        const SizedBox(height: AppSpacing.insetXs),
+        const SizedBox(height: AppSpacing.xs),
         AppText(
           node.label,
           style: AppTextStyles.labelMedium.copyWith(
             color: labelColor,
-            height: 1.0,
+            height: AppLineHeights.none,
           ),
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
@@ -261,8 +261,8 @@ class _ProgressBadge extends StatelessWidget {
     return WelfareRewardBubble(
       background: AppWelfareColors.taskTimelineFill,
       padding: const EdgeInsets.only(
-        left: AppSpacing.insetXs,
-        right: AppSpacing.insetXs,
+        left: AppSpacing.xs,
+        right: AppSpacing.xs,
         top: AppSpacing.xxsHalf,
         bottom: AppSpacing.xxsHalf + AppSizes.welfareTaskTimelineTailHeight,
       ),

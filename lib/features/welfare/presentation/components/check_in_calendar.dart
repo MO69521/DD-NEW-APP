@@ -10,45 +10,55 @@ import '../../domain/entities/welfare_models.dart';
 import '../mappers/welfare_asset_mapper.dart';
 import '../../../../core/theme/app_welfare_colors.dart';
 
-/// L3 组件 — 7 日签到日历网格（Figma 519:8475）。
+/// L3 组件 — 7 日签到日历网格（Figma 1492:2765）。
 ///
+/// 统一 4 列网格，两行列边界严格对齐：
 /// 行1: 4 等宽卡片（含今日）
-/// 行2: [1] [1] [2 第7天]
+/// 行2: [第5][第6][第7天 = 2 列宽 + 1 列间隙]
 class CheckInCalendar extends StatelessWidget {
   const CheckInCalendar({super.key, required this.days});
 
   final List<CheckInDay> days;
 
-  static int _flexForDay(CheckInDay day, {required bool isSecondRow}) {
-    if (isSecondRow && day.rewards.length >= 3) return 2;
-    return 1;
-  }
-
-  Widget _buildRow(List<CheckInDay> rowDays, {required bool isSecondRow}) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        for (var i = 0; i < rowDays.length; i++) ...[
-          if (i > 0) const SizedBox(width: AppSpacing.xs),
-          Expanded(
-            flex: _flexForDay(rowDays[i], isSecondRow: isSecondRow),
-            child: _CheckInDayCard(day: rowDays[i]),
-          ),
-        ],
-      ],
-    );
-  }
+  static const double _gap = AppSpacing.xs;
 
   @override
   Widget build(BuildContext context) {
     assert(days.length == 7, 'CheckInCalendar expects exactly 7 days');
 
-    return Column(
-      children: [
-        _buildRow(days.sublist(0, 4), isSecondRow: false),
-        const SizedBox(height: AppSpacing.xs),
-        _buildRow(days.sublist(4, 7), isSecondRow: true),
-      ],
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final cellWidth = (constraints.maxWidth - _gap * 3) / 4;
+        final wideWidth = cellWidth * 2 + _gap;
+
+        return Column(
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                for (var i = 0; i < 4; i++) ...[
+                  if (i > 0) const SizedBox(width: _gap),
+                  SizedBox(
+                    width: cellWidth,
+                    child: _CheckInDayCard(day: days[i]),
+                  ),
+                ],
+              ],
+            ),
+            const SizedBox(height: _gap),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(width: cellWidth, child: _CheckInDayCard(day: days[4])),
+                const SizedBox(width: _gap),
+                SizedBox(width: cellWidth, child: _CheckInDayCard(day: days[5])),
+                const SizedBox(width: _gap),
+                SizedBox(width: wideWidth, child: _CheckInDayCard(day: days[6])),
+              ],
+            ),
+          ],
+        );
+      },
     );
   }
 }
@@ -59,6 +69,7 @@ class _CheckInDayCard extends StatelessWidget {
   final CheckInDay day;
 
   bool get _isToday => day.status == CheckInDayStatus.today;
+  bool get _isClaimed => day.status == CheckInDayStatus.claimed;
 
   @override
   Widget build(BuildContext context) {
@@ -68,26 +79,27 @@ class _CheckInDayCard extends StatelessWidget {
     final headerColor = _isToday
         ? AppWelfareColors.checkInHighlightHeader
         : AppWelfareColors.checkInDayHeader;
+    final borderColor = _isToday
+        ? AppWelfareColors.checkInHighlightBorder
+        : AppWelfareColors.checkInDayBorder;
+    final borderWidth = _isToday
+        ? AppSizes.borderWidthEmphasis
+        : AppSizes.hairline;
 
     return Container(
       decoration: BoxDecoration(
         color: bodyColor,
-        borderRadius: BorderRadius.circular(AppRadius.sm),
-        border: Border.all(
-          color: AppWelfareColors.checkInDayBorder,
-          width: AppSizes.hairline,
-        ),
+        borderRadius: BorderRadius.circular(AppRadius.md),
+        border: Border.all(color: borderColor, width: borderWidth),
       ),
       clipBehavior: Clip.antiAlias,
       child: Column(
         children: [
           Container(
             width: double.infinity,
-            padding: const EdgeInsets.fromLTRB(
-              AppSpacing.xxs,
-              AppSizes.welfareCheckInDayHeaderPaddingTop,
-              AppSpacing.xxs,
-              AppSizes.welfareCheckInDayHeaderPaddingBottom,
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.xxs,
+              vertical: AppSpacing.xs,
             ),
             color: headerColor,
             child: Center(
@@ -102,10 +114,30 @@ class _CheckInDayCard extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(
-              vertical: AppSizes.welfareCheckInDayBodyPaddingVertical,
-            ),
-            child: _RewardContent(day: day, isToday: _isToday),
+            padding: const EdgeInsets.symmetric(vertical: AppSpacing.xs),
+            child: _isClaimed
+                ? Stack(
+                    alignment: Alignment.topCenter,
+                    children: [
+                      Opacity(
+                        opacity: AppSizes.welfareCheckInClaimedRewardOpacity,
+                        child: _RewardContent(day: day, isToday: false),
+                      ),
+                      // 对勾与图标区域（顶部）居中对齐：与奖励图标同尺寸、贴顶。
+                      SizedBox(
+                        height: AppSizes.welfareCheckInRewardIconSize,
+                        child: Center(
+                          child: AppAssetImage(
+                            assetPath:
+                                'assets/icons/welfare/check_in_claimed.svg',
+                            width: AppSizes.welfareCheckInClaimedCheckSize,
+                            height: AppSizes.welfareCheckInClaimedCheckSize,
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
+                : _RewardContent(day: day, isToday: _isToday),
           ),
         ],
       ),
@@ -131,7 +163,7 @@ class _RewardContent extends StatelessWidget {
             width: AppSizes.welfareCheckInRewardIconSize,
             height: AppSizes.welfareCheckInRewardIconSize,
           ),
-          const SizedBox(height: AppSpacing.insetXs),
+          const SizedBox(height: AppSpacing.xs),
           AppText(
             _rewardLabel(reward),
             style: isToday
@@ -155,7 +187,7 @@ class _RewardContent extends StatelessWidget {
                 width: AppSizes.welfareCheckInRewardIconSize,
                 height: AppSizes.welfareCheckInRewardIconSize,
               ),
-              const SizedBox(height: AppSpacing.insetXs),
+              const SizedBox(height: AppSpacing.xs),
               AppText(
                 _rewardLabel(reward),
                 style: AppTextStyles.welfareCheckInReward,

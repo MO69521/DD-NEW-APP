@@ -57,7 +57,7 @@ class MealCheckInSection extends StatelessWidget {
                       summary.progressLabel,
                       style: AppTextStyles.bodyMedium.copyWith(
                         color: AppColors.textOnDarkMuted,
-                        height: 1.0,
+                        height: AppLineHeights.none,
                       ),
                     ),
                   ],
@@ -67,7 +67,7 @@ class MealCheckInSection extends StatelessWidget {
                   summary.subtitle,
                   style: AppTextStyles.welfareSubtitle.copyWith(
                     color: AppWelfareColors.subtitleMuted,
-                    height: 1.0,
+                    height: AppLineHeights.none,
                   ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
@@ -95,7 +95,7 @@ class _GoldEnergyRewardChip extends StatelessWidget {
     return Container(
       height: AppSizes.welfareTaskRewardChipHeight,
       padding: const EdgeInsets.only(
-        left: AppSpacing.insetXs,
+        left: AppSpacing.xs,
         right: AppSpacing.xs,
       ),
       decoration: BoxDecoration(
@@ -119,7 +119,7 @@ class _GoldEnergyRewardChip extends StatelessWidget {
             '$amount',
             style: AppTextStyles.captionMd.copyWith(
               color: AppWelfareColors.checkInMilestoneAmount,
-              fontWeight: FontWeight.w500,
+              fontWeight: AppFontWeights.medium,
             ),
           ),
         ],

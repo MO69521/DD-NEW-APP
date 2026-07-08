@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_durations.dart';
-import '../../routes/app_router.dart';
 
-/// 全局弹窗入口：80% 不透明遮罩，无背景模糊。
+/// 全局居中弹窗入口：统一「80% 纯黑遮罩」（架构 §3.2），不加背景模糊。
 ///
-/// 使用 [showGeneralDialog] + 自绘 [ColoredBox] 遮罩，避免 Web/原生
-/// [showDialog] 遮罩层可能附带的模糊效果。
+/// 使用 [showGeneralDialog]，barrier 透明，由 [_AppDialogOverlay] 自绘
+/// [ColoredBox] 遮罩（[AppColors.overlayScrim80]），保证所有弹窗遮罩一致。
 Future<T?> showAppBlurredDialog<T>({
   required BuildContext context,
   required WidgetBuilder builder,
@@ -24,7 +23,6 @@ Future<T?> showAppBlurredDialog<T>({
     pageBuilder: (dialogContext, animation, secondaryAnimation) {
       return _AppDialogOverlay(
         scrimColor: scrim,
-        onDismiss: () => AppRouter.pop(),
         child: builder(dialogContext),
       );
     },
@@ -47,12 +45,10 @@ Future<T?> showAppScrimDialog<T>({
 class _AppDialogOverlay extends StatelessWidget {
   const _AppDialogOverlay({
     required this.scrimColor,
-    required this.onDismiss,
     required this.child,
   });
 
   final Color scrimColor;
-  final VoidCallback onDismiss;
   final Widget child;
 
   @override
@@ -63,7 +59,9 @@ class _AppDialogOverlay extends StatelessWidget {
         fit: StackFit.expand,
         children: [
           GestureDetector(
-            onTap: onDismiss,
+            // 关闭弹窗：弹窗经 showGeneralDialog 压入 Navigator，
+            // 统一用 Navigator.pop 关闭（比 go_router pop 更稳，回到原页面）。
+            onTap: () => Navigator.of(context).pop(),
             behavior: HitTestBehavior.opaque,
             child: ColoredBox(color: scrimColor),
           ),

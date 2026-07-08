@@ -145,6 +145,8 @@ class CheckInSummary extends Equatable {
     required this.milestones,
     required this.weekDays,
     required this.todayRewardEnergy,
+    required this.vipExtraEnergy,
+    required this.videoExtraStardust,
   });
 
   final int totalDays;
@@ -153,6 +155,12 @@ class CheckInSummary extends Equatable {
   final List<CheckInDay> weekDays;
   final int todayRewardEnergy;
 
+  /// 签到成功弹窗：VIP 额外可再领的能量数量。
+  final int vipExtraEnergy;
+
+  /// 签到成功弹窗：看视频额外可再领的星辰数量。
+  final int videoExtraStardust;
+
   @override
   List<Object?> get props => [
     totalDays,
@@ -160,6 +168,8 @@ class CheckInSummary extends Equatable {
     milestones,
     weekDays,
     todayRewardEnergy,
+    vipExtraEnergy,
+    videoExtraStardust,
   ];
 }
 

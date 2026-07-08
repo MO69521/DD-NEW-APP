@@ -1,5 +1,6 @@
 import '../../../../core/constants/currency_mock_data.dart';
 import '../../../../core/domain/entities/commerce_entities.dart';
+import '../../domain/entities/achievement_badge.dart';
 import '../../domain/entities/profile_menu_item.dart';
 import '../../domain/entities/profile_page_content.dart';
 import '../../domain/entities/user_profile.dart';
@@ -20,9 +21,37 @@ class ProfileMockDataSource {
       vipMonthlyEnergy: _vipMonthlyEnergy,
       vipPriceYuan: _vipPriceYuan,
       rechargePackages: _rechargePackages,
+      freeClaimOptions: _freeClaimOptions,
+      achievementCount: _achievementCount,
+      achievementBadges: _achievementBadges,
       menuItems: _menuItems,
     );
   }
+
+  static const int _achievementCount = 4;
+
+  static const List<AchievementBadge> _achievementBadges = [
+    AchievementBadge(
+      id: 'badge_taohua',
+      name: '桃花小妖',
+      iconAsset: 'assets/images/profile/medal_1.png',
+    ),
+    AchievementBadge(
+      id: 'badge_lingshou',
+      name: '元气灵兽',
+      iconAsset: 'assets/images/profile/medal_2.png',
+    ),
+    AchievementBadge(
+      id: 'badge_shennv',
+      name: '招财神女',
+      iconAsset: 'assets/images/profile/medal_3.png',
+    ),
+    AchievementBadge(
+      id: 'badge_tianguan',
+      name: '纳福天官',
+      iconAsset: 'assets/images/profile/medal_4.png',
+    ),
+  ];
 
   static const List<String> _mockPartnerAvatarUrls = [
     '',
@@ -78,6 +107,25 @@ class ProfileMockDataSource {
       originalAmount: 32800,
       priceYuan: 328,
       illustrationAsset: 'assets/images/welfare/recharge_tier_6.png',
+    ),
+  ];
+
+  static const List<EnergyFreeClaimOption> _freeClaimOptions = [
+    EnergyFreeClaimOption(
+      id: 'fc_vip',
+      badgeLabel: '会员免费领',
+      energyAmount: 1000,
+      ctaLabel: 'VIP领取',
+      kind: EnergyFreeClaimKind.vip,
+      illustrationAsset: 'assets/images/welfare/recharge_tier_2.png',
+    ),
+    EnergyFreeClaimOption(
+      id: 'fc_daily',
+      badgeLabel: '0/300每日',
+      energyAmount: 12,
+      ctaLabel: '免费领',
+      kind: EnergyFreeClaimKind.dailyAd,
+      illustrationAsset: 'assets/images/welfare/recharge_tier_1.png',
     ),
   ];
 

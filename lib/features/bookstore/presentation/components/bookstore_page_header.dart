@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
+import '../../../../shared/components/app_top_bar.dart';
 import '../../../../shared/components/app_top_bar_icon_button.dart';
 import '../../domain/entities/bookstore_top_tab.dart';
 import 'bookstore_top_tabs.dart';
 
 /// L3 — 书城顶栏：推荐 / 分类 / 排行同级 Tab + 搜索图标。
+///
+/// [AppTopBar] 的「居中 Tab + 右侧动作」变体；blur/statusBar 由页面外层负责。
 class BookstorePageHeader extends StatelessWidget {
   const BookstorePageHeader({
     super.key,
@@ -23,25 +26,15 @@ class BookstorePageHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return AppTopBar(
       height: AppSizes.bookstoreTopHeaderHeight,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm),
-        child: Row(
-          children: [
-            const SizedBox(width: AppSizes.topBarIconFrameSize),
-            Expanded(
-              child: Center(
-                child: BookstoreTopTabs(
-                  selected: selectedTopTab,
-                  onSelected: onTopTabSelected,
-                ),
-              ),
-            ),
-            _SearchIconButton(onTap: onSearchTap),
-          ],
-        ),
+      horizontalPadding: AppSpacing.sm,
+      chromeBlurEnabled: false,
+      center: BookstoreTopTabs(
+        selected: selectedTopTab,
+        onSelected: onTopTabSelected,
       ),
+      trailing: _SearchIconButton(onTap: onSearchTap),
     );
   }
 }

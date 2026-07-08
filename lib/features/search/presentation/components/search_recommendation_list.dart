@@ -23,6 +23,7 @@ class SearchRecommendationList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.separated(
+      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       padding: EdgeInsets.fromLTRB(
         AppSpacing.md,
         AppLayout.chromeTopHeight(context) + AppSpacing.md,

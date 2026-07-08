@@ -71,7 +71,7 @@ class _RankingRowBadge extends StatelessWidget {
         '$rank',
         style: AppTextStyles.labelMedium.copyWith(
           color: AppColors.textOnDark,
-          height: 1.0,
+          height: AppLineHeights.none,
         ),
       ),
     );

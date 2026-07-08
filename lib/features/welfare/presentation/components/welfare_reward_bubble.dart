@@ -24,7 +24,7 @@ class WelfareRewardBubble extends StatelessWidget {
 
   /// 默认内边距：内容四周留白 + 底部预留尾巴高度。
   static const EdgeInsets defaultPadding = EdgeInsets.only(
-    left: AppSpacing.insetXs,
+    left: AppSpacing.xs,
     right: AppSpacing.xs,
     top: AppSpacing.xxs,
     bottom: AppSpacing.xxs + AppSizes.welfareTaskTimelineTailHeight,

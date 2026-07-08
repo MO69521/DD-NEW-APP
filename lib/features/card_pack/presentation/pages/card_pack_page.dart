@@ -33,9 +33,9 @@ class CardPackPage extends StatelessWidget {
         ),
         body: Padding(
           padding: EdgeInsets.fromLTRB(
-            AppSpacing.insetMd,
+            AppSpacing.md,
             AppLayout.chromeTopHeight(context),
-            AppSpacing.insetMd,
+            AppSpacing.md,
             AppSpacing.xl,
           ),
           child: Column(

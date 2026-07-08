@@ -31,7 +31,7 @@ class WelfareTaskRewardChip extends StatelessWidget {
     return Container(
       height: AppSizes.welfareTaskRewardChipHeight,
       padding: const EdgeInsets.only(
-        left: AppSpacing.insetXs,
+        left: AppSpacing.xs,
         right: AppSpacing.xs,
       ),
       decoration: BoxDecoration(

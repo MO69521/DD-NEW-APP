@@ -160,7 +160,7 @@ class _FilterButtonState extends State<_FilterButton> {
         ),
         decoration: BoxDecoration(
           color: _pressed ? AppPartnerColors.chipPressedOverlay : null,
-          borderRadius: BorderRadius.circular(AppRadius.sm),
+          borderRadius: BorderRadius.circular(AppRadius.md),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,

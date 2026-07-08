@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 
 import '../../../../core/domain/entities/commerce_entities.dart';
+import 'achievement_badge.dart';
 import 'profile_menu_item.dart';
 import 'user_profile.dart';
 
@@ -12,6 +13,9 @@ class ProfilePageContent extends Equatable {
     required this.vipMonthlyEnergy,
     required this.vipPriceYuan,
     required this.rechargePackages,
+    required this.freeClaimOptions,
+    required this.achievementCount,
+    required this.achievementBadges,
     required this.menuItems,
   });
 
@@ -20,6 +24,13 @@ class ProfilePageContent extends Equatable {
   final int vipMonthlyEnergy;
   final double vipPriceYuan;
   final List<RechargePackage> rechargePackages;
+  final List<EnergyFreeClaimOption> freeClaimOptions;
+
+  /// 已获得勋章总数。
+  final int achievementCount;
+
+  /// 勋章缩略图（展示用，通常取最近几枚）。
+  final List<AchievementBadge> achievementBadges;
   final List<ProfileMenuItem> menuItems;
 
   @override
@@ -29,6 +40,9 @@ class ProfilePageContent extends Equatable {
     vipMonthlyEnergy,
     vipPriceYuan,
     rechargePackages,
+    freeClaimOptions,
+    achievementCount,
+    achievementBadges,
     menuItems,
   ];
 }

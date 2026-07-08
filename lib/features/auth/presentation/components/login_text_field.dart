@@ -28,6 +28,10 @@ class LoginTextField extends StatefulWidget {
   State<LoginTextField> createState() => _LoginTextFieldState();
 }
 
+abstract final class _LoginTextFieldLayout {
+  static const double height = AppSpacing.xxl + AppSpacing.md;
+}
+
 class _LoginTextFieldState extends State<LoginTextField>
     with SingleTickerProviderStateMixin {
   late final FocusNode _focusNode = FocusNode();
@@ -75,7 +79,7 @@ class _LoginTextFieldState extends State<LoginTextField>
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: AppSizes.helpFeedbackInputMinHeight,
+      height: _LoginTextFieldLayout.height,
       child: LayoutBuilder(
         builder: (context, constraints) {
           return Stack(

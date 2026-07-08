@@ -5,19 +5,19 @@ import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../shared/components/app_top_bar_icon_button.dart';
+import '../../../../shared/widgets/app_icon.dart';
 import '../../../../shared/widgets/app_network_avatar.dart';
 import '../../../../shared/widgets/app_text.dart';
 import '../../domain/entities/user_profile.dart';
 import '../../../../core/theme/app_colors.dart';
 
-/// L3 组件 — 我的页 Hero 背景：头图（后端头像）+ 向下渐隐，可撑满父级高度。
+/// L3 组件 — 我的页 Hero 背景：独立素材图（非头像）+ 向下渐隐，可撑满父级高度。
+///
+/// [backgroundAsset] 为可替换素材图；后续不同主题/活动可传入不同素材。
 class ProfileHeroBackground extends StatelessWidget {
-  const ProfileHeroBackground({super.key, required this.avatarUrl});
+  const ProfileHeroBackground({super.key, required this.backgroundAsset});
 
-  static const String _avatarPlaceholderAsset =
-      'assets/images/profile/avatar_placeholder.png';
-
-  final String avatarUrl;
+  final String backgroundAsset;
 
   @override
   Widget build(BuildContext context) {
@@ -25,12 +25,13 @@ class ProfileHeroBackground extends StatelessWidget {
       fit: StackFit.expand,
       children: [
         const ColoredBox(color: AppColors.backgroundDark),
-        Opacity(
-          opacity: AppSizes.profileHeroBackgroundImageOpacity,
-          child: _ProfileHeroImageSource(
-            avatarUrl: avatarUrl,
-            placeholderAsset: _avatarPlaceholderAsset,
-          ),
+        Image.asset(
+          backgroundAsset,
+          fit: BoxFit.cover,
+          width: double.infinity,
+          height: double.infinity,
+          errorBuilder: (context, error, stackTrace) =>
+              const ColoredBox(color: AppColors.backgroundDark),
         ),
         Positioned.fill(
           child: DecoratedBox(
@@ -50,50 +51,6 @@ class ProfileHeroBackground extends StatelessWidget {
           ),
         ),
       ],
-    );
-  }
-}
-
-/// 头像 Hero 背景图源：网络失败或空 URL 时回退本地占位图（与 [AppNetworkAvatar] 一致）。
-class _ProfileHeroImageSource extends StatelessWidget {
-  const _ProfileHeroImageSource({
-    required this.avatarUrl,
-    required this.placeholderAsset,
-  });
-
-  final String avatarUrl;
-  final String placeholderAsset;
-
-  @override
-  Widget build(BuildContext context) {
-    final hasUrl = avatarUrl.isNotEmpty;
-
-    if (!hasUrl) {
-      return _assetImage();
-    }
-
-    return Image.network(
-      avatarUrl,
-      fit: BoxFit.cover,
-      gaplessPlayback: true,
-      width: double.infinity,
-      height: double.infinity,
-      errorBuilder: (context, error, stackTrace) => _assetImage(),
-      loadingBuilder: (context, child, loadingProgress) {
-        if (loadingProgress == null) return child;
-        return _assetImage();
-      },
-    );
-  }
-
-  Widget _assetImage() {
-    return Image.asset(
-      placeholderAsset,
-      fit: BoxFit.cover,
-      width: double.infinity,
-      height: double.infinity,
-      errorBuilder: (context, error, stackTrace) =>
-          const ColoredBox(color: AppColors.backgroundDark),
     );
   }
 }
@@ -125,7 +82,7 @@ class ProfileHeroHeader extends StatelessWidget {
         child: Stack(
           fit: StackFit.expand,
           children: [
-            ProfileHeroBackground(avatarUrl: user.avatarUrl),
+            ProfileHeroBackground(backgroundAsset: user.heroBackgroundAsset),
             _buildOverlay(context),
           ],
         ),
@@ -176,52 +133,50 @@ class _UserInfoBlock extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        GestureDetector(
-          onTap: onProfileTap,
-          behavior: HitTestBehavior.opaque,
-          child: AppNetworkAvatar(
+    return GestureDetector(
+      onTap: onProfileTap,
+      behavior: HitTestBehavior.opaque,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          AppNetworkAvatar(
             imageUrl: user.avatarUrl,
             size: AppSizes.profileAvatarSize,
           ),
-        ),
-        const SizedBox(width: AppSpacing.md),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              GestureDetector(
-                onTap: onProfileTap,
-                behavior: HitTestBehavior.opaque,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    AppText(
-                      user.nickname,
-                      style: AppTextStyles.profileNickname.copyWith(
-                        color: AppColors.textOnDark,
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    const SizedBox(height: AppSpacing.md),
-                    AppText(
-                      'ID ${user.userId}',
-                      style: AppTextStyles.profileUserId.copyWith(
-                        color: AppColors.textOnDark,
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
+          const SizedBox(width: AppSpacing.md),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                AppText(
+                  user.nickname,
+                  style: AppTextStyles.profileNickname.copyWith(
+                    color: AppColors.textOnDark,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
-              ),
-            ],
+                const SizedBox(height: AppSpacing.md),
+                AppText(
+                  'ID ${user.userId}',
+                  style: AppTextStyles.profileUserId.copyWith(
+                    color: AppColors.textOnDark,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
+            ),
           ),
-        ),
-      ],
+          const SizedBox(width: AppSpacing.xs),
+          const AppIcon(
+            assetPath: 'assets/icons/arrow_right.svg',
+            width: AppSpacing.sm,
+            height: AppSpacing.sm,
+            color: AppColors.textOnDark,
+          ),
+        ],
+      ),
     );
   }
 }

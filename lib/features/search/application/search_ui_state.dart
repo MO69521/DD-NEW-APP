@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 
 /// 搜索页阶段：空态（未搜索）、加载中、结果、无结果。
-enum SearchPhase { empty, loading, results, noResult }
+enum SearchPhase { empty, suggesting, loading, results, noResult }
 
 /// 搜索页 UI 状态。
 class SearchUiState extends Equatable {

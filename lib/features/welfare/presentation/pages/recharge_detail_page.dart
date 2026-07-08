@@ -75,6 +75,7 @@ class RechargeDetailPage extends StatelessWidget {
               const Spacer(),
               AppButton(
                 label: '¥ ${package.priceYuan} 立即充值',
+                variant: AppButtonVariant.accent,
                 isExpanded: true,
                 onPressed: onClose,
               ),

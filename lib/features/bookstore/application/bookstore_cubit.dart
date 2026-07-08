@@ -55,6 +55,17 @@ class BookstoreCubit extends Cubit<BookstoreState> {
     );
   }
 
+  void dismissContinueReading() {
+    if (state.interaction.continueReadingDismissed) return;
+    emit(
+      state.copyWith(
+        interaction: state.interaction.copyWith(
+          continueReadingDismissed: true,
+        ),
+      ),
+    );
+  }
+
   void switchRankingTab(RankingTab tab) {
     if (tab == state.interaction.selectedRankingTab) return;
     emit(

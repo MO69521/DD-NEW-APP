@@ -1,19 +1,26 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_durations.dart';
 import '../../../../core/theme/app_radius.dart';
 import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/theme/app_welfare_colors.dart';
+import '../../../../shared/components/sweep_highlight_overlay.dart';
+import '../../../../shared/widgets/app_icon.dart';
 import '../../../../shared/widgets/app_text.dart';
 import '../../domain/entities/welfare_models.dart';
 import 'check_in_calendar.dart';
 import 'check_in_milestone_progress.dart';
+import 'check_in_subtitle.dart';
 import '../../../../core/theme/app_theme_context.dart';
 
-/// L3 组件 — 每日签到整块（Figma 519:8475）。
-class DailyCheckInSection extends StatelessWidget {
+/// L3 组件 — 每日签到整块（Figma 1492:3474）。
+///
+/// 标题右侧 chevron 可折叠：展开显示累计进度 / 日历 / 签到按钮，
+/// 折叠仅保留标题与副标题（默认展开）。
+class DailyCheckInSection extends StatefulWidget {
   const DailyCheckInSection({
     super.key,
     required this.summary,
@@ -24,8 +31,18 @@ class DailyCheckInSection extends StatelessWidget {
   final VoidCallback? onCheckInTap;
 
   @override
+  State<DailyCheckInSection> createState() => _DailyCheckInSectionState();
+}
+
+class _DailyCheckInSectionState extends State<DailyCheckInSection> {
+  bool _expanded = true;
+
+  void _toggle() => setState(() => _expanded = !_expanded);
+
+  @override
   Widget build(BuildContext context) {
     final colors = context.appColors;
+    final summary = widget.summary;
     return Container(
       padding: const EdgeInsets.symmetric(
         horizontal: AppSpacing.sm,
@@ -38,28 +55,67 @@ class DailyCheckInSection extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          AppText(
-            '每日签到',
-            style: AppTextStyles.welfareSectionTitle.copyWith(
-              color: colors.textPrimary,
+          GestureDetector(
+            onTap: _toggle,
+            behavior: HitTestBehavior.opaque,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      AppText(
+                        '每日签到',
+                        style: AppTextStyles.welfareSectionTitle.copyWith(
+                          color: colors.textPrimary,
+                        ),
+                      ),
+                      const SizedBox(height: AppSpacing.xs),
+                      CheckInSubtitle(
+                        totalDays: summary.totalDays,
+                        daysUntilNextReward: summary.daysUntilNextReward,
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: AppSpacing.sm),
+                AnimatedRotation(
+                  turns: _expanded ? 0 : 0.5,
+                  duration: AppDurations.normal,
+                  child: AppIcon(
+                    assetPath: 'assets/icons/chevron_down.svg',
+                    width: AppSizes.welfareCheckInChevronSize,
+                    height: AppSizes.welfareCheckInChevronSize,
+                    color: AppColors.white60,
+                  ),
+                ),
+              ],
             ),
           ),
-          const SizedBox(height: AppSpacing.xs),
-          _CheckInSubtitle(
-            totalDays: summary.totalDays,
-            daysUntilNextReward: summary.daysUntilNextReward,
-          ),
-          const SizedBox(height: AppSpacing.lg),
-          CheckInMilestoneProgress(
-            totalDays: summary.totalDays,
-            milestones: summary.milestones,
-          ),
-          const SizedBox(height: AppSpacing.lg),
-          CheckInCalendar(days: summary.weekDays),
-          const SizedBox(height: AppSpacing.lg),
-          _AnimatedCheckInCta(
-            rewardEnergy: summary.todayRewardEnergy,
-            onTap: onCheckInTap,
+          AnimatedSize(
+            duration: AppDurations.normal,
+            curve: Curves.easeInOut,
+            alignment: Alignment.topCenter,
+            child: _expanded
+                ? Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: AppSpacing.lg),
+                      CheckInMilestoneProgress(
+                        totalDays: summary.totalDays,
+                        milestones: summary.milestones,
+                      ),
+                      const SizedBox(height: AppSpacing.lg),
+                      CheckInCalendar(days: summary.weekDays),
+                      const SizedBox(height: AppSpacing.lg),
+                      _AnimatedCheckInCta(
+                        rewardEnergy: summary.todayRewardEnergy,
+                        onTap: widget.onCheckInTap,
+                      ),
+                    ],
+                  )
+                : const SizedBox(width: double.infinity),
           ),
         ],
       ),
@@ -78,9 +134,8 @@ class _AnimatedCheckInCta extends StatefulWidget {
 }
 
 class _AnimatedCheckInCtaState extends State<_AnimatedCheckInCta>
-    with TickerProviderStateMixin {
+    with SingleTickerProviderStateMixin {
   late final AnimationController _breathController;
-  late final AnimationController _sweepController;
   late final Animation<double> _breathScale;
 
   @override
@@ -90,10 +145,6 @@ class _AnimatedCheckInCtaState extends State<_AnimatedCheckInCta>
       vsync: this,
       duration: AppDurations.membershipCtaBreath,
     )..repeat(reverse: true);
-    _sweepController = AnimationController(
-      vsync: this,
-      duration: AppDurations.membershipCtaSweep,
-    )..repeat();
     _breathScale =
         Tween<double>(
           begin: AppSizes.membershipCtaBreathScaleMin,
@@ -106,7 +157,6 @@ class _AnimatedCheckInCtaState extends State<_AnimatedCheckInCta>
   @override
   void dispose() {
     _breathController.dispose();
-    _sweepController.dispose();
     super.dispose();
   }
 
@@ -126,8 +176,11 @@ class _AnimatedCheckInCtaState extends State<_AnimatedCheckInCta>
             child: Stack(
               alignment: Alignment.center,
               children: [
-                Positioned.fill(
-                  child: _CheckInCtaSweepOverlay(animation: _sweepController),
+                const Positioned.fill(
+                  child: SweepHighlightOverlay(
+                    highlightColor: AppWelfareColors.checkInCtaSweepHighlight,
+                    edgeColor: AppWelfareColors.checkInCtaSweepEdge,
+                  ),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(
@@ -162,86 +215,3 @@ class _AnimatedCheckInCtaState extends State<_AnimatedCheckInCta>
   }
 }
 
-class _CheckInCtaSweepOverlay extends StatelessWidget {
-  const _CheckInCtaSweepOverlay({required this.animation});
-
-  final Animation<double> animation;
-
-  @override
-  Widget build(BuildContext context) {
-    return IgnorePointer(
-      child: AnimatedBuilder(
-        animation: animation,
-        builder: (context, child) {
-          return LayoutBuilder(
-            builder: (context, constraints) {
-              final buttonWidth = constraints.maxWidth;
-              final bandWidth =
-                  buttonWidth * AppSizes.membershipCtaSweepBandWidthRatio;
-              final travelDistance = buttonWidth + bandWidth;
-              final offsetX = -bandWidth + travelDistance * animation.value;
-
-              return Stack(
-                clipBehavior: Clip.hardEdge,
-                children: [
-                  Transform.translate(
-                    offset: Offset(offsetX, 0),
-                    child: Container(
-                      width: bandWidth,
-                      height: constraints.maxHeight,
-                      decoration: const BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.centerLeft,
-                          end: Alignment.centerRight,
-                          colors: [
-                            AppWelfareColors.checkInCtaSweepEdge,
-                            AppWelfareColors.checkInCtaSweepHighlight,
-                            AppWelfareColors.checkInCtaSweepEdge,
-                          ],
-                          stops: [0, 0.5, 1],
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              );
-            },
-          );
-        },
-      ),
-    );
-  }
-}
-
-class _CheckInSubtitle extends StatelessWidget {
-  const _CheckInSubtitle({
-    required this.totalDays,
-    required this.daysUntilNextReward,
-  });
-
-  final int totalDays;
-  final int daysUntilNextReward;
-
-  @override
-  Widget build(BuildContext context) {
-    final highlightStyle = AppTextStyles.welfareSubtitle.copyWith(
-      color: AppWelfareColors.accentOrange,
-    );
-
-    return RichText(
-      softWrap: true,
-      text: TextSpan(
-        style: AppTextStyles.welfareSubtitle.copyWith(
-          color: AppWelfareColors.subtitleMuted,
-        ),
-        children: [
-          const TextSpan(text: '已累计签到 '),
-          TextSpan(text: '$totalDays', style: highlightStyle),
-          const TextSpan(text: ' 天，再签到 '),
-          TextSpan(text: '$daysUntilNextReward', style: highlightStyle),
-          const TextSpan(text: ' 天可领丰厚奖励'),
-        ],
-      ),
-    );
-  }
-}

@@ -74,6 +74,8 @@ class WelfareMockDataSource {
     totalDays: 9,
     daysUntilNextReward: 6,
     todayRewardEnergy: 20,
+    vipExtraEnergy: 1000,
+    videoExtraStardust: 500,
     milestones: [
       CheckInMilestone(requiredDays: 15, rewardAmount: 100),
       CheckInMilestone(requiredDays: 22, rewardAmount: 150),
@@ -201,8 +203,8 @@ class WelfareMockDataSource {
       );
 
   static const MealCheckInSummary _mealCheckInSummary = MealCheckInSummary(
-    title: '吃饭签到',
-    progressLabel: '(2/15)',
+    title: 'VIP 签到奖励',
+    progressLabel: '(0/1)',
     subtitle: '每日多奖励100能量',
     rewardAmount: 100,
   );

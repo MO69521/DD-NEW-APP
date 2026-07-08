@@ -33,8 +33,8 @@ class MembershipUserCard extends StatelessWidget {
       borderRadius: BorderRadius.circular(AppRadius.membershipCard),
       child: BackdropFilter(
         filter: ImageFilter.blur(
-          sigmaX: AppSizes.welfareCurrencyBlurSigma,
-          sigmaY: AppSizes.welfareCurrencyBlurSigma,
+          sigmaX: AppSizes.membershipUserCardBlurSigma,
+          sigmaY: AppSizes.membershipUserCardBlurSigma,
         ),
         child: Container(
           padding: const EdgeInsets.all(AppSpacing.sm),

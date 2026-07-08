@@ -18,6 +18,8 @@ class BookstoreDomainState extends Equatable {
 
   List<Book> get guessLikeSeed => content?.guessLikeBooks ?? const [];
 
+  Book? get continueReadingBook => content?.continueReadingBook;
+
   BookstoreDomainState copyWith({BookstorePageContent? content}) {
     return BookstoreDomainState(content: content ?? this.content);
   }

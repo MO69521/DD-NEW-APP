@@ -19,6 +19,7 @@ class SearchAppBar extends StatefulWidget {
     this.initialQuery = '',
     this.onBack,
     this.onSubmit,
+    this.onChanged,
     this.onCleared,
   });
 
@@ -27,6 +28,9 @@ class SearchAppBar extends StatefulWidget {
   final String initialQuery;
   final VoidCallback? onBack;
   final void Function(String query)? onSubmit;
+
+  /// 输入变化实时回调（用于联想）。
+  final void Function(String query)? onChanged;
   final VoidCallback? onCleared;
 
   @override
@@ -41,11 +45,6 @@ class _SearchAppBarState extends State<SearchAppBar> {
   void initState() {
     super.initState();
     _controller = TextEditingController(text: widget.initialQuery);
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) {
-        _focusNode.requestFocus();
-      }
-    });
   }
 
   @override
@@ -58,6 +57,7 @@ class _SearchAppBarState extends State<SearchAppBar> {
   void _submit() => widget.onSubmit?.call(_controller.text);
 
   void _handleChanged(String value) {
+    widget.onChanged?.call(value);
     if (value.trim().isEmpty) {
       widget.onCleared?.call();
     }

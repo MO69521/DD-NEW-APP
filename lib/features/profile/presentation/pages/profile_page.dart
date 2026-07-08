@@ -3,12 +3,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/constants/main_tab_config.dart';
 import '../../../../core/constants/bookshelf_tab_intent.dart';
+import '../../../../core/domain/entities/commerce_entities.dart';
 import '../../../../core/theme/app_layout.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_sizes.dart';
 import '../../../../routes/app_router.dart';
 import '../../../../routes/app_routes.dart';
 import '../../../../core/theme/app_spacing.dart';
+import '../../../../shared/components/app_toast.dart';
 import '../../../../shared/components/currency_balance_bar.dart';
 import '../../../../shared/components/empty_state.dart';
 import '../../../../shared/components/energy_recharge_purchase_dialog.dart';
@@ -20,6 +22,7 @@ import '../../../../shared/widgets/app_button.dart';
 import '../../application/profile_cubit.dart';
 import '../../application/profile_state.dart';
 import '../../domain/entities/profile_page_content.dart';
+import '../components/profile_achievement_section.dart';
 import '../components/profile_hero_header.dart';
 import '../components/profile_shortcut_grid.dart';
 import '../../domain/entities/profile_menu_item.dart';
@@ -110,7 +113,7 @@ class _ProfileView extends StatelessWidget {
                           right: 0,
                           height: heroBackgroundHeight,
                           child: ProfileHeroBackground(
-                            avatarUrl: content.user.avatarUrl,
+                            backgroundAsset: content.user.heroBackgroundAsset,
                           ),
                         ),
                         Column(
@@ -149,9 +152,9 @@ class _ProfileView extends StatelessWidget {
                       ),
                       child: Padding(
                         padding: const EdgeInsets.fromLTRB(
-                          AppSpacing.insetMd,
+                          AppSpacing.md,
                           AppSizes.profileBalanceBarToVipGap,
-                          AppSpacing.insetMd,
+                          AppSpacing.md,
                           ProfilePage._bottomNavReserve,
                         ),
                         child: Column(
@@ -167,13 +170,32 @@ class _ProfileView extends StatelessWidget {
                               ),
                             if (!content.user.isVip)
                               const SizedBox(height: AppSpacing.sm),
+                            ProfileAchievementSection(
+                              earnedCount: content.achievementCount,
+                              badges: content.achievementBadges,
+                              onViewDetail: () =>
+                                  AppToast.show(context, '成就详情即将上线'),
+                            ),
+                            const SizedBox(height: AppSpacing.sm),
                             RechargePackagesSection(
                               packages: content.rechargePackages,
+                              freeClaimOptions: content.freeClaimOptions,
                               onPackageTap: (package) =>
                                   EnergyRechargePurchaseDialog.show(
                                 context,
                                 package: package,
                               ),
+                              onFreeClaimTap: (option) {
+                                if (option.kind == EnergyFreeClaimKind.vip) {
+                                  AppRouter.pushNamed(
+                                    AppRoutes.membershipName,
+                                  );
+                                } else {
+                                  mainTabController?.switchTo(
+                                    MainTabConfig.welfareIndex,
+                                  );
+                                }
+                              },
                               onMoreTap: () => mainTabController?.switchTo(
                                 MainTabConfig.welfareIndex,
                               ),

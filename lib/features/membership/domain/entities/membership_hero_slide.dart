@@ -10,6 +10,7 @@ class MembershipHeroSlide extends Equatable {
     required this.titleSuffix,
     required this.subtitlePrefix,
     required this.subtitleValue,
+    required this.imageAsset,
   });
 
   final String titlePrefix;
@@ -18,6 +19,9 @@ class MembershipHeroSlide extends Equatable {
   final String subtitlePrefix;
   final String subtitleValue;
 
+  /// 右侧主视觉插画（左文右图排版）。
+  final String imageAsset;
+
   @override
   List<Object?> get props => [
     titlePrefix,
@@ -25,5 +29,6 @@ class MembershipHeroSlide extends Equatable {
     titleSuffix,
     subtitlePrefix,
     subtitleValue,
+    imageAsset,
   ];
 }

@@ -15,6 +15,7 @@ import '../../../../routes/app_router.dart';
 import '../../../../routes/app_routes.dart';
 import '../../../../shared/components/app_blurred_dialog.dart';
 import '../../../../shared/components/app_toast.dart';
+import '../../../../shared/widgets/app_asset_image.dart';
 import '../../../../shared/widgets/app_button.dart';
 import '../../../../shared/widgets/app_icon.dart';
 import '../../../../shared/widgets/app_text.dart';
@@ -22,6 +23,21 @@ import '../../application/login_cubit.dart';
 import '../../application/login_state.dart';
 import '../components/auth_agreement_confirm_dialog.dart';
 import '../components/login_text_field.dart';
+
+abstract final class _LoginLayout {
+  static const String topBackgroundAsset =
+      'assets/images/auth/login_top_bg.png';
+  static const double contentHorizontalInset = AppSpacing.xl + AppSpacing.xs;
+  static const double titleFrameTop =
+      AppSizes.statusBarPlaceholderHeight +
+      AppSpacing.xxl +
+      AppSpacing.lg +
+      AppSpacing.xxs;
+  static const double titleToInputGap =
+      AppSpacing.xxl + AppSpacing.lg + AppSpacing.xxsHalf;
+  static const double inputToButtonGap = AppSpacing.xxl + AppSpacing.xl;
+  static const double buttonToAgreementGap = AppSpacing.xl;
+}
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
@@ -71,6 +87,10 @@ class _LoginView extends StatelessWidget {
   Widget build(BuildContext context) {
     final cubit = context.read<LoginCubit>();
     final statusBarHeight = AppLayout.statusBarHeight(context);
+    final titleTop = AppLayout.figmaFrameTop(
+      context,
+      _LoginLayout.titleFrameTop,
+    );
 
     if (state.ui.hasRequestedCode) {
       return _VerificationCodeView(
@@ -84,37 +104,55 @@ class _LoginView extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: AppColors.backgroundDark,
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
-        child: Column(
-          children: [
-            SizedBox(height: statusBarHeight + AppSpacing.xxl),
-            Expanded(
-              child: ListView(
-                padding: EdgeInsets.zero,
-                children: [
-                  AppText(
-                    '欢迎登录点点穿书',
-                    style: AppTextStyles.headlineMedium.copyWith(
-                      color: AppColors.textOnDark,
-                    ),
-                  ),
-                  const SizedBox(height: AppSpacing.authTitleContentGap),
-                  _PhoneLoginForm(
-                    state: state,
-                    onPhoneChanged: cubit.onPhoneChanged,
-                    onSendCode: () => _handleSendCode(context, cubit, state),
-                    onSendCodeUnavailable: cubit.promptPhoneRequired,
-                    onAgreementTap: cubit.toggleAgreementAccepted,
-                  ),
-                ],
-              ),
+      resizeToAvoidBottomInset: false,
+      body: Stack(
+        children: [
+          const Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            child: AppAssetImage(
+              assetPath: _LoginLayout.topBackgroundAsset,
+              fit: BoxFit.fitWidth,
             ),
-            const SizedBox(height: AppSpacing.xl),
-            _SocialLoginSection(onTap: cubit.onSocialLoginTap),
-            const SizedBox(height: AppSpacing.xl),
-          ],
-        ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: _LoginLayout.contentHorizontalInset,
+            ),
+            child: Column(
+              children: [
+                SizedBox(height: titleTop),
+                Expanded(
+                  child: ListView(
+                    padding: EdgeInsets.zero,
+                    children: [
+                      AppText(
+                        '欢迎登录',
+                        style: AppTextStyles.displayLarge.copyWith(
+                          color: AppColors.textOnDark,
+                          height: AppLineHeights.none,
+                        ),
+                      ),
+                      const SizedBox(height: _LoginLayout.titleToInputGap),
+                      _PhoneLoginForm(
+                        state: state,
+                        onPhoneChanged: cubit.onPhoneChanged,
+                        onSendCode: () =>
+                            _handleSendCode(context, cubit, state),
+                        onSendCodeUnavailable: cubit.promptPhoneRequired,
+                        onAgreementTap: cubit.toggleAgreementAccepted,
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: AppSpacing.xl),
+                _SocialLoginSection(onTap: cubit.onSocialLoginTap),
+                const SizedBox(height: AppSpacing.xl),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -166,22 +204,26 @@ class _PhoneLoginForm extends StatelessWidget {
           initialValue: ui.phone,
           onChanged: onPhoneChanged,
         ),
-        const SizedBox(height: AppSpacing.lg),
+        const SizedBox(height: _LoginLayout.inputToButtonGap),
         if (!ui.hasRequestedCode)
-          AppButton(
-            label: '获取验证码',
-            variant: ui.canSendCode
-                ? AppButtonVariant.accent
-                : AppButtonVariant.subtle,
-            isExpanded: true,
-            isLoading: ui.isSendingCode,
-            onPressed: ui.canSendCode ? onSendCode : null,
-            onDisabledPressed: ui.canSendCode ? null : onSendCodeUnavailable,
+          TextFieldTapRegion(
+            child: AppButton(
+              label: '获取验证码',
+              variant: ui.canSendCode
+                  ? AppButtonVariant.accent
+                  : AppButtonVariant.secondary,
+              isExpanded: true,
+              isLoading: ui.isSendingCode,
+              onPressed: ui.canSendCode ? onSendCode : null,
+              onDisabledPressed: ui.canSendCode ? null : onSendCodeUnavailable,
+            ),
           ),
-        const SizedBox(height: AppSpacing.md),
-        _AuthAgreementNotice(
-          isSelected: ui.isAgreementAccepted,
-          onToggle: onAgreementTap,
+        const SizedBox(height: _LoginLayout.buttonToAgreementGap),
+        TextFieldTapRegion(
+          child: _AuthAgreementNotice(
+            isSelected: ui.isAgreementAccepted,
+            onToggle: onAgreementTap,
+          ),
         ),
       ],
     );
@@ -566,13 +608,16 @@ class _VerificationCodeBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DecoratedBox(
+    return Container(
       decoration: BoxDecoration(
+        color: isActive ? Colors.transparent : AppColors.white04,
         borderRadius: BorderRadius.circular(AppRadius.md),
-        border: Border.all(
-          color: AppColors.accentYellow,
-          width: AppSizes.borderWidthEmphasis,
-        ),
+        border: isActive
+            ? Border.all(
+                color: AppColors.accentYellow,
+                width: AppSizes.borderWidthEmphasis,
+              )
+            : null,
       ),
       child: Center(
         child: value.isEmpty && isActive
@@ -637,21 +682,18 @@ class _SocialLoginSection extends StatelessWidget {
             _SocialLoginButton(
               provider: AuthSocialProvider.wechat,
               assetPath: 'assets/icons/account_settings/wechat.svg',
-              backgroundColor: AppColors.success,
               onTap: onTap,
             ),
             const SizedBox(width: AppSpacing.xl),
             _SocialLoginButton(
               provider: AuthSocialProvider.qq,
               assetPath: 'assets/icons/account_settings/qq.svg',
-              backgroundColor: AppColors.primary,
               onTap: onTap,
             ),
             const SizedBox(width: AppSpacing.xl),
             _SocialLoginButton(
               provider: AuthSocialProvider.douyin,
               assetPath: 'assets/icons/account_settings/douyin.svg',
-              backgroundColor: AppColors.error,
               onTap: onTap,
             ),
           ],
@@ -665,13 +707,11 @@ class _SocialLoginButton extends StatelessWidget {
   const _SocialLoginButton({
     required this.provider,
     required this.assetPath,
-    required this.backgroundColor,
     required this.onTap,
   });
 
   final AuthSocialProvider provider;
   final String assetPath;
-  final Color backgroundColor;
   final ValueChanged<AuthSocialProvider> onTap;
 
   @override
@@ -691,7 +731,7 @@ class _SocialLoginButton extends StatelessWidget {
                 width: AppSpacing.xxl,
                 height: AppSpacing.xxl,
                 decoration: BoxDecoration(
-                  color: backgroundColor,
+                  color: AppColors.white04,
                   borderRadius: BorderRadius.circular(AppRadius.full),
                 ),
                 child: Center(

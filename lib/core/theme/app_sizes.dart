@@ -18,7 +18,6 @@ abstract final class AppSizes {
   /// 右上角动作图标显示尺寸：无圆形底色，按原始设计尺寸展示（全局统一）。
   static const double topBarActionIconDisplaySize = 24;
   static const double topBarTitleMaxWidth = 220;
-  static const double dialogBackgroundBlurSigma = 64;
 
   // ── 通用按钮 (AppButton) ──
   static const double buttonPaddingHNormal = 24;
@@ -31,6 +30,9 @@ abstract final class AppSizes {
   // ── 搜索栏 / 玻璃态胶囊 ──
   static const double searchBarHeight = 40;
   static const double glassBlurSigma = 8;
+
+  /// 通用强玻璃模糊半径（重度磨砂，如任务卡 / 浮层）。
+  static const double strongBlurSigma = 180;
   static const double statusBarPlaceholderHeight = 44;
   static const double bookstoreHeaderVerticalInset = 2;
   static const double chromeBarBlurSigma = 24;
@@ -56,6 +58,15 @@ abstract final class AppSizes {
   static const double bottomNavIconLabelGap = 2;
   static const double bottomNavItemContentTopInset = 0;
   static const double bottomNavItemContentBottomInset = 4;
+
+  // 首页「继续阅读」浮层卡片
+  static const double continueReadingCoverWidth = 36;
+  static const double continueReadingCoverHeight = 48;
+  static const double continueReadingCloseIconSize = 16;
+
+  // 我的页「我的成就」勋章模块
+  static const double profileAchievementMedalSize = 52;
+  static const double profileAchievementActionIconSize = 12;
   static const double homeIndicatorWidth = 134;
   static const double homeIndicatorHeight = 5;
 
@@ -95,7 +106,7 @@ abstract final class AppSizes {
   static const double welfareHeaderHeight = 44;
   static const double welfareCurrencyBarHeight = 76;
   static const double welfareVipBannerHeight = 49;
-  static const double welfareRechargeCardHeight = 126;
+  static const double welfareRechargeCardHeight = 140;
   static const double welfareRechargeIllustrationWidth = 76;
   static const double welfareRechargeHotBadgeWidth = 33;
   static const double welfareRechargeHotBadgeHeight = 18;
@@ -120,6 +131,9 @@ abstract final class AppSizes {
   static const double welfareCheckInCumulativePadding = 8;
   static const double welfareCheckInCtaPaddingHorizontal = 28;
   static const double welfareCheckInCtaPaddingVertical = 14;
+  static const double welfareCheckInChevronSize = 16;
+  static const double welfareCheckInClaimedRewardOpacity = 0.3;
+  static const double welfareCheckInClaimedCheckSize = 24;
   static const double welfareCheckInCtaHeight = 42;
   static const double welfareCheckInDayWideMinWidth = 132;
   static const double welfareCurrencyIconSize = 16;
@@ -167,8 +181,8 @@ abstract final class AppSizes {
   /// 任务卡向上叠压 VIP 入口的高度（Figma 559:23234 重叠 24px）。
   static const double welfareTaskCardOverlap = 24;
 
-  /// 任务卡毛玻璃背景模糊半径。
-  static const double welfareTaskCardBlurSigma = 180;
+  /// 任务卡毛玻璃背景模糊半径（引用通用强模糊）。
+  static const double welfareTaskCardBlurSigma = strongBlurSigma;
 
   // ── 书架页 (Figma 220:9341 / 377:1909) ──
   static const double bookshelfHeaderHeight = 44;
@@ -216,7 +230,7 @@ abstract final class AppSizes {
 
   /// 余额条与 VIP 横幅间距（Figma 697:12412 → 697:12468）。
   static const double profileBalanceBarToVipGap = 16;
-  static const double profileAvatarSize = 80;
+  static const double profileAvatarSize = 72;
   static const double profileMessagesIconSize = 18;
   static const double profilePartnerAvatarSize = 24;
   static const double profilePartnerAvatarGap = 6;
@@ -226,7 +240,6 @@ abstract final class AppSizes {
   static const double profileShortcutRowGap = 30;
   static const double profileHeroUserInfoTop = 100;
   static const double profileHeroSettingsTop = 52;
-  static const double profileHeroBackgroundImageOpacity = 0.16;
   static const List<double> profileHeroImageMaskStops = [
     0.0,
     0.604723,
@@ -234,8 +247,10 @@ abstract final class AppSizes {
     1.0,
   ];
 
+  /// 全局二级页列表行最小高度（单行基准；带副标题/多行内容在此基础上自然增高）。
+  static const double listRowMinHeight = 60;
+
   // ── 账号设置页 ──
-  static const double accountSettingsRowHeight = 52;
   static const double accountSettingsAvatarSize = 40;
   static const double accountSettingsBindingIconSize = 24;
 
@@ -252,9 +267,6 @@ abstract final class AppSizes {
 
   // ── 设置页 ──
   static const double settingsLogoSize = 72;
-  static const double settingsMenuRowMinHeight = 60;
-  static const double settingsNotificationRowMinHeight = 56;
-  static const double settingsNotificationRowWithSubtitleMinHeight = 88;
   static const double appSwitchWidth = 50;
   static const double appSwitchHeight = 30;
   static const double appSwitchThumbSize = 24;
@@ -476,13 +488,24 @@ abstract final class AppSizes {
   static const double membershipHeroLayoutHeight =
       membershipHeroHeight - membershipLowerContentLift;
 
-  /// hero 文案块距屏幕顶（含状态栏 44 + 标题栏 44 + 间距 20）。
-  static const double membershipHeroTextTop = 108;
-  static const double membershipDotsTop = 179;
+  /// hero 文案块距屏幕顶（含状态栏 44 + 标题栏 44 + 间距）。
+  /// 下移让文案/头图整体避开顶栏「充值记录」按钮。
+  static const double membershipHeroTextTop = 124;
+
+  /// hero 右侧主视觉插画槽位（左文右图，右对齐贴边，Figma 1503:355）。
+  /// top 略高于文案，与主张视觉居中呼应。
+  static const double membershipHeroSlideImageTop = 80;
+  static const double membershipHeroSlideImageWidth = 144;
+  static const double membershipHeroSlideImageHeight = 200;
+
+  static const double membershipDotsTop = 195;
   static const double membershipDotsActiveWidth = 8;
   static const double membershipDotSize = 4;
   static const double membershipUserCardTop = 211;
   static const double membershipUserAvatarSize = 44;
+
+  /// 会员用户卡毛玻璃模糊强度（较通用卡片更强，凸显头图/背景虚化）。
+  static const double membershipUserCardBlurSigma = 40;
   static const double membershipPlanSelectedBorderWidth = 2;
   static const double membershipPlanUnselectedBorderWidth = 1;
   static const double membershipPlanSelectorGap = 16;

@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_radius.dart';
-import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../routes/app_router.dart';
 import '../../../../shared/components/app_blurred_dialog.dart';
+import '../../../../shared/components/dialog_close_button.dart';
 import '../../../../shared/widgets/app_button.dart';
 import '../../../../shared/widgets/app_text.dart';
 import '../../domain/entities/currency_wallet_page_content.dart';
@@ -93,25 +93,7 @@ class CurrencyInfoDialog extends StatelessWidget {
             ),
           ),
           const SizedBox(height: AppSpacing.lg),
-          GestureDetector(
-            onTap: onClose,
-            behavior: HitTestBehavior.opaque,
-            child: Container(
-              width: AppSizes.topBarCircleSize,
-              height: AppSizes.topBarCircleSize,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: AppColors.overlayScrim,
-                shape: BoxShape.circle,
-                border: Border.all(color: AppColors.borderGlass),
-              ),
-              child: const Icon(
-                Icons.close,
-                size: AppSizes.topBarActionIconSize,
-                color: AppColors.textOnDark,
-              ),
-            ),
-          ),
+          DialogCloseButton(onTap: onClose),
         ],
       ),
     );

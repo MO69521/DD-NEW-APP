@@ -31,9 +31,9 @@ class PersonalizedAdsPage extends StatelessWidget {
         ),
         body: ListView(
           padding: EdgeInsets.fromLTRB(
-            AppSpacing.insetMd,
+            AppSpacing.md,
             AppLayout.chromeTopHeight(context) + AppSpacing.md,
-            AppSpacing.insetMd,
+            AppSpacing.md,
             AppSpacing.xl,
           ),
           children: [
@@ -46,7 +46,7 @@ class PersonalizedAdsPage extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
                 child: ConstrainedBox(
                   constraints: const BoxConstraints(
-                    minHeight: AppSizes.settingsNotificationRowMinHeight,
+                    minHeight: AppSizes.listRowMinHeight,
                   ),
                   child: Row(
                     children: [

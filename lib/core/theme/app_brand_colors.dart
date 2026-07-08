@@ -19,8 +19,17 @@ abstract final class AppBrandColors {
   // ── 全局深色壳（主题源色）──
   static const Color backgroundDark = Color(0xFF090E17);
   static const Color accent = Color(0xFFFFE847);
+
+  /// 极光渐变亮核（暖米金）。
+  static const Color auroraGlow = Color(0xFFFFF2C6);
+
+  /// 极光渐变暗边（暗红近黑）。
+  static const Color auroraEdge = Color(0xFF1D0B10);
   static const Color dialogBackground = Color(0xFF131820);
   static const Color textOnDark = Color(0xFFFFFFFF);
+
+  /// 深青灰实心浮层/卡片底（如「继续阅读」浮层）。
+  static const Color surfaceMuted = Color(0xFF262B33);
 
   // 背景 tint 阶：基础背景色不同透明度（供渐隐 / 毛玻璃 / 头图蒙版）。
   static const Color bgTint00 = Color(0x00090E17);
@@ -33,9 +42,6 @@ abstract final class AppBrandColors {
 
   // ── 浅色主题（预留）──
   static const Color backgroundLight = Color(0xFFF8F7FC);
-  static const Color primaryPurple = Color(0xFF6B4EFF);
-  static const Color primaryPurpleLight = Color(0xFF9B8AFF);
-  static const Color primaryPurpleDark = Color(0xFF4A32CC);
   static const Color textPrimary = Color(0xFF1A1A2E);
   static const Color textSecondary = Color(0xFF6B7280);
 

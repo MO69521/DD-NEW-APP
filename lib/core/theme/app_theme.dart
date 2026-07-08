@@ -19,10 +19,10 @@ abstract final class AppTheme {
     return ThemeData(
       useMaterial3: true,
       colorScheme: const ColorScheme.light(
-        primary: AppColors.primary,
-        onPrimary: AppColors.textOnPrimary,
-        secondary: AppColors.primaryLight,
-        onSecondary: AppColors.textOnPrimary,
+        primary: AppColors.accentYellow,
+        onPrimary: AppColors.navActiveText,
+        secondary: AppColors.accentYellow,
+        onSecondary: AppColors.navActiveText,
         surface: AppColors.surface,
         onSurface: AppColors.textPrimary,
         error: AppColors.error,

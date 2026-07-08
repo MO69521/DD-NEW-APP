@@ -27,7 +27,20 @@ class AppTopBarAction {
   final double iconSize;
 }
 
-/// L2 — 通用二级页顶栏：返回圆钮 + 可选标题 + 右侧动作。
+/// L2 — 通用顶栏（单一控件多变体）。
+///
+/// 三个对齐槽位组合出全部形态：
+/// - [leading]（左对齐，缺省为 [onBack] 返回钮）
+/// - [center]（居中，缺省为 [title] 文案）
+/// - [trailing]（右对齐，缺省为 [actions] 动作行）
+///
+/// 变体示例：
+/// - 二级页：`onBack` + `title` + `actions`
+/// - Tab 根页（居中 Tab）：`center: 自定义 Tab` + `trailing: 搜索按钮`
+/// - Tab 根页（左对齐 Tab）：`leading: 自定义 Tab` + `trailing: 搜索按钮`
+///
+/// 布局参数 [height] / [horizontalPadding] 允许按页面复刻既有尺寸；
+/// [chromeBlurEnabled] 为 false 时不包裹毛玻璃（供已在外层处理 blur 的 Tab 页使用）。
 ///
 /// 可选 [showScrim] 渐变蒙版用于叠加在 hero 图上的沉浸式场景。
 class AppTopBar extends StatelessWidget {
@@ -37,6 +50,11 @@ class AppTopBar extends StatelessWidget {
     this.onBack,
     this.title,
     this.actions = const [],
+    this.leading,
+    this.center,
+    this.trailing,
+    this.height = AppSizes.topBarHeight,
+    this.horizontalPadding = AppSpacing.md,
     this.showScrim = false,
     this.chromeBlurEnabled = true,
     this.backIconAsset = 'assets/icons/ranking/back.svg',
@@ -46,12 +64,29 @@ class AppTopBar extends StatelessWidget {
   final VoidCallback? onBack;
   final String? title;
   final List<AppTopBarAction> actions;
+
+  /// 左对齐槽位；提供时覆盖 [onBack] 返回钮。
+  final Widget? leading;
+
+  /// 居中槽位；提供时覆盖 [title] 文案。
+  final Widget? center;
+
+  /// 右对齐槽位；提供时覆盖 [actions] 动作行。
+  final Widget? trailing;
+
+  final double height;
+  final double horizontalPadding;
   final bool showScrim;
   final bool chromeBlurEnabled;
   final String backIconAsset;
 
   @override
   Widget build(BuildContext context) {
+    final centerChild = center ?? (title != null ? _buildTitle() : null);
+    final leadingChild = leading ?? (onBack != null ? _buildBackButton() : null);
+    final trailingChild =
+        trailing ?? (actions.isNotEmpty ? _buildActions() : null);
+
     final bar = Container(
       padding: EdgeInsets.only(top: statusBarHeight),
       decoration: showScrim
@@ -67,57 +102,17 @@ class AppTopBar extends StatelessWidget {
             )
           : null,
       child: SizedBox(
-        height: AppSizes.topBarHeight,
+        height: height,
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
+          padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
           child: Stack(
             alignment: Alignment.center,
             children: [
-              if (title != null)
-                Center(
-                  child: ConstrainedBox(
-                    constraints: const BoxConstraints(
-                      maxWidth: AppSizes.topBarTitleMaxWidth,
-                    ),
-                    child: AppText(
-                      title!,
-                      style: AppTextStyles.sectionTitleDark,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                ),
-              if (onBack != null)
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: AppTopBarIconButton(
-                    onTap: onBack,
-                    iconAsset: backIconAsset,
-                    iconWidth: AppSizes.topBarBackIconWidth,
-                    iconHeight: AppSizes.topBarBackIconHeight,
-                  ),
-                ),
-              if (actions.isNotEmpty)
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      for (final action in actions) ...[
-                        const SizedBox(width: AppSpacing.xs),
-                        if (action.label != null)
-                          AppTopBarTextButton(
-                            label: action.label!,
-                            style: AppTextStyles.bodyMediumDark,
-                            onTap: action.onTap,
-                          )
-                        else
-                          _ActionIconButton(action: action),
-                      ],
-                    ],
-                  ),
-                ),
+              if (centerChild != null) Center(child: centerChild),
+              if (leadingChild != null)
+                Align(alignment: Alignment.centerLeft, child: leadingChild),
+              if (trailingChild != null)
+                Align(alignment: Alignment.centerRight, child: trailingChild),
             ],
           ),
         ),
@@ -125,6 +120,49 @@ class AppTopBar extends StatelessWidget {
     );
 
     return AppBlurredChromeBar(enabled: chromeBlurEnabled, child: bar);
+  }
+
+  Widget _buildTitle() {
+    return ConstrainedBox(
+      constraints: const BoxConstraints(
+        maxWidth: AppSizes.topBarTitleMaxWidth,
+      ),
+      child: AppText(
+        title!,
+        style: AppTextStyles.sectionTitleDark,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+        textAlign: TextAlign.center,
+      ),
+    );
+  }
+
+  Widget _buildBackButton() {
+    return AppTopBarIconButton(
+      onTap: onBack,
+      iconAsset: backIconAsset,
+      iconWidth: AppSizes.topBarBackIconWidth,
+      iconHeight: AppSizes.topBarBackIconHeight,
+    );
+  }
+
+  Widget _buildActions() {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        for (final action in actions) ...[
+          const SizedBox(width: AppSpacing.xs),
+          if (action.label != null)
+            AppTopBarTextButton(
+              label: action.label!,
+              style: AppTextStyles.bodyMediumDark,
+              onTap: action.onTap,
+            )
+          else
+            _ActionIconButton(action: action),
+        ],
+      ],
+    );
   }
 }
 

@@ -58,14 +58,14 @@ class BookCover extends StatelessWidget {
 
     return DecoratedBox(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(AppRadius.coverSm),
+        borderRadius: BorderRadius.circular(AppRadius.bookCover),
         border: Border.all(
           color: AppColors.coverBorder,
           width: AppSizes.hairline,
         ),
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(AppRadius.coverSm),
+        borderRadius: BorderRadius.circular(AppRadius.bookCover),
         child: image,
       ),
     );

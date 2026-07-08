@@ -21,6 +21,14 @@
 - [ ] `data` 无 UI、无状态管理、无业务编排
 - [ ] `core` 未 import `features/*`
 
+## 0.1 设计规范权威（最高优先级 · 见规范 §0.1）
+
+- [ ] 涉及颜色/字号/行高/字重/间距/圆角/组件外观或变体的改动，**动手前已先对照** `design-system/README.md`
+- [ ] token 只改 `lib/core/theme/*`、组件只改 `lib/shared/*`（改源即全局），未在页面内重定义样式或复制组件
+- [ ] 无规范外新增；如需超出，已停下向用户确认并同步更新 `design-system/README.md`
+- [ ] 若改了 `design-system/`：README / canvas 源 / 托管渲染副本**三处一致**，且已运行 `scripts/sync-canvas.sh`
+- [ ] canvas 中登记的组件源码路径（`src="lib/..."`）真实存在
+
 ## 3. UI / Design Token
 
 - [ ] 使用 `AppColors`、`AppSpacing`、`AppRadius`、`AppTextStyles`、`AppDurations`

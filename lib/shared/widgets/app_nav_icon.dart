@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../core/constants/main_tab_config.dart';
+import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_durations.dart';
 import '../../core/theme/app_sizes.dart';
 import 'app_asset_image.dart';
@@ -91,6 +92,7 @@ class _AppNavIconState extends State<AppNavIcon>
         width: widget.size,
         height: widget.size,
         fit: BoxFit.contain,
+        color: widget.isSelected ? null : AppColors.white60,
       ),
     );
   }

@@ -68,15 +68,18 @@ class _ReadingWelfareDayCard extends StatelessWidget {
     final headerColor = _isToday
         ? AppWelfareColors.checkInHighlightHeader
         : AppWelfareColors.checkInDayHeader;
+    final borderColor = _isToday
+        ? AppWelfareColors.checkInHighlightBorder
+        : AppWelfareColors.checkInDayBorder;
+    final borderWidth = _isToday
+        ? AppSizes.borderWidthEmphasis
+        : AppSizes.hairline;
 
     return Container(
       decoration: BoxDecoration(
         color: bodyColor,
-        borderRadius: BorderRadius.circular(AppRadius.sm),
-        border: Border.all(
-          color: AppWelfareColors.checkInDayBorder,
-          width: AppSizes.hairline,
-        ),
+        borderRadius: BorderRadius.circular(AppRadius.md),
+        border: Border.all(color: borderColor, width: borderWidth),
       ),
       clipBehavior: Clip.antiAlias,
       child: Column(
@@ -115,7 +118,7 @@ class _ReadingWelfareDayCard extends StatelessWidget {
                   width: AppSizes.welfareCheckInRewardIconSize,
                   height: AppSizes.welfareCheckInRewardIconSize,
                 ),
-                const SizedBox(height: AppSpacing.insetXs),
+                const SizedBox(height: AppSpacing.xs),
                 AppText(
                   '${day.rewardMinutes}分钟',
                   style: _isToday

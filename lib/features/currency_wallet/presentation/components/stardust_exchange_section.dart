@@ -100,7 +100,7 @@ class _StardustOptionCard extends StatelessWidget {
                 Container(
                   width: double.infinity,
                   padding: const EdgeInsets.symmetric(
-                    vertical: AppSpacing.insetXs,
+                    vertical: AppSpacing.xs,
                   ),
                   decoration: BoxDecoration(
                     color: AppColors.accentYellow,

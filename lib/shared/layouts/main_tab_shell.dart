@@ -98,7 +98,7 @@ class MainTabPlaceholder extends StatelessWidget {
         '$label · 敬请期待',
         style: AppTextStyles.bodyLarge.copyWith(
           color: AppColors.textOnDarkMuted,
-          height: 1.0,
+          height: AppLineHeights.none,
         ),
       ),
     );

@@ -33,8 +33,10 @@ class AccountSettingsInfoRow extends StatelessWidget {
       color: Colors.transparent,
       child: InkWell(
         onTap: onTap,
-        child: SizedBox(
-          height: AppSizes.accountSettingsRowHeight,
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(
+            minHeight: AppSizes.listRowMinHeight,
+          ),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
             child: Row(

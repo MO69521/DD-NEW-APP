@@ -7,6 +7,7 @@ import '../../../../core/theme/app_radius.dart';
 import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
+import '../../../../shared/components/sweep_highlight_overlay.dart';
 import '../../../../shared/widgets/app_text.dart';
 import '../../domain/entities/membership_agreement.dart';
 
@@ -68,9 +69,8 @@ class _GradientCta extends StatefulWidget {
 }
 
 class _GradientCtaState extends State<_GradientCta>
-    with TickerProviderStateMixin {
+    with SingleTickerProviderStateMixin {
   late final AnimationController _breathController;
-  late final AnimationController _sweepController;
   late final Animation<double> _breathScale;
 
   @override
@@ -79,10 +79,6 @@ class _GradientCtaState extends State<_GradientCta>
     _breathController = AnimationController(
       vsync: this,
       duration: AppDurations.membershipCtaBreath,
-    );
-    _sweepController = AnimationController(
-      vsync: this,
-      duration: AppDurations.membershipCtaSweep,
     );
     _breathScale = Tween<double>(
       begin: AppSizes.membershipCtaBreathScaleMin,
@@ -109,24 +105,17 @@ class _GradientCtaState extends State<_GradientCta>
       _breathController
         ..stop()
         ..value = 0;
-      _sweepController
-        ..stop()
-        ..value = 0;
       return;
     }
 
     if (!_breathController.isAnimating) {
       _breathController.repeat(reverse: true);
     }
-    if (!_sweepController.isAnimating) {
-      _sweepController.repeat();
-    }
   }
 
   @override
   void dispose() {
     _breathController.dispose();
-    _sweepController.dispose();
     super.dispose();
   }
 
@@ -173,8 +162,12 @@ class _GradientCtaState extends State<_GradientCta>
                         child: SizedBox.expand(),
                       ),
                       if (!widget.isLoading)
-                        Positioned.fill(
-                          child: _CtaSweepOverlay(animation: _sweepController),
+                        const Positioned.fill(
+                          child: SweepHighlightOverlay(
+                            highlightColor:
+                                AppMembershipColors.ctaSweepHighlight,
+                            edgeColor: AppMembershipColors.ctaSweepEdge,
+                          ),
                         ),
                       if (widget.isLoading)
                         const SizedBox(
@@ -215,58 +208,6 @@ class _GradientCtaState extends State<_GradientCta>
           ),
         );
       },
-    );
-  }
-}
-
-/// CTA 扫光层：半透明白色高亮带从左向右循环滑过。
-class _CtaSweepOverlay extends StatelessWidget {
-  const _CtaSweepOverlay({required this.animation});
-
-  final Animation<double> animation;
-
-  @override
-  Widget build(BuildContext context) {
-    return IgnorePointer(
-      child: AnimatedBuilder(
-        animation: animation,
-        builder: (context, child) {
-          return LayoutBuilder(
-            builder: (context, constraints) {
-              final buttonWidth = constraints.maxWidth;
-              final bandWidth =
-                  buttonWidth * AppSizes.membershipCtaSweepBandWidthRatio;
-              final travelDistance = buttonWidth + bandWidth;
-              final offsetX = -bandWidth + travelDistance * animation.value;
-
-              return Stack(
-                clipBehavior: Clip.hardEdge,
-                children: [
-                  Transform.translate(
-                    offset: Offset(offsetX, 0),
-                    child: Container(
-                      width: bandWidth,
-                      height: constraints.maxHeight,
-                      decoration: const BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.centerLeft,
-                          end: Alignment.centerRight,
-                          colors: [
-                            AppMembershipColors.ctaSweepEdge,
-                            AppMembershipColors.ctaSweepHighlight,
-                            AppMembershipColors.ctaSweepEdge,
-                          ],
-                          stops: [0, 0.5, 1],
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              );
-            },
-          );
-        },
-      ),
     );
   }
 }

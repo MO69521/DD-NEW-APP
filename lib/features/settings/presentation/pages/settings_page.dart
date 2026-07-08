@@ -91,9 +91,9 @@ class _SettingsView extends StatelessWidget {
         ),
         body: ListView(
           padding: EdgeInsets.fromLTRB(
-            AppSpacing.insetMd,
+            AppSpacing.md,
             AppLayout.chromeTopHeight(context) + AppSpacing.md,
-            AppSpacing.insetMd,
+            AppSpacing.md,
             AppSpacing.xl,
           ),
           children: [
@@ -106,7 +106,7 @@ class _SettingsView extends StatelessWidget {
             const SizedBox(height: AppSpacing.xl),
             AppButton(
               label: '退出登录',
-              variant: AppButtonVariant.subtle,
+              variant: AppButtonVariant.secondary,
               isExpanded: true,
               isLoading: context.select(
                 (SettingsCubit cubit) => cubit.state.ui.isLoggingOut,

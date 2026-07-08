@@ -30,9 +30,9 @@ class SettingsDocumentPage extends StatelessWidget {
         ),
         body: ListView(
           padding: EdgeInsets.fromLTRB(
-            AppSpacing.insetMd,
+            AppSpacing.md,
             AppLayout.chromeTopHeight(context) + AppSpacing.md,
-            AppSpacing.insetMd,
+            AppSpacing.md,
             AppSpacing.xl,
           ),
           children: [
@@ -89,7 +89,7 @@ class _DocumentSection extends StatelessWidget {
           section.title,
           style: AppTextStyles.bodyMedium.copyWith(
             color: AppColors.textOnDark,
-            fontWeight: FontWeight.w600,
+            fontWeight: AppFontWeights.semibold,
           ),
         ),
         const SizedBox(height: AppSpacing.sm),

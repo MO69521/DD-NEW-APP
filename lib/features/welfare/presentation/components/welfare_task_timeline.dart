@@ -322,7 +322,7 @@ class _TimelineFooterRow extends StatelessWidget {
                       nodes[index].label,
                       style: AppTextStyles.welfareSubtitle.copyWith(
                         color: _footerColor(nodes[index], index, activeIndex),
-                        height: 1.0,
+                        height: AppLineHeights.none,
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,

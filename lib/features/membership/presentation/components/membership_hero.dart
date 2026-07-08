@@ -7,11 +7,12 @@ import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../shared/widgets/app_text.dart';
+import '../../../../shared/widgets/aurora_background.dart';
 import '../../domain/entities/membership_hero_slide.dart';
 
-/// L3 — 会员页 Hero 头图：背景插画 + 主张文案轮播 + 指示点。
+/// L3 — 会员页 Hero 头图：固定纹理背景 + 主张文案轮播（左文右图）+ 指示点。
 ///
-/// 背景熊插画按高度铺满并右对齐，左侧用暗色渐变衔接（消除接缝并衬托文案）；
+/// 背景为固定纹理图（不随轮播切换）；每页左侧主张文案、右侧主视觉插画贴右边缘；
 /// 指示点水平居中（对齐 Figma 933:1120）。
 /// 轮播跟手拖动 + 首尾橡皮筋，松手后一次最多切换 1 张。
 class MembershipHero extends StatefulWidget {
@@ -20,63 +21,67 @@ class MembershipHero extends StatefulWidget {
   final List<MembershipHeroSlide> slides;
 
   static const String _bgAsset =
-      'assets/images/membership/membership_hero_bg.png';
+      'assets/images/membership/hero_texture.png';
 
   @override
   State<MembershipHero> createState() => _MembershipHeroState();
 }
 
-class _MembershipHeroState extends State<MembershipHero> {
-  final PageController _controller = PageController();
+class _MembershipHeroState extends State<MembershipHero>
+    with SingleTickerProviderStateMixin {
+  /// 循环轮播：以大基数虚拟页中点起步，内容按取模映射，实现无限左右滑动。
+  static const int _loopCycles = 1000;
+
+  late final PageController _controller;
+  late final int _baseIndex;
+  late final AnimationController _imageScaleController;
+  late final Animation<double> _imageScale;
+
   int _current = 0;
   double _dragDelta = 0;
-  double _rubberBandOffset = 0;
   double? _viewportWidth;
   bool _isDragging = false;
   bool _isAnimating = false;
 
+  int get _slideCount => widget.slides.length;
+
+  @override
+  void initState() {
+    super.initState();
+    _baseIndex = _loopCycles * _slideCount;
+    _current = _baseIndex;
+    _controller = PageController(initialPage: _baseIndex);
+    _imageScaleController = AnimationController(
+      vsync: this,
+      duration: AppDurations.normal,
+      value: 1,
+    );
+    _imageScale = CurvedAnimation(
+      parent: _imageScaleController,
+      curve: Curves.easeOutBack,
+    );
+  }
+
   @override
   void dispose() {
     _controller.dispose();
+    _imageScaleController.dispose();
     super.dispose();
   }
 
-  double _rubberBand(double overscroll, double viewportWidth) {
-    final friction = AppSizes.membershipHeroRubberBandFriction;
-    final ratio = overscroll / viewportWidth;
-    return (1 - (1 / (ratio / friction + 1))) * viewportWidth;
-  }
+  /// 切到新一张时，右侧插画从 0 快速缩放弹入。
+  void _playImagePop() => _imageScaleController.forward(from: 0);
 
   void _applyDragVisual() {
     final viewportWidth = _viewportWidth;
     if (viewportWidth == null || viewportWidth <= 0) return;
 
-    final lastIndex = widget.slides.length - 1;
-    final atFirst = _current == 0;
-    final atLast = _current == lastIndex;
+    // 循环轮播无首尾边界：仅限制单次跟手不超过相邻一页。
     final maxDrag = viewportWidth * AppSizes.membershipHeroMaxDragPageRatio;
-
-    if (atFirst && _dragDelta > 0) {
-      _controller.jumpTo(0);
-      _rubberBandOffset = _rubberBand(_dragDelta, viewportWidth);
-      return;
-    }
-
-    if (atLast && _dragDelta < 0) {
-      _controller.jumpTo(_current * viewportWidth);
-      _rubberBandOffset = -_rubberBand(-_dragDelta, viewportWidth);
-      return;
-    }
-
-    _rubberBandOffset = 0;
     final clampedDrag = _dragDelta.clamp(-maxDrag, maxDrag);
-    final minPixels = atFirst ? 0.0 : (_current - 1) * viewportWidth;
-    final maxPixels = atLast
-        ? lastIndex * viewportWidth
-        : (_current + 1) * viewportWidth;
     final targetPixels = (_current * viewportWidth - clampedDrag).clamp(
-      minPixels,
-      maxPixels,
+      (_current - 1) * viewportWidth,
+      (_current + 1) * viewportWidth,
     );
     _controller.jumpTo(targetPixels);
   }
@@ -87,14 +92,12 @@ class _MembershipHeroState extends State<MembershipHero> {
     final velocity = details.primaryVelocity ?? 0;
     final distanceThreshold = AppSizes.membershipHeroSwipeDistanceThreshold;
     final velocityThreshold = AppSizes.membershipHeroSwipeVelocityThreshold;
-    final lastIndex = widget.slides.length - 1;
 
     int? target;
-    if (_current < lastIndex &&
-        (_dragDelta <= -distanceThreshold || velocity <= -velocityThreshold)) {
+    if (_dragDelta <= -distanceThreshold || velocity <= -velocityThreshold) {
       target = _current + 1;
-    } else if (_current > 0 &&
-        (_dragDelta >= distanceThreshold || velocity >= velocityThreshold)) {
+    } else if (_dragDelta >= distanceThreshold ||
+        velocity >= velocityThreshold) {
       target = _current - 1;
     }
 
@@ -110,7 +113,6 @@ class _MembershipHeroState extends State<MembershipHero> {
         setState(() {
           _current = target!;
           _dragDelta = 0;
-          _rubberBandOffset = 0;
         });
       }
     } else {
@@ -120,10 +122,7 @@ class _MembershipHeroState extends State<MembershipHero> {
         curve: Curves.easeOutBack,
       );
       if (mounted) {
-        setState(() {
-          _dragDelta = 0;
-          _rubberBandOffset = 0;
-        });
+        setState(() => _dragDelta = 0);
       }
     }
 
@@ -137,7 +136,6 @@ class _MembershipHeroState extends State<MembershipHero> {
     setState(() {
       _isDragging = false;
       _dragDelta = 0;
-      _rubberBandOffset = 0;
     });
     _controller.animateToPage(
       _current,
@@ -151,7 +149,6 @@ class _MembershipHeroState extends State<MembershipHero> {
     setState(() {
       _isDragging = true;
       _dragDelta = 0;
-      _rubberBandOffset = 0;
     });
   }
 
@@ -182,39 +179,19 @@ class _MembershipHeroState extends State<MembershipHero> {
           Positioned.fill(
             child: Image.asset(
               MembershipHero._bgAsset,
-              fit: BoxFit.cover,
-              alignment: Alignment.center,
+              fit: BoxFit.fitWidth,
+              alignment: Alignment.topCenter,
               errorBuilder: (_, _, _) => const SizedBox.shrink(),
             ),
           ),
           const Positioned.fill(
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.centerLeft,
-                  end: Alignment.centerRight,
-                  colors: [
-                    AppColors.gradientFadeEnd,
-                    AppColors.gradientFadeStart,
-                  ],
-                  stops: [0.18, 0.62],
-                ),
-              ),
-            ),
-          ),
-          const Positioned.fill(
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    AppColors.gradientFadeStart,
-                    AppColors.gradientFadeEnd,
-                  ],
-                  stops: [0.62, 1.0],
-                ),
-              ),
+            child: AuroraBackground(
+              opacity: 0.6,
+              colorStops: [
+                AppColors.auroraEdge,
+                AppColors.auroraGlow,
+                AppColors.auroraEdge,
+              ],
             ),
           ),
           Positioned.fill(
@@ -227,31 +204,55 @@ class _MembershipHeroState extends State<MembershipHero> {
                   onHorizontalDragUpdate: _onHorizontalDragUpdate,
                   onHorizontalDragEnd: _onHorizontalDragEnd,
                   onHorizontalDragCancel: _resetDrag,
-                  child: Transform.translate(
-                    offset: Offset(_rubberBandOffset, 0),
-                    child: PageView.builder(
-                      controller: _controller,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: widget.slides.length,
-                      onPageChanged: (index) {
-                        if (_isAnimating) {
-                          setState(() => _current = index);
-                        }
-                      },
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: EdgeInsets.only(
-                            left: AppSpacing.lg,
-                            right: AppSpacing.lg,
-                            top: AppSizes.membershipHeroTextTop,
+                  child: PageView.builder(
+                    controller: _controller,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: _baseIndex * 2,
+                    onPageChanged: (index) {
+                      if (_isAnimating && index != _current) {
+                        setState(() => _current = index);
+                        _playImagePop();
+                      }
+                    },
+                    itemBuilder: (context, index) {
+                      final slide = widget.slides[index % _slideCount];
+                      final isCurrent = index == _current;
+                      return Stack(
+                        children: [
+                          Positioned(
+                            right: 0,
+                            top: AppSizes.membershipHeroSlideImageTop,
+                            width: AppSizes.membershipHeroSlideImageWidth,
+                            height: AppSizes.membershipHeroSlideImageHeight,
+                            child: AnimatedBuilder(
+                              animation: _imageScale,
+                              builder: (context, child) => Transform.scale(
+                                scale: isCurrent ? _imageScale.value : 1,
+                                child: child,
+                              ),
+                              child: Image.asset(
+                                slide.imageAsset,
+                                fit: BoxFit.contain,
+                                alignment: Alignment.center,
+                                errorBuilder: (_, _, _) =>
+                                    const SizedBox.shrink(),
+                              ),
+                            ),
                           ),
-                          child: Align(
-                            alignment: Alignment.topLeft,
-                            child: _HeroSlideText(slide: widget.slides[index]),
+                          Padding(
+                            padding: const EdgeInsets.only(
+                              left: AppSpacing.lg,
+                              right: AppSpacing.lg,
+                              top: AppSizes.membershipHeroTextTop,
+                            ),
+                            child: Align(
+                              alignment: Alignment.topLeft,
+                              child: _HeroSlideText(slide: slide),
+                            ),
                           ),
-                        );
-                      },
-                    ),
+                        ],
+                      );
+                    },
                   ),
                 );
               },
@@ -263,7 +264,10 @@ class _MembershipHeroState extends State<MembershipHero> {
             top: AppSizes.membershipDotsTop,
             child: IgnorePointer(
               child: Center(
-                child: _Dots(count: widget.slides.length, current: _current),
+                child: _Dots(
+                  count: _slideCount,
+                  current: _current % _slideCount,
+                ),
               ),
             ),
           ),
@@ -284,28 +288,33 @@ class _HeroSlideText extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.baseline,
-          textBaseline: TextBaseline.alphabetic,
-          children: [
-            AppText(
-              slide.titlePrefix,
-              style: AppTextStyles.membershipHeroEnergyLabel,
-            ),
-            const SizedBox(width: AppSpacing.xxs),
-            AppText(
-              slide.titleHighlight,
-              style: AppTextStyles.membershipHeroEnergyAmount,
-            ),
-            const SizedBox(width: AppSpacing.xxs),
-            AppText(
-              slide.titleSuffix,
-              style: AppTextStyles.membershipHeroEnergyLabel,
-            ),
-          ],
+        // 单段落排版：主副字号在同一基线对齐，避免大号数字底部被
+        // 行高 descent 抬高（Row + 交叉轴对齐无法保证不同字号视觉底对齐）。
+        Text.rich(
+          TextSpan(
+            children: [
+              TextSpan(
+                text: slide.titlePrefix,
+                style: AppTextStyles.membershipHeroEnergyLabel,
+              ),
+              const WidgetSpan(child: SizedBox(width: AppSpacing.xxs)),
+              TextSpan(
+                text: slide.titleHighlight,
+                style: AppTextStyles.membershipHeroEnergyAmount,
+              ),
+              if (slide.titleSuffix.isNotEmpty) ...[
+                const WidgetSpan(child: SizedBox(width: AppSpacing.xxs)),
+                TextSpan(
+                  text: slide.titleSuffix,
+                  style: AppTextStyles.membershipHeroEnergyLabel,
+                ),
+              ],
+            ],
+          ),
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
         ),
-        const SizedBox(height: AppSpacing.xs),
+        const SizedBox(height: AppSpacing.sm),
         Row(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -315,11 +324,13 @@ class _HeroSlideText extends StatelessWidget {
                 color: AppColors.textOnDarkMuted,
               ),
             ),
-            const SizedBox(width: AppSpacing.xxs),
-            AppText(
-              slide.subtitleValue,
-              style: AppTextStyles.membershipHeroSubtitle,
-            ),
+            if (slide.subtitleValue.isNotEmpty) ...[
+              const SizedBox(width: AppSpacing.xxs),
+              AppText(
+                slide.subtitleValue,
+                style: AppTextStyles.membershipHeroSubtitle,
+              ),
+            ],
           ],
         ),
       ],

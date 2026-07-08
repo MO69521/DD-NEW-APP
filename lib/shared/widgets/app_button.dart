@@ -8,17 +8,11 @@ import 'app_text.dart';
 
 /// 按钮视觉变体。
 enum AppButtonVariant {
-  /// 亮色主操作（紫）。
-  primary,
-
   /// 暗色页主 CTA（黄色胶囊）。
   accent,
 
-  /// 暗色次操作（玻璃面板）。
+  /// 次操作 / 弱强调面按钮（4% 白底、无描边、胶囊）。
   secondary,
-
-  /// 暗色弱强调面按钮（4% 白底，无描边）。
-  subtle,
 
   /// 描边按钮（透明底 + 细边框）。
   outline,
@@ -34,7 +28,7 @@ class AppButton extends StatelessWidget {
     required this.label,
     this.onPressed,
     this.onDisabledPressed,
-    this.variant = AppButtonVariant.primary,
+    this.variant = AppButtonVariant.secondary,
     this.size = AppButtonSize.normal,
     this.isLoading = false,
     this.isExpanded = false,
@@ -51,20 +45,16 @@ class AppButton extends StatelessWidget {
   final Widget? leadingIcon;
 
   Color get _backgroundColor => switch (variant) {
-    AppButtonVariant.primary => AppColors.primary,
     AppButtonVariant.accent => AppColors.accentYellow,
     AppButtonVariant.secondary => AppColors.surfaceCard,
-    AppButtonVariant.subtle => AppColors.surfaceCard,
     AppButtonVariant.outline => Colors.transparent,
   };
 
   static const double _disabledForegroundOpacity = 0.4;
 
   Color get _foregroundColor => switch (variant) {
-    AppButtonVariant.primary => AppColors.textOnPrimary,
     AppButtonVariant.accent => AppColors.rankingSegmentedSelectedText,
     AppButtonVariant.secondary => AppColors.textOnDark,
-    AppButtonVariant.subtle => AppColors.textOnDark,
     AppButtonVariant.outline => AppColors.textOnDark,
   };
 
@@ -73,12 +63,9 @@ class AppButton extends StatelessWidget {
     return _foregroundColor.withValues(alpha: _disabledForegroundOpacity);
   }
 
-  bool get _hasBorder =>
-      variant == AppButtonVariant.secondary ||
-      variant == AppButtonVariant.outline;
+  bool get _hasBorder => variant == AppButtonVariant.outline;
 
-  double get _radius =>
-      variant == AppButtonVariant.primary ? AppRadius.md : AppRadius.full;
+  double get _radius => AppRadius.full;
 
   EdgeInsets get _padding => switch (size) {
     AppButtonSize.normal => const EdgeInsets.symmetric(
@@ -98,8 +85,8 @@ class AppButton extends StatelessWidget {
   TextStyle _textStyleFor(bool enabled) {
     final base = size == AppButtonSize.normal
         ? AppTextStyles.buttonLabel16
-        : AppTextStyles.bodyMedium.copyWith(fontWeight: FontWeight.w500);
-    return base.copyWith(color: _foregroundColorFor(enabled), height: 1.0);
+        : AppTextStyles.bodyMedium.copyWith(fontWeight: AppFontWeights.medium);
+    return base.copyWith(color: _foregroundColorFor(enabled), height: AppLineHeights.none);
   }
 
   @override

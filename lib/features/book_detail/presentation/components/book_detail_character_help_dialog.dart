@@ -6,6 +6,7 @@ import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../routes/app_router.dart';
+import '../../../../shared/components/dialog_close_button.dart';
 import '../../../../shared/widgets/app_text.dart';
 
 /// L3 — 角色玩法说明弹窗。
@@ -94,28 +95,7 @@ class BookDetailCharacterHelpDialog extends StatelessWidget {
               ),
             ),
             const SizedBox(height: AppSpacing.sm),
-            GestureDetector(
-              onTap: AppRouter.pop,
-              behavior: HitTestBehavior.opaque,
-              child: Container(
-                width: AppSizes.bookDetailCharacterHelpCloseSize,
-                height: AppSizes.bookDetailCharacterHelpCloseSize,
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  color: AppColors.overlayScrim,
-                  shape: BoxShape.circle,
-                  border: Border.all(
-                    color: AppColors.borderGlass,
-                    width: AppSizes.hairline,
-                  ),
-                ),
-                child: const Icon(
-                  Icons.close_rounded,
-                  color: AppColors.textOnDark,
-                  size: AppSizes.topBarActionIconSize,
-                ),
-              ),
-            ),
+            DialogCloseButton(onTap: AppRouter.pop),
           ],
         ),
       ),

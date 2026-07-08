@@ -37,9 +37,9 @@ class NotificationSettingsPage extends StatelessWidget {
 
             return ListView(
               padding: EdgeInsets.fromLTRB(
-                AppSpacing.insetMd,
+                AppSpacing.md,
                 AppLayout.chromeTopHeight(context) + AppSpacing.md,
-                AppSpacing.insetMd,
+                AppSpacing.md,
                 AppSpacing.xl,
               ),
               children: [
@@ -50,7 +50,6 @@ class NotificationSettingsPage extends StatelessWidget {
                       subtitle: '接收消息需手机的 系统设置-通知中心-点点穿书 已打开',
                       value: state.receiveMessages,
                       onChanged: cubit.setReceiveMessages,
-                      hasSubtitle: true,
                     ),
                   ],
                 ),
@@ -108,24 +107,20 @@ class _NotificationSwitchRow extends StatelessWidget {
     required this.value,
     required this.onChanged,
     this.subtitle,
-    this.hasSubtitle = false,
   });
 
   final String title;
   final String? subtitle;
   final bool value;
   final ValueChanged<bool> onChanged;
-  final bool hasSubtitle;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
       child: ConstrainedBox(
-        constraints: BoxConstraints(
-          minHeight: hasSubtitle
-              ? AppSizes.settingsNotificationRowWithSubtitleMinHeight
-              : AppSizes.settingsNotificationRowMinHeight,
+        constraints: const BoxConstraints(
+          minHeight: AppSizes.listRowMinHeight,
         ),
         child: Row(
           children: [

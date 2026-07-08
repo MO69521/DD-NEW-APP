@@ -36,9 +36,9 @@ class ReadingPreferencesPage extends StatelessWidget {
 
             return ListView(
               padding: EdgeInsets.fromLTRB(
-                AppSpacing.insetMd,
+                AppSpacing.md,
                 AppLayout.chromeTopHeight(context) + AppSpacing.lg,
-                AppSpacing.insetMd,
+                AppSpacing.md,
                 AppSpacing.xl,
               ),
               children: [

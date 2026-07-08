@@ -84,7 +84,7 @@ class _RuleSection extends StatelessWidget {
           '${section.title}：',
           style: AppTextStyles.bodyMedium.copyWith(
             color: AppColors.textOnDark,
-            fontWeight: FontWeight.w600,
+            fontWeight: AppFontWeights.semibold,
           ),
         ),
         const SizedBox(height: AppSpacing.xxs),

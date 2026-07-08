@@ -54,7 +54,7 @@ class SettingsLogoutConfirmDialog extends StatelessWidget {
                   Expanded(
                     child: AppButton(
                       label: '退出登录',
-                      variant: AppButtonVariant.subtle,
+                      variant: AppButtonVariant.secondary,
                       onPressed: () => AppRouter.pop(true),
                     ),
                   ),

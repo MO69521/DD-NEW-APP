@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_radius.dart';
 import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
@@ -23,9 +24,9 @@ class CheckInCumulativeBadge extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(AppSizes.welfareCheckInCumulativePadding),
       decoration: BoxDecoration(
-        color: AppWelfareColors.checkInCumulativeBg,
-        borderRadius: BorderRadius.circular(AppRadius.sm),
-        border: Border.all(color: AppWelfareColors.checkInCumulativeBorder),
+        color: AppWelfareColors.checkInDayBg,
+        borderRadius: BorderRadius.circular(AppRadius.md),
+        border: Border.all(color: AppWelfareColors.checkInDayBorder),
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -33,14 +34,16 @@ class CheckInCumulativeBadge extends StatelessWidget {
           AppText(
             title,
             textAlign: TextAlign.center,
-            style: AppTextStyles.welfareCheckInCumulativeLabel,
+            style: AppTextStyles.welfareCheckInCumulativeLabel.copyWith(
+              color: AppColors.white60,
+            ),
           ),
-          const SizedBox(height: AppSpacing.insetXs),
+          const SizedBox(height: AppSpacing.xs),
           AppText(
             '$value',
             textAlign: TextAlign.center,
             style: AppTextStyles.welfareCheckInCumulativeValue.copyWith(
-              color: AppWelfareColors.checkInCumulativeValue,
+              color: AppColors.textOnDark,
             ),
           ),
         ],

@@ -1,23 +1,15 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/theme/app_radius.dart';
-import '../../../../core/theme/app_sizes.dart';
-
+/// 启动页整屏插画（满屏铺满）。
 class SplashLogo extends StatelessWidget {
   const SplashLogo({super.key});
 
-  static const String _assetPath = 'assets/images/splash/app_icon.png';
+  static const String _assetPath = 'assets/images/splash/splash_screen.png';
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(AppRadius.xl),
-      child: Image.asset(
-        _assetPath,
-        width: AppSizes.splashLogoSize,
-        height: AppSizes.splashLogoSize,
-        fit: BoxFit.cover,
-      ),
+    return SizedBox.expand(
+      child: Image.asset(_assetPath, fit: BoxFit.cover),
     );
   }
 }

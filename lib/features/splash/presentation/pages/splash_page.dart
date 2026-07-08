@@ -25,7 +25,7 @@ class SplashPage extends StatelessWidget {
       },
       child: const Scaffold(
         backgroundColor: AppColors.backgroundDark,
-        body: Center(child: SplashLogo()),
+        body: SplashLogo(),
       ),
     );
   }

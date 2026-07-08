@@ -9,6 +9,7 @@ class BookstorePageContent extends Equatable {
     required this.rankingBooksByTab,
     required this.editorPicks,
     required this.guessLikeBooks,
+    this.continueReadingBook,
   });
 
   final String searchPlaceholder;
@@ -16,11 +17,15 @@ class BookstorePageContent extends Equatable {
   final List<Book> editorPicks;
   final List<Book> guessLikeBooks;
 
+  /// 最近在读书籍；为空表示无「继续阅读」入口。
+  final Book? continueReadingBook;
+
   @override
   List<Object?> get props => [
     searchPlaceholder,
     rankingBooksByTab,
     editorPicks,
     guessLikeBooks,
+    continueReadingBook,
   ];
 }

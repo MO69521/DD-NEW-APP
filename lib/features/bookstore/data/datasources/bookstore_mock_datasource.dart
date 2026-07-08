@@ -12,8 +12,16 @@ class BookstoreMockDataSource {
       rankingBooksByTab: _rankingBooksByTab,
       editorPicks: _editorPicks,
       guessLikeBooks: _guessYouLike,
+      continueReadingBook: _continueReadingBook,
     );
   }
+
+  static const Book _continueReadingBook = Book(
+    id: 'cr1',
+    title: '和前夫解绑后，黑莲花直播爆红了',
+    category: '都市甜宠',
+    coverAsset: 'assets/covers/cover_03.png',
+  );
 
   static const String _searchPlaceholder = '穿书后：将门六姝';
 

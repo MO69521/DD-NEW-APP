@@ -29,7 +29,7 @@ class BookDetailSummaryCard extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         ClipRRect(
-          borderRadius: BorderRadius.circular(AppRadius.coverSm),
+          borderRadius: BorderRadius.circular(AppRadius.bookCover),
           child: BookCover(
             assetPath: detail.coverAsset,
             width: AppSizes.bookDetailSummaryCoverWidth,

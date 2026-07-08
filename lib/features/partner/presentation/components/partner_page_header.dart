@@ -3,11 +3,14 @@ import 'package:flutter/material.dart';
 import '../../../../core/theme/app_partner_colors.dart';
 import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
+import '../../../../shared/components/app_top_bar.dart';
 import '../../../../shared/components/app_top_bar_icon_button.dart';
 import '../../domain/entities/partner_top_tab.dart';
 import 'partner_top_tabs.dart';
 
 /// L3 — 探索页顶栏：探索 / 消息 / 互动同级 Tab + 搜索。
+///
+/// [AppTopBar] 的「左对齐 Tab + 右侧图标」变体；blur/statusBar 由页面外层负责。
 class PartnerPageHeader extends StatelessWidget {
   const PartnerPageHeader({
     super.key,
@@ -26,23 +29,17 @@ class PartnerPageHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return AppTopBar(
       height: AppSizes.partnerHeaderHeight,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm),
-        child: Row(
-          children: [
-            PartnerTopTabs(
-              selected: selectedTopTab,
-              messageUnreadCount: messageUnreadCount,
-              interactionUnreadCount: interactionUnreadCount,
-              onSelected: onTopTabSelected,
-            ),
-            const Spacer(),
-            _SearchButton(onTap: onSearchTap),
-          ],
-        ),
+      horizontalPadding: AppSpacing.sm,
+      chromeBlurEnabled: false,
+      leading: PartnerTopTabs(
+        selected: selectedTopTab,
+        messageUnreadCount: messageUnreadCount,
+        interactionUnreadCount: interactionUnreadCount,
+        onSelected: onTopTabSelected,
       ),
+      trailing: _SearchButton(onTap: onSearchTap),
     );
   }
 }

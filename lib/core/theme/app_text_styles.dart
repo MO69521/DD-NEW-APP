@@ -6,11 +6,23 @@ import 'app_partner_colors.dart';
 import 'app_sizes.dart';
 import 'app_welfare_colors.dart';
 
+/// 全局字体族 token。禁止在 UI 中写死 fontFamily 字符串。
+abstract final class AppFontFamilies {
+  /// 定制数字字体（TCloudNumber）。仅数字 / 标点 / 符号有字形，
+  /// 其余字符（中文 / 字母）自动回退系统字体。
+  ///
+  /// 规则：**仅 ≥18px（`AppFontSizes.xl` 及以上）字号引用**，
+  /// <18px 字号（含 16px `lg`）不引用，保持系统字体。
+  ///
+  /// 字重：字体注册桶整体上移一档（见 `pubspec.yaml`），数字字形比文本标称
+  /// 字重轻一档；中文 / 字母回退按标称字重渲染，不受影响。
+  static const String number = 'TCloudNumber';
+}
+
 /// 全局字号阶梯（type scale）。禁止再写死 fontSize 数值。
 abstract final class AppFontSizes {
   static const double xxs = 9;
   static const double xs = 10;
-  static const double sm = 11;
   static const double md = 12;
   static const double base = 14;
   static const double lg = 16;
@@ -23,9 +35,7 @@ abstract final class AppFontSizes {
 abstract final class AppLineHeights {
   static const double none = 1.0;
   static const double tight = 1.2;
-  static const double snug = 1.3;
   static const double normal = 1.4;
-  static const double relaxed = 1.5;
   static const double loose = 1.75;
 }
 
@@ -43,6 +53,7 @@ abstract final class AppFontWeights {
 abstract final class AppTextStyles {
   static const TextStyle displayLarge = TextStyle(
     fontSize: AppFontSizes.display,
+    fontFamily: AppFontFamilies.number,
     fontWeight: AppFontWeights.bold,
     color: AppColors.textPrimary,
     height: AppLineHeights.tight,
@@ -50,13 +61,15 @@ abstract final class AppTextStyles {
 
   static const TextStyle headlineMedium = TextStyle(
     fontSize: AppFontSizes.xxl,
+    fontFamily: AppFontFamilies.number,
     fontWeight: AppFontWeights.semibold,
     color: AppColors.textPrimary,
-    height: AppLineHeights.snug,
+    height: AppLineHeights.tight,
   );
 
   static const TextStyle titleMedium = TextStyle(
     fontSize: AppFontSizes.xl,
+    fontFamily: AppFontFamilies.number,
     fontWeight: AppFontWeights.semibold,
     color: AppColors.textPrimary,
     height: AppLineHeights.normal,
@@ -66,14 +79,14 @@ abstract final class AppTextStyles {
     fontSize: AppFontSizes.lg,
     fontWeight: AppFontWeights.regular,
     color: AppColors.textPrimary,
-    height: AppLineHeights.relaxed,
+    height: AppLineHeights.normal,
   );
 
   static const TextStyle bodyMedium = TextStyle(
     fontSize: AppFontSizes.base,
     fontWeight: AppFontWeights.regular,
     color: AppColors.textSecondary,
-    height: AppLineHeights.relaxed,
+    height: AppLineHeights.normal,
   );
 
   /// 大按钮主文案字重（AppButton normal、福利签到 CTA、会员开通 CTA 等）。
@@ -112,7 +125,7 @@ abstract final class AppTextStyles {
   );
 
   static const TextStyle captionMd = TextStyle(
-    fontSize: AppFontSizes.sm,
+    fontSize: AppFontSizes.md,
     fontWeight: AppFontWeights.medium,
     color: AppColors.textSecondary,
     height: AppLineHeights.none,
@@ -134,6 +147,7 @@ abstract final class AppTextStyles {
 
   static const TextStyle displaySm = TextStyle(
     fontSize: AppFontSizes.xxl,
+    fontFamily: AppFontFamilies.number,
     fontWeight: AppFontWeights.bold,
     color: AppColors.textPrimary,
     height: AppLineHeights.none,
@@ -183,6 +197,7 @@ abstract final class AppTextStyles {
 
   static const TextStyle tabActiveDark = TextStyle(
     fontSize: AppFontSizes.xl,
+    fontFamily: AppFontFamilies.number,
     fontWeight: AppFontWeights.medium,
     color: AppColors.textOnDark,
     height: AppLineHeights.none,
@@ -198,14 +213,14 @@ abstract final class AppTextStyles {
   static TextStyle get bookTitleDark => bodyMedium.copyWith(
     color: AppColors.textOnDark,
     fontWeight: AppFontWeights.regular,
-    height: AppLineHeights.relaxed,
+    height: AppLineHeights.normal,
   );
 
   static TextStyle get bookGridTitleDark => bodyMedium.copyWith(
     color: AppColors.textOnDark,
     fontWeight: AppFontWeights.regular,
     // Grid cards are tighter than list tiles; use denser line-height.
-    height: AppLineHeights.snug,
+    height: AppLineHeights.tight,
   );
 
   static TextStyle get bookTagDark => labelMedium.copyWith(
@@ -260,6 +275,7 @@ abstract final class AppTextStyles {
 
   static TextStyle get welfareCurrencyAmount => const TextStyle(
     fontSize: AppFontSizes.xxl,
+    fontFamily: AppFontFamilies.number,
     fontWeight: AppFontWeights.bold,
     color: AppColors.textOnDark,
     height: AppLineHeights.none,
@@ -269,7 +285,7 @@ abstract final class AppTextStyles {
     fontSize: AppFontSizes.md,
     fontWeight: AppFontWeights.regular,
     color: AppColors.textOnDarkMuted,
-    height: AppLineHeights.relaxed,
+    height: AppLineHeights.normal,
   );
 
   static TextStyle get welfareCtaText => buttonLabel14;
@@ -297,7 +313,7 @@ abstract final class AppTextStyles {
   );
 
   static TextStyle get welfareCheckInRewardToday => captionMd.copyWith(
-    color: AppWelfareColors.goldText,
+    color: AppWelfareColors.checkInRewardTodayText,
     fontWeight: AppFontWeights.medium,
   );
 
@@ -374,8 +390,11 @@ abstract final class AppTextStyles {
     height: AppLineHeights.none,
   );
 
-  static TextStyle get welfareCheckInCumulativeValue =>
-      const TextStyle(fontSize: AppFontSizes.lg, fontWeight: AppFontWeights.bold, height: AppLineHeights.none);
+  static TextStyle get welfareCheckInCumulativeValue => const TextStyle(
+    fontSize: AppFontSizes.lg,
+    fontWeight: AppFontWeights.bold,
+    height: AppLineHeights.none,
+  );
 
   static TextStyle get welfareCheckInMilestoneLabel => captionMd.copyWith(
     color: AppWelfareColors.checkInMilestoneLabel,
@@ -412,6 +431,7 @@ abstract final class AppTextStyles {
 
   static TextStyle get profileNickname => const TextStyle(
     fontSize: AppFontSizes.xl,
+    fontFamily: AppFontFamilies.number,
     fontWeight: AppFontWeights.medium,
     color: AppColors.textOnDark,
     height: AppLineHeights.none,
@@ -447,6 +467,7 @@ abstract final class AppTextStyles {
   // 榜单详情页 (Figma 220:8376)
   static const TextStyle rankingHeroTitle = TextStyle(
     fontSize: AppFontSizes.xxl,
+    fontFamily: AppFontFamilies.number,
     fontWeight: AppFontWeights.heavy,
     color: AppColors.rankingHeroTitle,
     height: AppLineHeights.none,
@@ -492,13 +513,14 @@ abstract final class AppTextStyles {
   // 书籍详情页 (Figma 183:1874) — 颜色复用现有 token。
   static const TextStyle bookDetailTitle = TextStyle(
     fontSize: AppFontSizes.xxl,
+    fontFamily: AppFontFamilies.number,
     fontWeight: AppFontWeights.medium,
     color: AppColors.textOnDark,
     height: AppLineHeights.normal,
   );
 
   static const TextStyle bookDetailTag = TextStyle(
-    fontSize: AppFontSizes.sm,
+    fontSize: AppFontSizes.md,
     fontWeight: AppFontWeights.regular,
     color: AppColors.textOnDarkPlaceholder,
     height: AppLineHeights.none,
@@ -513,15 +535,16 @@ abstract final class AppTextStyles {
 
   /// 书籍详情摘要卡：标签行 / 连载数据行。
   static const TextStyle bookDetailSummaryMeta = TextStyle(
-    fontSize: AppFontSizes.sm,
+    fontSize: AppFontSizes.md,
     fontWeight: AppFontWeights.regular,
     color: AppColors.textOnDarkPlaceholder,
-    height: AppLineHeights.snug,
+    height: AppLineHeights.tight,
   );
 
   /// 书籍详情摘要卡标题（左图右文，较顶栏叠字略小）。
   static const TextStyle bookDetailSummaryTitle = TextStyle(
     fontSize: AppFontSizes.xl,
+    fontFamily: AppFontFamilies.number,
     fontWeight: AppFontWeights.semibold,
     color: AppColors.textOnDark,
     height: AppLineHeights.normal,
@@ -529,6 +552,7 @@ abstract final class AppTextStyles {
 
   static const TextStyle bookDetailStatValue = TextStyle(
     fontSize: AppFontSizes.xxl,
+    fontFamily: AppFontFamilies.number,
     fontWeight: AppFontWeights.bold,
     color: AppColors.textOnDark,
     height: AppLineHeights.none,
@@ -556,14 +580,14 @@ abstract final class AppTextStyles {
   );
 
   static const TextStyle bookDetailTabCount = TextStyle(
-    fontSize: AppFontSizes.sm,
+    fontSize: AppFontSizes.md,
     fontWeight: AppFontWeights.regular,
     color: AppColors.segmentedUnselectedText,
     height: AppLineHeights.none,
   );
 
   static const TextStyle bookDetailTabCountSelected = TextStyle(
-    fontSize: AppFontSizes.sm,
+    fontSize: AppFontSizes.md,
     fontWeight: AppFontWeights.regular,
     color: AppColors.segmentedSelectedText,
     height: AppLineHeights.none,
@@ -578,6 +602,7 @@ abstract final class AppTextStyles {
 
   static const TextStyle bookDetailSectionTitle = TextStyle(
     fontSize: AppFontSizes.xl,
+    fontFamily: AppFontFamilies.number,
     fontWeight: AppFontWeights.medium,
     color: AppColors.textOnDark,
     height: AppLineHeights.none,
@@ -601,7 +626,7 @@ abstract final class AppTextStyles {
     fontSize: AppFontSizes.lg,
     fontWeight: AppFontWeights.medium,
     color: AppColors.textOnDark,
-    height: AppLineHeights.snug,
+    height: AppLineHeights.tight,
   );
 
   static const TextStyle bookDetailCatalogChapterTitle = TextStyle(
@@ -622,7 +647,7 @@ abstract final class AppTextStyles {
     fontSize: AppFontSizes.base,
     fontWeight: AppFontWeights.medium,
     color: AppColors.textOnDark,
-    height: AppLineHeights.relaxed,
+    height: AppLineHeights.normal,
   );
 
   static const TextStyle bookDetailCharFav = TextStyle(
@@ -657,7 +682,7 @@ abstract final class AppTextStyles {
     fontSize: AppFontSizes.base,
     fontWeight: AppFontWeights.regular,
     color: AppColors.textOnDarkMuted,
-    height: AppLineHeights.relaxed,
+    height: AppLineHeights.normal,
   );
 
   static const TextStyle bookDetailDiscussionFilterSelected = TextStyle(
@@ -682,7 +707,7 @@ abstract final class AppTextStyles {
   );
 
   static const TextStyle bookDetailDiscussionMeta = TextStyle(
-    fontSize: AppFontSizes.sm,
+    fontSize: AppFontSizes.md,
     fontWeight: AppFontWeights.regular,
     color: AppColors.textOnDarkMuted,
     height: AppLineHeights.none,
@@ -696,7 +721,7 @@ abstract final class AppTextStyles {
   );
 
   static const TextStyle bookDetailDiscussionTag = TextStyle(
-    fontSize: AppFontSizes.sm,
+    fontSize: AppFontSizes.md,
     fontWeight: AppFontWeights.regular,
     color: AppColors.textOnDark,
     height: AppLineHeights.none,
@@ -713,7 +738,7 @@ abstract final class AppTextStyles {
     fontSize: AppFontSizes.base,
     fontWeight: AppFontWeights.regular,
     color: AppColors.textOnDarkMuted,
-    height: AppLineHeights.relaxed,
+    height: AppLineHeights.normal,
   );
 
   static const TextStyle bookDetailDiscussionReplyAction = TextStyle(
@@ -793,12 +818,12 @@ abstract final class AppTextStyles {
     fontSize: AppFontSizes.base,
     fontWeight: AppFontWeights.regular,
     color: AppColors.textOnDarkMuted,
-    height: AppLineHeights.relaxed,
+    height: AppLineHeights.normal,
   );
 
   /// 封面右上角状态角标文字（Figma 1335:12223）；颜色随变体覆盖。
   static const TextStyle bookCoverTagLabel = TextStyle(
-    fontSize: AppFontSizes.sm,
+    fontSize: AppFontSizes.md,
     fontWeight: AppFontWeights.regular,
     color: AppColors.textOnDark,
     height: AppLineHeights.none,
@@ -839,6 +864,7 @@ abstract final class AppTextStyles {
   // 设计字体 YouSheBiaoTiHei 工程未内置，降级为系统粗体显示字重。
   static const TextStyle membershipHeroEnergyLabel = TextStyle(
     fontSize: AppFontSizes.xxl,
+    fontFamily: AppFontFamilies.number,
     fontWeight: AppFontWeights.bold,
     color: AppColors.textOnDark,
     height: AppLineHeights.none,
@@ -846,6 +872,7 @@ abstract final class AppTextStyles {
 
   static const TextStyle membershipHeroEnergyAmount = TextStyle(
     fontSize: AppFontSizes.display,
+    fontFamily: AppFontFamilies.number,
     fontWeight: AppFontWeights.bold,
     color: AppColors.textOnDark,
     height: AppLineHeights.none,
@@ -888,7 +915,8 @@ abstract final class AppTextStyles {
 
   static const TextStyle membershipPlanPrice = TextStyle(
     fontSize: AppFontSizes.display,
-    fontWeight: AppFontWeights.black,
+    fontFamily: AppFontFamilies.number,
+    fontWeight: AppFontWeights.heavy,
     color: AppColors.textOnDark,
     height: AppLineHeights.none,
   );
@@ -961,7 +989,7 @@ abstract final class AppTextStyles {
   );
 
   static const TextStyle membershipStatementBody = TextStyle(
-    fontSize: AppFontSizes.sm,
+    fontSize: AppFontSizes.md,
     fontWeight: AppFontWeights.regular,
     color: AppColors.textOnDarkPlaceholder,
     height: AppLineHeights.loose,
@@ -999,6 +1027,7 @@ abstract final class AppTextStyles {
   // 伙伴页 / 探索（深色 + 粉紫主题）
   static const TextStyle partnerPageTitle = TextStyle(
     fontSize: AppFontSizes.xxl,
+    fontFamily: AppFontFamilies.number,
     fontWeight: AppFontWeights.bold,
     color: AppPartnerColors.textPrimary,
     height: AppLineHeights.none,
@@ -1064,7 +1093,7 @@ abstract final class AppTextStyles {
     fontSize: AppFontSizes.lg,
     fontWeight: AppFontWeights.bold,
     color: AppPartnerColors.textPrimary,
-    height: AppLineHeights.snug,
+    height: AppLineHeights.tight,
   );
 
   static const TextStyle partnerCharacterQuote = TextStyle(
@@ -1078,7 +1107,7 @@ abstract final class AppTextStyles {
     fontSize: AppFontSizes.md,
     fontWeight: AppFontWeights.regular,
     color: AppPartnerColors.textTertiary,
-    height: AppLineHeights.snug,
+    height: AppLineHeights.tight,
   );
 
   static const TextStyle partnerTraitTag = TextStyle(
@@ -1155,7 +1184,7 @@ abstract final class AppTextStyles {
     fontSize: AppFontSizes.base,
     fontWeight: AppFontWeights.regular,
     color: AppPartnerColors.textSecondary,
-    height: AppLineHeights.snug,
+    height: AppLineHeights.tight,
   );
 
   static const TextStyle partnerMessageTimestamp = TextStyle(
@@ -1174,20 +1203,21 @@ abstract final class AppTextStyles {
 
   static const TextStyle partnerInteractionCharacterName = TextStyle(
     fontSize: AppFontSizes.xl,
+    fontFamily: AppFontFamilies.number,
     fontWeight: AppFontWeights.bold,
     color: AppPartnerColors.textPrimary,
     height: AppLineHeights.tight,
   );
 
   static const TextStyle partnerInteractionUpgradeHint = TextStyle(
-    fontSize: AppFontSizes.sm,
+    fontSize: AppFontSizes.md,
     fontWeight: AppFontWeights.regular,
     color: AppPartnerColors.textSecondary,
     height: AppLineHeights.tight,
   );
 
   static const TextStyle partnerInteractionSideActionLabel = TextStyle(
-    fontSize: AppFontSizes.sm,
+    fontSize: AppFontSizes.md,
     fontWeight: AppFontWeights.regular,
     color: AppPartnerColors.textPrimary,
     height: AppLineHeights.none,

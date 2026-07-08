@@ -281,7 +281,7 @@ class _Header extends StatelessWidget {
                       : Icons.thumb_up_alt_outlined,
                   size: AppSizes.bookDetailDiscussionLikeIconSize,
                   color: post.isLiked
-                      ? AppColors.primary
+                      ? AppColors.accentYellow
                       : AppColors.discussionLikeIcon,
                 ),
                 const SizedBox(width: AppSpacing.xxsHalf),
@@ -347,7 +347,7 @@ class _Tag extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         color: AppColors.navBarBackground,
-        borderRadius: BorderRadius.circular(AppRadius.sm),
+        borderRadius: BorderRadius.circular(AppRadius.md),
       ),
       child: AppText(label, style: AppTextStyles.bookDetailDiscussionTag),
     );

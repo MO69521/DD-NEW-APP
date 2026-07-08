@@ -60,3 +60,35 @@ class RechargePackage extends Equatable {
     actionRoute,
   ];
 }
+
+/// 能量免费领取入口类型（VIP 每日赠送 / 每日看广告领取）。
+enum EnergyFreeClaimKind { vip, dailyAd }
+
+/// 能量充值区「免费领取」卡片契约（跨 feature 共享，纯 Dart）。
+class EnergyFreeClaimOption extends Equatable {
+  const EnergyFreeClaimOption({
+    required this.id,
+    required this.badgeLabel,
+    required this.energyAmount,
+    required this.ctaLabel,
+    required this.kind,
+    this.illustrationAsset = 'assets/images/welfare/recharge_tier_1.png',
+  });
+
+  final String id;
+  final String badgeLabel;
+  final int energyAmount;
+  final String ctaLabel;
+  final EnergyFreeClaimKind kind;
+  final String illustrationAsset;
+
+  @override
+  List<Object?> get props => [
+    id,
+    badgeLabel,
+    energyAmount,
+    ctaLabel,
+    kind,
+    illustrationAsset,
+  ];
+}

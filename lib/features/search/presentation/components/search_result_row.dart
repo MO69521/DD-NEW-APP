@@ -14,11 +14,13 @@ class SearchResultRow extends StatelessWidget {
   const SearchResultRow({
     super.key,
     required this.item,
+    this.isInShelf = false,
     this.onTap,
     this.onAddToShelf,
   });
 
   final SearchResultItem item;
+  final bool isInShelf;
   final void Function(Book book)? onTap;
   final void Function(Book book)? onAddToShelf;
 
@@ -36,6 +38,7 @@ class SearchResultRow extends StatelessWidget {
       description: item.description,
       coverTag: _coverTagFor(item.status),
       trailing: _AddToShelfButton(
+        isInShelf: isInShelf,
         onTap: onAddToShelf == null ? null : () => onAddToShelf!(item.book),
       ),
       padding: EdgeInsets.zero,
@@ -45,22 +48,28 @@ class SearchResultRow extends StatelessWidget {
 }
 
 class _AddToShelfButton extends StatelessWidget {
-  const _AddToShelfButton({this.onTap});
+  const _AddToShelfButton({this.isInShelf = false, this.onTap});
 
+  final bool isInShelf;
   final VoidCallback? onTap;
 
-  static const String _addIconAsset = 'assets/icons/search/add_to_shelf.svg';
+  static const String _addIconAsset =
+      'assets/icons/book_detail/add_to_shelf.svg';
+  static const String _inShelfIconAsset =
+      'assets/icons/book_detail/in_shelf.svg';
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
       behavior: HitTestBehavior.opaque,
-      child: const AppIcon(
-        assetPath: _addIconAsset,
+      child: AppIcon(
+        assetPath: isInShelf ? _inShelfIconAsset : _addIconAsset,
         width: AppSizes.bookCardLargeTrailingIconSize,
         height: AppSizes.bookCardLargeTrailingIconSize,
-        color: AppColors.textOnDarkPlaceholder,
+        color: isInShelf
+            ? AppColors.accentYellow
+            : AppColors.textOnDarkPlaceholder,
       ),
     );
   }

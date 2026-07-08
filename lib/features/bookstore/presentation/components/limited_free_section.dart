@@ -211,7 +211,7 @@ class _CountdownValue extends StatelessWidget {
         borderRadius: BorderRadius.circular(AppRadius.xs),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(AppSpacing.countdownValueInset),
+        padding: const EdgeInsets.all(AppSpacing.xxsHalf),
         child: AppText(
           value,
           style: AppTextStyles.captionMd.copyWith(

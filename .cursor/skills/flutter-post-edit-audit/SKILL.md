@@ -2,8 +2,10 @@
 name: flutter-post-edit-audit
 description: >-
   Audits Flutter code changes after every edit for design-token compliance and
-  STRICT V2 architecture rules. Use after completing any Flutter/Dart code
-  modification, feature implementation, refactor, or bug fix in this project.
+  STRICT V2 architecture rules, and enforces the highest-priority design-system/
+  authority (README + canvas three-way consistency and canvas sync). Use after
+  completing any Flutter/Dart code modification, feature implementation, refactor,
+  or bug fix, AND after editing anything under design-system/.
 ---
 
 # Flutter 修改后合规审计
@@ -11,17 +13,23 @@ description: >-
 每次完成 Flutter/Dart 代码修改后，**必须**执行本审计，再向用户汇报结果。
 
 规范全文：[flutter-architecture-strict-v2.mdc](../../rules/flutter-architecture-strict-v2.mdc)
-设计 token 基线（唯一权威）：[design-system/README.md](../../../design-system/README.md)
+设计规范（**最高优先级唯一权威**，见规范 §0.1）：
 
-## 设计规范治理（强制）
+- 文本基线：[design-system/README.md](../../../design-system/README.md)
+- 可视化目录：[design-system/design-system-spec.canvas.tsx](../../../design-system/design-system-spec.canvas.tsx)
 
-- 涉及颜色 / 字号 / 行高 / 字重 / 间距 / 圆角的改动，**必须先对照** `design-system/README.md`。
-- **严禁擅自新增或修改 token / 档位 / 规范。** 收敛去重（把重复字面量指向已有 token、值不变）可直接做；一旦需要**新增字面量 / 新 token / 新档位 / 新色系**（超出规范），**必须停止，先向用户说明用途与建议值并取得确认**，落地后**同步更新** `design-system/README.md`。
+## 设计规范治理（最高优先级 · 强制）
+
+- **先对照后动手**：涉及颜色 / 字号 / 行高 / 字重 / 间距 / 圆角 / 组件外观或变体的改动，**动手前必须先读** `design-system/README.md`，直接引用已有 token / 组件档位；与规范冲突时**以规范为准**。
+- **改源即全局**：token 真源在 `lib/core/theme/*`，组件真源在 `lib/shared/*`；只改这一处即全局同步，禁止在页面内重定义样式或复制组件。
+- **严禁擅自新增**：收敛去重（把重复字面量指向已有 token、值不变）可直接做；一旦需要**新增字面量 / 新 token / 新档位 / 新色系 / 新组件变体**（超出规范），**必须停止，先向用户说明用途与建议值并取得确认**，落地后**同步更新** `design-system/README.md`。
+- **三处一致**：README.md（文本）、canvas 源文件、Cursor 托管渲染副本必须一致；改了可视化文档后**必须运行** `scripts/sync-canvas.sh` 同步（见 Step 2.6）。
 - `--dart-define=THEME` 换色系时，不得改动 `dark`（默认）分支源值。
 
 ## 触发时机
 
 - 新增/修改/删除任意 `lib/**/*.dart` 文件后
+- **新增/修改任意 `design-system/**` 文件后**（对照三处一致 + 同步 canvas）
 - 用户要求实现功能、修 bug、重构后
 - 准备说「已完成」之前
 
@@ -55,6 +63,21 @@ bash .cursor/skills/flutter-post-edit-audit/scripts/design-system-check.sh
   - 若属**收敛去重**（新增只是把重复值指向已有 token、值不变）→ 可继续。
   - 若属**规范外新增**（新值 / 新档位 / 新 token / 新色系）→ **停止**，在报告中列出并**向用户说明用途 + 建议值，取得确认后**才落地，并同步更新规范文档。
 - 退出码 2 表示检测到 token 层新增，需人工判定；0 表示无新增。
+
+### Step 2.6 — 设计规范一致性 + canvas 同步（改动涉及 `design-system/` 或 UI token/组件时强制）
+
+```bash
+bash .cursor/skills/flutter-post-edit-audit/scripts/design-system-consistency.sh
+```
+
+- 校验 §0.1「三处一致」：`README.md` / canvas 源 / Cursor 托管渲染副本，以及 canvas 中登记的组件源码路径是否真实存在。
+- 退出码 2（不一致 / 缺失）→ 修复后重跑。若仅是托管副本落后，运行同步脚本：
+
+```bash
+bash .cursor/skills/flutter-post-edit-audit/scripts/sync-canvas.sh
+```
+
+- **凡编辑过 `design-system/design-system-spec.canvas.tsx`，收尾前必须跑一次 `sync-canvas.sh`**，否则预览不更新。
 
 ### Step 3 — 人工核对清单
 
@@ -93,6 +116,7 @@ bash .cursor/skills/flutter-post-edit-audit/scripts/design-system-check.sh
 |--------|------|
 | Design Token | ✅ 无写死样式；新增 token（如有）已登记于 `lib/core/theme/` |
 | 设计规范对照 | ✅ 已对照 `design-system/README.md`；无规范外新增（或已获用户确认并更新文档） |
+| 设计规范一致性 | ✅ README / canvas 源 / 托管副本三处一致（涉及 `design-system/` 时已跑 sync-canvas.sh） |
 | Feature 分层 | ✅ |
 | 依赖方向 | ✅ |
 | 组件分级 | ✅ |

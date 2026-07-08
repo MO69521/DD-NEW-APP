@@ -1,16 +1,13 @@
 /// 全局圆角 token，禁止在 UI 中写死 [BorderRadius.circular] 数值。
 abstract final class AppRadius {
   static const double xs = 4;
-  static const double sm = 8;
   static const double md = 12;
   static const double lg = 16;
   static const double xl = 24;
   static const double full = 999;
 
-  static const double coverSm = 6;
-
-  /// 通用 CTA / 胶囊按钮圆角（多处 26 的单一真源）。
-  static const double cta = 26;
+  /// 书籍封面统一圆角（全局单一真源，较卡片 md 小两档）。
+  static const double bookCover = xs;
 
   static const double rankingFullListAction = 22;
   static const double searchBar = 35;
@@ -21,8 +18,8 @@ abstract final class AppRadius {
   static const double welfareTaskBubble = 9;
   static const double welfareCheckInSection = lg;
   static const double welfareVipCta = 23;
-  static const double welfareCheckInCta = cta;
-  static const double welfareRechargePrice = cta;
+  static const double welfareCheckInCta = xl;
+  static const double welfareRechargePrice = xl;
   static const double welfareRechargeMoreAction = 22;
 
   static const double bookshelfReadingBanner = 45;
@@ -37,11 +34,11 @@ abstract final class AppRadius {
   static const double bookDetailTabBar = 46;
   static const double bookDetailTabItem = 50;
   static const double bookDetailCatalog = 10;
-  static const double bookDetailCatalogDrawerCover = coverSm;
-  static const double bookDetailReadCta = cta;
-  static const double bookDetailCharFav = cta;
+  static const double bookDetailCatalogDrawerCover = bookCover;
+  static const double bookDetailReadCta = xl;
+  static const double bookDetailCharFav = xl;
   static const double bookDetailDiscussionCard = md;
-  static const double bookDetailDiscussionReply = sm;
+  static const double bookDetailDiscussionReply = md;
   static const double bookDetailDiscussionFilter = 20;
 
   // 搜索页（深色态）
@@ -50,13 +47,13 @@ abstract final class AppRadius {
   // 会员页 (Figma 927:725)
   static const double membershipCard = lg;
   static const double membershipPlanCard = 10;
-  static const double membershipCta = cta;
+  static const double membershipCta = xl;
 
   // 设置页
-  static const double settingsLogo = xl;
+  static const double settingsLogo = lg;
 
   // 伙伴页 / 探索
-  static const double partnerCategoryChip = sm;
+  static const double partnerCategoryChip = md;
   static const double partnerCharacterCard = md;
   static const double partnerTraitTag = xs;
   static const double partnerCollectionBadge = xs;

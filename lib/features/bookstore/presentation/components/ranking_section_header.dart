@@ -39,8 +39,8 @@ class RankingSectionHeader extends StatelessWidget {
             padding: const EdgeInsets.only(
               left: AppSpacing.sm,
               right: AppSpacing.xs,
-              top: AppSpacing.insetXs,
-              bottom: AppSpacing.insetXs,
+              top: AppSpacing.xs,
+              bottom: AppSpacing.xs,
             ),
             decoration: BoxDecoration(
               color: AppColors.surfaceCard,

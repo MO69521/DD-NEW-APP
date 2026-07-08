@@ -293,8 +293,8 @@ class _PaymentLogo extends StatelessWidget {
 
   final PaymentMethod method;
 
-  static const String _wechatAsset = 'assets/icons/payment/wechat_pay.png';
-  static const String _alipayAsset = 'assets/icons/payment/alipay.png';
+  static const String _wechatAsset = 'assets/icons/payment/wechat.svg';
+  static const String _alipayAsset = 'assets/icons/payment/alipay.svg';
 
   @override
   Widget build(BuildContext context) {

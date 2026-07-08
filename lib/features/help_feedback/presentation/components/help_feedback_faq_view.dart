@@ -23,9 +23,9 @@ class HelpFeedbackFaqView extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView(
       padding: const EdgeInsets.fromLTRB(
-        AppSpacing.insetMd,
         AppSpacing.md,
-        AppSpacing.insetMd,
+        AppSpacing.md,
+        AppSpacing.md,
         AppSpacing.xl,
       ),
       children: [
@@ -160,27 +160,29 @@ class _FaqQuestionRow extends StatelessWidget {
       onTap: onTap,
       behavior: HitTestBehavior.opaque,
       child: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: AppSpacing.md,
-          vertical: AppSpacing.sm,
-        ),
-        child: Row(
-          children: [
-            Expanded(
-              child: AppText(
-                question,
-                style: AppTextStyles.bodyMediumDark,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
+        padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(
+            minHeight: AppSizes.listRowMinHeight,
+          ),
+          child: Row(
+            children: [
+              Expanded(
+                child: AppText(
+                  question,
+                  style: AppTextStyles.bodyMediumDark,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
-            ),
-            const SizedBox(width: AppSpacing.xs),
-            const Icon(
-              Icons.chevron_right_rounded,
-              color: AppColors.textOnDarkMuted,
-              size: AppSizes.topBarActionIconSize,
-            ),
-          ],
+              const SizedBox(width: AppSpacing.xs),
+              const Icon(
+                Icons.chevron_right_rounded,
+                color: AppColors.textOnDarkMuted,
+                size: AppSizes.topBarActionIconSize,
+              ),
+            ],
+          ),
         ),
       ),
     );

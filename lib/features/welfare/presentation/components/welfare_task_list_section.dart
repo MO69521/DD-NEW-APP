@@ -46,7 +46,6 @@ class WelfareTaskListSection extends StatelessWidget {
                 padding: const EdgeInsets.only(
                   left: AppSpacing.sm,
                   right: AppSpacing.sm,
-                  top: AppSpacing.md,
                   bottom: AppSpacing.xs,
                 ),
                 decoration: BoxDecoration(
@@ -104,7 +103,7 @@ class _TaskVipEntry extends StatelessWidget {
           left: AppSpacing.sm,
           right: AppSpacing.sm,
           top: AppSpacing.md,
-          bottom: AppSpacing.xl,
+          bottom: AppSpacing.lg,
         ),
         decoration: BoxDecoration(
           gradient: const LinearGradient(
@@ -131,7 +130,8 @@ class _TaskVipEntry extends StatelessWidget {
                     AppText(
                       entry.title,
                       style: AppTextStyles.welfareVipBannerLabel.copyWith(
-                        color: AppWelfareColors.vipBannerText,
+                        color: AppWelfareColors.vipCtaText,
+                        fontWeight: AppFontWeights.semibold,
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,

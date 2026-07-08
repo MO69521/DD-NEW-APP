@@ -17,4 +17,7 @@ abstract final class AppDurations {
 
   /// 会员页开通 CTA 扫光动画单周期（左 → 右）。
   static const Duration membershipCtaSweep = Duration(milliseconds: 2200);
+
+  /// 礼花彩带庆祝动效喷发窗口（仅迸发一下，粒子随后自行飘落）。
+  static const Duration confettiBurst = Duration(milliseconds: 200);
 }

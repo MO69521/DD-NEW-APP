@@ -4,6 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/theme/app_layout.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_sizes.dart';
+import '../../../../core/theme/app_spacing.dart';
 import '../../../../routes/app_router.dart';
 import '../../../../routes/app_routes.dart';
 import '../../../../shared/components/empty_state.dart';
@@ -15,6 +17,7 @@ import '../../application/bookstore_state.dart';
 import '../../domain/entities/bookstore_top_tab.dart';
 import '../components/bookstore_page_header.dart';
 import '../components/bookstore_recommend_body.dart';
+import '../components/continue_reading_card.dart';
 
 /// 书城推荐页：仅渲染 state、触发 action。
 class BookstorePage extends StatelessWidget {
@@ -144,39 +147,67 @@ class _BookstoreViewState extends State<_BookstoreView> {
       },
       child: Scaffold(
         backgroundColor: AppColors.backgroundDark,
-        body: BlocSelector<BookstoreCubit, BookstoreState, BookstoreTopTab>(
-          selector: (state) => state.interaction.selectedTopTab,
-          builder: (context, selectedTopTab) {
-            return AppPageChrome(
-              topBar: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  SizedBox(height: statusBarHeight),
-                  BookstorePageHeader(
-                    selectedTopTab: selectedTopTab,
-                    onTopTabSelected: cubit.switchTopTab,
-                    onSearchTap: () =>
-                        AppRouter.pushNamed(AppRoutes.searchName),
+        body: Stack(
+          children: [
+            BlocSelector<BookstoreCubit, BookstoreState, BookstoreTopTab>(
+              selector: (state) => state.interaction.selectedTopTab,
+              builder: (context, selectedTopTab) {
+                return AppPageChrome(
+                  topBar: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      SizedBox(height: statusBarHeight),
+                      BookstorePageHeader(
+                        selectedTopTab: selectedTopTab,
+                        onTopTabSelected: cubit.switchTopTab,
+                        onSearchTap: () =>
+                            AppRouter.pushNamed(AppRoutes.searchName),
+                      ),
+                    ],
                   ),
-                ],
+                  body: ScrollConfiguration(
+                    behavior: const _TopTabSwipeScrollBehavior(),
+                    child: PageView(
+                      controller: _pageController,
+                      physics: const PageScrollPhysics(),
+                      onPageChanged: (index) {
+                        cubit.switchTopTab(BookstoreTopTab.values[index]);
+                      },
+                      children: [
+                        const BookstoreRecommendBody(),
+                        widget.categoryTabBuilder(context),
+                        widget.rankingTabBuilder(context),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+            Positioned(
+              left: 0,
+              right: 0,
+              bottom: AppSizes.bottomNavBarHeight + AppSpacing.xs,
+              child: BlocBuilder<BookstoreCubit, BookstoreState>(
+                buildWhen: (previous, current) =>
+                    previous.domain.continueReadingBook !=
+                        current.domain.continueReadingBook ||
+                    previous.interaction.continueReadingDismissed !=
+                        current.interaction.continueReadingDismissed,
+                builder: (context, state) {
+                  final book = state.domain.continueReadingBook;
+                  if (book == null ||
+                      state.interaction.continueReadingDismissed) {
+                    return const SizedBox.shrink();
+                  }
+                  return ContinueReadingCard(
+                    book: book,
+                    onContinue: () => AppRouter.goBookDetail(book),
+                    onClose: cubit.dismissContinueReading,
+                  );
+                },
               ),
-              body: ScrollConfiguration(
-                behavior: const _TopTabSwipeScrollBehavior(),
-                child: PageView(
-                  controller: _pageController,
-                  physics: const PageScrollPhysics(),
-                  onPageChanged: (index) {
-                    cubit.switchTopTab(BookstoreTopTab.values[index]);
-                  },
-                  children: [
-                    const BookstoreRecommendBody(),
-                    widget.categoryTabBuilder(context),
-                    widget.rankingTabBuilder(context),
-                  ],
-                ),
-              ),
-            );
-          },
+            ),
+          ],
         ),
       ),
     );

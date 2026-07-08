@@ -19,15 +19,23 @@ abstract final class AppWelfareColors {
   static const Color goldText = AppBrandColors.goldText;
   static const Color accentOrange = AppBrandColors.accentOrange;
 
-  static const Color checkInHighlightBg = Color(0xFFFFF7BF);
-  static const Color checkInHighlightHeader = AppBrandColors.checkInHighlightHeader;
+  /// 签到高亮面（今日卡体 / 里程碑气泡 / 奖励 chip）：主黄 8% 叠深底。
+  static const Color checkInHighlightSurface = Color(0x14FCE64D);
+  static const Color checkInHighlightBg = checkInHighlightSurface;
+  static const Color checkInHighlightHeader = AppBrandColors.checkInYellow;
+
+  /// 今日卡描边（暖黄）。
+  static const Color checkInHighlightBorder = AppBrandColors.checkInHighlightHeader;
   static const Color checkInTodayHeaderText = AppBrandColors.textOnLightPanel;
-  static const Color checkInDayBg = AppColors.black04;
+
+  /// 今日可领奖励文字（主黄）。
+  static const Color checkInRewardTodayText = AppBrandColors.checkInYellow;
+  static const Color checkInDayBg = AppColors.white04;
   static const Color checkInDayHeader = AppColors.white04;
   static const Color checkInDayBorder = AppColors.white04;
   static const Color checkInDayLabelMuted = AppColors.white60;
-  static const Color checkInCumulativeBg = Color(0xFFFFF9C6);
-  static const Color checkInCumulativeBorder = Color(0xFFFFE8A2);
+  static const Color checkInCumulativeBg = checkInHighlightSurface;
+  static const Color checkInCumulativeBorder = AppColors.white00;
   static const Color checkInCumulativeLabel = AppBrandColors.goldMedium;
   static const Color checkInCumulativeValue = AppBrandColors.goldDark;
   static const Color checkInProgressTrack = AppColors.white04;
@@ -36,7 +44,7 @@ abstract final class AppWelfareColors {
   static const Color checkInProgressDotStroke = Color(0xFF121721);
   static const Color checkInMilestoneBubbleStart = Color(0xFFFFD443);
   static const Color checkInMilestoneBubbleEnd = AppBrandColors.accent;
-  static const Color checkInMilestoneAmount = AppBrandColors.goldMedium;
+  static const Color checkInMilestoneAmount = AppColors.white100;
   static const Color checkInMilestoneLabel = AppColors.white60;
   static const Color checkInCtaSolid = AppBrandColors.checkInYellow;
   static const Color checkInCtaTextDark = AppBrandColors.textOnLightPanel;

@@ -42,9 +42,9 @@ class HelpFeedbackFormView extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView(
       padding: const EdgeInsets.fromLTRB(
-        AppSpacing.insetMd,
         AppSpacing.md,
-        AppSpacing.insetMd,
+        AppSpacing.md,
+        AppSpacing.md,
         AppSpacing.xl,
       ),
       children: [
@@ -371,7 +371,7 @@ class _UploadPlaceholder extends StatelessWidget {
         height: AppSizes.helpFeedbackUploadBoxSize,
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(AppRadius.sm),
+          borderRadius: BorderRadius.circular(AppRadius.md),
           border: Border.all(
             color: AppColors.borderGlass,
             width: AppSizes.hairline,
