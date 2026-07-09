@@ -74,7 +74,7 @@ class _MilestoneBubble extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return WelfareRewardBubble(
-      background: AppWelfareColors.checkInCumulativeBg,
+      background: AppWelfareColors.checkInDayBg,
       border: AppWelfareColors.checkInCumulativeBorder,
       child: Row(
         mainAxisSize: MainAxisSize.min,

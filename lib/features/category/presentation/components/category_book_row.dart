@@ -23,6 +23,7 @@ class CategoryBookRow extends StatelessWidget {
       coverTag: BookCoverTag.fromLabel(item.badgeLabel),
       padding: EdgeInsets.zero,
       onTap: onTap == null ? null : () => onTap!(item.book),
+      heroTag: 'book-cover-${item.book.id}',
     );
   }
 }

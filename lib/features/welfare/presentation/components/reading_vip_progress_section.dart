@@ -259,7 +259,7 @@ class _ProgressBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return WelfareRewardBubble(
-      background: AppWelfareColors.taskTimelineFill,
+      background: AppColors.white04,
       padding: const EdgeInsets.only(
         left: AppSpacing.xs,
         right: AppSpacing.xs,

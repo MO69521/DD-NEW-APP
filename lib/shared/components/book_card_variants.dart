@@ -19,6 +19,7 @@ class BookCardVertical extends StatelessWidget {
     required this.coverAsset,
     this.coverTag,
     this.onTap,
+    this.heroTag,
   });
 
   final String title;
@@ -26,6 +27,7 @@ class BookCardVertical extends StatelessWidget {
   final String coverAsset;
   final BookCoverTag? coverTag;
   final VoidCallback? onTap;
+  final Object? heroTag;
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +39,7 @@ class BookCardVertical extends StatelessWidget {
           BookCover(
             assetPath: coverAsset,
             aspectRatio: AppSizes.bookCoverGridAspectRatio,
+            heroTag: heroTag,
             topEndBadge: coverTag == null
                 ? null
                 : BookCoverTagBadge(tag: coverTag!),

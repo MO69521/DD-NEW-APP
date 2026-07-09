@@ -23,38 +23,21 @@ _NodeStyle _nodeStyle(WelfareTaskTimelineNode node) {
       text: AppWelfareColors.checkInCtaTextDark,
     );
   }
-  if (node.isReached) {
-    return (
-      background: AppWelfareColors.taskTimelineBubbleReached,
-      border: null,
-      text: AppColors.textOnDark,
-    );
-  }
+  // 已领取 / 还不能领取：统一纯白 4% 气泡；已领取整体降到 30% 由外层处理。
   return (
-    background: AppWelfareColors.checkInCumulativeBg,
-    border: AppWelfareColors.checkInCumulativeBorder,
-    text: AppWelfareColors.goldMedium,
+    background: AppColors.white04,
+    border: null,
+    text: AppColors.textOnDark,
   );
 }
 
-/// 时间轴底部文案颜色：当前可领橙色、已领白色、未达成/已过节点淡白。
-Color _footerColor(WelfareTaskTimelineNode node, int index, int activeIndex) {
-  if (node.isActive) {
-    return AppWelfareColors.taskTimelineFill;
-  }
-  if (node.isReached) {
-    return index < activeIndex
-        ? AppWelfareColors.taskProgressLabel
-        : AppColors.textOnDark;
+/// 时间轴底部文案颜色：可领取白色（按钮内）、已领取白色（外层 30% 变淡）、
+/// 未达成节点 60% 白。
+Color _footerColor(WelfareTaskTimelineNode node) {
+  if (node.isActive || node.isReached) {
+    return AppColors.textOnDark;
   }
   return AppWelfareColors.taskProgressLabel;
-}
-
-int _activeNodeIndex(List<WelfareTaskTimelineNode> nodes) {
-  for (var i = 0; i < nodes.length; i++) {
-    if (nodes[i].isActive) return i;
-  }
-  return -1;
 }
 
 /// L3 组件 — 福利任务横向进度时间轴。
@@ -138,7 +121,7 @@ class _TimelineRewardPill extends StatelessWidget {
 
     final style = _nodeStyle(node);
 
-    return WelfareRewardBubble(
+    final bubble = WelfareRewardBubble(
       background: style.background,
       border: style.border,
       child: Column(
@@ -155,6 +138,15 @@ class _TimelineRewardPill extends StatelessWidget {
         ],
       ),
     );
+
+    // 已领取：整枚气泡降至 30% 不透明度。
+    if (node.isReached) {
+      return Opacity(
+        opacity: AppSizes.welfareCheckInClaimedRewardOpacity,
+        child: bubble,
+      );
+    }
+    return bubble;
   }
 }
 
@@ -295,46 +287,76 @@ class _TimelineFooterRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final activeIndex = _activeNodeIndex(nodes);
-
-    return SizedBox(
-      height: AppSizes.welfareTaskTimelineFooterHeight,
-      child: Row(
-        children: [
-          for (var index = 0; index < nodes.length; index++) ...[
-            if (index > 0) const SizedBox(width: AppSpacing.xs),
-            SizedBox(
-              width: AppSizes.welfareTaskTimelineNodeWidth,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  if (nodes[index].showVideoIcon) ...[
-                    Icon(
-                      Icons.play_circle_fill_rounded,
-                      size: AppSizes.welfareTaskRewardIconSize,
-                      color: _footerColor(nodes[index], index, activeIndex),
-                    ),
-                    const SizedBox(width: AppSpacing.xxsHalf),
-                  ],
-                  Flexible(
-                    child: AppText(
-                      nodes[index].label,
-                      style: AppTextStyles.welfareSubtitle.copyWith(
-                        color: _footerColor(nodes[index], index, activeIndex),
-                        height: AppLineHeights.none,
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        for (var index = 0; index < nodes.length; index++) ...[
+          if (index > 0) const SizedBox(width: AppSpacing.xs),
+          SizedBox(
+            width: AppSizes.welfareTaskTimelineNodeWidth,
+            child: _TimelineFooterCell(node: nodes[index]),
+          ),
         ],
-      ),
+      ],
     );
+  }
+}
+
+class _TimelineFooterCell extends StatelessWidget {
+  const _TimelineFooterCell({required this.node});
+
+  final WelfareTaskTimelineNode node;
+
+  @override
+  Widget build(BuildContext context) {
+    final color = _footerColor(node);
+
+    final content = Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        if (node.showVideoIcon) ...[
+          Icon(
+            Icons.play_circle_fill_rounded,
+            size: AppSizes.welfareTaskRewardIconSize,
+            color: color,
+          ),
+          const SizedBox(width: AppSpacing.xxsHalf),
+        ],
+        Flexible(
+          child: AppText(
+            node.label,
+            style: AppTextStyles.welfareSubtitle.copyWith(
+              color: color,
+              height: AppLineHeights.none,
+            ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            textAlign: TextAlign.center,
+          ),
+        ),
+      ],
+    );
+
+    // 可领取：文案做成按钮样式（纯白 4% 底 + 胶囊圆角）。
+    final cell = Container(
+      padding: const EdgeInsets.symmetric(vertical: AppSpacing.xs),
+      decoration: node.isActive
+          ? BoxDecoration(
+              color: AppColors.white04,
+              borderRadius: BorderRadius.circular(AppRadius.full),
+            )
+          : null,
+      child: content,
+    );
+
+    // 已领取：整体降至 30% 不透明度。
+    if (node.isReached) {
+      return Opacity(
+        opacity: AppSizes.welfareCheckInClaimedRewardOpacity,
+        child: cell,
+      );
+    }
+    return cell;
   }
 }

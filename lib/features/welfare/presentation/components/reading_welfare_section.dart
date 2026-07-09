@@ -6,7 +6,7 @@ import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/theme/app_welfare_colors.dart';
-import '../../../../shared/widgets/app_pressable.dart';
+import '../../../../shared/widgets/app_button.dart';
 import '../../../../shared/widgets/app_text.dart';
 import '../../domain/entities/welfare_models.dart';
 import 'check_in_milestone_progress.dart';
@@ -56,30 +56,11 @@ class ReadingWelfareSection extends StatelessWidget {
           const SizedBox(height: AppSpacing.md),
           ReadingWelfareCalendar(days: summary.weekDays),
           const SizedBox(height: AppSpacing.md),
-          AppPressable(
-            onTap: onReadTap,
-            pressScale: AppSizes.tapPressScaleSubtle,
-            child: Container(
-              width: double.infinity,
-              padding: const EdgeInsets.symmetric(
-                horizontal: AppSizes.welfareCheckInCtaPaddingHorizontal,
-                vertical: AppSizes.welfareCheckInCtaPaddingVertical,
-              ),
-              decoration: BoxDecoration(
-                color: AppWelfareColors.checkInCtaSolid,
-                borderRadius: BorderRadius.circular(
-                  AppRadius.welfareCheckInCta,
-                ),
-              ),
-              child: Center(
-                child: AppText(
-                  '去阅读',
-                  style: AppTextStyles.welfareCtaText.copyWith(
-                    color: AppWelfareColors.checkInCtaTextDark,
-                  ),
-                ),
-              ),
-            ),
+          AppButton(
+            label: '去阅读',
+            variant: AppButtonVariant.accent,
+            isExpanded: true,
+            onPressed: onReadTap,
           ),
         ],
       ),

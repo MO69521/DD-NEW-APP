@@ -10,6 +10,7 @@ import '../../../../routes/app_routes.dart';
 import '../../../../shared/components/app_toast.dart';
 import '../../../../shared/components/empty_state.dart';
 import '../../../../shared/widgets/app_button.dart';
+import '../../../../shared/widgets/overscroll_stretch.dart';
 import '../../../../shared/components/app_blurred_chrome_bar.dart';
 import '../../../../shared/layouts/app_scroll_blur_scope.dart';
 import '../../application/membership_cubit.dart';
@@ -81,7 +82,7 @@ class MembershipPage extends StatelessWidget {
   }
 }
 
-class _MembershipView extends StatelessWidget {
+class _MembershipView extends StatefulWidget {
   const _MembershipView({
     required this.content,
     required this.selectedPlanId,
@@ -92,13 +93,35 @@ class _MembershipView extends StatelessWidget {
   final String? selectedPlanId;
   final bool isPurchasing;
 
-  MembershipPlan get _selectedPlan => content.plans.firstWhere(
-    (p) => p.id == selectedPlanId,
-    orElse: () => content.plans.first,
+  @override
+  State<_MembershipView> createState() => _MembershipViewState();
+}
+
+class _MembershipViewState extends State<_MembershipView> {
+  late final ScrollController _scrollController;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = ScrollController();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  MembershipPlan get _selectedPlan => widget.content.plans.firstWhere(
+    (p) => p.id == widget.selectedPlanId,
+    orElse: () => widget.content.plans.first,
   );
 
   @override
   Widget build(BuildContext context) {
+    final content = widget.content;
+    final selectedPlanId = widget.selectedPlanId;
+    final isPurchasing = widget.isPurchasing;
     final cubit = context.read<MembershipCubit>();
     final statusBarHeight = AppLayout.statusBarHeight(context);
     final bottomInset = MediaQuery.paddingOf(context).bottom;
@@ -110,6 +133,10 @@ class _MembershipView extends StatelessWidget {
         builder: (context, topBlurEnabled) => Stack(
           children: [
             SingleChildScrollView(
+              controller: _scrollController,
+              physics: const BouncingScrollPhysics(
+                parent: AlwaysScrollableScrollPhysics(),
+              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
@@ -123,7 +150,11 @@ class _MembershipView extends StatelessWidget {
                           left: 0,
                           right: 0,
                           height: AppSizes.membershipHeroHeight,
-                          child: MembershipHero(slides: content.heroSlides),
+                          child: OverscrollStretch(
+                            controller: _scrollController,
+                            baseHeight: AppSizes.membershipHeroHeight,
+                            child: MembershipHero(slides: content.heroSlides),
+                          ),
                         ),
                         Positioned(
                           left: AppSpacing.sm,

@@ -12,6 +12,7 @@ class BookGridCard extends StatelessWidget {
     required this.coverAsset,
     this.coverTag,
     this.onTap,
+    this.heroTag,
   });
 
   final String title;
@@ -19,6 +20,7 @@ class BookGridCard extends StatelessWidget {
   final String coverAsset;
   final BookCoverTag? coverTag;
   final VoidCallback? onTap;
+  final Object? heroTag;
 
   @override
   Widget build(BuildContext context) {
@@ -28,6 +30,7 @@ class BookGridCard extends StatelessWidget {
       coverAsset: coverAsset,
       coverTag: coverTag,
       onTap: onTap,
+      heroTag: heroTag,
     );
   }
 }

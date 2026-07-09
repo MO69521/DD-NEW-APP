@@ -39,7 +39,6 @@ class AppSwipeTabSwitcher extends StatefulWidget {
 
 class _AppSwipeTabSwitcherState extends State<AppSwipeTabSwitcher> {
   late final PageController _pageController;
-  bool _isProgrammaticScroll = false;
 
   @override
   void initState() {
@@ -54,17 +53,11 @@ class _AppSwipeTabSwitcherState extends State<AppSwipeTabSwitcher> {
       return;
     }
     if (!_pageController.hasClients) return;
-    _isProgrammaticScroll = true;
-    _pageController
-        .animateToPage(
-          widget.selectedIndex,
-          duration: AppDurations.normal,
-          curve: Curves.easeOutCubic,
-        )
-        .whenComplete(() {
-          if (!mounted) return;
-          _isProgrammaticScroll = false;
-        });
+    _pageController.animateToPage(
+      widget.selectedIndex,
+      duration: AppDurations.normal,
+      curve: Curves.easeOutCubic,
+    );
   }
 
   @override
@@ -83,14 +76,27 @@ class _AppSwipeTabSwitcherState extends State<AppSwipeTabSwitcher> {
       return children[index];
     }
 
-    return PageView(
-      controller: _pageController,
-      physics: const PageScrollPhysics(),
-      onPageChanged: (index) {
-        if (_isProgrammaticScroll) return;
-        widget.onIndexChanged(index);
+    // 仅在滚动结束（松手落页）后提交切换：拖动过程中跟手但不中途自动翻页，
+    // 由 PageScrollPhysics 依据松手位置/速度决定落到哪一页。
+    return NotificationListener<ScrollEndNotification>(
+      onNotification: (notification) {
+        if (!_pageController.hasClients || _pageController.page == null) {
+          return false;
+        }
+        final target = _pageController.page!.round().clamp(
+          0,
+          children.length - 1,
+        );
+        if (target != widget.selectedIndex) {
+          widget.onIndexChanged(target);
+        }
+        return false;
       },
-      children: children,
+      child: PageView(
+        controller: _pageController,
+        physics: const PageScrollPhysics(),
+        children: children,
+      ),
     );
   }
 

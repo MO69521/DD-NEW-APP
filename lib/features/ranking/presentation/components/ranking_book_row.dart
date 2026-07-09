@@ -33,6 +33,7 @@ class RankingBookRow extends StatelessWidget {
       leadingBadge: _RankingRowBadge(rank: rank),
       padding: EdgeInsets.zero,
       onTap: onTap,
+      heroTag: 'book-cover-${book.id}',
     );
   }
 }

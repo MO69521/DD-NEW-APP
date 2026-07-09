@@ -20,7 +20,7 @@ class BookCardLargeRow extends StatelessWidget {
     this.description,
     this.footer,
     this.titleMaxLines = 1,
-    this.descriptionMaxLines = 3,
+    this.descriptionMaxLines = 2,
     this.coverWidth = AppSizes.bookCardLargeCoverWidth,
     this.coverHeight = AppSizes.bookCardLargeCoverHeight,
     this.coverTag,
@@ -30,6 +30,7 @@ class BookCardLargeRow extends StatelessWidget {
       vertical: AppSizes.bookCardLargeRowVerticalPadding,
     ),
     this.onTap,
+    this.heroTag,
   });
 
   final String coverAsset;
@@ -59,6 +60,9 @@ class BookCardLargeRow extends StatelessWidget {
   final EdgeInsetsGeometry padding;
   final VoidCallback? onTap;
 
+  /// 共享元素转场标签（透传给封面），仅在书 id 唯一的列表传入。
+  final Object? heroTag;
+
   @override
   Widget build(BuildContext context) {
     return AppPressable(
@@ -76,6 +80,7 @@ class BookCardLargeRow extends StatelessWidget {
                   assetPath: coverAsset,
                   width: coverWidth,
                   height: coverHeight,
+                  heroTag: heroTag,
                   topEndBadge: coverTag == null
                       ? null
                       : BookCoverTagBadge(tag: coverTag!),
@@ -155,43 +160,56 @@ class _RichTextBlock extends StatelessWidget {
       );
     }
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        AppText(
-          title,
-          style: AppTextStyles.bookCardLargeTitle,
-          maxLines: titleMaxLines,
-          overflow: TextOverflow.ellipsis,
-        ),
-        if (meta != null) ...[
-          const SizedBox(height: AppSizes.bookCardLargeTitleToMetaGap),
-          AppText(
-            meta!,
-            style: AppTextStyles.bookTagDark,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
+    // 标题/标签置顶，简介 + 作者信息作为一个模块单元与封面底部对齐。
+    return SizedBox(
+      height: coverHeight,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              AppText(
+                title,
+                style: AppTextStyles.bookCardLargeTitle,
+                maxLines: titleMaxLines,
+                overflow: TextOverflow.ellipsis,
+              ),
+              if (meta != null) ...[
+                const SizedBox(height: AppSizes.bookCardLargeTitleToMetaGap),
+                AppText(
+                  meta!,
+                  style: AppTextStyles.bookTagDark,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
+            ],
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (description != null)
+                AppText(
+                  description!,
+                  style: AppTextStyles.bookCardLargeDescription,
+                  maxLines: descriptionMaxLines,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              if (description != null && footer != null)
+                const SizedBox(height: AppSizes.bookCardDescToFooterGap),
+              if (footer != null)
+                AppText(
+                  footer!,
+                  style: AppTextStyles.bookCardFooter,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+            ],
           ),
         ],
-        if (description != null) ...[
-          const SizedBox(height: AppSizes.bookCardLargeMetaToDescGap),
-          AppText(
-            description!,
-            style: AppTextStyles.bookCardLargeDescription,
-            maxLines: descriptionMaxLines,
-            overflow: TextOverflow.ellipsis,
-          ),
-        ],
-        if (footer != null) ...[
-          const SizedBox(height: AppSizes.bookCardDescToFooterGap),
-          AppText(
-            footer!,
-            style: AppTextStyles.bookCardFooter,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
-        ],
-      ],
+      ),
     );
   }
 }

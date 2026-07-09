@@ -137,7 +137,7 @@ class _TaskVipEntry extends StatelessWidget {
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    const SizedBox(height: AppSpacing.xs),
+                    const SizedBox(height: AppSpacing.sm),
                     _VipEntryBadge(label: entry.tagLabel),
                   ],
                 ),

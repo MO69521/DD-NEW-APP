@@ -6,10 +6,6 @@ import 'app_colors.dart';
 /// 会员页（Figma 927:725）专用色 token。品牌色引用 [AppBrandColors]、
 /// 中性叠加色引用 [AppColors] 中性阶；仅会员页独有色保留字面量。
 abstract final class AppMembershipColors {
-  // ── Hero 头图 ──
-  /// 轮播指示点：未选中态（白 20%）。
-  static const Color dotInactive = AppColors.white20;
-
   // ── 套餐卡：选中态（深色暖底 + 金描边 + 金渐变文字，Figma 1059:2298） ──
   /// 选中卡底色：金 8%（叠在深色页面上呈暖色深底）。
   static const Color planSelectedBg = Color(0x14FFE794);

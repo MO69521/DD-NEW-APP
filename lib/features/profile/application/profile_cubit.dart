@@ -125,6 +125,7 @@ class ProfileCubit extends Cubit<ProfileState> {
       case ProfileMenuAction.cardPack:
         AppRouter.pushNamed(AppRoutes.cardPackName);
       case ProfileMenuAction.dressUp:
+        AppRouter.pushNamed(AppRoutes.dressUpName);
       case ProfileMenuAction.cardAlbum:
         break;
     }

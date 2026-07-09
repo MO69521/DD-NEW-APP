@@ -167,17 +167,31 @@ class _BookstoreViewState extends State<_BookstoreView> {
                   ),
                   body: ScrollConfiguration(
                     behavior: const _TopTabSwipeScrollBehavior(),
-                    child: PageView(
-                      controller: _pageController,
-                      physics: const PageScrollPhysics(),
-                      onPageChanged: (index) {
-                        cubit.switchTopTab(BookstoreTopTab.values[index]);
+                    // 仅在滚动结束（松手落页）后切换 Tab，拖动过程中不中途翻页。
+                    child: NotificationListener<ScrollEndNotification>(
+                      onNotification: (notification) {
+                        if (!_pageController.hasClients ||
+                            _pageController.page == null) {
+                          return false;
+                        }
+                        final target = _pageController.page!.round().clamp(
+                          0,
+                          BookstoreTopTab.values.length - 1,
+                        );
+                        if (target != selectedTopTab.index) {
+                          cubit.switchTopTab(BookstoreTopTab.values[target]);
+                        }
+                        return false;
                       },
-                      children: [
-                        const BookstoreRecommendBody(),
-                        widget.categoryTabBuilder(context),
-                        widget.rankingTabBuilder(context),
-                      ],
+                      child: PageView(
+                        controller: _pageController,
+                        physics: const PageScrollPhysics(),
+                        children: [
+                          const BookstoreRecommendBody(),
+                          widget.categoryTabBuilder(context),
+                          widget.rankingTabBuilder(context),
+                        ],
+                      ),
                     ),
                   ),
                 );

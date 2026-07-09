@@ -75,6 +75,7 @@ class BookstoreRecommendBody extends StatelessWidget {
                       books: books,
                       onMoreTap: () => AppRouter.pushNamed(
                         AppRoutes.editorPickName,
+                        extra: '限时免费',
                       ),
                       onBookTap: AppRouter.goBookDetail,
                     );

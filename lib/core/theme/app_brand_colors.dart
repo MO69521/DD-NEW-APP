@@ -78,14 +78,22 @@ abstract final class AppBrandColors {
   static const Color iconMutedSecondary = Color(0xFFABACB3);
   static const Color rankingHeroTitle = Color(0xFFFFFAD7);
 
-  // ── 语义状态色 ──
-  static const Color success = Color(0xFF10B981);
-  static const Color warning = Color(0xFFF59E0B);
-  static const Color error = Color(0xFFEF4444);
+  // ── 语义状态色（Design Token v1.0）──
+  static const Color success = Color(0xFF39D98A);
+  static const Color warning = Color(0xFFFFA940);
+  static const Color error = Color(0xFFFF667F);
   static const Color hotSaleBadge = Color(0xFFFF6B6B);
   static const Color hotSaleBadgeText = Color(0xFFFFFEF4);
 
   // ── 蓝色品牌预设（[AppColorScheme.brandBlue] 用）──
   static const Color brandBlueBackground = Color(0xFF0A1628);
   static const Color brandBlueAccent = Color(0xFF4DA6FF);
+
+  // ── Design Token v1.0 · 语义强调色扩展 ──
+  // 新增源色，暂未接入具体页面，供后续 feature 语义 token 引用。
+  static const Color premiumGold = Color(0xFFF9C74F); // VIP Theme（会员金主题）
+  static const Color info = Color(0xFF59AEFF); // 信息 / 提示
+  static const Color fantasyPurple = Color(0xFF9C87FF); // 奇幻紫
+  static const Color energyCyan = Color(0xFF42DDFF); // 能量青
+  static const Color growthBlue = Color(0xFF7E95FF); // 成长蓝
 }

@@ -5,7 +5,9 @@ import '../../../../core/theme/app_radius.dart';
 import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
+import '../../../../shared/widgets/animated_count_text.dart';
 import '../../../../shared/widgets/app_asset_image.dart';
+import '../../../../shared/widgets/app_button.dart';
 import '../../../../shared/widgets/app_pressable.dart';
 import '../../../../shared/widgets/app_text.dart';
 
@@ -21,7 +23,7 @@ class DailyReadingBanner extends StatelessWidget {
   final VoidCallback onClaimWelfareTap;
 
   static const String _bearAsset = 'assets/images/bookshelf/reading_bear.png';
-  static const String _energyIconAsset = 'assets/icons/welfare/energy.png';
+  static const String _energyIconAsset = 'assets/icons/welfare/energy.svg';
 
   @override
   Widget build(BuildContext context) {
@@ -92,8 +94,8 @@ class _ReadingMinutesText extends StatelessWidget {
             color: AppColors.textOnDarkPlaceholder,
           ),
         ),
-        AppText(
-          '$minutes',
+        AnimatedCountText(
+          value: minutes,
           style: AppTextStyles.bookshelfReadingMinutes.copyWith(
             color: AppColors.textOnDark,
           ),
@@ -116,39 +118,15 @@ class _ClaimWelfareButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppPressable(
-      onTap: onTap,
-      pressScale: AppSizes.tapPressScaleSubtle,
-      child: Container(
-        padding: const EdgeInsets.symmetric(
-          horizontal: AppSizes.bookshelfClaimWelfareCtaPaddingHorizontal,
-          vertical: AppSizes.bookshelfClaimWelfareCtaPaddingVertical,
-        ),
-        decoration: BoxDecoration(
-          color: AppColors.accentYellow,
-          borderRadius: BorderRadius.circular(
-            AppRadius.bookshelfClaimWelfareCta,
-          ),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            AppAssetImage(
-              assetPath: DailyReadingBanner._energyIconAsset,
-              width: AppSizes.bookshelfClaimWelfareIconSize,
-              height: AppSizes.bookshelfClaimWelfareIconSize,
-            ),
-            const SizedBox(width: AppSpacing.xxs),
-            AppText(
-              '领福利',
-              style: AppTextStyles.bookshelfClaimWelfareCta.copyWith(
-                color: AppColors.navActiveText,
-              ),
-            ),
-          ],
-        ),
+    return AppButton(
+      label: '领福利',
+      variant: AppButtonVariant.accent,
+      size: AppButtonSize.small,
+      onPressed: onTap,
+      leadingIcon: AppAssetImage(
+        assetPath: DailyReadingBanner._energyIconAsset,
+        width: AppSizes.bookshelfClaimWelfareIconSize,
+        height: AppSizes.bookshelfClaimWelfareIconSize,
       ),
     );
   }

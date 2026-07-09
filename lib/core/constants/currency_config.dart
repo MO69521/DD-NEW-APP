@@ -15,7 +15,7 @@ abstract final class CurrencyConfig {
 
   static String iconAsset(CurrencyType type) {
     return switch (type) {
-      CurrencyType.energy => 'assets/icons/welfare/energy.png',
+      CurrencyType.energy => 'assets/icons/welfare/energy.svg',
       CurrencyType.wishStar => 'assets/icons/welfare/wish_star.png',
       CurrencyType.love => 'assets/icons/welfare/love.png',
       CurrencyType.stardust => 'assets/icons/welfare/stardust.png',

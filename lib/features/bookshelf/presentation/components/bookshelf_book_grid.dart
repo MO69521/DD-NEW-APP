@@ -70,6 +70,7 @@ class BookshelfBookGrid extends StatelessWidget {
           coverAsset: book.coverAsset,
           coverTag: book.coverTag,
           onTap: onBookTap == null ? null : () => onBookTap(book),
+          heroTag: 'book-cover-${book.id}',
         );
       }, childCount: books.length),
     );

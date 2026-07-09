@@ -41,84 +41,624 @@ const APP = {
   hair: "0.5px", // AppSizes.hairline
 };
 
+/* ───────────────── 筛选：分区注册表 ───────────────── */
+
+type PartId = "01" | "02" | "03";
+type PartFilter = PartId | "all";
+
+const PARTS: Record<PartId, { title: string; subtitle: string; label: string }> = {
+  "01": {
+    title: "视觉基础规范",
+    subtitle: "字号 · 行高 · 字重 · 字体族 · 颜色 · 间距 · 圆角",
+    label: "视觉基础",
+  },
+  "02": {
+    title: "组件规范与样式展现",
+    subtitle: "每个组件独占一行 · 可点击体验 · 附源码入口",
+    label: "组件",
+  },
+  "03": {
+    title: "动效与特殊设计",
+    subtitle: "全局自定义动效 / 特殊视觉索引 · 约 50 项 · 点源码路径打开真源",
+    label: "动效",
+  },
+};
+
+interface SpecEntry {
+  part: PartId;
+  title: string;
+  keywords: string;
+  render: ReactNode;
+}
+
 export default function DesignSystemSpec() {
+  const [activePart, setActivePart] = useCanvasState<PartFilter>("specPart", "all");
+
+  const filtering = activePart !== "all";
+
+  // 01 / 02 分区条目（03 动效由结构化数据单独渲染）。
+  const entries: SpecEntry[] = [
+    { part: "01", title: "字号", keywords: "", render: <TypeScaleSection /> },
+    { part: "01", title: "行高", keywords: "", render: <LineHeightSection /> },
+    { part: "01", title: "字重", keywords: "", render: <WeightSection /> },
+    { part: "01", title: "字体族", keywords: "", render: <FontFamilySection /> },
+    { part: "01", title: "颜色", keywords: "", render: <ColorSection /> },
+    { part: "01", title: "间距", keywords: "", render: <SpacingSection /> },
+    { part: "01", title: "圆角", keywords: "", render: <RadiusSection /> },
+    { part: "01", title: "组件尺寸 token", keywords: "", render: <SizeIndexSection /> },
+    { part: "02", title: "按压反馈", keywords: "", render: <PressableSection /> },
+    { part: "02", title: "按钮", keywords: "", render: <ButtonSection /> },
+    { part: "02", title: "卡片", keywords: "", render: <CardSection /> },
+    { part: "02", title: "弹窗", keywords: "", render: <DialogSection /> },
+    { part: "02", title: "底部弹层", keywords: "", render: <SheetSection /> },
+    { part: "02", title: "顶栏", keywords: "", render: <TopBarSection /> },
+    { part: "02", title: "底部导航", keywords: "", render: <BottomNavSection /> },
+    { part: "02", title: "分段切换", keywords: "", render: <SegmentedSection /> },
+    { part: "02", title: "选中指示线", keywords: "", render: <TabIndicatorSection /> },
+    { part: "02", title: "搜索框", keywords: "", render: <SearchSection /> },
+    { part: "02", title: "开关", keywords: "", render: <SwitchSection /> },
+    { part: "02", title: "扫光高亮层", keywords: "", render: <SweepHighlightSection /> },
+    { part: "02", title: "轻提示", keywords: "", render: <ToastSection /> },
+    { part: "02", title: "空状态", keywords: "", render: <EmptyStateSection /> },
+    { part: "02", title: "区块标题", keywords: "", render: <SectionHeaderSection /> },
+  ];
+
+  const matchPart = (p: PartId) => activePart === "all" || activePart === p;
+  const visibleEntries = entries.filter((e) => matchPart(e.part));
+  const motionVisible = matchPart("03");
+
   return (
     <Stack gap={28} style={{ padding: 32, maxWidth: 1040 }}>
       <CoverHeader />
-      <SummaryStats />
 
-      <Callout tone="warning" title="关于「改一处，全局生效」">
-        <Stack gap={4}>
-          <Text>
-            这份可视化文档是 <Text weight="semibold">组件目录 / 预览</Text>
-            ，用于对照与定位；它本身是 React 预览，<Text weight="semibold">不是</Text>
-            应用的运行源码。
-          </Text>
-          <Text>
-            真正「改一处即全局生效」的源头是 Dart 代码：设计 token 在{" "}
-            <Code>lib/core/theme/*</Code>，共享组件在 <Code>lib/shared/*</Code>。
-            全项目都引用它们，改动即全局同步。
-          </Text>
-          <Text>
-            用法：在下方找到组件 → 点它的「源码」路径打开真源 → 告诉我要改什么，我改这一处 Dart，页面即全局更新。
-          </Text>
-        </Stack>
-      </Callout>
+      <FilterBar activePart={activePart} onPart={setActivePart} />
 
-      <PartBanner
-        index="01"
-        title="视觉基础规范"
-        subtitle="字号 · 行高 · 字重 · 字体族 · 颜色 · 间距 · 圆角"
-      />
-      <TypeScaleSection />
-      <LineHeightSection />
-      <WeightSection />
-      <FontFamilySection />
-      <ColorSection />
-      <SpacingSection />
-      <RadiusSection />
-      <SizeIndexSection />
+      {filtering ? null : (
+        <>
+          <SummaryStats />
+          <Callout tone="warning" title="关于「改一处，全局生效」">
+            <Stack gap={4}>
+              <Text>
+                这份可视化文档是 <Text weight="semibold">组件目录 / 预览</Text>
+                ，用于对照与定位；它本身是 React 预览，<Text weight="semibold">不是</Text>
+                应用的运行源码。
+              </Text>
+              <Text>
+                真正「改一处即全局生效」的源头是 Dart 代码：设计 token 在{" "}
+                <Code>lib/core/theme/*</Code>，共享组件在 <Code>lib/shared/*</Code>。
+                全项目都引用它们，改动即全局同步。
+              </Text>
+              <Text>
+                用法：在下方找到组件 → 点它的「源码」路径打开真源 → 告诉我要改什么，我改这一处 Dart，页面即全局更新。
+              </Text>
+            </Stack>
+          </Callout>
+        </>
+      )}
 
-      <Divider />
+      {(["01", "02"] as PartId[]).map((p) => {
+        const partEntries = visibleEntries.filter((e) => e.part === p);
+        if (partEntries.length === 0) return null;
+        return (
+          <div key={p}>
+            <Stack gap={28}>
+              <PartBanner index={p} title={PARTS[p].title} subtitle={PARTS[p].subtitle} />
+              {partEntries.map((e) => (
+                <div key={e.title}>{e.render}</div>
+              ))}
+            </Stack>
+          </div>
+        );
+      })}
 
-      <PartBanner
-        index="02"
-        title="组件规范与样式展现"
-        subtitle="每个组件独占一行 · 可点击体验 · 附源码入口"
-      />
-      <PressableSection />
-      <ButtonSection />
-      <CardSection />
-      <DialogSection />
-      <SheetSection />
-      <TopBarSection />
-      <BottomNavSection />
-      <SegmentedSection />
-      <TabIndicatorSection />
-      <SearchSection />
-      <SwitchSection />
-      <SweepHighlightSection />
-      <ToastSection />
-      <EmptyStateSection />
-      <SectionHeaderSection />
+      {motionVisible ? (
+        <div>
+          <Stack gap={28}>
+            <PartBanner
+              index="03"
+              title={PARTS["03"].title}
+              subtitle={PARTS["03"].subtitle}
+            />
+            <MotionGallerySection />
+          </Stack>
+        </div>
+      ) : null}
 
-      <Divider />
+      {filtering ? null : (
+        <>
+          <Divider />
+          <Callout tone="info" title="使用约定">
+            <Stack gap={4}>
+              <Text>
+                1. 界面只用 token：禁止 <Code>Color(0x…)</Code> / <Code>fontSize 数字</Code> /
+                <Code>EdgeInsets 数字</Code> / <Code>BorderRadius.circular 数字</Code>。
+              </Text>
+              <Text>
+                2. 单一真源：token → <Code>lib/core/theme/*</Code>；组件 →{" "}
+                <Code>lib/shared/*</Code>。改源即全局。
+              </Text>
+              <Text>
+                3. 新增即询问：任何超出本文档的新 token、新变体、新组件，先确认再落地，并同步本文档。
+              </Text>
+            </Stack>
+          </Callout>
+        </>
+      )}
+    </Stack>
+  );
+}
 
-      <Callout tone="info" title="使用约定">
-        <Stack gap={4}>
-          <Text>
-            1. 界面只用 token：禁止 <Code>Color(0x…)</Code> / <Code>fontSize 数字</Code> /
-            <Code>EdgeInsets 数字</Code> / <Code>BorderRadius.circular 数字</Code>。
-          </Text>
-          <Text>
-            2. 单一真源：token → <Code>lib/core/theme/*</Code>；组件 →{" "}
-            <Code>lib/shared/*</Code>。改源即全局。
-          </Text>
-          <Text>
-            3. 新增即询问：任何超出本文档的新 token、新变体、新组件，先确认再落地，并同步本文档。
-          </Text>
-        </Stack>
-      </Callout>
+/* ───────────────── 顶部分区切换（吸顶 · 仅 tab）───────────────── */
+
+function FilterBar({
+  activePart,
+  onPart,
+}: {
+  activePart: PartFilter;
+  onPart: (v: PartFilter) => void;
+}) {
+  const theme = useHostTheme();
+  const chips: Array<{ id: PartFilter; label: string }> = [
+    { id: "all", label: "全部" },
+    { id: "01", label: PARTS["01"].label },
+    { id: "02", label: PARTS["02"].label },
+    { id: "03", label: PARTS["03"].label },
+  ];
+  return (
+    <div
+      style={{
+        position: "sticky",
+        top: 0,
+        zIndex: 20,
+        background: theme.bg.editor,
+        marginLeft: -32,
+        marginRight: -32,
+        padding: "10px 32px",
+      }}
+    >
+      <Row gap={8} wrap>
+        {chips.map((c) => {
+          const active = activePart === c.id;
+          return (
+            <div
+              key={c.id}
+              onClick={() => onPart(c.id)}
+              style={{
+                padding: "7px 14px",
+                borderRadius: 999,
+                cursor: "pointer",
+                userSelect: "none",
+                fontSize: 13,
+                fontWeight: active ? 600 : 400,
+                color: active ? APP.onAccent : APP.textMuted,
+                background: active ? APP.accent : APP.surface,
+                border: `${APP.hair} solid ${active ? APP.accent : APP.border}`,
+                transition: "background 0.15s, color 0.15s, border-color 0.15s",
+              }}
+            >
+              {c.label}
+            </div>
+          );
+        })}
+      </Row>
+    </div>
+  );
+}
+
+/* ───────────────── 03 动效与特殊设计 ───────────────── */
+
+interface MotionEffect {
+  name: string;
+  desc: string;
+  tech: string;
+  path: string;
+}
+
+const MOTION_CATEGORIES: Array<{ title: string; items: MotionEffect[] }> = [
+  {
+    title: "点击按压微动效",
+    items: [
+      {
+        name: "AppPressable",
+        desc: "全局「缩小 → overshoot 反弹 → 回落」点击脚本，已铺至 70+ 组件",
+        tech: "TweenSequence + Transform.scale，延迟触发动作",
+        path: "lib/shared/widgets/app_pressable.dart",
+      },
+      {
+        name: "AppButton 按压",
+        desc: "所有按钮变体继承按压回弹",
+        tech: "外层包裹 AppPressable",
+        path: "lib/shared/widgets/app_button.dart",
+      },
+      {
+        name: "伙伴卡按下叠层",
+        desc: "按下叠加粉色半透明遮罩（保留自有反馈）",
+        tech: "onTapDown/Up + Positioned.fill",
+        path: "lib/features/partner/presentation/components/partner_character_card.dart",
+      },
+      {
+        name: "伙伴 chip 按下态",
+        desc: "chip / 排序栏按下变色",
+        tech: "_pressed 布尔 + onTapDown/Up",
+        path: "lib/features/partner/presentation/components/partner_category_chip_bar.dart",
+      },
+    ],
+  },
+  {
+    title: "弹性 / 回弹 / 物理",
+    items: [
+      {
+        name: "ElasticTabIndicator",
+        desc: "黄色下划线平移 + 宽度拉伸回弹（架构 §3.5）",
+        tech: "AnimationController + 分段 _stretchProgress",
+        path: "lib/shared/components/elastic_tab_indicator.dart",
+      },
+      {
+        name: "底部导航图标弹跳",
+        desc: "选中图标冲高 → 回落 → 稳定",
+        tech: "TweenSequence + ScaleTransition",
+        path: "lib/shared/widgets/app_nav_icon.dart",
+      },
+      {
+        name: "分类筛选弹性下划线",
+        desc: "共享下划线在 chip 间滑动 + 拉伸",
+        tech: "Offset.lerp + 宽度拉伸",
+        path: "lib/features/category/presentation/components/category_filter_section.dart",
+      },
+      {
+        name: "会员 Hero 橡皮筋回弹",
+        desc: "轮播取消回弹 + 插图弹入",
+        tech: "animateToPage + Curves.easeOutBack",
+        path: "lib/features/membership/presentation/components/membership_hero.dart",
+      },
+      {
+        name: "伙伴弹簧物理",
+        desc: "单次手势最多翻一页 + 弹簧回稳，已接入互动 Feed PageView",
+        tech: "ScrollSpringSimulation + SpringDescription",
+        path: "lib/features/partner/presentation/components/partner_interaction_page_physics.dart",
+      },
+    ],
+  },
+  {
+    title: "呼吸 / 循环 / 引导 / 加载",
+    items: [
+      {
+        name: "SweepHighlightOverlay",
+        desc: "CTA 循环左 → 右扫光",
+        tech: "repeat() + Transform.translate + LinearGradient",
+        path: "lib/shared/components/sweep_highlight_overlay.dart",
+      },
+      {
+        name: "AppGradientCtaButton",
+        desc: "共享渐变强动效 CTA:呼吸缩放 + 扫光 + loading;各处传渐变/高度/圆角/扫光色",
+        tech: "ScaleTransition + SweepHighlightOverlay",
+        path: "lib/shared/components/app_gradient_cta_button.dart",
+      },
+      {
+        name: "MembershipCtaButton",
+        desc: "会员金色 CTA,委派 AppGradientCtaButton",
+        tech: "AppGradientCtaButton(金渐变)",
+        path: "lib/features/membership/presentation/components/membership_cta_button.dart",
+      },
+      {
+        name: "福利签到 CTA",
+        desc: "「立即签到」呼吸 + 扫光",
+        tech: "呼吸 token + SweepHighlightOverlay",
+        path: "lib/features/welfare/presentation/components/daily_check_in_section.dart",
+      },
+      {
+        name: "VIP 领取按钮",
+        desc: "签到成功弹窗粉色 VIP 按钮呼吸 + 扫光",
+        tech: "repeat(reverse) + 扫光层",
+        path: "lib/features/welfare/presentation/components/check_in_success_dialog.dart",
+      },
+      {
+        name: "验证码光标闪烁",
+        desc: "OTP 输入格内光标闪烁",
+        tech: "repeat(reverse) + FadeTransition",
+        path: "lib/features/auth/presentation/pages/login_page.dart",
+      },
+      {
+        name: "AppConfetti",
+        desc: "庆祝礼花迸发（签到成功全屏）",
+        tech: "confetti 包，双向爆发喷发器",
+        path: "lib/shared/components/app_confetti.dart",
+      },
+      {
+        name: "AppShimmer + 书卡骨架",
+        desc: "加载时高光扫过骨架占位，替代整屏 spinner（榜单/分类/搜索/书架）",
+        tech: "AnimationController + ShaderMask 高光带",
+        path: "lib/shared/widgets/app_shimmer.dart",
+      },
+      {
+        name: "AppLottie",
+        desc: "Lottie 帧动画统一封装（基建就绪，资源放 assets/lottie/）",
+        tech: "lottie 包 Lottie.asset",
+        path: "lib/shared/components/app_lottie.dart",
+      },
+    ],
+  },
+  {
+    title: "着色器 / 自绘",
+    items: [
+      {
+        name: "极光 GLSL 背景",
+        desc: "噪声 + 三色渐变动态极光，含降级渐变",
+        tech: "FragmentShader + Ticker 驱动 uTime + CustomPaint",
+        path: "lib/shared/widgets/aurora_background.dart",
+      },
+      {
+        name: "极光着色器源",
+        desc: "simplex noise + 三色 ramp + 垂直衰减",
+        tech: "GLSL 片元着色器",
+        path: "assets/shaders/aurora.frag",
+      },
+      {
+        name: "方案卡渐变描边",
+        desc: "选中会员方案卡金色渐变描边",
+        tech: "CustomPaint 路径 + LinearGradient shader",
+        path: "lib/features/membership/presentation/components/membership_plan_card.dart",
+      },
+      {
+        name: "勾选标记自绘",
+        desc: "圆内手绘对勾",
+        tech: "CustomPaint 描边路径",
+        path: "lib/shared/widgets/app_selection_mark.dart",
+      },
+      {
+        name: "福利气泡自绘",
+        desc: "圆角气泡 + 底部小尾巴",
+        tech: "CustomPaint 圆角矩形 + 三角",
+        path: "lib/features/welfare/presentation/components/welfare_reward_bubble.dart",
+      },
+      {
+        name: "焦点封面裁剪",
+        desc: "按焦点保脸比例裁剪封面",
+        tech: "布局计算 + 条件留白",
+        path: "lib/shared/components/app_focal_cover_image.dart",
+      },
+    ],
+  },
+  {
+    title: "玻璃 / 模糊",
+    items: [
+      {
+        name: "showAppBlurredDialog",
+        desc: "居中弹窗统一入口（80% 黑遮罩）",
+        tech: "showGeneralDialog + 透明 barrier",
+        path: "lib/shared/components/app_blurred_dialog.dart",
+      },
+      {
+        name: "AppBlurredChromeBar",
+        desc: "顶 / 底 chrome 磨砂玻璃",
+        tech: "ClipRect + BackdropFilter",
+        path: "lib/shared/components/app_blurred_chrome_bar.dart",
+      },
+      {
+        name: "滚动触发 chrome 模糊",
+        desc: "内容滚到 chrome 下方时起雾",
+        tech: "ScrollNotification → shouldBlur",
+        path: "lib/shared/components/app_scroll_blur_scope.dart",
+      },
+      {
+        name: "吸顶 sliver 模糊",
+        desc: "吸顶头与内容重叠时模糊",
+        tech: "SliverPersistentHeaderDelegate",
+        path: "lib/shared/components/blurred_pinned_header_delegate.dart",
+      },
+      {
+        name: "GlassChipButton",
+        desc: "玻璃胶囊 / 搜索框容器",
+        tech: "BackdropFilter(glassBlurSigma)",
+        path: "lib/shared/components/glass_chip_button.dart",
+      },
+      {
+        name: "AppBottomNav 玻璃",
+        desc: "悬浮导航渐隐 + 胶囊模糊",
+        tech: "LinearGradient + BackdropFilter",
+        path: "lib/shared/layouts/app_bottom_nav.dart",
+      },
+      {
+        name: "继续阅读封面底纹",
+        desc: "页面背景色 + 放大封面背景层（撑满宽度、居中、半透明 + 模糊 sigma 90），随书籍变化",
+        tech: "Opacity + ImageFiltered(continueReadingBgBlurSigma)",
+        path: "lib/features/bookstore/presentation/components/continue_reading_card.dart",
+      },
+      {
+        name: "圆形磨砂图标框",
+        desc: "顶栏圆形磨砂图标按钮",
+        tech: "ClipOval + BackdropFilter",
+        path: "lib/shared/components/app_top_bar_icon_button.dart",
+      },
+    ],
+  },
+  {
+    title: "页面转场 / 容器变换",
+    items: [
+      {
+        name: "AdvancedTransitionWrapper",
+        desc: "卡片 → 全屏容器变形（充值卡 → 详情）",
+        tech: "OpenContainer + fadeThrough",
+        path: "lib/shared/widgets/advanced_transition_wrapper.dart",
+      },
+      {
+        name: "目录抽屉滑入",
+        desc: "左侧目录面板滑入",
+        tech: "showGeneralDialog + SlideTransition",
+        path: "lib/features/book_detail/presentation/components/book_detail_catalog_drawer.dart",
+      },
+      {
+        name: "会员权益 3D 轮播",
+        desc: "权益卡随滚动缩放 / 透明 / Y 位移 / Y 旋转",
+        tech: "PageView + AnimatedBuilder + Matrix4.rotateY",
+        path: "lib/features/membership/presentation/pages/membership_benefits_detail_page.dart",
+      },
+      {
+        name: "书封 Hero 共享元素",
+        desc: "列表书封 → 书详情头图同 tag 飞行（仅书 id 唯一的列表启用）",
+        tech: "Hero(tag) + 入口封面即时渲染作落点",
+        path: "lib/shared/widgets/book_cover.dart",
+      },
+    ],
+  },
+  {
+    title: "Tab 跟手切换 / 滑块",
+    items: [
+      {
+        name: "AppSwipeTabSwitcher",
+        desc: "顶部固定、内容跟手横滑（架构 §3.4，8 页复用）",
+        tech: "PageView + PageScrollPhysics",
+        path: "lib/shared/components/app_swipe_tab_switcher.dart",
+      },
+      {
+        name: "AppSegmentedSwitch",
+        desc: "玻璃分段控件选中滑块横移",
+        tech: "AnimatedPositioned + easeInOut",
+        path: "lib/shared/components/app_segmented_switch.dart",
+      },
+      {
+        name: "AppVerticalRailSwitch",
+        desc: "竖向轨道黄条滑动（榜单维度导航）",
+        tech: "AnimatedPositioned",
+        path: "lib/shared/components/app_vertical_rail_switch.dart",
+      },
+    ],
+  },
+  {
+    title: "滚动 / 沉浸式 Hero 头图",
+    items: [
+      {
+        name: "AppTopBar 沉浸蒙版",
+        desc: "沉浸头图上加深色渐变保证 chrome 可读",
+        tech: "showScrim LinearGradient + 可选 blur",
+        path: "lib/shared/components/app_top_bar.dart",
+      },
+      {
+        name: "榜单 Hero",
+        desc: "定比头图 + 蒙版底 + 桂冠镜像装饰",
+        tech: "Stack + 渐隐 + Transform.scale(-1)",
+        path: "lib/features/ranking/presentation/components/ranking_hero_banner.dart",
+      },
+      {
+        name: "装扮 Hero 头",
+        desc: "沉浸顶（scrim 开、blur 关）",
+        tech: "AppTopBar(showScrim)",
+        path: "lib/features/dress_up/presentation/components/dress_up_hero_header.dart",
+      },
+      {
+        name: "OverscrollStretch 头图视差",
+        desc: "下拉回弹时头图放大的视差 / 拉伸（书详情 + 会员 Hero）",
+        tech: "ScrollController overscroll + Transform.scale",
+        path: "lib/shared/widgets/overscroll_stretch.dart",
+      },
+    ],
+  },
+  {
+    title: "其它自定义",
+    items: [
+      {
+        name: "AppToast",
+        desc: "黄底居中轻提示，自动消失",
+        tech: "OverlayEntry + AnimatedOpacity",
+        path: "lib/shared/components/app_toast.dart",
+      },
+      {
+        name: "AppSwitch",
+        desc: "开关滑块 + 轨道色过渡",
+        tech: "AnimatedContainer + AnimatedAlign",
+        path: "lib/shared/widgets/app_switch.dart",
+      },
+      {
+        name: "登录输入框聚焦下划线",
+        desc: "黄色下划线聚焦时中心向两侧展开",
+        tech: "AnimationController + 宽度 lerp",
+        path: "lib/features/auth/presentation/components/login_text_field.dart",
+      },
+      {
+        name: "福利任务倒计时",
+        desc: "HH:MM:SS 每秒跳动",
+        tech: "Timer.periodic + setState",
+        path: "lib/features/welfare/presentation/components/welfare_task_row.dart",
+      },
+      {
+        name: "续费提示交叉淡入",
+        desc: "提示文案交叉淡入滑动，slot 高度动画",
+        tech: "AnimatedSize + AnimatedSwitcher",
+        path: "lib/features/membership/presentation/components/membership_renew_hint.dart",
+      },
+      {
+        name: "「换一换」旋转",
+        desc: "推荐区刷新图标点击自转一圈",
+        tech: "RotationTransition forward(from:0)",
+        path: "lib/features/book_detail/presentation/components/book_detail_recommendation_section.dart",
+      },
+      {
+        name: "AnimatedCountText",
+        desc: "数值变化时从旧值滚动到新值（余额 / 钱包 / 星尘 / 阅读分钟）",
+        tech: "TweenAnimationBuilder<double>",
+        path: "lib/shared/widgets/animated_count_text.dart",
+      },
+      {
+        name: "AppMarqueeText",
+        desc: "文本溢出时横向循环滚动（「继续阅读」书名）",
+        tech: "LayoutBuilder 测宽 + AnimationController 平移",
+        path: "lib/shared/widgets/app_marquee_text.dart",
+      },
+    ],
+  },
+];
+
+const MOTION_GAPS =
+  "Lottie 具体动画（基建就绪：lottie 依赖 + AppLottie + assets/lottie/，待放入 JSON 资源并接入）";
+
+function MotionGallerySection({
+  categories = MOTION_CATEGORIES,
+  showExtras = true,
+}: {
+  categories?: Array<{ title: string; items: MotionEffect[] }>;
+  showExtras?: boolean;
+}) {
+  return (
+    <Stack gap={18}>
+      {showExtras ? (
+        <Text tone="tertiary" size="small">
+          约 50 项独立效果，分 9 类；<Code>AppPressable</Code> 已铺至 70+
+          组件。每项点右侧「源码」路径直接打开真源。
+        </Text>
+      ) : null}
+      {categories.map((category) => (
+        <div key={category.title}>
+          <Stack gap={8}>
+            <Row gap={8} align="center">
+              <H3>{category.title}</H3>
+              <Pill size="sm">{`${category.items.length}`}</Pill>
+            </Row>
+            <Table
+              headers={["名称", "说明", "实现技术", "源码"]}
+              columnAlign={["left", "left", "left", "left"]}
+              rows={category.items.map((effect) => [
+                cell(<Code>{effect.name}</Code>),
+                cell(
+                  <div style={{ minWidth: 240 }}>
+                    <Text>{effect.desc}</Text>
+                  </div>,
+                ),
+                cell(
+                  <Text tone="tertiary" size="small">
+                    {effect.tech}
+                  </Text>,
+                ),
+                cell(<SourceLink path={effect.path} />),
+              ])}
+            />
+          </Stack>
+        </div>
+      ))}
+      {showExtras ? (
+        <Callout tone="neutral" title="尚未实现（后续增强候选）">
+          <Text>{MOTION_GAPS}</Text>
+        </Callout>
+      ) : null}
     </Stack>
   );
 }
@@ -171,6 +711,7 @@ function CoverHeader() {
 }
 
 function SummaryStats() {
+  const motionItems = MOTION_CATEGORIES.reduce((n, c) => n + c.items.length, 0);
   const stats: Array<[string, string]> = [
     ["8", "字号档"],
     ["4", "行高档"],
@@ -178,13 +719,17 @@ function SummaryStats() {
     ["8", "间距档"],
     ["5", "圆角档"],
     ["14", "核心组件"],
+    [`${MOTION_CATEGORIES.length}`, "动效类"],
+    [`${motionItems}`, "动效项"],
   ];
   return (
-    <Grid columns={6} gap={12}>
-      {stats.map(([value, label]) => (
-        <Stat key={label} value={value} label={label} />
-      ))}
-    </Grid>
+    <Stage>
+      <Grid columns={4} gap={12}>
+        {stats.map(([value, label]) => (
+          <Stat key={label} value={value} label={label} />
+        ))}
+      </Grid>
+    </Stage>
   );
 }
 
@@ -199,8 +744,7 @@ function PartBanner({
 }) {
   const theme = useHostTheme();
   return (
-    <Stack gap={16} style={{ marginTop: 28, marginBottom: 12 }}>
-      <Divider />
+    <Stack gap={16} style={{ marginTop: 56, marginBottom: 32 }}>
       <Row gap={14} align="center">
         <span
           style={{
@@ -221,7 +765,7 @@ function PartBanner({
             background: theme.stroke.secondary,
           }}
         />
-        <Stack gap={2}>
+        <Stack gap={8}>
           <span
             style={{ fontSize: 20, fontWeight: 700, color: theme.text.primary }}
           >
@@ -372,7 +916,7 @@ function Pressable({
  * 按钮区、弹窗、Toast 触发钮等全部复用它——与真实代码「弹窗调用 AppButton」一致：
  * 改这里 = 预览里所有用到按钮的地方一起变。
  */
-type BtnVariant = "accent" | "secondary" | "outline";
+type BtnVariant = "accent" | "secondary" | "outline" | "vip";
 type BtnSize = "normal" | "compact" | "small";
 
 const BTN_VARIANTS: Record<
@@ -382,6 +926,12 @@ const BTN_VARIANTS: Record<
   accent: { bg: APP.accent, fg: APP.onAccent, radius: 999, border: false },
   secondary: { bg: APP.surface, fg: "#FFFFFF", radius: 999, border: false },
   outline: { bg: "transparent", fg: "#FFFFFF", radius: 999, border: true },
+  vip: {
+    bg: "linear-gradient(90deg, #FFDDC1 0%, #F393DC 100%)",
+    fg: "#740551",
+    radius: 999,
+    border: false,
+  },
 };
 
 const BTN_SIZES: Record<BtnSize, { pad: string; fs: number; fw: number }> = {
@@ -533,7 +1083,7 @@ function TypeScaleSection() {
     ["display", 32, "Hero / 展示级"],
   ];
   return (
-    <Stack gap={10}>
+    <Stack gap={16}>
       <SectionTitle
         zh="字号（8 档）"
         note="AppFontSizes"
@@ -557,7 +1107,7 @@ function TypeScaleSection() {
 
 function LineHeightSection() {
   return (
-    <Stack gap={10}>
+    <Stack gap={16}>
       <SectionTitle
         zh="行高（4 档）"
         note="AppLineHeights"
@@ -587,7 +1137,7 @@ function WeightSection() {
     ["black", 900, "会员价格等极强调"],
   ];
   return (
-    <Stack gap={10}>
+    <Stack gap={16}>
       <SectionTitle
         zh="字重（6 档）"
         note="AppFontWeights"
@@ -611,7 +1161,7 @@ function WeightSection() {
 
 function FontFamilySection() {
   return (
-    <Stack gap={10}>
+    <Stack gap={16}>
       <SectionTitle
         zh="字体族 · 定制数字字体"
         note="AppFontFamilies"
@@ -674,32 +1224,30 @@ function ColorSection() {
         />
       </Stack>
 
-      <Grid columns={2} gap={16}>
-        <Stack gap={8}>
-          <Text weight="semibold">中性阶 · 黑色透明度（遮罩）</Text>
-          <Table
-            headers={["档位", "不透明度", "用途"]}
-            columnAlign={["left", "center", "left"]}
-            rows={[
-              ["black80", "80%", "居中弹窗遮罩（80% 纯黑，无模糊）"],
-              ["black60", "60%", "封面选择遮罩"],
-              ["black40", "40%", "选中态封面遮罩"],
-              ["black30", "30%", "顶栏图标框 / 通用遮罩"],
-              ["black08", "8%", "顶栏图标框底"],
-              ["black04", "4%", "封面描边 / 签到底"],
-              ["black00", "0%", "渐变透明端"],
-            ].map((r) => r.map(cell))}
-          />
-        </Stack>
-        <Stack gap={8}>
-          <Text weight="semibold">背景 tint 阶（随主题换色）</Text>
-          <Text tone="secondary" size="small">
-            基于基础背景 <Code>#090E17</Code> 的不同透明度，用于渐隐 / 毛玻璃底 /
-            头图蒙版；换色系时整条随背景色相变化。
-          </Text>
-          <BgTintSwatches />
-        </Stack>
-      </Grid>
+      <Stack gap={8}>
+        <Text weight="semibold">中性阶 · 黑色透明度（遮罩）</Text>
+        <Table
+          headers={["档位", "不透明度", "用途"]}
+          columnAlign={["left", "center", "left"]}
+          rows={[
+            ["black80", "80%", "居中弹窗遮罩（80% 纯黑，无模糊）"],
+            ["black60", "60%", "封面选择遮罩"],
+            ["black40", "40%", "选中态封面遮罩"],
+            ["black30", "30%", "顶栏图标框 / 通用遮罩"],
+            ["black08", "8%", "顶栏图标框底"],
+            ["black04", "4%", "封面描边 / 签到底"],
+            ["black00", "0%", "渐变透明端"],
+          ].map((r) => r.map(cell))}
+        />
+      </Stack>
+      <Stack gap={8}>
+        <Text weight="semibold">背景 tint 阶（随主题换色）</Text>
+        <Text tone="secondary" size="small">
+          基于基础背景 <Code>#090E17</Code> 的不同透明度，用于渐隐 / 毛玻璃底 /
+          头图蒙版；换色系时整条随背景色相变化。
+        </Text>
+        <BgTintSwatches />
+      </Stack>
 
       <Stack gap={8}>
         <Text weight="semibold">品牌 / 主题源色</Text>
@@ -775,9 +1323,14 @@ function BrandSwatches() {
     ["auroraEdge", "#1D0B10", "极光暗边（暗红近黑）", "#FFFFFF"],
     ["dialogBackground", "#131820", "弹窗底", "#FFFFFF"],
     ["surfaceMuted", "#262B33", "深青灰实心浮层 / 卡片底", "#FFFFFF"],
-    ["success", "#10B981", "成功", "#FFFFFF"],
-    ["warning", "#F59E0B", "警告", "#131820"],
-    ["error", "#EF4444", "错误", "#FFFFFF"],
+    ["success", "#39D98A", "成功", "#131820"],
+    ["warning", "#FFA940", "警告", "#131820"],
+    ["error", "#FF667F", "错误", "#131820"],
+    ["premiumGold", "#F9C74F", "VIP 会员金主题（v1.0）", "#131820"],
+    ["info", "#59AEFF", "信息 / 提示（v1.0）", "#131820"],
+    ["fantasyPurple", "#9C87FF", "奇幻紫（v1.0）", "#131820"],
+    ["energyCyan", "#42DDFF", "能量青（v1.0）", "#131820"],
+    ["growthBlue", "#7E95FF", "成长蓝（v1.0）", "#131820"],
   ];
   return (
     <Table
@@ -805,7 +1358,7 @@ function SpacingSection() {
     ["xxl", 48, "超大间距"],
   ];
   return (
-    <Stack gap={10}>
+    <Stack gap={16}>
       <SectionTitle
         zh="间距（8 档）"
         note="AppSpacing · 基阶 2·4·8·12·16·24·32·48"
@@ -843,7 +1396,7 @@ function RadiusSection() {
     ["full", 999, "全圆 / 药丸"],
   ];
   return (
-    <Stack gap={10}>
+    <Stack gap={16}>
       <SectionTitle
         zh="圆角（5 档）"
         note="AppRadius · 基阶 4·12·16·24·full"
@@ -896,7 +1449,7 @@ function SizeIndexSection() {
     ["Toast / 交互阈值", "轻提示内边距 / 滑动切换阈值", "toast* · swipeTabVelocityThreshold"],
   ];
   return (
-    <Stack gap={10}>
+    <Stack gap={16}>
       <SectionTitle
         zh="组件尺寸 token · 分组索引"
         note="AppSizes · 组件级布局精确值（真值随源码为准）"
@@ -918,7 +1471,7 @@ function SizeIndexSection() {
 
 function PressableSection() {
   return (
-    <Stack gap={10}>
+    <Stack gap={16}>
       <SectionTitle
         zh="按压反馈"
         note="AppPressable（L1）· 按下缩小 → 松手 overshoot 回弹 · 全局可点击模块统一微交互"
@@ -985,27 +1538,47 @@ function ButtonSection() {
     { zh: "主 CTA", code: "accent" },
     { zh: "次操作", code: "secondary" },
     { zh: "描边", code: "outline" },
+    { zh: "VIP", code: "vip" },
   ];
   const sizes: BtnSize[] = ["normal", "compact", "small"];
   return (
     <Stack gap={12}>
       <SectionTitle
         zh="按钮"
-        note="AppButton（L1）· 3 视觉变体 × 3 尺寸 · 弹窗等组件复用它"
+        note="AppButton（L1）· 4 视觉变体 × 3 尺寸 · 弹窗等组件复用它"
         src="lib/shared/widgets/app_button.dart"
       />
 
-      <Text weight="semibold">视觉变体（不同样式）</Text>
+      <Text tone="tertiary" size="small">
+        4 视觉变体 × 3 尺寸 组合总览（每行一个变体，每列一个尺寸）：
+      </Text>
       <Stage>
-        <div style={{ display: "flex", gap: 20, flexWrap: "wrap" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
           {variants.map((b) => (
-            <div key={b.code} style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-              <DemoButton variant={b.code}>{b.zh}</DemoButton>
-              <Caption>{b.code}</Caption>
+            <div
+              key={b.code}
+              style={{ display: "flex", gap: 24, alignItems: "center", flexWrap: "wrap" }}
+            >
+              <div style={{ width: 92, flexShrink: 0 }}>
+                <div style={{ color: APP.text, fontSize: 13, fontWeight: 600 }}>{b.zh}</div>
+                <Caption>{b.code}</Caption>
+              </div>
+              {sizes.map((s) => (
+                <div
+                  key={s}
+                  style={{ display: "flex", flexDirection: "column", gap: 6, alignItems: "flex-start" }}
+                >
+                  <DemoButton variant={b.code} size={s}>
+                    按钮
+                  </DemoButton>
+                  <Caption>{s}</Caption>
+                </div>
+              ))}
             </div>
           ))}
         </div>
       </Stage>
+
       <Table
         headers={["变体", "外观", "使用场景"]}
         columnAlign={["left", "left", "left"]}
@@ -1013,22 +1586,9 @@ function ButtonSection() {
           ["accent", "黄底深字 · 胶囊", "深色页主 CTA：阅读 / 确认 / 提交 / 领取 / 充值（最常用）"],
           ["secondary", "4% 白底 · 无描边 · 胶囊", "次操作 / 弱化 / 未激活态（重试默认、退出登录、验证码倒计时）· 默认变体"],
           ["outline", "透明底 + 细边框", "对话框取消 · 轻量次要操作"],
+          ["vip", "粉金渐变底 + 深粉字 · 胶囊", "VIP 领取 / 会员向操作（福利「VIP领取」等）"],
         ].map((r) => r.map(cell))}
       />
-
-      <Text weight="semibold">尺寸（不同大小）</Text>
-      <Stage>
-        <div style={{ display: "flex", gap: 24, alignItems: "center", flexWrap: "wrap" }}>
-          {sizes.map((s) => (
-            <div key={s} style={{ display: "flex", flexDirection: "column", gap: 8, alignItems: "flex-start" }}>
-              <DemoButton variant="accent" size={s}>
-                按钮
-              </DemoButton>
-              <Caption>{s}</Caption>
-            </div>
-          ))}
-        </div>
-      </Stage>
       <Table
         headers={["尺寸", "内边距 H×V", "文字", "使用场景"]}
         columnAlign={["left", "left", "left", "left"]}
@@ -1049,7 +1609,7 @@ function ButtonSection() {
 
 function CardSection() {
   return (
-    <Stack gap={10}>
+    <Stack gap={16}>
       <SectionTitle
         zh="卡片"
         note="书卡族 · 底 4% 白底 + 圆角 · 禁止卡中卡 · 可点按"
@@ -1083,7 +1643,7 @@ function CardSection() {
 
 function DialogSection() {
   return (
-    <Stack gap={10}>
+    <Stack gap={16}>
       <SectionTitle
         zh="弹窗"
         note="showAppBlurredDialog · 80% 纯黑遮罩(无模糊) · 圆角 xl · 关闭钮 DialogCloseButton"
@@ -1128,7 +1688,7 @@ function SheetSection() {
   const options = ["综合排序", "最新更新", "人气最高", "字数最多"];
   const [selected, setSelected] = useCanvasState<number>("demoSheetSelected", 0);
   return (
-    <Stack gap={10}>
+    <Stack gap={16}>
       <SectionTitle
         zh="底部弹层"
         note="showModalBottomSheet · 顶部圆角 + 玻璃 · 可选中"
@@ -1136,7 +1696,7 @@ function SheetSection() {
       />
       <Stage style={{ padding: 0, overflow: "hidden" }}>
         <div style={{ background: "rgba(0,0,0,0.45)", paddingTop: 36 }}>
-          <div style={{ background: APP.dialogBg, borderTopLeftRadius: 20, borderTopRightRadius: 20, borderTop: `${APP.hair} solid ${APP.border}`, padding: "16px 0" }}>
+          <div style={{ background: APP.dialogBg, borderTopLeftRadius: 16, borderTopRightRadius: 16, borderTop: `${APP.hair} solid ${APP.border}`, padding: "16px 0" }}>
             <div style={{ color: APP.text, fontSize: 15, fontWeight: 600, padding: "0 16px 8px" }}>筛选</div>
             {options.map((o, i) => {
               const active = i === selected;
@@ -1172,21 +1732,21 @@ function SheetSection() {
 
 function TopBarSection() {
   return (
-    <Stack gap={10}>
+    <Stack gap={16}>
       <SectionTitle
         zh="顶栏"
-        note="AppTopBar（L2）· 三槽位 leading / center / trailing"
+        note="AppTopBar（L2）· 高 44 · 图标框 32 · 三槽位 leading / center / trailing"
         src="lib/shared/components/app_top_bar.dart"
       />
       <Stage>
         <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-          <div style={{ display: "flex", alignItems: "center", height: 48, padding: "0 8px", background: APP.glass, borderRadius: 12 }}>
-            <Pressable style={{ width: 40, height: 40, display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <Glyph name="back" color={APP.text} size={22} strokeWidth={2} />
+          <div style={{ display: "flex", alignItems: "center", height: 44, padding: "0 8px", background: APP.glass, borderRadius: 12 }}>
+            <Pressable style={{ width: 32, height: 32, display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <Glyph name="back" color={APP.text} size={20} strokeWidth={2} />
             </Pressable>
             <div style={{ flex: 1, textAlign: "center", color: APP.text, fontSize: 16, fontWeight: 600 }}>页面标题</div>
-            <Pressable style={{ width: 40, height: 40, display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <Glyph name="search" color={APP.text} size={20} strokeWidth={2} />
+            <Pressable style={{ width: 32, height: 32, display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <Glyph name="search" color={APP.text} size={24} strokeWidth={2} />
             </Pressable>
           </div>
           <Caption>二级页：返回 + 标题 + 动作（图标可按压）</Caption>
@@ -1198,7 +1758,7 @@ function TopBarSection() {
 
 function BottomNavSection() {
   return (
-    <Stack gap={10}>
+    <Stack gap={16}>
       <SectionTitle
         zh="底部导航"
         note="AppBottomNav · 图标 26 · 选中弹跳（1.18→0.92→1）· hairline 描边"
@@ -1235,11 +1795,10 @@ function BottomNavDemo() {
     <div
       style={{
         display: "flex",
-        justifyContent: "space-between",
-        background: APP.glass,
+        background: APP.navBg,
         border: `${APP.hair} solid ${APP.border}`,
-        borderRadius: 999,
-        padding: "8px 20px",
+        borderRadius: 47,
+        padding: 4,
       }}
     >
       {tabs.map((t, i) => {
@@ -1248,17 +1807,18 @@ function BottomNavDemo() {
           <div
             key={t.zh}
             onClick={() => select(i)}
-            style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4, cursor: "pointer", userSelect: "none" }}
+            style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", gap: 2, cursor: "pointer", userSelect: "none" }}
           >
             <div
               style={{
+                width: 26,
+                height: 26,
+                borderRadius: 6,
+                background: active ? APP.accent : APP.textMuted,
                 transform: `scale(${active ? bounce : 1})`,
-                transition: "transform 0.09s ease",
-                lineHeight: 0,
+                transition: "transform 0.09s ease, background 0.2s",
               }}
-            >
-              <Glyph name={t.icon} color={active ? APP.accent : APP.textMuted} size={26} strokeWidth={1.8} />
-            </div>
+            />
             <span style={{ fontSize: 11, color: active ? APP.accent : APP.textMuted, transition: "color 0.2s" }}>{t.zh}</span>
           </div>
         );
@@ -1269,10 +1829,10 @@ function BottomNavDemo() {
 
 function SegmentedSection() {
   return (
-    <Stack gap={10}>
+    <Stack gap={16}>
       <SectionTitle
         zh="分段切换"
-        note="AppSegmentedSwitch · 玻璃态 + 黄色滑块动画"
+        note="AppSegmentedSwitch · 玻璃态 + 黄色滑块动画 · 书籍详情「详情/讨论/更新」、榜单频道同款（圆角 46）"
         src="lib/shared/components/app_segmented_switch.dart"
       />
       <Stage>
@@ -1283,8 +1843,8 @@ function SegmentedSection() {
 }
 
 function SegmentedDemo() {
-  const segs = ["书架", "阅读历史"];
-  const segWidth = 104;
+  const segs = ["详情", "讨论", "更新"];
+  const segWidth = 92;
   const pad = 4;
   const [sel, setSel] = useCanvasState<number>("demoSeg", 0);
   return (
@@ -1295,7 +1855,7 @@ function SegmentedDemo() {
         display: "inline-flex",
         background: APP.surface,
         border: `${APP.hair} solid ${APP.border}`,
-        borderRadius: 16,
+        borderRadius: 46,
         padding: pad,
       }}
     >
@@ -1308,7 +1868,7 @@ function SegmentedDemo() {
           width: segWidth,
           background: APP.segFill,
           border: `${APP.hair} solid ${APP.accent}`,
-          borderRadius: 12,
+          borderRadius: 999,
           transition: "left 0.25s cubic-bezier(0.2,0,0,1)",
         }}
       />
@@ -1341,7 +1901,7 @@ function SegmentedDemo() {
 
 function TabIndicatorSection() {
   return (
-    <Stack gap={10}>
+    <Stack gap={16}>
       <SectionTitle
         zh="选中指示线"
         note="ElasticTabIndicator · 线宽 24 · 平移时先拉长再回弹"
@@ -1410,7 +1970,7 @@ function TabIndicatorDemo() {
 
 function SearchSection() {
   return (
-    <Stack gap={10}>
+    <Stack gap={16}>
       <SectionTitle
         zh="搜索框"
         note="GlassChipButton · 高 40 · 圆角 35 · 放大镜图标 · hairline 描边"
@@ -1436,7 +1996,7 @@ function SearchDemo() {
         borderRadius: 35,
         background: APP.glass,
         border: `${APP.hair} solid ${focused ? APP.accent : APP.border}`,
-        padding: "0 14px",
+        padding: "0 16px",
         color: APP.textMuted,
         fontSize: 14,
         cursor: "text",
@@ -1455,7 +2015,7 @@ function SearchDemo() {
 
 function SwitchSection() {
   return (
-    <Stack gap={10}>
+    <Stack gap={16}>
       <SectionTitle
         zh="开关"
         note="AppSwitch · 50×30 · 滑块 24 · 开(黄4%底+黄钮) / 关(玻璃+白钮)"
@@ -1495,7 +2055,7 @@ function InteractiveSwitch({ stateKey, initial }: { stateKey: string; initial: b
 
 function SweepHighlightSection() {
   return (
-    <Stack gap={10}>
+    <Stack gap={16}>
       <SectionTitle
         zh="扫光高亮层"
         note="SweepHighlightOverlay · 高亮带循环左→右滑过"
@@ -1543,7 +2103,7 @@ function SweepHighlightSection() {
 
 function ToastSection() {
   return (
-    <Stack gap={10}>
+    <Stack gap={16}>
       <SectionTitle
         zh="轻提示"
         note="AppToast · 黄底 · 圆角 md · 淡入后自动消失"
@@ -1588,7 +2148,7 @@ function ToastDemo() {
 
 function EmptyStateSection() {
   return (
-    <Stack gap={10}>
+    <Stack gap={16}>
       <SectionTitle
         zh="空状态"
         note="EmptyState · 标题 + 说明 + 操作"
@@ -1606,7 +2166,7 @@ function EmptyStateSection() {
 
 function SectionHeaderSection() {
   return (
-    <Stack gap={10}>
+    <Stack gap={16}>
       <SectionTitle
         zh="区块标题"
         note="SectionHeader · 标题 + 右侧操作链接"

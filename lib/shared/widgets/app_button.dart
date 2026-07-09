@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../core/theme/app_brand_colors.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_radius.dart';
 import '../../core/theme/app_sizes.dart';
@@ -17,6 +18,9 @@ enum AppButtonVariant {
 
   /// 描边按钮（透明底 + 细边框）。
   outline,
+
+  /// VIP 粉色渐变胶囊（粉金渐变 + 深粉字），会员 / 福利 VIP 领取类操作。
+  vip,
 }
 
 /// 按钮尺寸。
@@ -49,6 +53,18 @@ class AppButton extends StatelessWidget {
     AppButtonVariant.accent => AppColors.accentYellow,
     AppButtonVariant.secondary => AppColors.surfaceCard,
     AppButtonVariant.outline => Colors.transparent,
+    AppButtonVariant.vip => Colors.transparent,
+  };
+
+  /// VIP 变体用粉金渐变填充（其它变体为纯色，返回 null）。
+  LinearGradient? get _gradient => switch (variant) {
+    AppButtonVariant.vip => const LinearGradient(
+      colors: [
+        AppBrandColors.vipGradientStart,
+        AppBrandColors.vipGradientEnd,
+      ],
+    ),
+    _ => null,
   };
 
   static const double _disabledForegroundOpacity = 0.4;
@@ -57,6 +73,7 @@ class AppButton extends StatelessWidget {
     AppButtonVariant.accent => AppColors.rankingSegmentedSelectedText,
     AppButtonVariant.secondary => AppColors.textOnDark,
     AppButtonVariant.outline => AppColors.textOnDark,
+    AppButtonVariant.vip => AppBrandColors.vipOnGradientText,
   };
 
   Color _foregroundColorFor(bool enabled) {
@@ -142,7 +159,8 @@ class AppButton extends StatelessWidget {
       onTap: tapHandler,
       child: Container(
         decoration: BoxDecoration(
-          color: _backgroundColor,
+          color: _gradient == null ? _backgroundColor : null,
+          gradient: _gradient,
           borderRadius: radius,
           border: _hasBorder
               ? Border.all(

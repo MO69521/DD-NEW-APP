@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../core/services/service_locator.dart';
 import '../../core/theme/app_layout.dart';
 import '../../core/theme/app_sizes.dart';
 import '../../core/theme/app_spacing.dart';
@@ -14,6 +15,7 @@ import '../../features/partner/application/partner_cubit.dart';
 import '../../features/partner/index.dart';
 import '../../features/profile/application/profile_cubit.dart';
 import '../../features/profile/index.dart';
+import '../../features/onboarding/index.dart';
 import '../../features/ranking/index.dart';
 import '../../features/welfare/application/welfare_cubit.dart';
 import '../../features/welfare/index.dart';
@@ -51,6 +53,16 @@ class _MainTabShellPageState extends State<MainTabShellPage> {
         _mainTabController.openBookshelfTab(intent);
       });
     }
+    _maybeShowOnboarding();
+  }
+
+  /// 新用户首次进入首页时弹出性别 / 年龄收集弹窗（必填，本会话仅一次）。
+  void _maybeShowOnboarding() {
+    if (!ServiceLocator.onboarding.needsBasicInfo) return;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      OnboardingProfileDialog.show(context);
+    });
   }
 
   @override

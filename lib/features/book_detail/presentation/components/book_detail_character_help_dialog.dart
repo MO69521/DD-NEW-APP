@@ -53,11 +53,10 @@ class BookDetailCharacterHelpDialog extends StatelessWidget {
               MediaQuery.sizeOf(context).height *
               AppSizes.bookDetailCharacterHelpDialogMaxHeightRatio,
         ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
+        child: Stack(
+          clipBehavior: Clip.none,
           children: [
-            Flexible(
-              child: Container(
+            Container(
                 padding: const EdgeInsets.all(AppSpacing.lg),
                 decoration: BoxDecoration(
                   color: AppColors.dialogBackground,
@@ -93,9 +92,11 @@ class BookDetailCharacterHelpDialog extends StatelessWidget {
                   ],
                 ),
               ),
+            Positioned(
+              top: AppSpacing.lg,
+              right: AppSpacing.lg,
+              child: DialogCloseButton(onTap: AppRouter.pop),
             ),
-            const SizedBox(height: AppSpacing.sm),
-            DialogCloseButton(onTap: AppRouter.pop),
           ],
         ),
       ),

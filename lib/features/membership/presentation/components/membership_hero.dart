@@ -6,7 +6,7 @@ import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../shared/widgets/aurora_background.dart';
 import '../../domain/entities/membership_hero_slide.dart';
-import 'membership_dots.dart';
+import '../../../../shared/components/app_page_dots.dart';
 import 'membership_hero_slide_text.dart';
 
 /// L3 — 会员页 Hero 头图：固定纹理背景 + 主张文案轮播（左文右图）+ 指示点。
@@ -277,7 +277,7 @@ class _MembershipHeroState extends State<MembershipHero>
             top: AppSizes.membershipDotsTop,
             child: IgnorePointer(
               child: Center(
-                child: MembershipDots(
+                child: AppPageDots(
                   count: _slideCount,
                   current: _current % _slideCount,
                 ),

@@ -8,6 +8,7 @@ import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../shared/widgets/app_asset_image.dart';
+import '../../../../shared/widgets/animated_count_text.dart';
 import '../../../../shared/widgets/app_pressable.dart';
 import '../../../../shared/widgets/app_text.dart';
 import '../../domain/entities/currency_wallet_page_content.dart';
@@ -93,8 +94,8 @@ class _StardustOptionCard extends StatelessWidget {
                 const SizedBox(height: AppSpacing.xs),
                 AppText('可获得', style: AppTextStyles.captionMdDarkMuted),
                 const SizedBox(height: AppSpacing.xxs),
-                AppText(
-                  '${option.energyAmount}',
+                AnimatedCountText(
+                  value: option.energyAmount,
                   style: AppTextStyles.titleMediumDark,
                 ),
                 const SizedBox(height: AppSpacing.xs),

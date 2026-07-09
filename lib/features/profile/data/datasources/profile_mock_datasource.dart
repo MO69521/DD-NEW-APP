@@ -76,7 +76,7 @@ class ProfileMockDataSource {
       energyAmount: 700,
       originalAmount: 500,
       priceYuan: 15,
-      badgeLabel: '热销',
+      badgeLabel: '热',
       illustrationAsset: 'assets/images/welfare/recharge_tier_2.png',
     ),
     RechargePackage(
@@ -98,7 +98,7 @@ class ProfileMockDataSource {
       energyAmount: 25000,
       originalAmount: 15000,
       priceYuan: 100,
-      badgeLabel: '热销',
+      badgeLabel: '热',
       illustrationAsset: 'assets/images/welfare/recharge_tier_5.png',
     ),
     RechargePackage(

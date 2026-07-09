@@ -14,6 +14,7 @@ class BookCover extends StatelessWidget {
     this.aspectRatio,
     this.overlayColor,
     this.topEndBadge,
+    this.heroTag,
   }) : assert(
          (width != null && height != null) || aspectRatio != null,
          'Provide width+height or aspectRatio',
@@ -27,6 +28,10 @@ class BookCover extends StatelessWidget {
 
   /// 右上角叠加插槽（如封面状态角标），为空则不渲染。
   final Widget? topEndBadge;
+
+  /// 共享元素转场标签；非空则封面参与 Hero 飞行（详情页头图用同 tag）。
+  /// 同一屏内必须唯一，仅在书 id 唯一的列表启用。
+  final Object? heroTag;
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +61,7 @@ class BookCover extends StatelessWidget {
       image = _buildLayeredCover(null);
     }
 
-    return DecoratedBox(
+    final cover = DecoratedBox(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(AppRadius.bookCover),
         border: Border.all(
@@ -69,6 +74,9 @@ class BookCover extends StatelessWidget {
         child: image,
       ),
     );
+
+    if (heroTag == null) return cover;
+    return Hero(tag: heroTag!, child: cover);
   }
 
   Widget _buildLayeredCover(int? cacheWidth) {

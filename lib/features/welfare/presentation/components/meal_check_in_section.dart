@@ -7,7 +7,7 @@ import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/theme/app_welfare_colors.dart';
 import '../../../../shared/widgets/app_asset_image.dart';
-import '../../../../shared/widgets/app_pressable.dart';
+import '../../../../shared/widgets/app_button.dart';
 import '../../../../shared/widgets/app_text.dart';
 import '../../domain/entities/welfare_models.dart';
 import '../mappers/welfare_asset_mapper.dart';
@@ -136,29 +136,11 @@ class _VipClaimButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppPressable(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(
-          horizontal: AppSpacing.md,
-          vertical: AppSpacing.xs,
-        ),
-        decoration: BoxDecoration(
-          gradient: const LinearGradient(
-            colors: [
-              AppWelfareColors.vipBannerGradientStart,
-              AppWelfareColors.vipBannerGradientEnd,
-            ],
-          ),
-          borderRadius: BorderRadius.circular(AppRadius.welfareCheckInCta),
-        ),
-        child: AppText(
-          'VIP领取',
-          style: AppTextStyles.welfareCtaText.copyWith(
-            color: AppWelfareColors.vipCtaText,
-          ),
-        ),
-      ),
+    return AppButton(
+      label: 'VIP领取',
+      variant: AppButtonVariant.vip,
+      size: AppButtonSize.small,
+      onPressed: onTap,
     );
   }
 }

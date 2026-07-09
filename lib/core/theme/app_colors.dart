@@ -37,9 +37,16 @@ abstract final class AppColors {
   static const Color border = Color(0xFFE5E7EB);
   static const Color divider = Color(0xFFF3F4F6);
 
-  static const Color success = Color(0xFF10B981);
-  static const Color warning = Color(0xFFF59E0B);
-  static const Color error = Color(0xFFEF4444);
+  static const Color success = AppBrandColors.success;
+  static const Color warning = AppBrandColors.warning;
+  static const Color error = AppBrandColors.error;
+
+  // Design Token v1.0 · 语义强调色扩展（源色见 AppBrandColors，暂未接入页面）
+  static const Color premiumGold = AppBrandColors.premiumGold;
+  static const Color info = AppBrandColors.info;
+  static const Color fantasyPurple = AppBrandColors.fantasyPurple;
+  static const Color energyCyan = AppBrandColors.energyCyan;
+  static const Color growthBlue = AppBrandColors.growthBlue;
 
   // Bookstore dark theme tokens（主题源色由 AppBrandColors 提供，支持换色系）
   static const Color backgroundDark = AppBrandColors.backgroundDark;
@@ -57,6 +64,9 @@ abstract final class AppColors {
   /// 顶/底 Chrome 毛玻璃半透明底色（约 45% 不透明，配合 blur 透出内容）。
   static const Color chromeBarScrim = bgTint45;
 
+  /// 底部导航毛玻璃底色（约 60% 不透明，弱化毛玻璃、减少透出下方内容）。
+  static const Color bottomNavScrim = bgTint60;
+
   /// 顶栏滚动后毛玻璃底色：更接近页面背景，避免头图文字透出干扰导航。
   static const Color topChromeBarScrolledScrim = bgTint80;
   static const Color topBarHeroScrimStart = black30;
@@ -64,6 +74,10 @@ abstract final class AppColors {
 
   static const Color surfaceGlass = white08;
   static const Color surfaceCard = white04;
+
+  /// 骨架屏底色 / 扫光高光（复用中性白阶：底 8%、高光 24%）。
+  static const Color shimmerBase = white08;
+  static const Color shimmerHighlight = white24;
   static const Color surfaceMuted = AppBrandColors.surfaceMuted;
   static const Color auroraGlow = AppBrandColors.auroraGlow;
   static const Color auroraEdge = AppBrandColors.auroraEdge;
@@ -178,4 +192,33 @@ abstract final class AppColors {
 
   /// 分类页次级筛选选中文字：比主分类弱一档，避免多行筛选同时抢焦点。
   static const Color categoryFilterSecondarySelectedText = white85;
+
+  // 我的消息（互动消息列表）——语义均复用既有色值，未引入新色。
+  /// Tab 未读数字红点底（复用 error 红）。
+  static const Color badgeCount = error;
+
+  /// 「作者」标识底（复用品牌黄）。
+  static const Color authorBadgeBackground = accentYellow;
+
+  /// 「作者」标识字（深色，复用导航激活字色）。
+  static const Color authorBadgeText = navActiveText;
+
+  /// 消息条目内书籍引用块底。
+  static const Color myMessagesBookRefBackground = white05;
+
+  /// 消息条目内引用书评左侧竖条。
+  static const Color myMessagesQuoteBar = white20;
+
+  /// 通知「NEW / 未读」标识（复用品牌橙）。
+  static const Color myMessagesNoticeBadge = searchHotAccent;
+
+  // 新手基础信息收集弹窗（性别 / 年龄）——语义均复用既有色值。
+  /// 年龄选项选中底（复用品牌黄）。
+  static const Color onboardingAgeSelected = accentYellow;
+
+  /// 年龄选项选中字（深色，复用导航激活字色）。
+  static const Color onboardingAgeSelectedText = navActiveText;
+
+  /// 年龄选项未选中底（纯白 8%）。
+  static const Color onboardingAgeUnselected = surfaceGlass;
 }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_radius.dart';
+import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../shared/components/elastic_tab_indicator.dart';
@@ -14,10 +16,14 @@ class MyMessagesTabBar extends StatelessWidget {
     super.key,
     required this.selected,
     required this.onSelected,
+    this.unreadCounts = const {},
   });
 
   final MyMessageTab selected;
   final ValueChanged<MyMessageTab> onSelected;
+
+  /// 各 Tab 未读数；选中的 Tab 视为已读不展示红点。
+  final Map<MyMessageTab, int> unreadCounts;
 
   @override
   Widget build(BuildContext context) {
@@ -44,6 +50,7 @@ class MyMessagesTabBar extends StatelessWidget {
                   tab: tabs[i],
                   isSelected: tabs[i] == selected,
                   width: slotWidth,
+                  unreadCount: unreadCounts[tabs[i]] ?? 0,
                   onTap: () => onSelected(tabs[i]),
                 ),
               ],
@@ -83,12 +90,14 @@ class _MyMessagesTabItem extends StatelessWidget {
     required this.tab,
     required this.isSelected,
     required this.width,
+    required this.unreadCount,
     required this.onTap,
   });
 
   final MyMessageTab tab;
   final bool isSelected;
   final double width;
+  final int unreadCount;
   final VoidCallback onTap;
 
   @override
@@ -99,21 +108,59 @@ class _MyMessagesTabItem extends StatelessWidget {
         width: width,
         child: Padding(
           padding: const EdgeInsets.only(bottom: AppSpacing.xs),
-          child: AppText(
-            tab.label,
-            style:
-                (isSelected
-                        ? AppTextStyles.tabActiveDark
-                        : AppTextStyles.tabInactiveDark)
-                    .copyWith(
-                      color: isSelected
-                          ? AppColors.textOnDark
-                          : AppColors.textOnDarkMuted,
-                    ),
-            maxLines: 1,
-            textAlign: TextAlign.center,
+          child: Stack(
+            clipBehavior: Clip.none,
+            children: [
+              AppText(
+                tab.label,
+                style:
+                    (isSelected
+                            ? AppTextStyles.tabActiveDark
+                            : AppTextStyles.tabInactiveDark)
+                        .copyWith(
+                          color: isSelected
+                              ? AppColors.textOnDark
+                              : AppColors.textOnDarkMuted,
+                        ),
+                maxLines: 1,
+                textAlign: TextAlign.center,
+              ),
+              if (unreadCount > 0)
+                Positioned(
+                  top: -AppSpacing.sm,
+                  right: -AppSpacing.md,
+                  child: _UnreadBadge(count: unreadCount),
+                ),
+            ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _UnreadBadge extends StatelessWidget {
+  const _UnreadBadge({required this.count});
+
+  final int count;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      constraints: const BoxConstraints(
+        minWidth: AppSizes.myMessagesUnreadBadgeMinSize,
+        minHeight: AppSizes.myMessagesUnreadBadgeMinSize,
+      ),
+      alignment: Alignment.center,
+      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xxs),
+      decoration: BoxDecoration(
+        color: AppColors.badgeCount,
+        borderRadius: BorderRadius.circular(AppRadius.full),
+      ),
+      child: AppText(
+        count > 99 ? '99+' : '$count',
+        style: AppTextStyles.captionSm.copyWith(color: AppColors.textOnDark),
+        maxLines: 1,
       ),
     );
   }

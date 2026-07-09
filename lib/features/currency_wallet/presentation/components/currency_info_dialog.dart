@@ -45,8 +45,8 @@ class CurrencyInfoDialog extends StatelessWidget {
     return Dialog(
       backgroundColor: Colors.transparent,
       insetPadding: const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
+      child: Stack(
+        clipBehavior: Clip.none,
         children: [
           ConstrainedBox(
             constraints: BoxConstraints(maxHeight: maxHeight),
@@ -92,8 +92,11 @@ class CurrencyInfoDialog extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(height: AppSpacing.lg),
-          DialogCloseButton(onTap: onClose),
+          Positioned(
+            top: AppSpacing.lg,
+            right: AppSpacing.lg,
+            child: DialogCloseButton(onTap: onClose),
+          ),
         ],
       ),
     );

@@ -23,7 +23,8 @@ abstract final class WelfareAssetMapper {
 
   static String checkInRewardIconAsset(CheckInRewardType type) {
     return switch (type) {
-      CheckInRewardType.energy => 'assets/icons/welfare/check_in_energy.png',
+      // 能量图标全局统一为 energy.svg（矢量，按使用尺寸缩放不失真）。
+      CheckInRewardType.energy => 'assets/icons/welfare/energy.svg',
       CheckInRewardType.stardust =>
         'assets/icons/welfare/check_in_stardust.png',
       CheckInRewardType.freeCard => 'assets/icons/welfare/free_card.png',
@@ -59,7 +60,7 @@ abstract final class WelfareAssetMapper {
   static String checkInMilestoneDotAsset() =>
       'assets/images/welfare/slices/milestone_dot.svg';
 
-  /// 气泡内能量图标（PNG，避免复杂 SVG 引发布局溢出）。
+  /// 气泡内能量图标（全局统一 energy.svg，矢量按尺寸缩放）。
   static String checkInMilestoneEnergyIconAsset() =>
-      'assets/icons/welfare/check_in_energy.png';
+      'assets/icons/welfare/energy.svg';
 }

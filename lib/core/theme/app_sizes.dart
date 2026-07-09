@@ -22,6 +22,16 @@ abstract final class AppSizes {
   /// 反弹时放大越过原尺寸的 overshoot 峰值比例。
   static const double tapPressReboundScale = 1.05;
 
+  // ── 跑马灯 (AppMarqueeText) ──
+  /// 文本溢出时横向滚动速度（px/s）。
+  static const double marqueeSpeed = 40;
+
+  /// 跑马灯循环时两段文本之间的间隔宽度。
+  static const double marqueeGap = 48;
+
+  /// 头图下拉回弹时的最大额外放大比例（视差 / 拉伸头图）。
+  static const double heroParallaxFactor = 0.4;
+
   // ── 通用二级页顶栏 (AppTopBar) ──
   static const double topBarHeight = 44;
   static const double topBarCircleSize = 32;
@@ -79,6 +89,9 @@ abstract final class AppSizes {
   static const double continueReadingCoverWidth = 36;
   static const double continueReadingCoverHeight = 48;
   static const double continueReadingCloseIconSize = 16;
+  // 背景层：放大封面（宽度撑满卡片、居中）叠加页面背景，做模糊 + 半透明
+  static const double continueReadingBgBlurSigma = 90;
+  static const double continueReadingBgImageOpacity = 0.8;
 
   // 我的页「我的成就」勋章模块
   static const double profileAchievementMedalSize = 52;
@@ -149,6 +162,27 @@ abstract final class AppSizes {
   static const double welfareCheckInCtaPaddingVertical = 14;
   static const double welfareCheckInChevronSize = 16;
   static const double welfareCheckInClaimedRewardOpacity = 0.3;
+
+  /// 已签到日：奖励图标更淡（Figma 10%）。
+  static const double welfareCheckInClaimedIconOpacity = 0.1;
+
+  /// 签到成功弹窗头部：能量图标圆底与图标尺寸（Figma 1568:2048/2126）。
+  static const double welfareCheckInSuccessBadgeSize = 66;
+  static const double welfareCheckInSuccessBadgeIconSize = 40;
+
+  // ── 新手基础信息收集弹窗 ──
+  /// 性别头像圆底直径。
+  static const double onboardingGenderAvatarSize = 96;
+
+  /// 步骤内容视口固定高度（PageView 跟手切换需有界高度，取较高的步骤）。
+  static const double onboardingStepViewportHeight = 300;
+
+  /// 「— 选择性别 —」标签两侧短线长度。
+  static const double onboardingSectionLabelLineWidth = 20;
+
+  /// 统一分页指示点：圆点直径与选中点拉长宽度（会员轮播 / 新手引导共用）。
+  static const double pageDotSize = 4;
+  static const double pageDotActiveWidth = 8;
   static const double welfareCheckInClaimedCheckSize = 24;
   static const double welfareCheckInCtaHeight = 42;
   static const double welfareCheckInDayWideMinWidth = 132;
@@ -168,7 +202,6 @@ abstract final class AppSizes {
 
   // ── 能量充值支付确认弹窗 ──
   static const double rechargePurchaseDialogEnergyIconSize = 16;
-  static const double rechargePurchaseDialogCloseIconSize = 20;
   static const double rechargePurchaseDialogPriceFontSize = 28;
 
   static const double welfareCheckInRewardIconSize = 24;
@@ -187,7 +220,6 @@ abstract final class AppSizes {
   static const double welfareTaskTimelineLineHeight = 4;
   static const double welfareTaskTimelineDotSize = 12;
   static const double welfareTaskTimelineDotBorderWidth = 2;
-  static const double welfareTaskTimelineFooterHeight = 20;
   static const double welfareTaskTimelineTailWidth = 10;
   static const double welfareTaskTimelineTailHeight = 4;
   static const double welfareTaskPopularIconSize = 16;
@@ -197,8 +229,8 @@ abstract final class AppSizes {
   /// 任务卡向上叠压 VIP 入口的高度（Figma 559:23234 重叠 24px）。
   static const double welfareTaskCardOverlap = 24;
 
-  /// 任务卡毛玻璃背景模糊半径（引用通用强模糊）。
-  static const double welfareTaskCardBlurSigma = strongBlurSigma;
+  /// 任务卡毛玻璃背景模糊半径（福利页 VIP 横幅叠压处）。
+  static const double welfareTaskCardBlurSigma = 90;
 
   // ── 书架页 (Figma 220:9341 / 377:1909) ──
   static const double bookshelfHeaderHeight = 44;
@@ -275,6 +307,22 @@ abstract final class AppSizes {
   static const double myMessagesEmptyIconSize = 48;
   static const int myMessagesEmptyTopFlex = 2;
   static const int myMessagesEmptyBottomFlex = 3;
+
+  /// 互动消息条目：发信人头像。
+  static const double myMessagesAvatarSize = 36;
+
+  /// 互动消息条目：书籍引用块小封面。
+  static const double myMessagesBookRefCoverWidth = 40;
+  static const double myMessagesBookRefCoverHeight = 52;
+
+  /// 互动消息条目：引用书评左侧竖条宽度。
+  static const double myMessagesQuoteBarWidth = 3;
+
+  /// Tab 未读数字红点最小直径。
+  static const double myMessagesUnreadBadgeMinSize = 16;
+
+  /// 已读通知整条置灰不透明度。
+  static const double myMessagesReadOpacity = 0.45;
 
   // ── 我的卡包页 ──
   static const double cardPackEmptyIllustrationSize = 160;
@@ -515,8 +563,6 @@ abstract final class AppSizes {
   static const double membershipHeroSlideImageHeight = 200;
 
   static const double membershipDotsTop = 195;
-  static const double membershipDotsActiveWidth = 8;
-  static const double membershipDotSize = 4;
   static const double membershipUserCardTop = 211;
   static const double membershipUserAvatarSize = 44;
 
@@ -685,8 +731,6 @@ abstract final class AppSizes {
 
   // ── 帮助与反馈页 ──
   static const double helpFeedbackTabBarReserveHeight = 40;
-  static const double helpFeedbackBannerHeight = 120;
-  static const double helpFeedbackQuestionMarkSize = 36;
   static const double helpFeedbackIssueTypeRadioSize = 18;
   static const double helpFeedbackInputMinHeight = 48;
   static const double helpFeedbackDescriptionMinHeight = 164;

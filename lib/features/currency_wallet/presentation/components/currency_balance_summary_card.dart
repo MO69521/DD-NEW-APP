@@ -7,6 +7,7 @@ import '../../../../core/theme/app_radius.dart';
 import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
+import '../../../../shared/widgets/animated_count_text.dart';
 import '../../../../shared/widgets/app_asset_image.dart';
 import '../../../../shared/widgets/app_text.dart';
 
@@ -36,8 +37,8 @@ class CurrencyBalanceSummaryCard extends StatelessWidget {
             style: AppTextStyles.titleMediumDark,
           ),
           const Spacer(),
-          AppText(
-            '$balance',
+          AnimatedCountText(
+            value: balance,
             style: AppTextStyles.displaySm.copyWith(
               color: AppColors.textOnDark,
             ),

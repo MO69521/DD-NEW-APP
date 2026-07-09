@@ -95,6 +95,8 @@ class AppBottomNav extends StatelessWidget {
   Widget _buildSolidBottomBar(Widget navCapsule) {
     return AppBlurredChromeBar(
       enabled: blurEnabled,
+      blurSigma: AppSizes.bottomNavBlurSigma,
+      scrimColor: AppColors.bottomNavScrim,
       child: SafeArea(
         top: false,
         left: false,

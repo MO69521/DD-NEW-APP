@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_colors.dart';
-import '../../../../core/theme/app_radius.dart';
 import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../shared/layouts/app_bottom_nav.dart';
+import '../../../../shared/widgets/app_button.dart';
 import '../../../../shared/widgets/app_selection_mark.dart';
 import '../../../../shared/widgets/app_pressable.dart';
 import '../../../../shared/widgets/app_text.dart';
@@ -57,30 +57,13 @@ class BookshelfManageActionBar extends StatelessWidget {
                     ),
                   ),
                   const Spacer(),
-                  AppPressable(
-                    onTap: canDelete ? onDeleteTap : null,
-                    child: DecoratedBox(
-                      decoration: BoxDecoration(
-                        color: canDelete
-                            ? AppColors.accentYellow
-                            : AppColors.surfaceGlass,
-                        borderRadius: BorderRadius.circular(AppRadius.full),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: AppSpacing.lg,
-                          vertical: AppSpacing.xs,
-                        ),
-                        child: AppText(
-                          canDelete ? '删除($selectedCount)' : '删除',
-                          style: AppTextStyles.bodyMediumDark.copyWith(
-                            color: canDelete
-                                ? AppColors.navActiveText
-                                : AppColors.textOnDarkMuted,
-                          ),
-                        ),
-                      ),
-                    ),
+                  AppButton(
+                    label: canDelete ? '删除($selectedCount)' : '删除',
+                    variant: canDelete
+                        ? AppButtonVariant.accent
+                        : AppButtonVariant.secondary,
+                    size: AppButtonSize.small,
+                    onPressed: canDelete ? onDeleteTap : null,
                   ),
                 ],
               ),

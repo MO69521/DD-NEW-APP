@@ -44,7 +44,7 @@ List<RouteBase> accountSettingsRoutes() => [
     path: AppRoutes.myMessages,
     name: AppRoutes.myMessagesName,
     builder: (context, state) => BlocProvider(
-      create: (_) => MyMessagesCubit(),
+      create: (_) => MyMessagesCubit()..load(),
       child: const MyMessagesPage(),
     ),
   ),

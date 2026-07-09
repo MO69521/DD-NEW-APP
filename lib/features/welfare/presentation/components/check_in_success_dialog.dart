@@ -11,10 +11,12 @@ import '../../../../shared/components/app_blurred_dialog.dart';
 import '../../../../shared/components/app_confetti.dart';
 import '../../../../shared/components/dialog_close_button.dart';
 import '../../../../shared/components/sweep_highlight_overlay.dart';
+import '../../../../shared/widgets/app_asset_image.dart';
 import '../../../../shared/widgets/app_button.dart';
 import '../../../../shared/widgets/app_pressable.dart';
 import '../../../../shared/widgets/app_text.dart';
 import '../../domain/entities/welfare_models.dart';
+import '../mappers/welfare_asset_mapper.dart';
 import 'check_in_calendar.dart';
 import 'check_in_milestone_progress.dart';
 import 'check_in_subtitle.dart';
@@ -78,11 +80,10 @@ class CheckInSuccessDialog extends StatelessWidget {
     return Dialog(
       backgroundColor: Colors.transparent,
       insetPadding: const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
+      child: Stack(
+        clipBehavior: Clip.none,
         children: [
-          Flexible(
-            child: ConstrainedBox(
+          ConstrainedBox(
               constraints: BoxConstraints(maxHeight: maxHeight),
               child: DecoratedBox(
                 decoration: BoxDecoration(
@@ -100,18 +101,25 @@ class CheckInSuccessDialog extends StatelessWidget {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      AppText(
-                        '签到成功',
-                        style: AppTextStyles.titleMedium.copyWith(
-                          color: AppColors.textOnDark,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: AppSpacing.xs),
-                      AppText(
-                        '+${summary.todayRewardEnergy}能量',
-                        style: AppTextStyles.welfareCurrencyAmount,
-                        textAlign: TextAlign.center,
+                      const _EnergyBadge(),
+                      const SizedBox(height: AppSpacing.sm),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          AppText(
+                            '签到成功',
+                            style: AppTextStyles.titleMedium.copyWith(
+                              color: AppColors.textOnDark,
+                            ),
+                          ),
+                          const SizedBox(width: AppSpacing.xs),
+                          AppText(
+                            '+${summary.todayRewardEnergy}',
+                            style: AppTextStyles.titleMedium.copyWith(
+                              color: AppColors.textOnDark,
+                            ),
+                          ),
+                        ],
                       ),
                       const SizedBox(height: AppSpacing.sm),
                       CheckInSubtitle(
@@ -148,10 +156,35 @@ class CheckInSuccessDialog extends StatelessWidget {
                 ),
               ),
             ),
+          Positioned(
+            top: AppSpacing.lg,
+            right: AppSpacing.lg,
+            child: DialogCloseButton(onTap: () => Navigator.of(context).pop()),
           ),
-          const SizedBox(height: AppSpacing.lg),
-          DialogCloseButton(onTap: () => Navigator.of(context).pop()),
         ],
+      ),
+    );
+  }
+}
+
+/// 头部能量图标：纯白 4% 圆底 + 居中能量图标（Figma 1568:2048）。
+class _EnergyBadge extends StatelessWidget {
+  const _EnergyBadge();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: AppSizes.welfareCheckInSuccessBadgeSize,
+      height: AppSizes.welfareCheckInSuccessBadgeSize,
+      alignment: Alignment.center,
+      decoration: const BoxDecoration(
+        color: AppColors.white04,
+        shape: BoxShape.circle,
+      ),
+      child: AppAssetImage(
+        assetPath: WelfareAssetMapper.checkInMilestoneEnergyIconAsset(),
+        width: AppSizes.welfareCheckInSuccessBadgeIconSize,
+        height: AppSizes.welfareCheckInSuccessBadgeIconSize,
       ),
     );
   }

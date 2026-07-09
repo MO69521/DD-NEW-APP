@@ -5,6 +5,7 @@ import '../../../../core/theme/app_radius.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../routes/app_router.dart';
+import '../../../../shared/components/dialog_close_button.dart';
 import '../../../../shared/widgets/app_button.dart';
 import '../../../../shared/widgets/app_text.dart';
 
@@ -26,45 +27,55 @@ class WelfareRulesDialog extends StatelessWidget {
     return Dialog(
       backgroundColor: Colors.transparent,
       insetPadding: const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          color: AppColors.dialogBackground,
-          borderRadius: BorderRadius.circular(AppRadius.xl),
-          border: Border.all(color: AppColors.borderGlass),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(
-            AppSpacing.xl,
-            AppSpacing.xl,
-            AppSpacing.xl,
-            AppSpacing.lg,
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              AppText(
-                '规则说明',
-                style: AppTextStyles.titleMedium.copyWith(
-                  color: AppColors.textOnDark,
-                ),
-                textAlign: TextAlign.center,
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          DecoratedBox(
+            decoration: BoxDecoration(
+              color: AppColors.dialogBackground,
+              borderRadius: BorderRadius.circular(AppRadius.xl),
+              border: Border.all(color: AppColors.borderGlass),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(
+                AppSpacing.xl,
+                AppSpacing.xl,
+                AppSpacing.xl,
+                AppSpacing.lg,
               ),
-              const SizedBox(height: AppSpacing.lg),
-              for (final section in _sections) ...[
-                _RuleSection(section: section),
-                if (section != _sections.last)
-                  const SizedBox(height: AppSpacing.md),
-              ],
-              const SizedBox(height: AppSpacing.xl),
-              AppButton(
-                label: '知道了',
-                variant: AppButtonVariant.accent,
-                isExpanded: true,
-                onPressed: AppRouter.pop,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  AppText(
+                    '规则说明',
+                    style: AppTextStyles.titleMedium.copyWith(
+                      color: AppColors.textOnDark,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: AppSpacing.lg),
+                  for (final section in _sections) ...[
+                    _RuleSection(section: section),
+                    if (section != _sections.last)
+                      const SizedBox(height: AppSpacing.md),
+                  ],
+                  const SizedBox(height: AppSpacing.xl),
+                  AppButton(
+                    label: '知道了',
+                    variant: AppButtonVariant.accent,
+                    isExpanded: true,
+                    onPressed: AppRouter.pop,
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
-        ),
+          Positioned(
+            top: AppSpacing.lg,
+            right: AppSpacing.lg,
+            child: DialogCloseButton(onTap: AppRouter.pop),
+          ),
+        ],
       ),
     );
   }

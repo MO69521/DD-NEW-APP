@@ -9,6 +9,7 @@ import '../../core/theme/app_radius.dart';
 import '../../core/theme/app_sizes.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text_styles.dart';
+import '../widgets/animated_count_text.dart';
 import '../widgets/app_asset_image.dart';
 import '../widgets/app_icon.dart';
 import '../widgets/app_pressable.dart';
@@ -98,8 +99,8 @@ class _CurrencyColumn extends StatelessWidget {
             child: Center(
               child: FittedBox(
                 fit: BoxFit.scaleDown,
-                child: AppText(
-                  '${balance.amount}',
+                child: AnimatedCountText(
+                  value: balance.amount,
                   style: AppTextStyles.welfareCurrencyAmount.copyWith(
                     color: AppColors.textOnDark,
                   ),

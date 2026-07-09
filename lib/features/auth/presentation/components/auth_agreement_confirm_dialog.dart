@@ -9,8 +9,8 @@ import '../../../../core/theme/app_text_styles.dart';
 import '../../../../routes/app_router.dart';
 import '../../../../routes/app_routes.dart';
 import '../../../../shared/components/app_toast.dart';
+import '../../../../shared/components/dialog_close_button.dart';
 import '../../../../shared/widgets/app_button.dart';
-import '../../../../shared/widgets/app_pressable.dart';
 import '../../../../shared/widgets/app_text.dart';
 
 /// L3 — 登录前协议确认弹窗。
@@ -98,9 +98,9 @@ class _AuthAgreementConfirmDialogState
               ),
             ),
             Positioned(
-              top: AppSpacing.md,
-              right: AppSpacing.md,
-              child: _DialogCloseButton(onTap: () => AppRouter.pop(false)),
+              top: AppSpacing.lg,
+              right: AppSpacing.lg,
+              child: DialogCloseButton(onTap: () => AppRouter.pop(false)),
             ),
           ],
         ),
@@ -114,24 +114,6 @@ class _AuthAgreementConfirmDialogState
 
   void _showMinorProtectionTodo() {
     AppToast.show(context, '未成年人保护规则即将上线');
-  }
-}
-
-class _DialogCloseButton extends StatelessWidget {
-  const _DialogCloseButton({required this.onTap});
-
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return AppPressable(
-      onTap: onTap,
-      child: const Icon(
-        Icons.close_rounded,
-        size: AppSizes.topBarActionIconSize,
-        color: AppColors.textOnDarkMuted,
-      ),
-    );
   }
 }
 

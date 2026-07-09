@@ -5,6 +5,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../routes/app_router.dart';
+import '../../../../shared/components/book_card_skeletons.dart';
 import '../../../../shared/components/empty_state.dart';
 import '../../application/category_cubit.dart';
 import '../../application/category_state.dart';
@@ -35,7 +36,14 @@ class CategoryTabBody extends StatelessWidget {
       builder: (context, state) {
         switch (state.ui.phase) {
           case CategoryPhase.loading:
-            return const Center(child: CircularProgressIndicator());
+            return BookLargeRowListSkeleton(
+              padding: EdgeInsets.fromLTRB(
+                AppSpacing.md,
+                topScrollPadding + AppSpacing.md,
+                AppSpacing.md,
+                0,
+              ),
+            );
           case CategoryPhase.empty:
             return EmptyState(
               title: emptyTitle,

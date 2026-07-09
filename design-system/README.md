@@ -122,9 +122,14 @@
 | `auroraEdge` | `#1D0B10` | 极光渐变暗边（暗红近黑） |
 | `dialogBackground` | `#131820` | 弹窗底 |
 | `surfaceMuted` | `#262B33` | 深青灰实心浮层 / 卡片底（如「继续阅读」浮层） |
-| `success` | `#10B981` | 成功 |
-| `warning` | `#F59E0B` | 警告 |
-| `error` | `#EF4444` | 错误 |
+| `success` | `#39D98A` | 成功（Design Token v1.0） |
+| `warning` | `#FFA940` | 警告（Design Token v1.0） |
+| `error` | `#FF667F` | 错误（Design Token v1.0） |
+| `premiumGold` | `#F9C74F` | VIP 会员金主题（v1.0 新增，暂未接入页面） |
+| `info` | `#59AEFF` | 信息 / 提示（v1.0 新增，暂未接入页面） |
+| `fantasyPurple` | `#9C87FF` | 奇幻紫（v1.0 新增，暂未接入页面） |
+| `energyCyan` | `#42DDFF` | 能量青（v1.0 新增，暂未接入页面） |
+| `growthBlue` | `#7E95FF` | 成长蓝（v1.0 新增，暂未接入页面） |
 
 > 说明：黄（`accent`）为深色页唯一主强调 —— 主 CTA、点赞、互动选中等强调态统一用黄。原紫色 `primary`（#6B4EFF）已全局移除。
 
@@ -204,6 +209,9 @@ feature 专用圆角（在基阶之上按页面命名，如 `navOuter 47` / `sea
 |------|----------|------------------|
 | 通用基础 | 描边 / 通用图标 / 启动图 | `hairline` · `borderWidthEmphasis` · `iconSm` · `splashLogoSize` |
 | 通用按压反馈 `AppPressable` | 按下缩小 / 大面积柔和缩小 / 回弹 overshoot 比例 | `tapPressScale` · `tapPressScaleSubtle` · `tapPressReboundScale` |
+| 骨架屏 `AppShimmer` | 骨架底色 / 扫光高光（复用中性白阶） | `shimmerBase` · `shimmerHighlight`（另见 `AppDurations.shimmerSweep`）|
+| 跑马灯 `AppMarqueeText` | 溢出滚动速度 / 间隔 | `marqueeSpeed` · `marqueeGap`（另见 `AppDurations.marqueePause`）|
+| 头图视差 `OverscrollStretch` | 下拉拉伸最大放大比例 | `heroParallaxFactor` |
 | 顶栏 `AppTopBar` | 二级页顶栏高度 / 图标框 / 返回钮 | `topBar*` |
 | 按钮 `AppButton` | 各尺寸内边距 / loading / 图标间距 | `buttonPadding*` · `buttonLoadingIndicatorSize` |
 | 搜索栏 / 玻璃模糊 | 搜索框高 / 各级磨砂半径 | `searchBarHeight` · `glassBlurSigma` · `strongBlurSigma` · `chromeBarBlurSigma` |
@@ -214,7 +222,7 @@ feature 专用圆角（在基阶之上按页面命名，如 `navOuter 47` / `sea
 | 福利页 | 头图 / 签到里程碑 / 任务时间线 / 充值弹窗 | `welfare*` · `rechargePurchaseDialog*` |
 | 书架页 | 顶栏 / 阅读横幅 / 空状态 / 封面角标 | `bookshelf*` · `bookCoverTag*` |
 | 我的页 | Hero / 头像 / 快捷入口 / 成就勋章 | `profile*` · `homeIndicator*` · `listRowMinHeight` |
-| 我的-子页 | 账号设置 / 消息 / 卡包 | `accountSettings*` · `myMessages*` · `cardPack*` |
+| 我的-子页 | 账号设置 / 消息 / 卡包 | `accountSettings*` · `myMessages*` · `cardPack*` · 互动消息标识 `authorBadge*`（复用品牌黄）· 未读红点 `badgeCount`（复用 error 红）· 通知标识 `myMessagesNoticeBadge`（复用品牌橙）|
 | 设置页 | Logo / 开关 `AppSwitch` | `settings*` · `appSwitch*` |
 | 书籍详情页 | 头图 / 目录抽屉 / 角色卡 / 讨论区 / 更新时间线 | `bookDetail*` · `bookDiscussionDetail*` |
 | 搜索页 | 顶栏返回 / 输入图标 / 空状态 | `searchAppBar*` · `searchInput*` · `searchEmpty*` |
@@ -241,6 +249,7 @@ feature 专用圆角（在基阶之上按页面命名，如 `navOuter 47` / `sea
 | `accent` | 黄底（`accentYellow`）深字 · 胶囊 `full` | **深色页主 CTA**：阅读 / 确认 / 提交 / 领取 / 充值（最常用） |
 | `secondary` | 4% 白底（`surfaceCard`）· 无描边 · 胶囊 `full` | 次操作 / 弱化 / 未激活态（重试默认、退出登录、验证码倒计时）·**默认变体** |
 | `outline` | 透明底 + 细边框 · 胶囊 `full` | 对话框取消 · 轻量次要操作 |
+| `vip` | 粉金渐变底（`vipGradientStart #FFDDC1` → `vipGradientEnd #F393DC`）+ 深粉字（`vipOnGradientText`）· 胶囊 `full` | VIP 领取 / 会员向操作（福利「VIP领取」等）|
 
 **尺寸（size）· 内边距与使用场景：**
 
@@ -261,8 +270,11 @@ feature 专用圆角（在基阶之上按页面命名，如 `navOuter 47` / `sea
 | `BookCardVertical` | `shared/components/book_card_variants.dart` | 网格：上图下文 |
 | `BookCardRankingCompact` | 同上 | 榜单紧凑：上图下文（封面 132:179） |
 | `BookCardHorizontal` | 同上 | 榜单：左图右文（旧版保留供回滚） |
-| `BookGridCard` / `BookListTile` / `BookCardLargeRow` | `shared/components/` | 网格卡 / 列表行 / 大图行 |
+| `BookGridCard` / `BookListTile` / `BookCardLargeRow` | `shared/components/` | 网格卡 / 列表行 / 大图行（简介 2 行，简介+作者与封面底对齐）|
 | `BookCoverTagBadge` | `shared/components/` | 封面角标 |
+| `MyMessagesList` / `MyMessageItem` | `features/my_messages/presentation/components/` | 互动消息（回复/获赞）：头像 + 发信人（可带「作者」标）+ 时间 + 回复正文 + 引用书评（左竖条）+ 书籍引用块；条目间 `dividerOnDark` 细线分隔 |
+| `MyNotificationsList` / `MyNotificationItem` | `features/my_messages/presentation/components/` | 通知卡片（客服/系统）：标题 + `NEW`/`未读`（橙 `myMessagesNoticeBadge`）标 + 内容 + 时间 + chevron；已读整条置灰 `myMessagesReadOpacity`；页脚「没有更多数据了」|
+| `OnboardingProfileDialog` | `features/onboarding/presentation/pages/` | 新用户首页首启弹窗：性别 → 年龄两步**横向切换**（高度固定、底部分页器可回退，右上角统一 `DialogCloseButton` X，标题统一 `titleMedium`，底部固定「完成」）；性别圆形头像（选中彩色插画 + 黄色描边环、未选灰色插画 + 细描边，不填充底色，参照装扮选中）+ 文字标签（选中白、未选 60% 白）；年龄选中 `onboardingAgeSelected`(黄底深字) |
 
 ### 7.3 Dialog · 居中弹窗
 
@@ -270,11 +282,11 @@ feature 专用圆角（在基阶之上按页面命名，如 `navOuter 47` / `sea
 
 | 项 | 值 |
 |----|----|
-| 入口 | `showAppBlurredDialog` / `showAppScrimDialog`（别名）· `shared/components/app_blurred_dialog.dart` |
+| 入口 | `showAppBlurredDialog` / `showAppScrimDialog`（别名）· `shared/components/app_blurred_dialog.dart`；必填弹窗传 `barrierDismissible: false`（点遮罩不关闭，靠内部 CTA 完成）|
 | 遮罩 | `overlayScrim80`（80% 纯黑，无背景模糊）|
 | 弹窗底 | `dialogBackground` `#131820` |
 | 圆角 | `xl`（24）|
-| 关闭 | 点遮罩 / `DialogCloseButton`（圆形玻璃底 + `close_rounded`，卡片下方居中，见 §7.7）· 统一 `Navigator.pop` |
+| 关闭 | 点遮罩 / `DialogCloseButton`（弹窗**右上角** `close_rounded` X 图标，距顶/右 `lg`=24，见 §7.7）· 统一 `Navigator.pop` |
 | 业务示例 | `EnergyRechargePurchaseDialog` / `WelfareRulesDialog` / `CheckInSuccessDialog`（L3） |
 
 ### 7.4 BottomSheet · 底部弹层
@@ -309,6 +321,7 @@ feature 专用圆角（在基阶之上按页面命名，如 `navOuter 47` / `sea
 | `ElasticTabIndicator` | `shared/components/elastic_tab_indicator.dart` | 横向黄色指示线，平移 + 宽度拉伸回弹（架构 §3.5） |
 | `AppSwipeTabSwitcher` | `shared/components/app_swipe_tab_switcher.dart` | Tab 内容跟手左右切换（架构 §3.4） |
 | `AppVerticalRailSwitch` | `shared/components/app_vertical_rail_switch.dart` | 竖向轨道切换 |
+| `AppPageDots` | `shared/components/app_page_dots.dart` | 统一分页指示点：选中态白色加宽胶囊(`pageDotActiveWidth`)、未选白 20% 小圆点(`pageDotSize`)；传 `onDotTap` 可点跳转。会员轮播 / 新手引导步骤共用 |
 
 ### 7.7 其它通用组件
 
@@ -319,8 +332,9 @@ feature 专用圆角（在基阶之上按页面命名，如 `navOuter 47` / `sea
 | `AppToast` | `shared/components/app_toast.dart` | 全局轻提示，黄底、淡入淡出自动消失 |
 | `GlassChipButton` | `shared/components/glass_chip_button.dart` | 玻璃胶囊 / 搜索框容器；`blur` / `expanded` |
 | `AppSwitch` | `shared/widgets/app_switch.dart` | 开关：on 品牌黄 4% 大色块底（`accentYellow04`）+ 黄色圆钮 / off 玻璃底 + 白钮 |
-| `DialogCloseButton` | `shared/components/dialog_close_button.dart` | 统一居中弹窗关闭按钮：圆形玻璃底（`overlayScrim`+`borderGlass`）+ `close_rounded`；置于卡片下方居中 |
+| `DialogCloseButton` | `shared/components/dialog_close_button.dart` | 统一居中弹窗关闭按钮：`close_rounded` X 图标（`textOnDarkMuted`）；`Positioned` 于卡片右上角，距顶/右 `lg`=24 |
 | `SweepHighlightOverlay` | `shared/components/sweep_highlight_overlay.dart` | 扫光高亮层：高亮带循环滑过（会员/福利 CTA、签到成功 VIP 按钮统一复用）；参数 `highlightColor` / `edgeColor` / `bandWidthRatio` / `duration` |
+| `AppGradientCtaButton` | `shared/components/app_gradient_cta_button.dart` | 渐变强动效 CTA：渐变底 + 呼吸缩放 + 循环扫光 + loading；固定高度。各处传入自己的渐变/高度/圆角/扫光色。`MembershipCtaButton` 委派于它;福利 padding 型 VIP 胶囊暂未纳入 |
 | `CurrencyBalanceBar` / `RechargePackagesSection` / `VipPromoBanner` | `shared/components/` | 业务复用组合组件 |
 
 ### 7.8 Pressable · 通用按压反馈 `AppPressable`（L1 · `shared/widgets/app_pressable.dart`）
@@ -351,7 +365,7 @@ feature 专用圆角（在基阶之上按页面命名，如 `navOuter 47` / `sea
 
 ## 9. 动效与特殊设计索引（Motion & Special Design Index）
 
-> 本节是全局自定义动效 / 特殊视觉的**导航索引**（约 45 项独立效果，分 9 类），便于按需定位真源。新增同类效果时在此登记。动效时长统一引用 `AppDurations`，缩放/模糊等参数引用 `AppSizes`。
+> 本节是全局自定义动效 / 特殊视觉的**导航索引**（约 50 项独立效果，分 9 类），便于按需定位真源。新增同类效果时在此登记。动效时长统一引用 `AppDurations`，缩放/模糊等参数引用 `AppSizes`。
 
 ### 9.1 点击按压微动效
 - `AppPressable`（`shared/widgets/app_pressable.dart`）：全局「缩小 → overshoot 反弹 → 回落」点击脚本，已铺至 70+ 组件（详见 §7.8）。
@@ -363,13 +377,15 @@ feature 专用圆角（在基阶之上按页面命名，如 `navOuter 47` / `sea
 - `ElasticTabIndicator`（`shared/components/elastic_tab_indicator.dart`）：下划线平移 + 宽度拉伸回弹（架构 §3.5）；测量版见书架 / 装扮 Tab、分类筛选。
 - 底部导航图标弹跳（`shared/widgets/app_nav_icon.dart`）：选中冲高 → 回落 → 稳定。
 - 会员 Hero 橡皮筋回弹 + 插图弹入（`features/membership/presentation/components/membership_hero.dart`，`Curves.easeOutBack`）。
-- 伙伴互动弹簧物理（`features/partner/presentation/components/partner_interaction_page_physics.dart`，`ScrollSpringSimulation`；已定义待接线）。
+- 伙伴互动弹簧物理（`features/partner/presentation/components/partner_interaction_page_physics.dart`，`ScrollSpringSimulation`）：已接入 `partner_interaction_body.dart` 的 `PageView`，单次手势最多翻一页 + 弹簧回稳。
 
-### 9.3 呼吸 / 循环 / 引导
+### 9.3 呼吸 / 循环 / 引导 / 加载
 - `SweepHighlightOverlay`（`shared/components/sweep_highlight_overlay.dart`）：CTA 循环扫光。
-- `MembershipCtaButton` / 福利签到 CTA / VIP 领取按钮：呼吸缩放 + 扫光。
+- `AppGradientCtaButton`（`shared/components/app_gradient_cta_button.dart`）：共享渐变强动效 CTA（呼吸 + 扫光 + loading）；`MembershipCtaButton` 委派于它。福利签到 / VIP 领取等 padding 型渐变 CTA 仍为各自 L3 实现。
 - 验证码光标闪烁（`features/auth/presentation/pages/login_page.dart`）。
 - `AppConfetti`（`shared/components/app_confetti.dart`）：庆祝礼花迸发。
+- `AppShimmer` + 书卡骨架（`shared/widgets/app_shimmer.dart`、`shared/components/book_card_skeletons.dart`）：加载时高光扫过骨架占位，替代整屏 spinner（榜单 / 分类 / 搜索 / 书架）。
+- `AppLottie`（`shared/components/app_lottie.dart`）：Lottie 帧动画统一封装（基建就绪，资源放 `assets/lottie/`）。
 
 ### 9.4 着色器 / 自绘
 - 极光 GLSL 背景（`shared/widgets/aurora_background.dart` + `assets/shaders/aurora.frag`）：噪声 + 三色渐变，`Ticker` 驱动 `uTime`，含降级渐变。
@@ -379,12 +395,14 @@ feature 专用圆角（在基阶之上按页面命名，如 `navOuter 47` / `sea
 ### 9.5 玻璃 / 模糊
 - 统一入口与 chrome：`showAppBlurredDialog`、`AppBlurredChromeBar`、`AppTopBar`（scrim + blur）、滚动触发 `AppScrollBlurScope` / 吸顶 `BlurredPinnedHeaderDelegate`。
 - 玻璃组件：`GlassChipButton`、`AppSegmentedSwitch`、`AppBottomNav`（glassCapsule）、`AppTopBarIconButton`、`CurrencyBalanceBar`、会员用户卡、书详情目录 chip、伙伴筛选弹层。
-- 强模糊：继续阅读浮条 / 福利任务叠层（`strongBlurSigma`）。
+- 强模糊：福利任务叠层（`strongBlurSigma`）。
+- 继续阅读浮条：页面背景色之上叠「放大封面」背景层（宽度撑满卡片、上下左右居中、半透明 `continueReadingBgImageOpacity` + 模糊 `continueReadingBgBlurSigma`），不同书籍呈现不同底纹。
 
-### 9.6 页面转场 / 容器变换
+### 9.6 页面转场 / 容器变换 / 共享元素
 - `AdvancedTransitionWrapper`（`shared/widgets/advanced_transition_wrapper.dart`）：卡片 → 全屏 `OpenContainer` 变形（充值卡 → 详情）。
 - 目录抽屉左侧滑入（`book_detail_catalog_drawer.dart`）。
 - 会员权益 3D 卡片轮播（`membership_benefits_detail_page.dart`，`Matrix4.rotateY` 透视）。
+- 书封 Hero 共享元素：`BookCover(heroTag:)` → 书详情头图（`book_detail_hero_cover.dart`）同 tag 飞行；仅在书 id 唯一的列表启用（榜单 / 搜索 / 分类 / 书架），详情页用入口封面即时渲染头图作落点。
 
 ### 9.7 Tab 跟手切换 / 滑块
 - `AppSwipeTabSwitcher`（`shared/components/app_swipe_tab_switcher.dart`，架构 §3.4，8 页复用）。
@@ -392,11 +410,15 @@ feature 专用圆角（在基阶之上按页面命名，如 `navOuter 47` / `sea
 
 ### 9.8 滚动 / 沉浸式 Hero 头图
 - `AppTopBar` 沉浸渐变蒙版 + 滚动起雾；会员 / 榜单 / 装扮 / 书详情沉浸顶（蒙版 + 模糊 + 装饰组合）。
+- `OverscrollStretch`（`shared/widgets/overscroll_stretch.dart`）：下拉回弹时头图按 `heroParallaxFactor` 放大的视差 / 拉伸；已接入书详情头图与会员 Hero（需 `BouncingScrollPhysics`）。
 
 ### 9.9 其它自定义
 - `AppToast`（淡入淡出）、`AppSwitch`（滑块过渡）、登录输入框聚焦下划线中心展开。
+- `AnimatedCountText`（`shared/widgets/animated_count_text.dart`）：数值变化时从旧值滚动到新值（余额 / 钱包 / 星尘 / 阅读分钟）。
+- `AppMarqueeText`（`shared/widgets/app_marquee_text.dart`）：文本溢出时横向循环滚动（「继续阅读」书名）。
 - 倒计时：短信 / 福利任务 `HH:MM:SS`；续费提示 slot 交叉淡入 + 高度动画。
-- 展开折叠 + 箭头旋转（签到 / 充值区）、「换一换」图标旋转、会员分页点、`DialogCloseButton`、定制数字字体 `TCloudNumber`。
+- 展开折叠 + 箭头旋转（签到 / 充值区）、「换一换」图标旋转、分页点 `AppPageDots`、`DialogCloseButton`、定制数字字体 `TCloudNumber`。
 
 ### 尚未实现（后续增强候选）
-骨架屏 / shimmer、跑马灯、`Hero()` 共享元素、Lottie、数字滚动动画、真正的滚动视差，以及伙伴弹簧物理接线。
+- **Lottie 具体动画**：基建（`lottie` 依赖 + `AppLottie` + `assets/lottie/`）已就绪，待放入 JSON 资源并在目标页接入。
+- 已完成（本轮）：骨架屏 / shimmer、数字滚动、跑马灯、书封 `Hero()` 共享元素、头图滚动视差（书详情 + 会员）、伙伴弹簧物理接线。

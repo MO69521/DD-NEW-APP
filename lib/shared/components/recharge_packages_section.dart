@@ -309,13 +309,25 @@ class _RechargePackageCard extends StatelessWidget {
               ),
             ),
             if (package.badgeLabel != null && package.badgeLabel!.isNotEmpty)
-              const Positioned(
-                top: -AppSpacing.xxsHalf,
-                right: -AppSpacing.xxs,
-                child: AppAssetImage(
-                  assetPath: 'assets/images/welfare/recharge_hot_badge.png',
-                  width: AppSizes.welfareRechargeHotBadgeWidth,
-                  height: AppSizes.welfareRechargeHotBadgeHeight,
+              Positioned(
+                top: 0,
+                right: 0,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AppSpacing.xs,
+                    vertical: AppSpacing.xxs,
+                  ),
+                  decoration: const BoxDecoration(
+                    color: AppWelfareColors.hotSaleBadge,
+                    borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(AppRadius.md),
+                      bottomLeft: Radius.circular(AppRadius.md),
+                    ),
+                  ),
+                  child: AppText(
+                    package.badgeLabel!,
+                    style: AppTextStyles.welfareHotSaleBadge,
+                  ),
                 ),
               ),
           ],

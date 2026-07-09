@@ -36,7 +36,7 @@ class WelfareMockDataSource {
       energyAmount: 700,
       originalAmount: 500,
       priceYuan: 15,
-      badgeLabel: '热销',
+      badgeLabel: '热',
       illustrationAsset: 'assets/images/welfare/recharge_tier_2.png',
     ),
     RechargePackage(
@@ -58,7 +58,7 @@ class WelfareMockDataSource {
       energyAmount: 25000,
       originalAmount: 15000,
       priceYuan: 100,
-      badgeLabel: '热销',
+      badgeLabel: '热',
       illustrationAsset: 'assets/images/welfare/recharge_tier_5.png',
     ),
     RechargePackage(
@@ -213,7 +213,6 @@ class WelfareMockDataSource {
     id: 'featured_seven_day_reading',
     layoutType: WelfareTaskLayoutType.timeline,
     title: '7日阅读福利',
-    tagLabel: 'VIP翻倍中',
     description: '4月1日-4月7日，阅读时长满5小时，获得选项限免卡',
     action: WelfareTaskAction(type: WelfareTaskActionType.goRead, label: '去阅读'),
     timelineProgress: 0.17,
@@ -324,7 +323,6 @@ class WelfareMockDataSource {
         id: 'reading_duration_reward',
         layoutType: WelfareTaskLayoutType.timeline,
         title: '阅读时长奖励',
-        tagLabel: 'VIP翻倍中',
         description: '每日多奖励100能量',
         rewards: [
           WelfareTaskReward(type: CheckInRewardType.energy, label: '100'),

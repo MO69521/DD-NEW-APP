@@ -9,6 +9,7 @@ import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../shared/components/app_swipe_tab_switcher.dart';
 import '../../../../shared/components/app_blurred_chrome_bar.dart';
+import '../../../../shared/components/book_card_skeletons.dart';
 import '../../../../shared/components/empty_state.dart';
 import '../../../../shared/layouts/app_bottom_nav.dart';
 import '../../../../routes/app_router.dart';
@@ -48,7 +49,14 @@ class BookshelfPage extends StatelessWidget {
         if (state.ui.isLoading) {
           return Scaffold(
             backgroundColor: AppColors.backgroundDark,
-            body: const Center(child: CircularProgressIndicator()),
+            body: BookGridSkeleton(
+              padding: EdgeInsets.fromLTRB(
+                AppSpacing.md,
+                AppLayout.chromeTopHeight(context) + AppSpacing.md,
+                AppSpacing.md,
+                0,
+              ),
+            ),
           );
         }
 

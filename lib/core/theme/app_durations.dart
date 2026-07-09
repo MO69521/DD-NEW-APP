@@ -30,4 +30,13 @@ abstract final class AppDurations {
   /// 通用按压反馈——点击后延迟触发动作/跳转的时长，
   /// 用于让「按下 → 反弹」峰值先可见，再执行跳转（跳转会盖住其后的回落）。
   static const Duration tapPressActionDelay = Duration(milliseconds: 150);
+
+  /// 骨架屏高光扫过一轮的时长。
+  static const Duration shimmerSweep = Duration(milliseconds: 1200);
+
+  /// 数字滚动（数值变化时从旧值滚到新值）的时长。
+  static const Duration numberRoll = Duration(milliseconds: 600);
+
+  /// 跑马灯每轮滚动前的起始停顿时长。
+  static const Duration marqueePause = Duration(milliseconds: 1000);
 }

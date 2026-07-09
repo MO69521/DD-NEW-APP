@@ -6,6 +6,7 @@ import 'auth_session_service.dart';
 import 'bookshelf_membership_service.dart';
 import 'membership_status_service.dart';
 import 'mock_auth_service.dart';
+import 'onboarding_service.dart';
 import 'rest_auth_service.dart';
 
 /// 全局服务注册入口，跨 feature 共享服务通过此处暴露。
@@ -23,6 +24,7 @@ abstract final class ServiceLocator {
   static BookshelfMembershipService? _bookshelfMembership;
   static AuthSessionService? _authSession;
   static AuthService? _authService;
+  static OnboardingService? _onboarding;
   static const AuthServiceConfig _authConfig = AuthServiceConfig();
 
   /// 会员状态共享服务（单例）。
@@ -32,6 +34,10 @@ abstract final class ServiceLocator {
   /// 书架状态共享服务（单例）。
   static BookshelfMembershipService get bookshelfMembership =>
       _bookshelfMembership ??= BookshelfMembershipService();
+
+  /// 新手基础信息收集状态服务（单例）。
+  static OnboardingService get onboarding =>
+      _onboarding ??= OnboardingService();
 
   /// 登录会话共享服务（单例）。
   static AuthSessionService get authSession =>
@@ -50,6 +56,7 @@ abstract final class ServiceLocator {
     if (_initialized) return;
     _membershipStatus ??= MockMembershipStatusService();
     _bookshelfMembership ??= BookshelfMembershipService();
+    _onboarding ??= OnboardingService();
     _authSession ??= InMemoryAuthSessionService(
       initialSession: _skipAuthForPreview ? _previewSession : null,
     );

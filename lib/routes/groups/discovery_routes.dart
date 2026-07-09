@@ -43,9 +43,12 @@ List<RouteBase> discoveryRoutes() => [
   GoRoute(
     path: AppRoutes.editorPick,
     name: AppRoutes.editorPickName,
-    builder: (context, state) => BlocProvider(
-      create: (_) => EditorPickCubit()..load(),
-      child: const EditorPickPage(),
-    ),
+    builder: (context, state) {
+      final title = state.extra is String ? state.extra as String : '编辑推荐';
+      return BlocProvider(
+        create: (_) => EditorPickCubit()..load(),
+        child: EditorPickPage(title: title),
+      );
+    },
   ),
 ];

@@ -10,6 +10,7 @@ import '../../../../core/theme/app_text_styles.dart';
 import '../../../../routes/app_router.dart';
 import '../../../../shared/components/app_blurred_dialog.dart';
 import '../../../../shared/components/app_toast.dart';
+import '../../../../shared/components/book_card_skeletons.dart';
 import '../../../../shared/components/empty_state.dart';
 import '../../../../shared/layouts/app_page_chrome.dart';
 import '../../../../shared/widgets/app_text.dart';
@@ -81,7 +82,14 @@ class _SearchBody extends StatelessWidget {
                 query: state.interaction.committedQuery,
               );
             case SearchPhase.loading:
-              return const Center(child: CircularProgressIndicator());
+              return BookLargeRowListSkeleton(
+                padding: EdgeInsets.fromLTRB(
+                  AppSpacing.md,
+                  AppLayout.chromeTopHeight(context) + AppSpacing.md,
+                  AppSpacing.md,
+                  0,
+                ),
+              );
             case SearchPhase.results:
               return _ResultList(domain: state.domain);
             case SearchPhase.noResult:
@@ -212,7 +220,14 @@ class _EmptyBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (isRecommendationsLoading) {
-      return const Center(child: CircularProgressIndicator());
+      return BookLargeRowListSkeleton(
+        padding: EdgeInsets.fromLTRB(
+          AppSpacing.md,
+          AppLayout.chromeTopHeight(context) + AppSpacing.md,
+          AppSpacing.md,
+          0,
+        ),
+      );
     }
 
     final hasHistory = domain.searchHistory.isNotEmpty;

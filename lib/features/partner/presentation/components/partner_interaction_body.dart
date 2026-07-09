@@ -8,6 +8,7 @@ import '../../../../core/theme/app_durations.dart';
 import '../../../../shared/components/empty_state.dart';
 import '../../application/partner_cubit.dart';
 import '../../application/partner_state.dart';
+import 'partner_interaction_page_physics.dart';
 import 'partner_interaction_scene_page.dart';
 
 /// L3 — 互动 Tab 竖滑 Feed（PageView）。
@@ -24,8 +25,9 @@ class _PartnerInteractionBodyState extends State<PartnerInteractionBody> {
   DateTime? _lastPageTriggerAt;
   Timer? _wheelUnlockTimer;
   bool _isWheelGestureLocked = false;
-  double _dragOffset = 0;
-  bool _didTriggerDragPage = false;
+
+  /// 手势起始页锚点：拖拽/惯性期间限制最多翻一页（供 [PartnerInteractionPagePhysics]）。
+  int? _anchorPage;
 
   @override
   void dispose() {
@@ -93,41 +95,19 @@ class _PartnerInteractionBodyState extends State<PartnerInteractionBody> {
     _animateToAdjacentPage(dy > 0 ? 1 : -1);
   }
 
-  void _handleVerticalDragStart(DragStartDetails details) {
-    _dragOffset = 0;
-    _didTriggerDragPage = false;
-  }
-
-  void _handleVerticalDragUpdate(DragUpdateDetails details) {
-    if (_isPaging || _didTriggerDragPage) return;
-
-    final delta = details.primaryDelta;
-    if (delta == null) return;
-
-    _dragOffset += delta;
-    if (_dragOffset.abs() < kTouchSlop * 3) return;
-
-    _didTriggerDragPage = true;
-    _animateToAdjacentPage(_dragOffset < 0 ? 1 : -1);
-  }
-
-  void _handleVerticalDragEnd(DragEndDetails details) {
-    if (!_didTriggerDragPage && !_isPaging) {
-      final velocity = details.primaryVelocity ?? 0;
-      if (velocity.abs() >= kMinFlingVelocity) {
-        _animateToAdjacentPage(velocity < 0 ? 1 : -1);
-      } else if (_dragOffset.abs() >= kTouchSlop * 2) {
-        _animateToAdjacentPage(_dragOffset < 0 ? 1 : -1);
+  /// 拖拽开始记录锚点页、结束清除，使物理层把单次手势限制在 ±1 页。
+  bool _handleScrollNotification(ScrollNotification notification) {
+    final controller = _pageController;
+    if (notification is ScrollStartNotification) {
+      if (notification.dragDetails != null &&
+          controller != null &&
+          controller.hasClients) {
+        _anchorPage = controller.page?.round();
       }
+    } else if (notification is ScrollEndNotification) {
+      _anchorPage = null;
     }
-
-    _dragOffset = 0;
-    _didTriggerDragPage = false;
-  }
-
-  void _handleVerticalDragCancel() {
-    _dragOffset = 0;
-    _didTriggerDragPage = false;
+    return false;
   }
 
   @override
@@ -165,17 +145,15 @@ class _PartnerInteractionBodyState extends State<PartnerInteractionBody> {
 
         return Listener(
           onPointerSignal: _handlePointerSignal,
-          child: GestureDetector(
-            behavior: HitTestBehavior.opaque,
-            onVerticalDragStart: _handleVerticalDragStart,
-            onVerticalDragUpdate: _handleVerticalDragUpdate,
-            onVerticalDragEnd: _handleVerticalDragEnd,
-            onVerticalDragCancel: _handleVerticalDragCancel,
+          child: NotificationListener<ScrollNotification>(
+            onNotification: _handleScrollNotification,
             child: SizedBox.expand(
               child: PageView.builder(
                 controller: controller,
                 scrollDirection: Axis.vertical,
-                physics: const NeverScrollableScrollPhysics(),
+                physics: PartnerInteractionPagePhysics(
+                  getGestureAnchorPage: () => _anchorPage,
+                ),
                 allowImplicitScrolling: false,
                 itemCount: scenes.length,
                 onPageChanged: context

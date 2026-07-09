@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_radius.dart';
 import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
@@ -103,14 +104,25 @@ class _CheckInDayCard extends StatelessWidget {
             ),
             color: headerColor,
             child: Center(
-              child: AppText(
-                day.displayLabel,
-                style: _isToday
-                    ? AppTextStyles.welfareCheckInDayLabelToday
-                    : AppTextStyles.welfareCheckInDayLabelMuted,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
+              child: _isClaimed
+                  ? Opacity(
+                      opacity: AppSizes.welfareCheckInClaimedRewardOpacity,
+                      child: AppText(
+                        day.displayLabel,
+                        style: AppTextStyles.welfareCheckInDayLabelMuted
+                            .copyWith(color: AppColors.textOnDark),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    )
+                  : AppText(
+                      day.displayLabel,
+                      style: _isToday
+                          ? AppTextStyles.welfareCheckInDayLabelToday
+                          : AppTextStyles.welfareCheckInDayLabelMuted,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
             ),
           ),
           Padding(
@@ -119,10 +131,7 @@ class _CheckInDayCard extends StatelessWidget {
                 ? Stack(
                     alignment: Alignment.topCenter,
                     children: [
-                      Opacity(
-                        opacity: AppSizes.welfareCheckInClaimedRewardOpacity,
-                        child: _RewardContent(day: day, isToday: false),
-                      ),
+                      _RewardContent(day: day, isToday: false, isClaimed: true),
                       // 对勾与图标区域（顶部）居中对齐：与奖励图标同尺寸、贴顶。
                       SizedBox(
                         height: AppSizes.welfareCheckInRewardIconSize,
@@ -146,10 +155,45 @@ class _CheckInDayCard extends StatelessWidget {
 }
 
 class _RewardContent extends StatelessWidget {
-  const _RewardContent({required this.day, required this.isToday});
+  const _RewardContent({
+    required this.day,
+    required this.isToday,
+    this.isClaimed = false,
+  });
 
   final CheckInDay day;
   final bool isToday;
+  final bool isClaimed;
+
+  Widget _rewardIcon(CheckInReward reward) {
+    final icon = AppAssetImage(
+      assetPath: WelfareAssetMapper.checkInRewardIconAsset(reward.type),
+      width: AppSizes.welfareCheckInRewardIconSize,
+      height: AppSizes.welfareCheckInRewardIconSize,
+    );
+    if (!isClaimed) return icon;
+    return Opacity(
+      opacity: AppSizes.welfareCheckInClaimedIconOpacity,
+      child: icon,
+    );
+  }
+
+  Widget _rewardLabelText(CheckInReward reward) {
+    final label = AppText(
+      _rewardLabel(reward),
+      style: isToday
+          ? AppTextStyles.welfareCheckInRewardToday
+          : AppTextStyles.welfareCheckInReward,
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
+      textAlign: TextAlign.center,
+    );
+    if (!isClaimed) return label;
+    return Opacity(
+      opacity: AppSizes.welfareCheckInClaimedRewardOpacity,
+      child: label,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -158,18 +202,9 @@ class _RewardContent extends StatelessWidget {
       return Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          AppAssetImage(
-            assetPath: WelfareAssetMapper.checkInRewardIconAsset(reward.type),
-            width: AppSizes.welfareCheckInRewardIconSize,
-            height: AppSizes.welfareCheckInRewardIconSize,
-          ),
+          _rewardIcon(reward),
           const SizedBox(height: AppSpacing.xs),
-          AppText(
-            _rewardLabel(reward),
-            style: isToday
-                ? AppTextStyles.welfareCheckInRewardToday
-                : AppTextStyles.welfareCheckInReward,
-          ),
+          _rewardLabelText(reward),
         ],
       );
     }
@@ -180,21 +215,9 @@ class _RewardContent extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              AppAssetImage(
-                assetPath: WelfareAssetMapper.checkInRewardIconAsset(
-                  reward.type,
-                ),
-                width: AppSizes.welfareCheckInRewardIconSize,
-                height: AppSizes.welfareCheckInRewardIconSize,
-              ),
+              _rewardIcon(reward),
               const SizedBox(height: AppSpacing.xs),
-              AppText(
-                _rewardLabel(reward),
-                style: AppTextStyles.welfareCheckInReward,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                textAlign: TextAlign.center,
-              ),
+              _rewardLabelText(reward),
             ],
           ),
         );

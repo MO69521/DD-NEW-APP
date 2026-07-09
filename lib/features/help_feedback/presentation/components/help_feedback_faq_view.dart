@@ -30,72 +30,11 @@ class HelpFeedbackFaqView extends StatelessWidget {
         AppSpacing.xl,
       ),
       children: [
-        const _HelpFeedbackBanner(),
-        const SizedBox(height: AppSpacing.md),
         for (final group in groups) ...[
           _FaqGroupCard(group: group, onQuestionTap: onQuestionTap),
           const SizedBox(height: AppSpacing.sm),
         ],
       ],
-    );
-  }
-}
-
-class _HelpFeedbackBanner extends StatelessWidget {
-  const _HelpFeedbackBanner();
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: AppSizes.helpFeedbackBannerHeight,
-      padding: const EdgeInsets.all(AppSpacing.md),
-      decoration: BoxDecoration(
-        color: AppColors.surfaceGlass,
-        borderRadius: BorderRadius.circular(AppRadius.lg),
-        border: Border.all(
-          color: AppColors.borderGlass,
-          width: AppSizes.hairline,
-        ),
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                AppText(
-                  '你遇到了什么问题呀？',
-                  style: AppTextStyles.titleMediumDark,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: AppSpacing.xs),
-                AppText(
-                  '先看看常见问题，也可以直接提交反馈。',
-                  style: AppTextStyles.bodyMediumDarkMuted,
-                  maxLines: 2,
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(width: AppSpacing.md),
-          Container(
-            width: AppSizes.helpFeedbackQuestionMarkSize,
-            height: AppSizes.helpFeedbackQuestionMarkSize,
-            alignment: Alignment.center,
-            decoration: const BoxDecoration(
-              color: AppColors.accentYellow,
-              shape: BoxShape.circle,
-            ),
-            child: const Icon(
-              Icons.question_mark_rounded,
-              color: AppColors.backgroundDark,
-              size: AppSizes.topBarActionIconSize,
-            ),
-          ),
-        ],
-      ),
     );
   }
 }

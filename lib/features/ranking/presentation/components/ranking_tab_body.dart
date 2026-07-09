@@ -7,6 +7,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../routes/app_router.dart';
+import '../../../../shared/components/book_card_skeletons.dart';
 import '../../../../shared/components/empty_state.dart';
 import '../../../../shared/widgets/app_button.dart';
 import '../../../../shared/layouts/app_bottom_nav.dart';
@@ -31,7 +32,23 @@ class RankingTabBody extends StatelessWidget {
     return BlocBuilder<RankingCubit, RankingState>(
       builder: (context, state) {
         if (state.ui.isLoading) {
-          return const Center(child: CircularProgressIndicator());
+          final topPad = AppLayout.chromeTopHeight(
+            context,
+            barHeight: embedded
+                ? AppSizes.bookstoreTopHeaderHeight
+                : AppSizes.topBarHeight,
+          );
+          return ColoredBox(
+            color: AppColors.backgroundDark,
+            child: BookLargeRowListSkeleton(
+              padding: EdgeInsets.fromLTRB(
+                AppSpacing.md,
+                topPad,
+                AppSpacing.md,
+                0,
+              ),
+            ),
+          );
         }
 
         if (state.ui.errorMessage != null) {

@@ -15,6 +15,7 @@ import '../widgets/app_selection_mark.dart';
 import '../widgets/app_text.dart';
 import 'app_blurred_dialog.dart';
 import 'app_toast.dart';
+import 'dialog_close_button.dart';
 
 /// L2 — 能量充值支付确认弹窗（深色 UI，个人主页 / 福利页共用）。
 class EnergyRechargePurchaseDialog extends StatefulWidget {
@@ -128,9 +129,9 @@ class _EnergyRechargePurchaseDialogState
               ),
             ),
             Positioned(
-              top: AppSpacing.md,
-              right: AppSpacing.md,
-              child: _DialogCloseButton(onTap: _handleClose),
+              top: AppSpacing.lg,
+              right: AppSpacing.lg,
+              child: DialogCloseButton(onTap: _handleClose),
             ),
           ],
         ),
@@ -180,24 +181,6 @@ class _DialogHeader extends StatelessWidget {
             height: AppSizes.rechargePurchaseDialogEnergyIconSize,
           ),
         ],
-      ),
-    );
-  }
-}
-
-class _DialogCloseButton extends StatelessWidget {
-  const _DialogCloseButton({required this.onTap});
-
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return AppPressable(
-      onTap: onTap,
-      child: const Icon(
-        Icons.close,
-        size: AppSizes.rechargePurchaseDialogCloseIconSize,
-        color: AppColors.iconMuted,
       ),
     );
   }

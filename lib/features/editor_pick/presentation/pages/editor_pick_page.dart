@@ -16,10 +16,13 @@ import '../components/editor_pick_book_list.dart';
 import '../components/editor_pick_list_footer.dart';
 
 /// 编辑推荐详情页：仅渲染 state、触发 action。
+///
+/// [title] 可由入口覆盖（如「限时免费」复用同款书单列表）。
 class EditorPickPage extends StatelessWidget {
-  const EditorPickPage({super.key});
+  const EditorPickPage({super.key, this.title = '编辑推荐'});
 
-  static const String _title = '编辑推荐';
+  final String title;
+
   static const String _emptyTitle = '暂无推荐';
 
   @override
@@ -31,7 +34,7 @@ class EditorPickPage extends StatelessWidget {
       body: AppPageChrome(
         topBar: AppTopBar(
           statusBarHeight: statusBarHeight,
-          title: _title,
+          title: title,
           onBack: AppRouter.pop,
         ),
         body: const _EditorPickBody(),

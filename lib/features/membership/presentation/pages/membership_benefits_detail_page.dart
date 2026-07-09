@@ -18,7 +18,7 @@ import '../../domain/entities/membership_benefit_detail.dart';
 import '../components/membership_benefit_detail_card.dart';
 import '../components/membership_benefit_item.dart';
 import '../components/membership_cta_button.dart';
-import '../components/membership_dots.dart';
+import '../../../../shared/components/app_page_dots.dart';
 
 /// 会员特权详情页（横向滑动展示各项特权）。
 class MembershipBenefitsDetailPage extends StatefulWidget {
@@ -156,7 +156,7 @@ class _MembershipBenefitsDetailPageState
           ),
         ),
         // 页面指示器（复用会员 Hero 分页器）
-        MembershipDots(count: benefits.length, current: currentIndex),
+        AppPageDots(count: benefits.length, current: currentIndex),
         const SizedBox(height: AppSpacing.lg),
         // 底部开通按钮（复用会员开通 CTA：金色渐变 + 呼吸缩放 + 扫光）
         Padding(

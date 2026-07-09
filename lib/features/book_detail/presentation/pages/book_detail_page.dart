@@ -11,6 +11,7 @@ import '../../../../shared/components/app_toast.dart';
 import '../../../../shared/components/empty_state.dart';
 import '../../../../shared/layouts/app_scroll_blur_scope.dart';
 import '../../../../shared/widgets/app_button.dart';
+import '../../../../shared/widgets/overscroll_stretch.dart';
 import '../../application/book_detail_cubit.dart';
 import '../../application/book_detail_state.dart';
 import '../../domain/entities/book_discussion_filter.dart';
@@ -51,9 +52,29 @@ class BookDetailPage extends StatelessWidget {
       child: BlocBuilder<BookDetailCubit, BookDetailState>(
         builder: (context, state) {
           if (state.ui.isLoading) {
-            return const Scaffold(
+            final cubit = context.read<BookDetailCubit>();
+            final seed = cubit.seedBook;
+            if (seed == null) {
+              return const Scaffold(
+                backgroundColor: AppColors.backgroundDark,
+                body: Center(child: CircularProgressIndicator()),
+              );
+            }
+            // 用入口书卡携带的封面即时渲染头图，让 Hero 飞行有落点；其余内容加载中。
+            return Scaffold(
               backgroundColor: AppColors.backgroundDark,
-              body: Center(child: CircularProgressIndicator()),
+              body: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  BookDetailHeroCover(
+                    coverAsset: seed.coverAsset,
+                    heroTag: 'book-cover-${cubit.bookId}',
+                  ),
+                  const Expanded(
+                    child: Center(child: CircularProgressIndicator()),
+                  ),
+                ],
+              ),
             );
           }
 
@@ -195,12 +216,24 @@ class _BookDetailViewState extends State<_BookDetailView> {
             CustomScrollView(
               controller: _scrollController,
               clipBehavior: Clip.none,
+              physics: const BouncingScrollPhysics(
+                parent: AlwaysScrollableScrollPhysics(),
+              ),
               slivers: [
                 SliverToBoxAdapter(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      BookDetailHeroCover(coverAsset: widget.detail.coverAsset),
+                      OverscrollStretch(
+                        controller: _scrollController,
+                        baseHeight:
+                            MediaQuery.sizeOf(context).width /
+                            AppSizes.bookDetailHeroAspectRatio,
+                        child: BookDetailHeroCover(
+                          coverAsset: widget.detail.coverAsset,
+                          heroTag: 'book-cover-${widget.detail.id}',
+                        ),
+                      ),
                       const SizedBox(
                         height: AppSizes.bookDetailContentHeroOverlap,
                       ),

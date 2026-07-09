@@ -38,6 +38,7 @@ class SearchResultRow extends StatelessWidget {
       meta: item.audienceTags.join(' / '),
       description: item.description,
       coverTag: _coverTagFor(item.status),
+      heroTag: 'book-cover-${item.book.id}',
       trailing: _AddToShelfButton(
         isInShelf: isInShelf,
         onTap: onAddToShelf == null ? null : () => onAddToShelf!(item.book),
