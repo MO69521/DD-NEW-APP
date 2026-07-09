@@ -9,6 +9,7 @@ import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../shared/widgets/app_asset_image.dart';
+import '../../../../shared/widgets/app_pressable.dart';
 import '../../../../shared/widgets/app_text.dart';
 
 /// L3 — 首页底部「继续阅读」浮层卡片：封面 + 书名 + 继续阅读按钮 + 关闭。
@@ -26,9 +27,9 @@ class ContinueReadingCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return AppPressable(
       onTap: onContinue,
-      behavior: HitTestBehavior.opaque,
+      pressScale: AppSizes.tapPressScaleSubtle,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
         child: ClipRRect(
@@ -84,9 +85,8 @@ class ContinueReadingCard extends StatelessWidget {
             const SizedBox(width: AppSpacing.sm),
             _ContinueButton(onTap: onContinue),
             const SizedBox(width: AppSpacing.xxs),
-            GestureDetector(
+            AppPressable(
               onTap: onClose,
-              behavior: HitTestBehavior.opaque,
               child: const Padding(
                 padding: EdgeInsets.all(AppSpacing.xxs),
                 child: Icon(
@@ -113,9 +113,8 @@ class _ContinueButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return AppPressable(
       onTap: onTap,
-      behavior: HitTestBehavior.opaque,
       child: Container(
         padding: const EdgeInsets.symmetric(
           horizontal: AppSpacing.sm,

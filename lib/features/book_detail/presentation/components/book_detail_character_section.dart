@@ -6,6 +6,7 @@ import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../shared/components/app_blurred_dialog.dart';
 import '../../../../shared/widgets/app_icon.dart';
+import '../../../../shared/widgets/app_pressable.dart';
 import '../../../../shared/widgets/app_text.dart';
 import '../../domain/entities/book_detail.dart';
 import 'book_detail_character_card.dart';
@@ -61,14 +62,13 @@ class _Header extends StatelessWidget {
       children: [
         const AppText('角色介绍', style: AppTextStyles.bookDetailSectionTitle),
         const SizedBox(width: AppSpacing.xxs),
-        GestureDetector(
+        AppPressable(
           onTap: () {
             showAppBlurredDialog<void>(
               context: context,
               builder: (_) => const BookDetailCharacterHelpDialog(),
             );
           },
-          behavior: HitTestBehavior.opaque,
           child: const Icon(
             Icons.info_outline,
             size: AppSizes.bookDetailBottomIconSize,

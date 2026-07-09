@@ -5,6 +5,7 @@ import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../shared/widgets/app_icon.dart';
+import '../../../../shared/widgets/app_pressable.dart';
 import '../../../../shared/widgets/app_text.dart';
 
 /// L3 — 会员页顶栏：返回圆钮 + 标题 + 右侧「充值记录」文字入口。
@@ -32,9 +33,8 @@ class MembershipAppBar extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
           child: Row(
             children: [
-              GestureDetector(
+              AppPressable(
                 onTap: onBack,
-                behavior: HitTestBehavior.opaque,
                 child: Container(
                   width: AppSizes.topBarCircleSize,
                   height: AppSizes.topBarCircleSize,
@@ -61,9 +61,8 @@ class MembershipAppBar extends StatelessWidget {
                   ),
                 ),
               ),
-              GestureDetector(
+              AppPressable(
                 onTap: onRecordsTap,
-                behavior: HitTestBehavior.opaque,
                 child: AppText(
                   '充值记录',
                   style: AppTextStyles.membershipAppBarAction,

@@ -24,6 +24,24 @@ class UserProfile extends Equatable {
   /// Hero 头部背景素材图资源路径。
   final String heroBackgroundAsset;
 
+  UserProfile copyWith({
+    String? userId,
+    String? nickname,
+    String? avatarUrl,
+    List<String>? partnerAvatarUrls,
+    bool? isVip,
+    String? heroBackgroundAsset,
+  }) {
+    return UserProfile(
+      userId: userId ?? this.userId,
+      nickname: nickname ?? this.nickname,
+      avatarUrl: avatarUrl ?? this.avatarUrl,
+      partnerAvatarUrls: partnerAvatarUrls ?? this.partnerAvatarUrls,
+      isVip: isVip ?? this.isVip,
+      heroBackgroundAsset: heroBackgroundAsset ?? this.heroBackgroundAsset,
+    );
+  }
+
   @override
   List<Object?> get props => [
     userId,

@@ -19,11 +19,16 @@ class MemberAccount extends Equatable {
   final bool isVip;
   final DateTime? vipExpireAt;
 
-  MemberAccount copyWith({bool? isVip, DateTime? vipExpireAt}) {
+  MemberAccount copyWith({
+    String? nickname,
+    String? avatarUrl,
+    bool? isVip,
+    DateTime? vipExpireAt,
+  }) {
     return MemberAccount(
       userId: userId,
-      nickname: nickname,
-      avatarUrl: avatarUrl,
+      nickname: nickname ?? this.nickname,
+      avatarUrl: avatarUrl ?? this.avatarUrl,
       isVip: isVip ?? this.isVip,
       vipExpireAt: vipExpireAt ?? this.vipExpireAt,
     );

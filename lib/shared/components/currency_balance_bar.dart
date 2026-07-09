@@ -11,6 +11,7 @@ import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../widgets/app_asset_image.dart';
 import '../widgets/app_icon.dart';
+import '../widgets/app_pressable.dart';
 import '../widgets/app_text.dart';
 
 /// L2 组件 — 虚拟货币余额条（福利页 / 我的页复用）。
@@ -87,9 +88,8 @@ class _CurrencyColumn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return AppPressable(
       onTap: onTap,
-      behavior: HitTestBehavior.opaque,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [

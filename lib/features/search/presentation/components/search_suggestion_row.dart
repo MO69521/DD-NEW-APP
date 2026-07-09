@@ -6,6 +6,7 @@ import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../shared/widgets/app_icon.dart';
+import '../../../../shared/widgets/app_pressable.dart';
 import '../../../../shared/widgets/app_text.dart';
 import '../../domain/entities/search_suggestion.dart';
 
@@ -29,9 +30,9 @@ class SearchSuggestionRow extends StatelessWidget {
     final base = AppTextStyles.bodyLarge.copyWith(color: AppColors.textOnDark);
     final highlight = base.copyWith(color: AppColors.searchHotAccent);
 
-    return GestureDetector(
+    return AppPressable(
       onTap: onTap,
-      behavior: HitTestBehavior.opaque,
+      pressScale: AppSizes.tapPressScaleSubtle,
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm),
         child: Row(

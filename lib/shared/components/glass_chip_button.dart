@@ -6,6 +6,7 @@ import '../../core/theme/app_theme_context.dart';
 import '../../core/theme/app_radius.dart';
 import '../../core/theme/app_sizes.dart';
 import '../../core/theme/app_spacing.dart';
+import '../widgets/app_pressable.dart';
 
 /// Level 2 — 玻璃态胶囊按钮/搜索框容器。
 class GlassChipButton extends StatelessWidget {
@@ -58,9 +59,8 @@ class GlassChipButton extends StatelessWidget {
     }
 
     final chip = onTap != null
-        ? GestureDetector(
+        ? AppPressable(
             onTap: onTap,
-            behavior: HitTestBehavior.opaque,
             child: container,
           )
         : container;

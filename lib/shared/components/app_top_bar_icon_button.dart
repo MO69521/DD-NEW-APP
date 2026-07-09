@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_sizes.dart';
 import '../widgets/app_icon.dart';
+import '../widgets/app_pressable.dart';
 
 /// L2 — 顶部栏通用图标按钮：32×32 半透明模糊底框 + 居中图标。
 class AppTopBarIconButton extends StatelessWidget {
@@ -25,9 +26,8 @@ class AppTopBarIconButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return AppPressable(
       onTap: onTap,
-      behavior: HitTestBehavior.opaque,
       child: SizedBox(
         width: AppSizes.topBarCircleSize,
         height: AppSizes.topBarCircleSize,

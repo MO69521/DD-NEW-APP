@@ -7,6 +7,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_layout.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../routes/app_router.dart';
+import '../../../../shared/components/app_toast.dart';
 import '../../../../shared/components/app_top_bar.dart';
 import '../../../../shared/components/empty_state.dart';
 import '../../../../shared/components/recharge_packages_section.dart';
@@ -35,9 +36,7 @@ class CurrencyWalletPage extends StatelessWidget {
       listener: (context, state) {
         final feedback = state.ui.feedbackMessage;
         if (feedback == null || feedback.isEmpty) return;
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text(feedback)));
+        AppToast.show(context, feedback);
         context.read<CurrencyWalletCubit>().clearFeedback();
       },
       buildWhen: (previous, current) => previous != current,

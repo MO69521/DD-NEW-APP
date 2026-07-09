@@ -10,6 +10,7 @@ import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/theme/app_welfare_colors.dart';
 import '../../../../shared/components/book_grid_card.dart';
 import '../../../../shared/widgets/app_icon.dart';
+import '../../../../shared/widgets/app_pressable.dart';
 import '../../../../shared/widgets/app_text.dart';
 
 /// 限时免费区块：倒计时 + 横向 3 本书卡。
@@ -139,9 +140,8 @@ class _LimitedFreeHeader extends StatelessWidget {
         const SizedBox(width: AppSpacing.xs),
         _Countdown(remaining: remaining),
         const Spacer(),
-        GestureDetector(
+        AppPressable(
           onTap: onMoreTap,
-          behavior: HitTestBehavior.opaque,
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [

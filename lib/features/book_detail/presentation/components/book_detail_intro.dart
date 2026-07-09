@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
+import '../../../../shared/widgets/app_pressable.dart';
 import '../../../../shared/widgets/app_text.dart';
 
 /// 作品简介区块（Figma 185:2438）。
@@ -84,9 +85,8 @@ class _BookDetailIntroState extends State<BookDetailIntro> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 if (shouldShowMore)
-                  GestureDetector(
+                  AppPressable(
                     onTap: () => setState(() => _isExpanded = true),
-                    behavior: HitTestBehavior.opaque,
                     child: RichText(
                       maxLines: _collapsedMaxLines,
                       overflow: TextOverflow.clip,

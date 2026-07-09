@@ -6,6 +6,7 @@ import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../shared/widgets/app_asset_image.dart';
+import '../../../../shared/widgets/app_pressable.dart';
 import '../../../../shared/widgets/app_text.dart';
 import '../../domain/entities/book_discussion_post.dart';
 
@@ -120,9 +121,8 @@ class _PostHeader extends StatelessWidget {
             ],
           ),
         ),
-        GestureDetector(
+        AppPressable(
           onTap: isLikePending ? null : onLikeTap,
-          behavior: HitTestBehavior.opaque,
           child: Row(
             children: [
               Icon(
@@ -187,9 +187,8 @@ class _ReplyItem extends StatelessWidget {
           ),
         ),
         const SizedBox(width: AppSpacing.xs),
-        GestureDetector(
+        AppPressable(
           onTap: isLikePending ? null : onLikeTap,
-          behavior: HitTestBehavior.opaque,
           child: Row(
             children: [
               Icon(

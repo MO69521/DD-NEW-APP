@@ -9,6 +9,7 @@ import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/theme/app_welfare_colors.dart';
 import '../../../../shared/components/sweep_highlight_overlay.dart';
 import '../../../../shared/widgets/app_icon.dart';
+import '../../../../shared/widgets/app_pressable.dart';
 import '../../../../shared/widgets/app_text.dart';
 import '../../domain/entities/welfare_models.dart';
 import 'check_in_calendar.dart';
@@ -55,9 +56,9 @@ class _DailyCheckInSectionState extends State<DailyCheckInSection> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          GestureDetector(
+          AppPressable(
             onTap: _toggle,
-            behavior: HitTestBehavior.opaque,
+            pressScale: AppSizes.tapPressScaleSubtle,
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -164,9 +165,8 @@ class _AnimatedCheckInCtaState extends State<_AnimatedCheckInCta>
   Widget build(BuildContext context) {
     return ScaleTransition(
       scale: _breathScale,
-      child: GestureDetector(
+      child: AppPressable(
         onTap: widget.onTap,
-        behavior: HitTestBehavior.opaque,
         child: ClipRRect(
           borderRadius: BorderRadius.circular(AppRadius.welfareCheckInCta),
           child: DecoratedBox(

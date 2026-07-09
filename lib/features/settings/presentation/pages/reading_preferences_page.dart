@@ -11,6 +11,7 @@ import '../../../../routes/app_router.dart';
 import '../../../../shared/components/app_top_bar.dart';
 import '../../../../shared/layouts/app_page_chrome.dart';
 import '../../../../shared/widgets/app_button.dart';
+import '../../../../shared/widgets/app_pressable.dart';
 import '../../../../shared/widgets/app_text.dart';
 import '../../application/reading_preferences_cubit.dart';
 import '../../application/reading_preferences_state.dart';
@@ -130,9 +131,9 @@ class _GenderCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return AppPressable(
       onTap: onTap,
-      behavior: HitTestBehavior.opaque,
+      pressScale: AppSizes.tapPressScaleSubtle,
       child: DecoratedBox(
         decoration: BoxDecoration(
           color: selected
@@ -191,9 +192,9 @@ class _AgeOption extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return AppPressable(
       onTap: onTap,
-      behavior: HitTestBehavior.opaque,
+      pressScale: AppSizes.tapPressScaleSubtle,
       child: DecoratedBox(
         decoration: BoxDecoration(
           color: selected

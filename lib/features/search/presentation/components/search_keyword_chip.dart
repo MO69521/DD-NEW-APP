@@ -6,6 +6,7 @@ import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../shared/widgets/app_asset_image.dart';
+import '../../../../shared/widgets/app_pressable.dart';
 import '../../../../shared/widgets/app_text.dart';
 
 /// L3 — 搜索关键词标签（历史 / 热门共用）。
@@ -29,9 +30,8 @@ class SearchKeywordChip extends StatelessWidget {
   Widget build(BuildContext context) {
     final labelColor = isHot ? AppColors.searchHotAccent : AppColors.textOnDark;
 
-    return GestureDetector(
+    return AppPressable(
       onTap: onTap,
-      behavior: HitTestBehavior.opaque,
       child: Container(
         padding: const EdgeInsets.symmetric(
           horizontal: AppSpacing.sm,

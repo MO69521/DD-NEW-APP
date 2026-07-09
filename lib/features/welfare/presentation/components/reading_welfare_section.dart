@@ -6,6 +6,7 @@ import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/theme/app_welfare_colors.dart';
+import '../../../../shared/widgets/app_pressable.dart';
 import '../../../../shared/widgets/app_text.dart';
 import '../../domain/entities/welfare_models.dart';
 import 'check_in_milestone_progress.dart';
@@ -55,9 +56,9 @@ class ReadingWelfareSection extends StatelessWidget {
           const SizedBox(height: AppSpacing.md),
           ReadingWelfareCalendar(days: summary.weekDays),
           const SizedBox(height: AppSpacing.md),
-          GestureDetector(
+          AppPressable(
             onTap: onReadTap,
-            behavior: HitTestBehavior.opaque,
+            pressScale: AppSizes.tapPressScaleSubtle,
             child: Container(
               width: double.infinity,
               padding: const EdgeInsets.symmetric(

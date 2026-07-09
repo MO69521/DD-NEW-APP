@@ -11,6 +11,7 @@ import '../../../../shared/components/app_toast.dart';
 import '../../../../shared/components/app_top_bar.dart';
 import '../../../../shared/components/empty_state.dart';
 import '../../../../shared/widgets/app_button.dart';
+import '../../../../shared/widgets/app_pressable.dart';
 import '../../../../shared/widgets/app_text.dart';
 import '../../../../shared/layouts/app_page_chrome.dart';
 import '../../application/settings_cubit.dart';
@@ -115,9 +116,8 @@ class _SettingsView extends StatelessWidget {
             ),
             const SizedBox(height: AppSpacing.md),
             Center(
-              child: GestureDetector(
+              child: AppPressable(
                 onTap: cubit.onDeleteAccountTap,
-                behavior: HitTestBehavior.opaque,
                 child: AppText(
                   '不想用了？注销账号',
                   style: AppTextStyles.bodyMedium.copyWith(

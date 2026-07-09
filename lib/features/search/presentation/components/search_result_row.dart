@@ -6,6 +6,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_sizes.dart';
 import '../../../../shared/components/book_card_large_row.dart';
 import '../../../../shared/widgets/app_icon.dart';
+import '../../../../shared/widgets/app_pressable.dart';
 import '../../domain/entities/book_serialization_status.dart';
 import '../../domain/entities/search_result_item.dart';
 
@@ -60,9 +61,8 @@ class _AddToShelfButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return AppPressable(
       onTap: onTap,
-      behavior: HitTestBehavior.opaque,
       child: AppIcon(
         assetPath: isInShelf ? _inShelfIconAsset : _addIconAsset,
         width: AppSizes.bookCardLargeTrailingIconSize,

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../core/domain/entities/book_cover_tag.dart';
 import '../../core/theme/app_sizes.dart';
 import '../../core/theme/app_text_styles.dart';
+import '../widgets/app_pressable.dart';
 import '../widgets/app_text.dart';
 import '../widgets/book_cover.dart';
 import 'book_cover_tag_badge.dart';
@@ -60,9 +61,9 @@ class BookCardLargeRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return AppPressable(
       onTap: onTap,
-      behavior: HitTestBehavior.opaque,
+      pressScale: AppSizes.tapPressScaleSubtle,
       child: Padding(
         padding: padding,
         child: Row(

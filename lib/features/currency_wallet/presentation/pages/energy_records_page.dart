@@ -14,6 +14,7 @@ import '../../../../shared/components/app_top_bar.dart';
 import '../../../../shared/components/empty_state.dart';
 import '../../../../shared/widgets/app_asset_image.dart';
 import '../../../../shared/widgets/app_button.dart';
+import '../../../../shared/widgets/app_pressable.dart';
 import '../../../../shared/widgets/app_text.dart';
 import '../../../../shared/layouts/app_page_chrome.dart';
 import '../../application/energy_records_cubit.dart';
@@ -146,9 +147,8 @@ class _EnergyRecordsTabItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return AppPressable(
       onTap: onTap,
-      behavior: HitTestBehavior.opaque,
       child: SizedBox(
         height: AppSizes.topBarHeight,
         child: Column(

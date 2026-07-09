@@ -6,6 +6,7 @@ import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../shared/widgets/app_icon.dart';
+import '../../../../shared/widgets/app_pressable.dart';
 import '../../../../shared/widgets/app_text.dart';
 import '../../domain/entities/settings_menu_item.dart';
 
@@ -65,13 +66,12 @@ class SettingsMenuRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
-          child: ConstrainedBox(
+    return AppPressable(
+      onTap: onTap,
+      pressScale: AppSizes.tapPressScaleSubtle,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
+        child: ConstrainedBox(
             constraints: const BoxConstraints(
               minHeight: AppSizes.listRowMinHeight,
             ),
@@ -120,7 +120,6 @@ class SettingsMenuRow extends StatelessWidget {
             ),
           ),
         ),
-      ),
     );
   }
 }

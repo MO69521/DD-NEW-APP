@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_sizes.dart';
+import '../widgets/app_pressable.dart';
 
 /// L2 — 统一居中弹窗关闭按钮：圆形玻璃底 + 关闭图标。
 ///
@@ -14,9 +15,8 @@ class DialogCloseButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return AppPressable(
       onTap: onTap,
-      behavior: HitTestBehavior.opaque,
       child: Container(
         width: AppSizes.topBarCircleSize,
         height: AppSizes.topBarCircleSize,

@@ -4,6 +4,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
+import '../../../../shared/widgets/app_pressable.dart';
 import '../../../../shared/widgets/app_text.dart';
 import 'search_keyword_chip.dart';
 
@@ -42,9 +43,8 @@ class SearchKeywordSection extends StatelessWidget {
             ),
             const Spacer(),
             if (onClear != null)
-              GestureDetector(
+              AppPressable(
                 onTap: onClear,
-                behavior: HitTestBehavior.opaque,
                 child: const Icon(
                   Icons.delete_outline,
                   size: AppSizes.searchInputIconSize,

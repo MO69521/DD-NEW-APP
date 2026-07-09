@@ -7,6 +7,7 @@ import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../shared/widgets/app_asset_image.dart';
 import '../../../../shared/widgets/app_selection_mark.dart';
+import '../../../../shared/widgets/app_pressable.dart';
 import '../../../../shared/widgets/app_text.dart';
 import 'currency_wallet_section_card.dart';
 
@@ -58,9 +59,9 @@ class _PaymentMethodRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final isSelected = method == selectedMethod;
 
-    return GestureDetector(
+    return AppPressable(
       onTap: () => onTap(method),
-      behavior: HitTestBehavior.opaque,
+      pressScale: AppSizes.tapPressScaleSubtle,
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm),
         child: Row(

@@ -5,6 +5,7 @@ import '../../../../core/theme/app_layout.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../routes/app_router.dart';
+import '../../../../shared/components/app_toast.dart';
 import '../../../../shared/components/app_top_bar.dart';
 import '../../../../shared/components/empty_state.dart';
 import '../../../../shared/widgets/app_button.dart';
@@ -28,9 +29,7 @@ class AccountSettingsPage extends StatelessWidget {
       listener: (context, state) {
         final message = state.ui.actionMessage;
         if (message == null) return;
-        ScaffoldMessenger.of(context)
-          ..hideCurrentSnackBar()
-          ..showSnackBar(SnackBar(content: Text(message)));
+        AppToast.show(context, message);
         context.read<AccountSettingsCubit>().consumeActionMessage();
       },
       builder: (context, state) {

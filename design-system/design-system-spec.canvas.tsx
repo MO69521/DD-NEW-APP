@@ -86,6 +86,7 @@ export default function DesignSystemSpec() {
         title="组件规范与样式展现"
         subtitle="每个组件独占一行 · 可点击体验 · 附源码入口"
       />
+      <PressableSection />
       <ButtonSection />
       <CardSection />
       <DialogSection />
@@ -915,6 +916,70 @@ function SizeIndexSection() {
 
 /* ───────────────── 第二部分 · 组件（每个独占一行）───────────────── */
 
+function PressableSection() {
+  return (
+    <Stack gap={10}>
+      <SectionTitle
+        zh="按压反馈"
+        note="AppPressable（L1）· 按下缩小 → 松手 overshoot 回弹 · 全局可点击模块统一微交互"
+        src="lib/shared/widgets/app_pressable.dart"
+      />
+      <Stage>
+        <div style={{ display: "flex", gap: 20, alignItems: "center", flexWrap: "wrap" }}>
+          <Pressable
+            style={{
+              width: 96,
+              height: 96,
+              borderRadius: 16,
+              background: APP.glass,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              color: APP.text,
+              fontSize: 14,
+              fontWeight: 600,
+            }}
+          >
+            按我
+          </Pressable>
+          <Pressable
+            style={{
+              display: "flex",
+              gap: 12,
+              width: 300,
+              padding: 12,
+              borderRadius: 12,
+              background: APP.glass,
+              alignItems: "center",
+            }}
+          >
+            <div style={{ width: 44, height: 44, flexShrink: 0, background: APP.surface, borderRadius: 12 }} />
+            <div style={{ color: APP.text, fontSize: 14, fontWeight: 600 }}>整行可点击（列表行柔和缩放）</div>
+          </Pressable>
+          <Caption>按住体验：先缩小，松手回弹</Caption>
+        </div>
+      </Stage>
+      <Table
+        headers={["参数", "值", "说明"]}
+        columnAlign={["left", "left", "left"]}
+        rows={[
+          ["tapPressScale", "0.94", "按下缩小到的比例"],
+          ["tapPressScaleSubtle", "0.97", "全宽列表行等大面积模块的柔和缩放"],
+          ["tapPressReboundScale", "1.05", "反弹的 overshoot 峰值（随后回落到 1）"],
+          ["tapPressDown", "70ms · easeOut", "缩小阶段时长"],
+          ["tapPressRebound", "170ms", "反弹时长（冲峰 easeOut + 回落 easeInOut）"],
+          ["tapPressActionDelay", "150ms", "点击后延迟触发跳转，让反弹峰值先可见"],
+        ].map((r) => r.map(cell))}
+      />
+      <Text tone="tertiary" size="small">
+        由 <Code>onTap</Code> 驱动固定脚本动画（缩小 → 反弹 → 回正），在可滚动列表内也能稳定看到完整回弹；
+        动作/跳转延后 <Code>tapPressActionDelay</Code> 触发，保证「按下 → 弹起 → 跳转」可见。已全局接入
+        <Code>AppButton</Code> 与书卡 / 列表行 / 图标 / Tab / chip；新可点击组件应优先用它替代裸 <Code>GestureDetector</Code>。
+      </Text>
+    </Stack>
+  );
+}
+
 function ButtonSection() {
   const variants: Array<{ zh: string; code: BtnVariant }> = [
     { zh: "主 CTA", code: "accent" },
@@ -1393,7 +1458,7 @@ function SwitchSection() {
     <Stack gap={10}>
       <SectionTitle
         zh="开关"
-        note="AppSwitch · 50×30 · 滑块 24 · 开(黄) / 关(玻璃)"
+        note="AppSwitch · 50×30 · 滑块 24 · 开(黄4%底+黄钮) / 关(玻璃+白钮)"
         src="lib/shared/widgets/app_switch.dart"
       />
       <Stage>
@@ -1412,14 +1477,14 @@ function InteractiveSwitch({ stateKey, initial }: { stateKey: string; initial: b
   return (
     <div
       onClick={() => setOn((v) => !v)}
-      style={{ width: 50, height: 30, borderRadius: 999, background: on ? APP.accent : APP.glass, padding: 3, cursor: "pointer", transition: "background 0.2s" }}
+      style={{ width: 50, height: 30, borderRadius: 999, background: on ? "rgba(255,232,71,0.04)" : APP.glass, padding: 3, cursor: "pointer", transition: "background 0.2s" }}
     >
       <div
         style={{
           width: 24,
           height: 24,
           borderRadius: 999,
-          background: "#FFFFFF",
+          background: on ? APP.accent : "#FFFFFF",
           transform: on ? "translateX(20px)" : "translateX(0)",
           transition: "transform 0.2s cubic-bezier(0.2,0,0,1)",
         }}

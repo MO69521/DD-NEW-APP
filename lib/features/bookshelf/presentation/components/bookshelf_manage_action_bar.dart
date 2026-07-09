@@ -7,6 +7,7 @@ import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../shared/layouts/app_bottom_nav.dart';
 import '../../../../shared/widgets/app_selection_mark.dart';
+import '../../../../shared/widgets/app_pressable.dart';
 import '../../../../shared/widgets/app_text.dart';
 
 /// 书架管理态底部操作栏，覆盖主 Tab 导航。
@@ -39,9 +40,8 @@ class BookshelfManageActionBar extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
               child: Row(
                 children: [
-                  GestureDetector(
+                  AppPressable(
                     onTap: onSelectAllTap,
-                    behavior: HitTestBehavior.opaque,
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -57,9 +57,8 @@ class BookshelfManageActionBar extends StatelessWidget {
                     ),
                   ),
                   const Spacer(),
-                  GestureDetector(
+                  AppPressable(
                     onTap: canDelete ? onDeleteTap : null,
-                    behavior: HitTestBehavior.opaque,
                     child: DecoratedBox(
                       decoration: BoxDecoration(
                         color: canDelete

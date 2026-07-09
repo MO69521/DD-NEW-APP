@@ -16,6 +16,20 @@ class AccountSettingsPageContent extends Equatable {
   final String userId;
   final List<AccountSecurityBinding> securityBindings;
 
+  AccountSettingsPageContent copyWith({
+    String? avatarUrl,
+    String? nickname,
+    String? userId,
+    List<AccountSecurityBinding>? securityBindings,
+  }) {
+    return AccountSettingsPageContent(
+      avatarUrl: avatarUrl ?? this.avatarUrl,
+      nickname: nickname ?? this.nickname,
+      userId: userId ?? this.userId,
+      securityBindings: securityBindings ?? this.securityBindings,
+    );
+  }
+
   @override
   List<Object?> get props => [avatarUrl, nickname, userId, securityBindings];
 }

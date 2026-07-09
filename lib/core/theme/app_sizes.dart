@@ -12,6 +12,16 @@ abstract final class AppSizes {
   static const double iconSm = 14;
   static const double splashLogoSize = 100;
 
+  // ── 通用按压反馈 (AppPressable) ──
+  /// 手指按下时缩小到的比例。
+  static const double tapPressScale = 0.94;
+
+  /// 全宽列表行等大面积模块的柔和按下比例（缩放幅度更小，避免整行大幅位移）。
+  static const double tapPressScaleSubtle = 0.97;
+
+  /// 反弹时放大越过原尺寸的 overshoot 峰值比例。
+  static const double tapPressReboundScale = 1.05;
+
   // ── 通用二级页顶栏 (AppTopBar) ──
   static const double topBarHeight = 44;
   static const double topBarCircleSize = 32;
@@ -240,7 +250,7 @@ abstract final class AppSizes {
   static const double profileMessagesIconSize = 18;
   static const double profilePartnerAvatarSize = 24;
   static const double profilePartnerAvatarGap = 6;
-  static const double profileShortcutIconSize = 24;
+  static const double profileShortcutIconSize = 28;
   static const double profileShortcutIconToLabelGap = 10;
   static const double profileShortcutItemHeight = 60;
   static const double profileShortcutRowGap = 30;

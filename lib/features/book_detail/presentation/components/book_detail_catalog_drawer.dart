@@ -9,6 +9,7 @@ import '../../../../core/theme/app_text_styles.dart';
 import '../../../../routes/app_router.dart';
 import '../../../../shared/widgets/app_asset_image.dart';
 import '../../../../shared/widgets/app_icon.dart';
+import '../../../../shared/widgets/app_pressable.dart';
 import '../../../../shared/widgets/app_text.dart';
 import '../../domain/entities/book_catalog_chapter.dart';
 import '../../domain/entities/book_detail.dart';
@@ -150,9 +151,8 @@ class _CatalogHeader extends StatelessWidget {
               ),
             ),
             const SizedBox(width: AppSpacing.xs),
-            GestureDetector(
+            AppPressable(
               onTap: AppRouter.pop,
-              behavior: HitTestBehavior.opaque,
               child: const AppIcon(
                 assetPath: 'assets/icons/arrow_right.svg',
                 width: AppSizes.bookDetailCatalogArrowSize,
@@ -175,9 +175,9 @@ class _CatalogChapterRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return AppPressable(
       onTap: onTap,
-      behavior: HitTestBehavior.opaque,
+      pressScale: AppSizes.tapPressScaleSubtle,
       child: Padding(
         padding: const EdgeInsets.symmetric(
           vertical: AppSizes.bookDetailCatalogChapterPaddingV,

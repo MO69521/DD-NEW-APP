@@ -42,6 +42,12 @@ abstract final class AppRoutes {
   static const String accountSettings = '/account-settings';
   static const String accountSettingsName = 'accountSettings';
 
+  static const String dressUp = '/dress-up';
+  static const String dressUpName = 'dressUp';
+
+  static const String editNickname = '/account-settings/nickname';
+  static const String editNicknameName = 'editNickname';
+
   static const String myMessages = '/my-messages';
   static const String myMessagesName = 'myMessages';
 

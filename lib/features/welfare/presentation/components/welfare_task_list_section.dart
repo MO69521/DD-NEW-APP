@@ -8,6 +8,7 @@ import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/theme/app_welfare_colors.dart';
+import '../../../../shared/widgets/app_pressable.dart';
 import '../../../../shared/widgets/app_text.dart';
 import '../../domain/entities/welfare_models.dart';
 import 'welfare_task_row.dart';
@@ -95,9 +96,9 @@ class _TaskVipEntry extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return AppPressable(
       onTap: onTap,
-      behavior: HitTestBehavior.opaque,
+      pressScale: AppSizes.tapPressScaleSubtle,
       child: Container(
         padding: const EdgeInsets.only(
           left: AppSpacing.sm,
@@ -198,34 +199,30 @@ class _VipEntryActionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(AppRadius.welfareVipCta),
-        child: Ink(
-          padding: const EdgeInsets.symmetric(
-            horizontal: AppSpacing.md,
-            vertical: AppSpacing.xs,
+    return AppPressable(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppSpacing.md,
+          vertical: AppSpacing.xs,
+        ),
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            colors: [
+              AppWelfareColors.vipCtaGradientStart,
+              AppWelfareColors.vipCtaGradientEnd,
+            ],
           ),
-          decoration: BoxDecoration(
-            gradient: const LinearGradient(
-              colors: [
-                AppWelfareColors.vipCtaGradientStart,
-                AppWelfareColors.vipCtaGradientEnd,
-              ],
-            ),
-            borderRadius: BorderRadius.circular(AppRadius.welfareVipCta),
-            border: Border.all(
-              color: AppWelfareColors.vipCtaBorder,
-              width: AppSizes.welfareVipCtaBorderWidth,
-            ),
+          borderRadius: BorderRadius.circular(AppRadius.welfareVipCta),
+          border: Border.all(
+            color: AppWelfareColors.vipCtaBorder,
+            width: AppSizes.welfareVipCtaBorderWidth,
           ),
-          child: AppText(
-            label,
-            style: AppTextStyles.welfareCtaText.copyWith(
-              color: AppWelfareColors.vipCtaText,
-            ),
+        ),
+        child: AppText(
+          label,
+          style: AppTextStyles.welfareCtaText.copyWith(
+            color: AppWelfareColors.vipCtaText,
           ),
         ),
       ),

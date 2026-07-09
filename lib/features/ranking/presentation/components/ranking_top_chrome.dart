@@ -8,6 +8,7 @@ import '../../../../routes/app_router.dart';
 import '../../../../routes/app_routes.dart';
 import '../../../../shared/components/app_blurred_chrome_bar.dart';
 import '../../../../shared/components/app_top_bar_icon_button.dart';
+import '../../../../shared/widgets/app_pressable.dart';
 import '../../../../shared/widgets/app_text.dart';
 
 class RankingTopChrome extends StatelessWidget {
@@ -91,9 +92,8 @@ class _RankingTopTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return AppPressable(
       onTap: route == null ? null : () => AppRouter.go(route!),
-      behavior: HitTestBehavior.opaque,
       child: AppText(label, style: style),
     );
   }

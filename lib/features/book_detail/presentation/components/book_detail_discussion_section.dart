@@ -5,6 +5,7 @@ import '../../../../core/theme/app_radius.dart';
 import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
+import '../../../../shared/widgets/app_pressable.dart';
 import '../../../../shared/widgets/app_text.dart';
 import '../../domain/entities/book_discussion_filter.dart';
 import '../../domain/entities/book_discussion_post.dart';
@@ -110,9 +111,8 @@ class _FilterChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return AppPressable(
       onTap: onTap,
-      behavior: HitTestBehavior.opaque,
       child: Container(
         padding: const EdgeInsets.symmetric(
           horizontal: AppSizes.bookDetailDiscussionFilterPaddingH,
@@ -168,9 +168,9 @@ class _DiscussionCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    GestureDetector(
+                    AppPressable(
                       onTap: onBodyTap,
-                      behavior: HitTestBehavior.opaque,
+                      pressScale: AppSizes.tapPressScaleSubtle,
                       child: _DiscussionBodyText(
                         title: post.title,
                         content: post.content,
@@ -179,9 +179,9 @@ class _DiscussionCard extends StatelessWidget {
                     ),
                     if (post.replyPreview != null) ...[
                       const SizedBox(height: AppSpacing.sm),
-                      GestureDetector(
+                      AppPressable(
                         onTap: onTap,
-                        behavior: HitTestBehavior.opaque,
+                        pressScale: AppSizes.tapPressScaleSubtle,
                         child: _ReplyPreview(
                           replyCount: post.replyCount,
                           preview: post.replyPreview!,
@@ -265,9 +265,8 @@ class _Header extends StatelessWidget {
           ),
         ),
         const SizedBox(width: AppSpacing.xs),
-        InkWell(
+        AppPressable(
           onTap: onLikeTap,
-          borderRadius: BorderRadius.circular(AppRadius.full),
           child: Padding(
             padding: const EdgeInsets.symmetric(
               horizontal: AppSpacing.xs,

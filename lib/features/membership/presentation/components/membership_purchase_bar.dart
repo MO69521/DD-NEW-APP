@@ -4,6 +4,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_membership_colors.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
+import '../../../../shared/widgets/app_pressable.dart';
 import '../../../../shared/widgets/app_text.dart';
 import '../../domain/entities/membership_agreement.dart';
 import 'membership_cta_button.dart';
@@ -93,9 +94,8 @@ class _AgreementText extends StatelessWidget {
         AppText(prefix, style: muted),
         for (var i = 0; i < agreements.length; i++) ...[
           if (i > 0) AppText('｜', style: muted),
-          GestureDetector(
+          AppPressable(
             onTap: () => onAgreementTap?.call(agreements[i]),
-            behavior: HitTestBehavior.opaque,
             child: AppText(agreements[i].title, style: link),
           ),
         ],

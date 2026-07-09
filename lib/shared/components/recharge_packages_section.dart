@@ -10,6 +10,7 @@ import '../../core/theme/app_welfare_colors.dart';
 import '../widgets/advanced_transition_wrapper.dart';
 import '../widgets/app_asset_image.dart';
 import '../widgets/app_icon.dart';
+import '../widgets/app_pressable.dart';
 import '../widgets/app_text.dart';
 import '../../core/theme/app_colors.dart';
 
@@ -83,9 +84,9 @@ class _RechargePackagesSectionState extends State<RechargePackagesSection> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           widget.collapsible
-              ? GestureDetector(
+              ? AppPressable(
                   onTap: _toggle,
-                  behavior: HitTestBehavior.opaque,
+                  pressScale: AppSizes.tapPressScaleSubtle,
                   child: header,
                 )
               : header,
@@ -186,9 +187,8 @@ class _RechargeSectionHeader extends StatelessWidget {
         ),
         const Spacer(),
         if (onMoreTap != null)
-          GestureDetector(
+          AppPressable(
             onTap: onMoreTap,
-            behavior: HitTestBehavior.opaque,
             child: Container(
               padding: const EdgeInsets.only(
                 left: AppSpacing.sm,
@@ -252,9 +252,8 @@ class _RechargePackageCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return AppPressable(
       onTap: onPriceTap,
-      behavior: HitTestBehavior.opaque,
       child: Container(
         height: AppSizes.welfareRechargeCardHeight,
         decoration: BoxDecoration(
@@ -337,9 +336,8 @@ class _FreeClaimCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return AppPressable(
       onTap: onTap,
-      behavior: HitTestBehavior.opaque,
       child: Container(
         height: AppSizes.welfareRechargeCardHeight,
         decoration: BoxDecoration(
@@ -464,29 +462,26 @@ class _RechargePriceButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(AppRadius.welfareRechargePrice),
-        child: Ink(
-          width: double.infinity,
-          height: AppSizes.welfareRechargePriceButtonHeight,
-          decoration: BoxDecoration(
-            color: AppColors.surfaceCard,
-            borderRadius: BorderRadius.circular(AppRadius.welfareRechargePrice),
-          ),
-          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(bottom: AppSpacing.xxsHalf),
-                child: AppText(
-                  '¥',
-                  style: AppTextStyles.welfareRechargePriceSymbol,
-                ),
+    return AppPressable(
+      onTap: onTap,
+      child: Container(
+        width: double.infinity,
+        height: AppSizes.welfareRechargePriceButtonHeight,
+        decoration: BoxDecoration(
+          color: AppColors.surfaceCard,
+          borderRadius: BorderRadius.circular(AppRadius.welfareRechargePrice),
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(bottom: AppSpacing.xxsHalf),
+              child: AppText(
+                '¥',
+                style: AppTextStyles.welfareRechargePriceSymbol,
+              ),
               ),
               const SizedBox(width: AppSpacing.xxsHalf),
               AppText(
@@ -496,7 +491,6 @@ class _RechargePriceButton extends StatelessWidget {
             ],
           ),
         ),
-      ),
     );
   }
 }

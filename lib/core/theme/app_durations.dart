@@ -20,4 +20,14 @@ abstract final class AppDurations {
 
   /// 礼花彩带庆祝动效喷发窗口（仅迸发一下，粒子随后自行飘落）。
   static const Duration confettiBurst = Duration(milliseconds: 200);
+
+  /// 通用按压反馈——缩小（被按下）阶段时长。
+  static const Duration tapPressDown = Duration(milliseconds: 70);
+
+  /// 通用按压反馈——反弹（overshoot 放大再回落）阶段时长。
+  static const Duration tapPressRebound = Duration(milliseconds: 170);
+
+  /// 通用按压反馈——点击后延迟触发动作/跳转的时长，
+  /// 用于让「按下 → 反弹」峰值先可见，再执行跳转（跳转会盖住其后的回落）。
+  static const Duration tapPressActionDelay = Duration(milliseconds: 150);
 }

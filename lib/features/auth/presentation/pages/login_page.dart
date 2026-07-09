@@ -18,6 +18,7 @@ import '../../../../shared/components/app_toast.dart';
 import '../../../../shared/widgets/app_asset_image.dart';
 import '../../../../shared/widgets/app_button.dart';
 import '../../../../shared/widgets/app_icon.dart';
+import '../../../../shared/widgets/app_pressable.dart';
 import '../../../../shared/widgets/app_text.dart';
 import '../../application/login_cubit.dart';
 import '../../application/login_state.dart';
@@ -280,9 +281,8 @@ class _AuthAgreementNoticeState extends State<_AuthAgreementNotice> {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        GestureDetector(
+        AppPressable(
           onTap: widget.onToggle,
-          behavior: HitTestBehavior.opaque,
           child: Container(
             width: AppSizes.iconSm,
             height: AppSizes.iconSm,
@@ -430,19 +430,15 @@ class _BackButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(AppRadius.full),
-        child: const Padding(
-          padding: EdgeInsets.all(AppSpacing.xs),
-          child: AppIcon(
-            assetPath: 'assets/icons/ranking/back.svg',
-            width: AppSizes.topBarBackIconWidth,
-            height: AppSizes.topBarBackIconHeight,
-            color: AppColors.textOnDark,
-          ),
+    return AppPressable(
+      onTap: onTap,
+      child: const Padding(
+        padding: EdgeInsets.all(AppSpacing.xs),
+        child: AppIcon(
+          assetPath: 'assets/icons/ranking/back.svg',
+          width: AppSizes.topBarBackIconWidth,
+          height: AppSizes.topBarBackIconHeight,
+          color: AppColors.textOnDark,
         ),
       ),
     );
@@ -466,9 +462,8 @@ class _ResendCodeAction extends StatelessWidget {
         ? '${countdownSeconds}s 后重新获取'
         : '重新获取验证码';
 
-    return GestureDetector(
+    return AppPressable(
       onTap: isLoading ? null : onTap,
-      behavior: HitTestBehavior.opaque,
       child: AppText(
         isLoading ? '发送中...' : label,
         style: AppTextStyles.bodyMedium.copyWith(
@@ -724,10 +719,9 @@ class _SocialLoginButton extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            InkWell(
+            AppPressable(
               onTap: () => onTap(provider),
-              borderRadius: BorderRadius.circular(AppRadius.full),
-              child: Ink(
+              child: Container(
                 width: AppSpacing.xxl,
                 height: AppSpacing.xxl,
                 decoration: BoxDecoration(

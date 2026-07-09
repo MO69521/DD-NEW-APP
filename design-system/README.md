@@ -203,6 +203,7 @@ feature 专用圆角（在基阶之上按页面命名，如 `navOuter 47` / `sea
 | 分组 | 覆盖范围 | Token 前缀 / 示例 |
 |------|----------|------------------|
 | 通用基础 | 描边 / 通用图标 / 启动图 | `hairline` · `borderWidthEmphasis` · `iconSm` · `splashLogoSize` |
+| 通用按压反馈 `AppPressable` | 按下缩小 / 大面积柔和缩小 / 回弹 overshoot 比例 | `tapPressScale` · `tapPressScaleSubtle` · `tapPressReboundScale` |
 | 顶栏 `AppTopBar` | 二级页顶栏高度 / 图标框 / 返回钮 | `topBar*` |
 | 按钮 `AppButton` | 各尺寸内边距 / loading / 图标间距 | `buttonPadding*` · `buttonLoadingIndicatorSize` |
 | 搜索栏 / 玻璃模糊 | 搜索框高 / 各级磨砂半径 | `searchBarHeight` · `glassBlurSigma` · `strongBlurSigma` · `chromeBarBlurSigma` |
@@ -317,10 +318,25 @@ feature 专用圆角（在基阶之上按页面命名，如 `navOuter 47` / `sea
 | `EmptyState` | `shared/components/empty_state.dart` | 空状态：`title` / `description` / `action` |
 | `AppToast` | `shared/components/app_toast.dart` | 全局轻提示，黄底、淡入淡出自动消失 |
 | `GlassChipButton` | `shared/components/glass_chip_button.dart` | 玻璃胶囊 / 搜索框容器；`blur` / `expanded` |
-| `AppSwitch` | `shared/widgets/app_switch.dart` | 开关：on 黄底 / off 玻璃底 |
+| `AppSwitch` | `shared/widgets/app_switch.dart` | 开关：on 品牌黄 4% 大色块底（`accentYellow04`）+ 黄色圆钮 / off 玻璃底 + 白钮 |
 | `DialogCloseButton` | `shared/components/dialog_close_button.dart` | 统一居中弹窗关闭按钮：圆形玻璃底（`overlayScrim`+`borderGlass`）+ `close_rounded`；置于卡片下方居中 |
 | `SweepHighlightOverlay` | `shared/components/sweep_highlight_overlay.dart` | 扫光高亮层：高亮带循环滑过（会员/福利 CTA、签到成功 VIP 按钮统一复用）；参数 `highlightColor` / `edgeColor` / `bandWidthRatio` / `duration` |
 | `CurrencyBalanceBar` / `RechargePackagesSection` / `VipPromoBanner` | `shared/components/` | 业务复用组合组件 |
+
+### 7.8 Pressable · 通用按压反馈 `AppPressable`（L1 · `shared/widgets/app_pressable.dart`）
+
+全局可点击模块统一的「按下—反弹」微交互包裹组件：点击时播放一段完整脚本动画——缩小（被按下）→ overshoot 反弹越过原尺寸 → 回落到原尺寸。**新的可点击基础组件应优先用它替代裸 `GestureDetector`**。
+
+| 项 | 值 / 说明 |
+|----|----------|
+| 按下缩小 | `AppSizes.tapPressScale`（0.94）；全宽列表行等大面积模块用 `tapPressScaleSubtle`（0.97） |
+| 反弹峰值 | `AppSizes.tapPressReboundScale`（1.05，overshoot 后回落到 1） |
+| 缩小时长 | `AppDurations.tapPressDown`（70ms，`easeOut`） |
+| 反弹时长 | `AppDurations.tapPressRebound`（170ms，`easeOut` 冲峰 + `easeInOut` 回落） |
+| 动作延迟 | `AppDurations.tapPressActionDelay`（150ms）：点击后先播放「缩小 → 反弹峰值」，再触发 `onTap`（跳转会盖住其后的回落），保证「按下 → 弹起 → 跳转」可见 |
+| 触发机制 | 由 `onTap` 驱动固定脚本动画（而非 `onTapDown/onTapUp`），避免可滚动列表中手势竞技场推迟 `onTapDown` 导致回弹几乎不可见 |
+| 禁用态 | `onTap == null` 时不缩放、不响应 |
+| 已接入 | `AppButton` + 书卡族 / 各列表行 / 图标按钮 / Tab / chip 等全局高频可点击模块（详见 §7 各组件） |
 
 ---
 
@@ -330,3 +346,57 @@ feature 专用圆角（在基阶之上按页面命名，如 `navOuter 47` / `sea
 2. **单一真源**：中性叠加色 → `AppColors` 白/黑阶；品牌与主题源色 → `AppBrandColors`；背景蒙版 → `bgTint` 阶；feature 色板只引用上述源色，不本地重定义。
 3. **换色系**：在 `AppBrandColors` 按 `themeId` 加分支，构建时 `--dart-define=THEME=<id>`；默认不带参永远是深色，`dark` 分支源值不得改动。
 4. **新增即询问**：任何超出本文档的新 token / 新值 / 新色系，先向用户说明并确认，再落地并更新本文档。
+
+---
+
+## 9. 动效与特殊设计索引（Motion & Special Design Index）
+
+> 本节是全局自定义动效 / 特殊视觉的**导航索引**（约 45 项独立效果，分 9 类），便于按需定位真源。新增同类效果时在此登记。动效时长统一引用 `AppDurations`，缩放/模糊等参数引用 `AppSizes`。
+
+### 9.1 点击按压微动效
+- `AppPressable`（`shared/widgets/app_pressable.dart`）：全局「缩小 → overshoot 反弹 → 回落」点击脚本，已铺至 70+ 组件（详见 §7.8）。
+- `AppButton` 按压：按钮变体继承按压回弹。
+- 柔和按压：大目标（书卡 / 整行）用 `tapPressScaleSubtle`。
+- 伙伴卡按下叠层 / chip / 行 / 头部按下态（`features/partner/presentation/components/*`）：按下变色（非缩放，保留自有反馈）。
+
+### 9.2 弹性 / 回弹 / 物理
+- `ElasticTabIndicator`（`shared/components/elastic_tab_indicator.dart`）：下划线平移 + 宽度拉伸回弹（架构 §3.5）；测量版见书架 / 装扮 Tab、分类筛选。
+- 底部导航图标弹跳（`shared/widgets/app_nav_icon.dart`）：选中冲高 → 回落 → 稳定。
+- 会员 Hero 橡皮筋回弹 + 插图弹入（`features/membership/presentation/components/membership_hero.dart`，`Curves.easeOutBack`）。
+- 伙伴互动弹簧物理（`features/partner/presentation/components/partner_interaction_page_physics.dart`，`ScrollSpringSimulation`；已定义待接线）。
+
+### 9.3 呼吸 / 循环 / 引导
+- `SweepHighlightOverlay`（`shared/components/sweep_highlight_overlay.dart`）：CTA 循环扫光。
+- `MembershipCtaButton` / 福利签到 CTA / VIP 领取按钮：呼吸缩放 + 扫光。
+- 验证码光标闪烁（`features/auth/presentation/pages/login_page.dart`）。
+- `AppConfetti`（`shared/components/app_confetti.dart`）：庆祝礼花迸发。
+
+### 9.4 着色器 / 自绘
+- 极光 GLSL 背景（`shared/widgets/aurora_background.dart` + `assets/shaders/aurora.frag`）：噪声 + 三色渐变，`Ticker` 驱动 `uTime`，含降级渐变。
+- 渐变描边 / 渐变文字（会员方案卡、Hero，`ShaderMask`）。
+- 自绘：勾选标记（`shared/widgets/app_selection_mark.dart`）、福利气泡（`welfare_reward_bubble.dart`）、焦点封面裁剪（`shared/components/app_focal_cover_image.dart`）。
+
+### 9.5 玻璃 / 模糊
+- 统一入口与 chrome：`showAppBlurredDialog`、`AppBlurredChromeBar`、`AppTopBar`（scrim + blur）、滚动触发 `AppScrollBlurScope` / 吸顶 `BlurredPinnedHeaderDelegate`。
+- 玻璃组件：`GlassChipButton`、`AppSegmentedSwitch`、`AppBottomNav`（glassCapsule）、`AppTopBarIconButton`、`CurrencyBalanceBar`、会员用户卡、书详情目录 chip、伙伴筛选弹层。
+- 强模糊：继续阅读浮条 / 福利任务叠层（`strongBlurSigma`）。
+
+### 9.6 页面转场 / 容器变换
+- `AdvancedTransitionWrapper`（`shared/widgets/advanced_transition_wrapper.dart`）：卡片 → 全屏 `OpenContainer` 变形（充值卡 → 详情）。
+- 目录抽屉左侧滑入（`book_detail_catalog_drawer.dart`）。
+- 会员权益 3D 卡片轮播（`membership_benefits_detail_page.dart`，`Matrix4.rotateY` 透视）。
+
+### 9.7 Tab 跟手切换 / 滑块
+- `AppSwipeTabSwitcher`（`shared/components/app_swipe_tab_switcher.dart`，架构 §3.4，8 页复用）。
+- `AppSegmentedSwitch`（滑块 `AnimatedPositioned`）、`AppVerticalRailSwitch`（竖向轨道）、书城顶部 Tab PageView、会员 Hero 无限循环轮播。
+
+### 9.8 滚动 / 沉浸式 Hero 头图
+- `AppTopBar` 沉浸渐变蒙版 + 滚动起雾；会员 / 榜单 / 装扮 / 书详情沉浸顶（蒙版 + 模糊 + 装饰组合）。
+
+### 9.9 其它自定义
+- `AppToast`（淡入淡出）、`AppSwitch`（滑块过渡）、登录输入框聚焦下划线中心展开。
+- 倒计时：短信 / 福利任务 `HH:MM:SS`；续费提示 slot 交叉淡入 + 高度动画。
+- 展开折叠 + 箭头旋转（签到 / 充值区）、「换一换」图标旋转、会员分页点、`DialogCloseButton`、定制数字字体 `TCloudNumber`。
+
+### 尚未实现（后续增强候选）
+骨架屏 / shimmer、跑马灯、`Hero()` 共享元素、Lottie、数字滚动动画、真正的滚动视差，以及伙伴弹簧物理接线。

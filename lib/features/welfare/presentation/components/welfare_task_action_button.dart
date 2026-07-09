@@ -7,6 +7,7 @@ import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/theme/app_welfare_colors.dart';
 import '../../../../shared/widgets/app_asset_image.dart';
+import '../../../../shared/widgets/app_pressable.dart';
 import '../../../../shared/widgets/app_text.dart';
 import '../../domain/entities/welfare_models.dart';
 import '../mappers/welfare_asset_mapper.dart';
@@ -27,16 +28,13 @@ class WelfareTaskActionButton extends StatelessWidget {
         ? AppWelfareColors.checkInCtaTextDark
         : AppColors.textOnDark;
 
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(AppRadius.welfareCheckInCta),
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(
-            minWidth: AppSizes.welfareTaskActionMinWidth,
-          ),
-          child: Ink(
+    return AppPressable(
+      onTap: onTap,
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(
+          minWidth: AppSizes.welfareTaskActionMinWidth,
+        ),
+        child: Container(
             padding: const EdgeInsets.symmetric(
               horizontal: AppSpacing.md,
               vertical: AppSpacing.xs,
@@ -68,7 +66,6 @@ class WelfareTaskActionButton extends StatelessWidget {
             ),
           ),
         ),
-      ),
     );
   }
 }

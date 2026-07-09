@@ -5,6 +5,7 @@ import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../shared/widgets/app_icon.dart';
+import '../../../../shared/widgets/app_pressable.dart';
 import '../../../../shared/widgets/app_text.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/domain/entities/book.dart';
@@ -32,9 +33,8 @@ class RankingSectionHeader extends StatelessWidget {
           child: RankingTabs(selected: selectedTab, onSelected: onTabSelected),
         ),
         const SizedBox(width: AppSpacing.xs),
-        GestureDetector(
+        AppPressable(
           onTap: onFullListTap,
-          behavior: HitTestBehavior.opaque,
           child: Container(
             padding: const EdgeInsets.only(
               left: AppSpacing.sm,

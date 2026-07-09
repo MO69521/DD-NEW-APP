@@ -7,6 +7,7 @@ import '../../core/theme/app_sizes.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../widgets/app_asset_image.dart';
+import '../widgets/app_pressable.dart';
 import '../widgets/app_text.dart';
 import '../../core/theme/app_welfare_colors.dart';
 
@@ -36,9 +37,9 @@ class VipPromoBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return AppPressable(
       onTap: onTap,
-      behavior: HitTestBehavior.opaque,
+      pressScale: AppSizes.tapPressScaleSubtle,
       child: ClipRRect(
         borderRadius: BorderRadius.circular(AppRadius.welfareVipBanner),
         child: SizedBox(

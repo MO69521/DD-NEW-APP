@@ -12,6 +12,7 @@ import '../../../../shared/components/app_confetti.dart';
 import '../../../../shared/components/dialog_close_button.dart';
 import '../../../../shared/components/sweep_highlight_overlay.dart';
 import '../../../../shared/widgets/app_button.dart';
+import '../../../../shared/widgets/app_pressable.dart';
 import '../../../../shared/widgets/app_text.dart';
 import '../../domain/entities/welfare_models.dart';
 import 'check_in_calendar.dart';
@@ -198,9 +199,8 @@ class _VipRewardButtonState extends State<_VipRewardButton>
   Widget build(BuildContext context) {
     return ScaleTransition(
       scale: _breathScale,
-      child: GestureDetector(
+      child: AppPressable(
         onTap: widget.onTap,
-        behavior: HitTestBehavior.opaque,
         child: ClipRRect(
           borderRadius: BorderRadius.circular(AppRadius.full),
           child: DecoratedBox(

@@ -9,6 +9,7 @@ import '../../../../core/theme/app_text_styles.dart';
 import '../../../../shared/components/book_grid_card.dart';
 import '../../../../shared/components/section_header.dart';
 import '../../../../shared/widgets/app_icon.dart';
+import '../../../../shared/widgets/app_pressable.dart';
 import '../../../../shared/widgets/app_text.dart';
 
 /// L3 — 书籍详情页推荐书籍区块，复用首页网格书卡样式。
@@ -134,9 +135,8 @@ class _RotatingRecommendationHeaderState
         ),
         const Spacer(),
         if (widget.actionLabel != null)
-          GestureDetector(
+          AppPressable(
             onTap: _handleTap,
-            behavior: HitTestBehavior.opaque,
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [

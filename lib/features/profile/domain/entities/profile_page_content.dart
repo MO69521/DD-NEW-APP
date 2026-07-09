@@ -33,6 +33,20 @@ class ProfilePageContent extends Equatable {
   final List<AchievementBadge> achievementBadges;
   final List<ProfileMenuItem> menuItems;
 
+  ProfilePageContent copyWith({UserProfile? user}) {
+    return ProfilePageContent(
+      user: user ?? this.user,
+      currencyBalances: currencyBalances,
+      vipMonthlyEnergy: vipMonthlyEnergy,
+      vipPriceYuan: vipPriceYuan,
+      rechargePackages: rechargePackages,
+      freeClaimOptions: freeClaimOptions,
+      achievementCount: achievementCount,
+      achievementBadges: achievementBadges,
+      menuItems: menuItems,
+    );
+  }
+
   @override
   List<Object?> get props => [
     user,

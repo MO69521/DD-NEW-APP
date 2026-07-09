@@ -10,9 +10,11 @@ import '../../core/theme/app_text_styles.dart';
 import '../../routes/app_router.dart';
 import '../widgets/app_asset_image.dart';
 import '../widgets/app_button.dart';
+import '../widgets/app_pressable.dart';
 import '../widgets/app_selection_mark.dart';
 import '../widgets/app_text.dart';
 import 'app_blurred_dialog.dart';
+import 'app_toast.dart';
 
 /// L2 — 能量充值支付确认弹窗（深色 UI，个人主页 / 福利页共用）。
 class EnergyRechargePurchaseDialog extends StatefulWidget {
@@ -68,10 +70,8 @@ class _EnergyRechargePurchaseDialogState
 
     final message =
         '${_selectedMethod.label} ¥${widget.package.priceYuan} 已模拟提交';
+    AppToast.show(context, message);
     AppRouter.pop();
-    ScaffoldMessenger.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(SnackBar(content: Text(message)));
   }
 
   @override
@@ -192,9 +192,8 @@ class _DialogCloseButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return AppPressable(
       onTap: onTap,
-      behavior: HitTestBehavior.opaque,
       child: const Icon(
         Icons.close,
         size: AppSizes.rechargePurchaseDialogCloseIconSize,
@@ -264,9 +263,9 @@ class _PaymentMethodRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final isSelected = method == selectedMethod;
 
-    return GestureDetector(
+    return AppPressable(
       onTap: () => onTap(method),
-      behavior: HitTestBehavior.opaque,
+      pressScale: AppSizes.tapPressScaleSubtle,
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm),
         child: Row(
@@ -319,9 +318,8 @@ class _AgreementFooter extends StatelessWidget {
       crossAxisAlignment: WrapCrossAlignment.center,
       children: [
         AppText('查看', style: AppTextStyles.rechargePurchaseDialogAgreement),
-        GestureDetector(
+        AppPressable(
           onTap: onAgreementTap,
-          behavior: HitTestBehavior.opaque,
           child: AppText(
             '《$agreementTitle》',
             style: AppTextStyles.rechargePurchaseDialogAgreementLink,

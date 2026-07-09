@@ -7,6 +7,7 @@ import '../../../../core/theme/app_text_styles.dart';
 import '../../../../shared/components/app_top_bar_icon_button.dart';
 import '../../../../shared/widgets/app_icon.dart';
 import '../../../../shared/widgets/app_network_avatar.dart';
+import '../../../../shared/widgets/app_pressable.dart';
 import '../../../../shared/widgets/app_text.dart';
 import '../../domain/entities/user_profile.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -133,9 +134,9 @@ class _UserInfoBlock extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return AppPressable(
       onTap: onProfileTap,
-      behavior: HitTestBehavior.opaque,
+      pressScale: AppSizes.tapPressScaleSubtle,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [

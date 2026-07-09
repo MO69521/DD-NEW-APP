@@ -4,6 +4,7 @@ import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/theme/app_theme_context.dart';
 import '../../../../shared/components/elastic_tab_indicator.dart';
+import '../../../../shared/widgets/app_pressable.dart';
 import '../../domain/entities/bookstore_top_tab.dart';
 
 /// 书城顶栏一级 Tab（推荐 / 分类 / 排行）。
@@ -93,9 +94,8 @@ class _BookstoreTopTabItem extends StatelessWidget {
               color: isSelected ? colors.textPrimary : colors.textMuted,
             );
 
-    return GestureDetector(
+    return AppPressable(
       onTap: onTap,
-      behavior: HitTestBehavior.opaque,
       child: SizedBox(
         width: width,
         child: Padding(

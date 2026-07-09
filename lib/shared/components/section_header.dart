@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../widgets/app_icon.dart';
+import '../widgets/app_pressable.dart';
 import '../widgets/app_text.dart';
 import '../../core/theme/app_colors.dart';
 
@@ -37,9 +38,8 @@ class SectionHeader extends StatelessWidget {
         ),
         const Spacer(),
         if (actionLabel != null)
-          GestureDetector(
+          AppPressable(
             onTap: onActionTap,
-            behavior: HitTestBehavior.opaque,
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [

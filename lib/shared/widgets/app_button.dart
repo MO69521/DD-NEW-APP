@@ -4,6 +4,7 @@ import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_radius.dart';
 import '../../core/theme/app_sizes.dart';
 import '../../core/theme/app_text_styles.dart';
+import 'app_pressable.dart';
 import 'app_text.dart';
 
 /// 按钮视觉变体。
@@ -137,25 +138,21 @@ class AppButton extends StatelessWidget {
       content = SizedBox(width: double.infinity, child: content);
     }
 
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: tapHandler,
-        borderRadius: radius,
-        child: Ink(
-          decoration: BoxDecoration(
-            color: _backgroundColor,
-            borderRadius: radius,
-            border: _hasBorder
-                ? Border.all(
-                    color: AppColors.borderGlass,
-                    width: AppSizes.hairline,
-                  )
-                : null,
-          ),
-          padding: _padding,
-          child: content,
+    return AppPressable(
+      onTap: tapHandler,
+      child: Container(
+        decoration: BoxDecoration(
+          color: _backgroundColor,
+          borderRadius: radius,
+          border: _hasBorder
+              ? Border.all(
+                  color: AppColors.borderGlass,
+                  width: AppSizes.hairline,
+                )
+              : null,
         ),
+        padding: _padding,
+        child: content,
       ),
     );
   }

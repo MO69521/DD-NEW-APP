@@ -5,6 +5,7 @@ import '../../../../core/theme/app_radius.dart';
 import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
+import '../../../../shared/widgets/app_pressable.dart';
 import '../../../../shared/widgets/app_text.dart';
 
 /// 书评详情底部回复输入栏。
@@ -69,7 +70,7 @@ class BookDiscussionReplyInputBar extends StatelessWidget {
                   ),
                 ),
               ),
-              GestureDetector(
+              AppPressable(
                 onTap: canSend ? onSend : null,
                 child: AppText(
                   isSubmitting ? '发送中...' : '发送',

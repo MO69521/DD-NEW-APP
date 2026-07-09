@@ -7,6 +7,7 @@ import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../routes/app_router.dart';
 import '../../../../routes/app_routes.dart';
+import '../../../../shared/components/app_toast.dart';
 import '../../../../shared/components/empty_state.dart';
 import '../../../../shared/widgets/app_button.dart';
 import '../../../../shared/components/app_blurred_chrome_bar.dart';
@@ -37,9 +38,7 @@ class MembershipPage extends StatelessWidget {
       listener: (context, state) {
         final message = state.interaction.purchaseMessage;
         if (message == null) return;
-        ScaffoldMessenger.of(context)
-          ..hideCurrentSnackBar()
-          ..showSnackBar(SnackBar(content: Text(message)));
+        AppToast.show(context, message);
         context.read<MembershipCubit>().consumePurchaseMessage();
       },
       builder: (context, state) {

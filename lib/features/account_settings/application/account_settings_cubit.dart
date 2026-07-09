@@ -1,5 +1,9 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../core/services/membership_status_service.dart';
+import '../../../core/services/service_locator.dart';
+import '../../../routes/app_router.dart';
+import '../../../routes/app_routes.dart';
 import '../data/datasources/account_settings_mock_datasource.dart';
 import '../data/repositories/account_settings_repository_impl.dart';
 import '../domain/entities/account_security_binding.dart';
@@ -8,13 +12,21 @@ import 'account_settings_state.dart';
 import 'account_settings_ui_state.dart';
 
 class AccountSettingsCubit extends Cubit<AccountSettingsState> {
-  AccountSettingsCubit({AccountSettingsRepository? repository})
-    : _repository =
-          repository ??
-          const AccountSettingsRepositoryImpl(AccountSettingsMockDataSource()),
-      super(const AccountSettingsState());
+  AccountSettingsCubit({
+    AccountSettingsRepository? repository,
+    MembershipStatusService? membership,
+  }) : _repository =
+           repository ??
+           const AccountSettingsRepositoryImpl(
+             AccountSettingsMockDataSource(),
+           ),
+       _membership = membership ?? ServiceLocator.membershipStatus,
+       super(const AccountSettingsState()) {
+    _membership.account.addListener(_onAccountChanged);
+  }
 
   final AccountSettingsRepository _repository;
+  final MembershipStatusService _membership;
 
   Future<void> load() async {
     emit(
@@ -25,10 +37,13 @@ class AccountSettingsCubit extends Cubit<AccountSettingsState> {
 
     try {
       final content = await _repository.fetchPageContent();
+      final merged = content.copyWith(
+        nickname: _membership.account.value.nickname,
+      );
       emit(
         state.copyWith(
           ui: state.ui.copyWith(isLoading: false),
-          domain: AccountSettingsDomainState(content: content),
+          domain: AccountSettingsDomainState(content: merged),
         ),
       );
     } catch (error) {
@@ -43,12 +58,35 @@ class AccountSettingsCubit extends Cubit<AccountSettingsState> {
     }
   }
 
+  void _onAccountChanged() {
+    final content = state.domain.content;
+    if (content == null) return;
+    final nickname = _membership.account.value.nickname;
+    if (content.nickname == nickname) return;
+    emit(
+      state.copyWith(
+        domain: state.domain.copyWith(
+          content: content.copyWith(nickname: nickname),
+        ),
+      ),
+    );
+  }
+
+  @override
+  Future<void> close() {
+    _membership.account.removeListener(_onAccountChanged);
+    return super.close();
+  }
+
   void onAvatarTap() {
-    _emitActionMessage('修改头像功能即将上线');
+    AppRouter.pushNamed(AppRoutes.dressUpName);
   }
 
   void onNicknameTap() {
-    _emitActionMessage('修改昵称功能即将上线');
+    AppRouter.pushNamed(
+      AppRoutes.editNicknameName,
+      extra: state.domain.content?.nickname ?? '',
+    );
   }
 
   void onSecurityBindingTap(AccountSecurityBindingType type) {

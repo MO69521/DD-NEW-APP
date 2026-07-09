@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../routes/app_router.dart';
+import '../../../../shared/components/app_toast.dart';
 import '../../../../shared/components/empty_state.dart';
 import '../../../../shared/widgets/app_text.dart';
 import '../../application/book_discussion_detail_cubit.dart';
@@ -37,9 +38,7 @@ class BookDiscussionDetailPage extends StatelessWidget {
       listenWhen: (previous, current) =>
           previous.sendSuccessTick != current.sendSuccessTick,
       listener: (context, state) {
-        ScaffoldMessenger.of(context)
-          ..hideCurrentSnackBar()
-          ..showSnackBar(const SnackBar(content: Text('回复已发送')));
+        AppToast.show(context, '回复已发送');
       },
       child: BlocListener<BookDiscussionDetailCubit, BookDiscussionDetailState>(
         listenWhen: (previous, current) =>
@@ -47,9 +46,7 @@ class BookDiscussionDetailPage extends StatelessWidget {
         listener: (context, state) {
           final message = state.errorMessage;
           if (message == null) return;
-          ScaffoldMessenger.of(context)
-            ..hideCurrentSnackBar()
-            ..showSnackBar(SnackBar(content: Text(message)));
+          AppToast.show(context, message);
         },
         child:
             BlocBuilder<BookDiscussionDetailCubit, BookDiscussionDetailState>(

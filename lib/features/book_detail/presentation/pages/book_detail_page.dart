@@ -37,15 +37,11 @@ class BookDetailPage extends StatelessWidget {
           previous.ui.shelfToastTick != current.ui.shelfToastTick,
       listener: (context, state) {
         if (state.ui.quickReplySuccessTick > 0) {
-          ScaffoldMessenger.of(context)
-            ..hideCurrentSnackBar()
-            ..showSnackBar(const SnackBar(content: Text('回复已发送')));
+          AppToast.show(context, '回复已发送');
         }
         final quickReplyError = state.ui.quickReplyErrorMessage;
         if (state.ui.quickReplyErrorTick > 0 && quickReplyError != null) {
-          ScaffoldMessenger.of(context)
-            ..hideCurrentSnackBar()
-            ..showSnackBar(SnackBar(content: Text(quickReplyError)));
+          AppToast.show(context, quickReplyError);
         }
         final shelfToast = state.ui.shelfToastMessage;
         if (state.ui.shelfToastTick > 0 && shelfToast != null) {
@@ -145,9 +141,7 @@ class _BookDetailViewState extends State<_BookDetailView> {
   }
 
   void _comingSoon(BuildContext context, String label) {
-    ScaffoldMessenger.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(SnackBar(content: Text('$label功能开发中')));
+    AppToast.show(context, '$label功能开发中');
   }
 
   Future<void> _openQuickReply(
@@ -174,11 +168,8 @@ class _BookDetailViewState extends State<_BookDetailView> {
           AppToast.show(context, '读完前一张即可解锁');
           return;
         }
+        AppToast.show(context, '开始阅读：${chapter.title}');
         AppRouter.pop();
-        if (!context.mounted) return;
-        ScaffoldMessenger.of(context)
-          ..hideCurrentSnackBar()
-          ..showSnackBar(SnackBar(content: Text('开始阅读：${chapter.title}')));
       },
     );
   }

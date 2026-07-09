@@ -6,6 +6,7 @@ import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../shared/widgets/app_icon.dart';
 import '../../../../shared/widgets/app_network_avatar.dart';
+import '../../../../shared/widgets/app_pressable.dart';
 import '../../../../shared/widgets/app_text.dart';
 
 /// L3 组件 — 账号设置个人信息行（可导航 / 只读）。
@@ -29,15 +30,14 @@ class AccountSettingsInfoRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final isTappable = onTap != null;
 
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: onTap,
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(
-            minHeight: AppSizes.listRowMinHeight,
-          ),
-          child: Padding(
+    return AppPressable(
+      onTap: onTap,
+      pressScale: AppSizes.tapPressScaleSubtle,
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(
+          minHeight: AppSizes.listRowMinHeight,
+        ),
+        child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
             child: Row(
               children: [
@@ -77,7 +77,6 @@ class AccountSettingsInfoRow extends StatelessWidget {
             ),
           ),
         ),
-      ),
     );
   }
 }

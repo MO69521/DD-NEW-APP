@@ -8,6 +8,7 @@ import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../shared/widgets/app_asset_image.dart';
 import '../../../../shared/widgets/app_button.dart';
+import '../../../../shared/widgets/app_pressable.dart';
 import '../../../../shared/widgets/app_text.dart';
 
 /// L3 页面 — 充值套餐详情（容器转换动效的展开目标，示例页）。
@@ -95,19 +96,14 @@ class _CloseButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: Colors.transparent,
-      shape: const CircleBorder(),
-      clipBehavior: Clip.antiAlias,
-      child: InkWell(
-        onTap: onTap,
-        child: const Padding(
-          padding: EdgeInsets.all(AppSpacing.xs),
-          child: Icon(
-            Icons.close_rounded,
-            color: AppColors.textOnDark,
-            size: AppSizes.welfareTaskActionIconSize,
-          ),
+    return AppPressable(
+      onTap: onTap,
+      child: const Padding(
+        padding: EdgeInsets.all(AppSpacing.xs),
+        child: Icon(
+          Icons.close_rounded,
+          color: AppColors.textOnDark,
+          size: AppSizes.welfareTaskActionIconSize,
         ),
       ),
     );

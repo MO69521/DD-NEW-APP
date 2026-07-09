@@ -197,7 +197,7 @@ class _MembershipHeroState extends State<MembershipHero>
               child: const ClipRect(
                 child: AuroraBackground(
                   opacity: 0.26,
-                  amplitude: 0.48,
+                  amplitude: 0.9,
                   colorStops: [
                     AppColors.accentYellow,
                     AppColors.accentYellow,

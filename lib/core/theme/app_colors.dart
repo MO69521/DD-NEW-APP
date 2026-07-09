@@ -70,6 +70,9 @@ abstract final class AppColors {
   static const Color dialogBackground = AppBrandColors.dialogBackground;
   static const Color accentYellow = AppBrandColors.accent;
 
+  /// 品牌黄 4% 不透明度填充（开启 / 选中态大色块底色）。
+  static const Color accentYellow04 = Color(0x0AFFE847);
+
   /// 礼花 / 庆祝动效多彩粒子配色（节日色，取品牌多色）。
   static const List<Color> confettiPalette = [
     AppBrandColors.accent, // 黄
@@ -109,7 +112,7 @@ abstract final class AppColors {
   static const Color bookDetailUpdateText = white85;
   static const Color bookDetailUpdateTextHighlighted = Color(0xFFF0B16A);
   static const Color bookDetailUpdateSectionBackground = white05;
-  static const Color bookDetailCharFavBackground = Color(0x0AFFE847);
+  static const Color bookDetailCharFavBackground = accentYellow04;
   static const Color guessLikeCardBackground = white05;
   static const Color guessLikeTagBackground = white04;
   static const Color guessLikeTagBorder = white04;

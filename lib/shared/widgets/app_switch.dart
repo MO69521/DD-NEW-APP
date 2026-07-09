@@ -24,7 +24,8 @@ class AppSwitch extends StatelessWidget {
         height: AppSizes.appSwitchHeight,
         padding: const EdgeInsets.all(AppSizes.appSwitchInset),
         decoration: BoxDecoration(
-          color: value ? AppColors.accentYellow : AppColors.surfaceGlass,
+          // 开启态：品牌黄 4% 大色块底 + 黄色圆钮；关闭态保持玻璃底 + 白钮。
+          color: value ? AppColors.accentYellow04 : AppColors.surfaceGlass,
           borderRadius: BorderRadius.circular(AppRadius.full),
         ),
         child: AnimatedAlign(
@@ -36,7 +37,7 @@ class AppSwitch extends StatelessWidget {
             height: AppSizes.appSwitchThumbSize,
             child: DecoratedBox(
               decoration: BoxDecoration(
-                color: value ? AppColors.textPrimary : AppColors.textOnDark,
+                color: value ? AppColors.accentYellow : AppColors.textOnDark,
                 shape: BoxShape.circle,
               ),
             ),

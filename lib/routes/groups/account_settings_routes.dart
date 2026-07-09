@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../features/account_settings/index.dart';
 import '../../features/card_pack/index.dart';
+import '../../features/dress_up/index.dart';
 import '../../features/help_feedback/index.dart';
 import '../../features/my_messages/index.dart';
 import '../../features/settings/data/datasources/settings_document_mock_datasource.dart';
@@ -19,6 +20,25 @@ List<RouteBase> accountSettingsRoutes() => [
       create: (_) => AccountSettingsCubit()..load(),
       child: const AccountSettingsPage(),
     ),
+  ),
+  GoRoute(
+    path: AppRoutes.dressUp,
+    name: AppRoutes.dressUpName,
+    builder: (context, state) => BlocProvider(
+      create: (_) => DressUpCubit()..load(),
+      child: const DressUpPage(),
+    ),
+  ),
+  GoRoute(
+    path: AppRoutes.editNickname,
+    name: AppRoutes.editNicknameName,
+    builder: (context, state) {
+      final nickname = state.extra is String ? state.extra as String : '';
+      return BlocProvider(
+        create: (_) => EditNicknameCubit(originalNickname: nickname),
+        child: const EditNicknamePage(),
+      );
+    },
   ),
   GoRoute(
     path: AppRoutes.myMessages,
