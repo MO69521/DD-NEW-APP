@@ -11,9 +11,16 @@ import 'membership_benefit_item.dart';
 
 /// L3 — 「点点会员权益」区：窄屏 4+3 网格，宽屏（≥ breakpoint）7 项单行均分。
 class MembershipBenefitsSection extends StatelessWidget {
-  const MembershipBenefitsSection({super.key, required this.benefits});
+  const MembershipBenefitsSection({
+    super.key,
+    required this.benefits,
+    this.onBenefitTap,
+  });
 
   final List<MembershipBenefit> benefits;
+
+  /// 点击某项权益的回调，参数为该权益在列表中的索引。
+  final ValueChanged<int>? onBenefitTap;
 
   List<List<MembershipBenefit>> _rowsForColumns(int columns) {
     final rows = <List<MembershipBenefit>>[];
@@ -63,7 +70,9 @@ class MembershipBenefitsSection extends StatelessWidget {
                       _BenefitRow(
                         items: rows[r],
                         columns: columns,
+                        startIndex: r * columns,
                         alignPartialRowLeft: !useSingleRow,
+                        onBenefitTap: onBenefitTap,
                       ),
                     ],
                   ],
@@ -81,12 +90,22 @@ class _BenefitRow extends StatelessWidget {
   const _BenefitRow({
     required this.items,
     required this.columns,
+    required this.startIndex,
     this.alignPartialRowLeft = false,
+    this.onBenefitTap,
   });
 
   final List<MembershipBenefit> items;
   final int columns;
+  final int startIndex;
   final bool alignPartialRowLeft;
+  final ValueChanged<int>? onBenefitTap;
+
+  VoidCallback? _tapFor(int positionInRow) {
+    final callback = onBenefitTap;
+    if (callback == null) return null;
+    return () => callback(startIndex + positionInRow);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -101,12 +120,13 @@ class _BenefitRow extends StatelessWidget {
           return Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              for (final benefit in items)
+              for (var j = 0; j < items.length; j++)
                 SizedBox(
                   width: cellWidth,
                   child: MembershipBenefitItem(
-                    benefit: benefit,
+                    benefit: items[j],
                     centered: true,
+                    onTap: _tapFor(j),
                   ),
                 ),
             ],
@@ -118,11 +138,12 @@ class _BenefitRow extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        for (final benefit in items)
+        for (var j = 0; j < items.length; j++)
           Expanded(
             child: MembershipBenefitItem(
-              benefit: benefit,
+              benefit: items[j],
               centered: true,
+              onTap: _tapFor(j),
             ),
           ),
       ],

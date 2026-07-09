@@ -2,13 +2,12 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_durations.dart';
-import '../../../../core/theme/app_membership_colors.dart';
 import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
-import '../../../../core/theme/app_text_styles.dart';
-import '../../../../shared/widgets/app_text.dart';
 import '../../../../shared/widgets/aurora_background.dart';
 import '../../domain/entities/membership_hero_slide.dart';
+import 'membership_dots.dart';
+import 'membership_hero_slide_text.dart';
 
 /// L3 — 会员页 Hero 头图：固定纹理背景 + 主张文案轮播（左文右图）+ 指示点。
 ///
@@ -20,8 +19,7 @@ class MembershipHero extends StatefulWidget {
 
   final List<MembershipHeroSlide> slides;
 
-  static const String _bgAsset =
-      'assets/images/membership/hero_texture.png';
+  static const String _bgAsset = 'assets/images/membership/hero_texture.png';
 
   @override
   State<MembershipHero> createState() => _MembershipHeroState();
@@ -184,14 +182,29 @@ class _MembershipHeroState extends State<MembershipHero>
               errorBuilder: (_, _, _) => const SizedBox.shrink(),
             ),
           ),
-          const Positioned.fill(
-            child: AuroraBackground(
-              opacity: 0.6,
-              colorStops: [
-                AppColors.auroraEdge,
-                AppColors.auroraGlow,
-                AppColors.auroraEdge,
-              ],
+          Positioned(
+            left: 0,
+            right: 0,
+            top: 0,
+            height: AppSizes.membershipUserCardTop + AppSpacing.xl,
+            child: ShaderMask(
+              shaderCallback: (bounds) => const LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [AppColors.white100, AppColors.white00],
+              ).createShader(bounds),
+              blendMode: BlendMode.dstIn,
+              child: const ClipRect(
+                child: AuroraBackground(
+                  opacity: 0.26,
+                  amplitude: 0.48,
+                  colorStops: [
+                    AppColors.accentYellow,
+                    AppColors.accentYellow,
+                    AppColors.accentYellow,
+                  ],
+                ),
+              ),
             ),
           ),
           Positioned.fill(
@@ -247,7 +260,7 @@ class _MembershipHeroState extends State<MembershipHero>
                             ),
                             child: Align(
                               alignment: Alignment.topLeft,
-                              child: _HeroSlideText(slide: slide),
+                              child: MembershipHeroSlideText(slide: slide),
                             ),
                           ),
                         ],
@@ -264,7 +277,7 @@ class _MembershipHeroState extends State<MembershipHero>
             top: AppSizes.membershipDotsTop,
             child: IgnorePointer(
               child: Center(
-                child: _Dots(
+                child: MembershipDots(
                   count: _slideCount,
                   current: _current % _slideCount,
                 ),
@@ -273,102 +286,6 @@ class _MembershipHeroState extends State<MembershipHero>
           ),
         ],
       ),
-    );
-  }
-}
-
-class _HeroSlideText extends StatelessWidget {
-  const _HeroSlideText({required this.slide});
-
-  final MembershipHeroSlide slide;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // 单段落排版：主副字号在同一基线对齐，避免大号数字底部被
-        // 行高 descent 抬高（Row + 交叉轴对齐无法保证不同字号视觉底对齐）。
-        Text.rich(
-          TextSpan(
-            children: [
-              TextSpan(
-                text: slide.titlePrefix,
-                style: AppTextStyles.membershipHeroEnergyLabel,
-              ),
-              const WidgetSpan(child: SizedBox(width: AppSpacing.xxs)),
-              TextSpan(
-                text: slide.titleHighlight,
-                style: AppTextStyles.membershipHeroEnergyAmount,
-              ),
-              if (slide.titleSuffix.isNotEmpty) ...[
-                const WidgetSpan(child: SizedBox(width: AppSpacing.xxs)),
-                TextSpan(
-                  text: slide.titleSuffix,
-                  style: AppTextStyles.membershipHeroEnergyLabel,
-                ),
-              ],
-            ],
-          ),
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-        ),
-        const SizedBox(height: AppSpacing.sm),
-        Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            AppText(
-              slide.subtitlePrefix,
-              style: AppTextStyles.membershipHeroSubtitle.copyWith(
-                color: AppColors.textOnDarkMuted,
-              ),
-            ),
-            if (slide.subtitleValue.isNotEmpty) ...[
-              const SizedBox(width: AppSpacing.xxs),
-              AppText(
-                slide.subtitleValue,
-                style: AppTextStyles.membershipHeroSubtitle,
-              ),
-            ],
-          ],
-        ),
-      ],
-    );
-  }
-}
-
-class _Dots extends StatelessWidget {
-  const _Dots({required this.count, required this.current});
-
-  final int count;
-  final int current;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        for (var i = 0; i < count; i++) ...[
-          if (i > 0) const SizedBox(width: AppSpacing.xxs),
-          DecoratedBox(
-            decoration: BoxDecoration(
-              color: i == current
-                  ? AppColors.textOnDark
-                  : AppMembershipColors.dotInactive,
-              borderRadius: BorderRadius.circular(
-                AppSizes.membershipDotSize / 2,
-              ),
-            ),
-            child: SizedBox(
-              width: i == current
-                  ? AppSizes.membershipDotsActiveWidth
-                  : AppSizes.membershipDotSize,
-              height: AppSizes.membershipDotSize,
-            ),
-          ),
-        ],
-      ],
     );
   }
 }

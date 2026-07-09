@@ -135,7 +135,10 @@ abstract final class AppRouter {
           builder: (context, state) {
             final extra = state.extra;
             final initialIndex = extra is int ? extra : 0;
-            return MembershipBenefitsDetailPage(initialIndex: initialIndex);
+            return BlocProvider(
+              create: (_) => MembershipBenefitsDetailCubit()..load(),
+              child: MembershipBenefitsDetailPage(initialIndex: initialIndex),
+            );
           },
         ),
         GoRoute(

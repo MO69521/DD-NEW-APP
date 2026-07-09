@@ -1,5 +1,6 @@
 import '../../../../core/domain/entities/member_account.dart';
 import '../../../../core/services/membership_status_service.dart';
+import '../../domain/entities/membership_benefit_detail.dart';
 import '../../domain/entities/membership_page_content.dart';
 import '../../domain/repositories/membership_repository.dart';
 import '../datasources/membership_mock_datasource.dart';
@@ -30,6 +31,10 @@ class MembershipRepositoryImpl implements MembershipRepository {
       statementParagraphs: _dataSource.statementParagraphs(),
     );
   }
+
+  @override
+  Future<List<MembershipBenefitDetail>> fetchBenefitDetails() async =>
+      _dataSource.benefitDetails();
 
   @override
   Future<MemberAccount> purchase(String planId) async {

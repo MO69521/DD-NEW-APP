@@ -163,7 +163,13 @@ class _MembershipView extends StatelessWidget {
                               cubit.openAgreement(agreement.url),
                         ),
                         const SizedBox(height: AppSpacing.lg),
-                        MembershipBenefitsSection(benefits: content.benefits),
+                        MembershipBenefitsSection(
+                          benefits: content.benefits,
+                          onBenefitTap: (index) => AppRouter.pushNamed(
+                            AppRoutes.membershipBenefitsDetailName,
+                            extra: index,
+                          ),
+                        ),
                         const SizedBox(height: AppSpacing.sm),
                         MembershipAutoRenewStatement(
                           title: content.statementTitle,

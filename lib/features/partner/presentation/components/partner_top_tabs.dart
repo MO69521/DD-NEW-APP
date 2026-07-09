@@ -29,7 +29,7 @@ class PartnerTopTabs extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tabs = PartnerTopTab.values;
-    const slotWidth = AppSizes.tabSlotWidthSm;
+    const slotWidth = AppSizes.tabSlotWidthMd;
 
     return SizedBox(
       width: slotWidth * tabs.length + AppSpacing.md * (tabs.length - 1),

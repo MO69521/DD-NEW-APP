@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/theme/app_durations.dart';
 import '../../../../core/theme/app_membership_colors.dart';
 import '../../../../core/theme/app_radius.dart';
 import '../../../../core/theme/app_sizes.dart';
@@ -14,55 +15,76 @@ class MembershipBenefitItem extends StatelessWidget {
     super.key,
     required this.benefit,
     this.centered = false,
+    this.selected = false,
+    this.showLabel = true,
+    this.onTap,
   });
+
+  static const double selectedScale = 1.5;
 
   final MembershipBenefit benefit;
   final bool centered;
+  final bool showLabel;
+
+  /// 选中态：整项放大（用于会员特权详情页顶部导航）。
+  final bool selected;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: centered ? double.infinity : null,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: centered
-            ? CrossAxisAlignment.center
-            : CrossAxisAlignment.start,
-        children: [
-          Container(
-            width: AppSizes.membershipBenefitIconCircle,
-            height: AppSizes.membershipBenefitIconCircle,
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              color: AppMembershipColors.benefitIconBg,
-              borderRadius: BorderRadius.circular(AppRadius.full),
-            ),
-            child: AppAssetImage(
-              assetPath: benefit.iconAsset,
-              width: AppSizes.membershipBenefitIcon,
-              height: AppSizes.membershipBenefitIcon,
-            ),
-          ),
-          const SizedBox(height: AppSizes.membershipBenefitIconLabelGap),
-          if (centered)
-            SizedBox(
-              width: double.infinity,
-              child: AppText(
-                benefit.label,
-                style: AppTextStyles.membershipBenefitLabel,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                textAlign: TextAlign.center,
+    return GestureDetector(
+      onTap: onTap,
+      behavior: HitTestBehavior.opaque,
+      child: SizedBox(
+        width: centered ? double.infinity : null,
+        child: AnimatedScale(
+          scale: selected ? selectedScale : 1,
+          duration: AppDurations.containerTransform,
+          curve: Curves.easeOutCubic,
+          alignment: Alignment.center,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                width: AppSizes.membershipBenefitIconCircle,
+                height: AppSizes.membershipBenefitIconCircle,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: AppMembershipColors.benefitIconBg,
+                  borderRadius: BorderRadius.circular(AppRadius.full),
+                ),
+                child: AppAssetImage(
+                  assetPath: benefit.iconAsset,
+                  width: AppSizes.membershipBenefitIcon,
+                  height: AppSizes.membershipBenefitIcon,
+                ),
               ),
-            )
-          else
-            AppText(
-              benefit.label,
-              style: AppTextStyles.membershipBenefitLabel,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
-        ],
+              if (showLabel) ...[
+                const SizedBox(height: AppSizes.membershipBenefitIconLabelGap),
+                if (centered)
+                  SizedBox(
+                    width: double.infinity,
+                    child: AppText(
+                      benefit.label,
+                      style: AppTextStyles.membershipBenefitLabel,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.center,
+                    ),
+                  )
+                else
+                  AppText(
+                    benefit.label,
+                    style: AppTextStyles.membershipBenefitLabel,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.center,
+                  ),
+              ],
+            ],
+          ),
+        ),
       ),
     );
   }

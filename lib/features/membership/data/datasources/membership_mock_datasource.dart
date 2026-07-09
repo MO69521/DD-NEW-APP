@@ -1,5 +1,6 @@
 import '../../domain/entities/membership_agreement.dart';
 import '../../domain/entities/membership_benefit.dart';
+import '../../domain/entities/membership_benefit_detail.dart';
 import '../../domain/entities/membership_hero_slide.dart';
 import '../../domain/entities/membership_plan.dart';
 
@@ -121,6 +122,59 @@ class MembershipMockDataSource {
       id: 'vip_badge',
       iconAsset: '$_benefitIconBase/benefit_vip_badge.svg',
       label: '会员标识',
+    ),
+  ];
+
+  /// 会员权益详情（顺序 / 图标 / id 与 [benefits] 保持一致，便于按索引直达）。
+  List<MembershipBenefitDetail> benefitDetails() => const [
+    MembershipBenefitDetail(
+      id: 'check_in',
+      iconAsset: '$_benefitIconBase/benefit_check_in.svg',
+      label: '签到奖励',
+      description: '每日登录可以额外领取100能量。',
+      exampleImageAsset: '$_heroImageBase/benefit_check_in_example.png',
+    ),
+    MembershipBenefitDetail(
+      id: 'first_recharge',
+      iconAsset: '$_benefitIconBase/benefit_first_recharge.svg',
+      label: '首充加赠',
+      description: '首次充值额外赠送1000能量，开通更划算。',
+      exampleImageAsset: '$_heroImageBase/benefit_first_recharge_example.png',
+    ),
+    MembershipBenefitDetail(
+      id: 'reading_discount',
+      iconAsset: '$_benefitIconBase/benefit_reading_discount.svg',
+      label: '阅读85折',
+      description: '全场图书阅读享受专属85折优惠。',
+      exampleImageAsset: '$_heroImageBase/benefit_reading_discount_example.png',
+    ),
+    MembershipBenefitDetail(
+      id: 'costume',
+      iconAsset: '$_benefitIconBase/benefit_costume.svg',
+      label: '专属服装',
+      description: '解锁专属会员服装，展示你的独特身份。',
+      exampleImageAsset: '$_heroImageBase/benefit_costume_example.png',
+    ),
+    MembershipBenefitDetail(
+      id: 'theater',
+      iconAsset: '$_benefitIconBase/benefit_theater.svg',
+      label: '专属小剧场',
+      description: '独享专属小剧场内容，更多精彩等你探索。',
+      exampleImageAsset: '$_heroImageBase/benefit_theater_example.png',
+    ),
+    MembershipBenefitDetail(
+      id: 'gold_name',
+      iconAsset: '$_benefitIconBase/benefit_gold_name.svg',
+      label: '金色昵称',
+      description: '获得金色昵称显示，彰显尊贵身份。',
+      exampleImageAsset: '$_heroImageBase/benefit_gold_name_example.png',
+    ),
+    MembershipBenefitDetail(
+      id: 'vip_badge',
+      iconAsset: '$_benefitIconBase/benefit_vip_badge.svg',
+      label: '会员标识',
+      description: '专属会员标识，让你在社区中脱颖而出。',
+      exampleImageAsset: '$_heroImageBase/benefit_vip_badge_example.png',
     ),
   ];
 

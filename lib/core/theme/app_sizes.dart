@@ -515,6 +515,12 @@ abstract final class AppSizes {
   static const double membershipBenefitRowGap = 16;
   static const int membershipBenefitColumns = 4;
 
+  /// 会员特权详情页顶部图标横向导航条高度（图标 + 文案）。
+  static const double membershipBenefitNavHeight = 78;
+
+  /// 会员特权详情页示例图占位内的图标尺寸。
+  static const double membershipBenefitExampleIconSize = 48;
+
   /// 权益区切换单行布局的最小宽度；达到后 7 项均分容器总宽。
   static const double membershipBenefitGridMaxWidth = 420;
   static const double membershipCtaHeight = 42;

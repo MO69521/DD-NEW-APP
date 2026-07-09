@@ -2,14 +2,12 @@ import 'package:flutter/material.dart';
 
 import '../../core/constants/currency_config.dart';
 import '../../core/domain/entities/commerce_entities.dart';
-import '../../core/theme/app_brand_colors.dart';
 import '../../core/theme/app_radius.dart';
 import '../../core/theme/app_sizes.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../widgets/app_asset_image.dart';
 import '../widgets/app_text.dart';
-import '../widgets/aurora_background.dart';
 import '../../core/theme/app_welfare_colors.dart';
 
 /// L2 组件 — VIP 开通引导横幅（Figma 296:5304 / 386:2170）。
@@ -48,7 +46,6 @@ class VipPromoBanner extends StatelessWidget {
           child: Stack(
             clipBehavior: Clip.hardEdge,
             children: [
-              // 最底层：粉色渐变打底（极光透明区域透出此背景）
               Positioned.fill(
                 child: DecoratedBox(
                   decoration: BoxDecoration(
@@ -62,19 +59,6 @@ class VipPromoBanner extends StatelessWidget {
                     ),
                   ),
                   child: const SizedBox.expand(),
-                ),
-              ),
-              // 极光（紫色）在粉色底上缓慢流动；深色区透出底层粉色
-              Positioned.fill(
-                child: AuroraBackground(
-                  colorStops: const [
-                    AppBrandColors.vipSelectedBorder,
-                    AppBrandColors.vipGradientEnd,
-                    AppBrandColors.vipSelectedBorder,
-                  ],
-                  amplitude: 0.8,
-                  blend: 0.6,
-                  opacity: 1.0,
                 ),
               ),
               Positioned.fill(
