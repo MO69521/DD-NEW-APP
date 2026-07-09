@@ -77,6 +77,7 @@ export default function DesignSystemSpec() {
       <ColorSection />
       <SpacingSection />
       <RadiusSection />
+      <SizeIndexSection />
 
       <Divider />
 
@@ -865,6 +866,48 @@ function RadiusSection() {
             }}
           />,
         ].map(cell))}
+      />
+    </Stack>
+  );
+}
+
+function SizeIndexSection() {
+  const groups: Array<[string, string, string]> = [
+    ["通用基础", "描边 / 通用图标 / 启动图", "hairline · iconSm · splashLogoSize"],
+    ["顶栏 AppTopBar", "顶栏高度 / 图标框 / 返回钮", "topBar*"],
+    ["按钮 AppButton", "内边距 / loading / 图标间距", "buttonPadding*"],
+    ["搜索栏 / 玻璃模糊", "搜索框高 / 各级磨砂半径", "searchBarHeight · glassBlurSigma · strongBlurSigma"],
+    ["书城首页", "顶栏 / 加载 / 继续阅读浮层", "bookstore* · continueReading*"],
+    ["底部导航 AppBottomNav", "胶囊 / 图标 / 弹跳缩放", "bottomNav*"],
+    ["榜单", "指示器 / 轮播 / 头图 / 维度导航", "ranking* · tab*"],
+    ["书籍封面 / 书卡", "列表/网格封面 / 大封面横向书卡", "bookCover* · bookGrid* · bookCardLarge*"],
+    ["福利页", "头图 / 签到里程碑 / 任务时间线 / 充值弹窗", "welfare* · rechargePurchaseDialog*"],
+    ["书架页", "顶栏 / 阅读横幅 / 空状态 / 封面角标", "bookshelf* · bookCoverTag*"],
+    ["我的页", "Hero / 头像 / 快捷入口 / 成就勋章", "profile* · homeIndicator* · listRowMinHeight"],
+    ["我的-子页", "账号设置 / 消息 / 卡包", "accountSettings* · myMessages* · cardPack*"],
+    ["设置页", "Logo / 开关 AppSwitch", "settings* · appSwitch*"],
+    ["书籍详情页", "头图 / 目录抽屉 / 角色卡 / 讨论区 / 更新时间线", "bookDetail* · bookDiscussionDetail*"],
+    ["搜索页", "顶栏返回 / 输入图标 / 空状态", "searchAppBar* · searchInput* · searchEmpty*"],
+    ["会员页", "Hero 轮播 / 方案卡 / 权益宫格 / CTA / 特权详情", "membership*"],
+    ["伙伴页", "头部 / 角色卡 / 消息 Tab / 互动 Tab", "partner*"],
+    ["分类页", "筛选组 / chip / 下划线", "categoryFilter*"],
+    ["帮助与反馈", "Banner / 输入 / 上传框", "helpFeedback*"],
+    ["Toast / 交互阈值", "轻提示内边距 / 滑动切换阈值", "toast* · swipeTabVelocityThreshold"],
+  ];
+  return (
+    <Stack gap={10}>
+      <SectionTitle
+        zh="组件尺寸 token · 分组索引"
+        note="AppSizes · 组件级布局精确值（真值随源码为准）"
+        src="lib/core/theme/app_sizes.dart"
+      />
+      <Text tone="tertiary" size="small">
+        尺寸档不同于上方基阶体系，是按页面/组件命名的精确值集合。下表仅作「按 feature 分组」的导航索引，改值只改 <Code>app_sizes.dart</Code> 一处。
+      </Text>
+      <Table
+        headers={["分组", "覆盖范围", "Token 前缀 / 示例"]}
+        columnAlign={["left", "left", "left"]}
+        rows={groups.map(([g, cover, prefix]) => [g, cover, <Code key={g}>{prefix}</Code>])}
       />
     </Stack>
   );

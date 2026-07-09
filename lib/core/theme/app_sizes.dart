@@ -1,4 +1,10 @@
 /// 全局尺寸 token（Figma 精确值），禁止在 UI 组件内写死 layout 数值。
+///
+/// 说明：本文件是**尺寸 token 的唯一真源**（扁平数据集合，非 widget/逻辑），
+/// 经确认豁免架构规范 §11「文件 > 300 行必须拆分」——与 `app_text_styles.dart` 同属
+/// token registry 例外。Dart 无法将单个类跨文件拆分（`part` 不能向类追加成员），
+/// 按 feature 拆分需引入多个类并迁移约 170 个文件的调用点，收益低于风险，故维持单文件。
+/// 分组导航见 `design-system/README.md` §6.5。
 abstract final class AppSizes {
   // ── 通用 ──
   static const double hairline = 0.5;
@@ -234,7 +240,7 @@ abstract final class AppSizes {
   static const double profileMessagesIconSize = 18;
   static const double profilePartnerAvatarSize = 24;
   static const double profilePartnerAvatarGap = 6;
-  static const double profileShortcutIconSize = 32;
+  static const double profileShortcutIconSize = 24;
   static const double profileShortcutIconToLabelGap = 10;
   static const double profileShortcutItemHeight = 60;
   static const double profileShortcutRowGap = 30;

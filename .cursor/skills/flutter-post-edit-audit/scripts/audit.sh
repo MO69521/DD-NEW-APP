@@ -156,10 +156,14 @@ while IFS= read -r file; do
 done <<< "$CHANGED_FILES"
 
 # --- 7. File size ---
+# 例外：token registry（扁平数据单一真源，非 widget/逻辑复杂度）经确认豁免 §11。
 echo ""
 echo "--- File size check ---"
 while IFS= read -r file; do
   [ -f "$file" ] || continue
+  case "$file" in
+    lib/core/theme/app_sizes.dart|lib/core/theme/app_text_styles.dart) continue ;;
+  esac
   lines=$(wc -l < "$file" | tr -d ' ')
   if [ "$lines" -gt 300 ]; then
     report_warning "$file: $lines lines (> 300) — consider splitting"
