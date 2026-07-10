@@ -13,10 +13,20 @@ import '../../../../shared/widgets/book_cover.dart';
 
 /// 榜单宫格书单（2 列 × 3 行，左图右文），最多展示 6 本。
 class RankingBookGrid extends StatelessWidget {
-  const RankingBookGrid({super.key, required this.books, this.onBookTap});
+  const RankingBookGrid({
+    super.key,
+    required this.books,
+    this.onBookTap,
+    this.heroNamespace,
+  });
 
   final List<Book> books;
-  final ValueChanged<Book>? onBookTap;
+
+  /// 回调携带该卡封面的屏内唯一 Hero 标签，供详情页同 tag 飞行。
+  final void Function(Book book, Object coverHeroTag)? onBookTap;
+
+  /// Hero 标签命名空间；非空时封面参与飞行，标签为 `book-cover-<ns>-<id>`。
+  final String? heroNamespace;
 
   static double get contentHeight {
     final coverHeight =
@@ -49,6 +59,9 @@ class RankingBookGrid extends StatelessWidget {
           itemCount: visibleBooks.length,
           itemBuilder: (context, index) {
             final book = visibleBooks[index];
+            final heroTag = heroNamespace == null
+                ? null
+                : 'book-cover-$heroNamespace-${book.id}';
             return _RankingBookItem(
               title: book.title,
               category: book.category,
@@ -56,7 +69,10 @@ class RankingBookGrid extends StatelessWidget {
               coverWidth: coverWidth,
               coverHeight: coverHeight,
               rank: index + 1,
-              onTap: onBookTap == null ? null : () => onBookTap!(book),
+              heroTag: heroTag,
+              onTap: onBookTap == null
+                  ? null
+                  : () => onBookTap!(book, heroTag ?? book.id),
             );
           },
         );
@@ -73,6 +89,7 @@ class _RankingBookItem extends StatelessWidget {
     required this.coverWidth,
     required this.coverHeight,
     required this.rank,
+    this.heroTag,
     this.onTap,
   });
 
@@ -82,6 +99,7 @@ class _RankingBookItem extends StatelessWidget {
   final double coverWidth;
   final double coverHeight;
   final int rank;
+  final Object? heroTag;
   final VoidCallback? onTap;
 
   @override
@@ -99,6 +117,7 @@ class _RankingBookItem extends StatelessWidget {
                 assetPath: coverAsset,
                 width: coverWidth,
                 height: coverHeight,
+                heroTag: heroTag,
               ),
               Positioned(top: 0, left: 0, child: _RankingBadge(rank: rank)),
             ],
@@ -164,7 +183,7 @@ class _RankingBadge extends StatelessWidget {
       height: AppSizes.rankingMutedBadgeSize,
       alignment: Alignment.center,
       decoration: BoxDecoration(
-        color: AppColors.overlayScrim,
+        color: AppColors.rankingMutedBadgeScrim,
         borderRadius: BorderRadius.circular(AppRadius.xs),
       ),
       child: AppText(

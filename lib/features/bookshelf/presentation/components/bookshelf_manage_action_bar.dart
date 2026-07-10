@@ -82,11 +82,6 @@ class _SelectAllMark extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppSelectionMark(
-      isSelected: isSelected,
-      unselectedBackgroundColor: AppColors.backgroundDark,
-      unselectedBorderColor: AppColors.textOnDarkMuted,
-      unselectedBorderWidth: AppSizes.hairline,
-    );
+    return AppSelectionMark(isSelected: isSelected);
   }
 }

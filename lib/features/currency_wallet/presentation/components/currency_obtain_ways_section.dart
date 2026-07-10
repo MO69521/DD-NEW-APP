@@ -63,7 +63,7 @@ class _ObtainWayRow extends StatelessWidget {
           AppButton(
             label: way.actionLabel,
             size: AppButtonSize.small,
-            variant: AppButtonVariant.accent,
+            variant: AppButtonVariant.secondary,
             onPressed: () => onAction(way.action),
           ),
         ],

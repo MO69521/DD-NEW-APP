@@ -36,7 +36,7 @@ abstract final class AppSizes {
   static const double topBarHeight = 44;
   static const double topBarCircleSize = 32;
   static const double topBarIconFrameSize = 32;
-  static const double topBarIconFrameBlurSigma = 12;
+  static const double topBarIconFrameBlurSigma = 8;
   static const double topBarBackIconWidth = 14;
   static const double topBarBackIconHeight = 20;
   static const double topBarActionIconSize = 19;
@@ -47,7 +47,7 @@ abstract final class AppSizes {
 
   // ── 通用按钮 (AppButton) ──
   static const double buttonPaddingHNormal = 24;
-  static const double buttonPaddingVNormal = 12;
+  static const double buttonPaddingVNormal = 16;
   static const double buttonPaddingHSmall = 16;
   static const double buttonPaddingVSmall = 8;
   static const double buttonLoadingIndicatorSize = 16;
@@ -61,7 +61,7 @@ abstract final class AppSizes {
   static const double strongBlurSigma = 90;
   static const double statusBarPlaceholderHeight = 44;
   static const double bookstoreHeaderVerticalInset = 2;
-  static const double chromeBarBlurSigma = 16;
+  static const double chromeBarBlurSigma = 40;
   static const double bookstoreTopHeaderHeight = 44;
   static const double bookstoreSearchIconSize = 20;
   static const double bookstoreStickyHeaderHeight = bookstoreTopHeaderHeight;
@@ -76,7 +76,7 @@ abstract final class AppSizes {
   static const double bottomNavCapsuleHeight = 50;
   static const double bottomNavHorizontalInset = 24;
   static const double bottomNavBottomInset = 4;
-  static const double bottomNavBlurSigma = 8;
+  static const double bottomNavBlurSigma = 40;
   static const double bottomNavIconSize = 26;
   static const double bottomNavSelectedIconPeakScale = 1.18;
   static const double bottomNavSelectedIconDipScale = 0.92;
@@ -86,12 +86,17 @@ abstract final class AppSizes {
   static const double bottomNavItemContentBottomInset = 4;
 
   // 首页「继续阅读」浮层卡片
-  static const double continueReadingCoverWidth = 36;
-  static const double continueReadingCoverHeight = 48;
+  // 封面放大并溢出卡片顶部（悬浮抬起效果），配阴影
+  static const double continueReadingCoverWidth = 40;
+  static const double continueReadingCoverHeight = 50;
+  static const double continueReadingCoverShadowBlur = 12;
   static const double continueReadingCloseIconSize = 16;
   // 背景层：放大封面（宽度撑满卡片、居中）叠加页面背景，做模糊 + 半透明
-  static const double continueReadingBgBlurSigma = 90;
-  static const double continueReadingBgImageOpacity = 0.8;
+  static const double continueReadingBgBlurSigma = 60;
+  static const double continueReadingBgImageOpacity = 0.9;
+
+  // 首页「限时免费」倒计时数字块：1:1 正方形，居中容纳两位数
+  static const double limitedFreeCountdownBoxSize = 18;
 
   // 我的页「我的成就」勋章模块
   static const double profileAchievementMedalSize = 52;
@@ -139,7 +144,6 @@ abstract final class AppSizes {
   static const double welfareRechargeIllustrationWidth = 76;
   static const double welfareRechargeHotBadgeWidth = 33;
   static const double welfareRechargeHotBadgeHeight = 18;
-  static const double stardustExchangeBadgeWidth = 48;
   static const double welfareRechargePriceButtonHeight = 28;
   static const double welfareCheckInMilestoneHeight = 70;
   static const double welfareCheckInProgressLineHeight = 4;
@@ -174,8 +178,9 @@ abstract final class AppSizes {
   /// 性别头像圆底直径。
   static const double onboardingGenderAvatarSize = 80;
 
-  /// 步骤内容视口固定高度（PageView 跟手切换需有界高度，取较高的步骤）。
-  static const double onboardingStepViewportHeight = 300;
+  /// 步骤内容视口固定高度（PageView 跟手切换需有界高度，取较高的步骤——
+  /// 年龄步骤 4 个加高选项 + 标签，取整留余量避免溢出）。
+  static const double onboardingStepViewportHeight = 288;
 
   /// 「— 选择性别 —」标签两侧短线长度。
   static const double onboardingSectionLabelLineWidth = 20;
@@ -226,7 +231,9 @@ abstract final class AppSizes {
   static const double welfareTaskVipBadgeHeight = 18;
   static const double welfareTaskListVipBannerHeight = 66;
 
-  /// 任务卡向上叠压 VIP 入口的高度（Figma 559:23234 重叠 24px）。
+  /// 任务卡向上叠压 VIP 入口的高度：需 ≥ 任务卡圆角（`welfareCheckInSection`
+  /// = 24），让 VIP 横幅的粉色延伸到任务卡圆角背后，避免两侧露出深色背景；
+  /// 间距通过加大横幅底部内边距实现（见 `_TaskVipEntry`）。
   static const double welfareTaskCardOverlap = 24;
 
   /// 任务卡毛玻璃背景模糊半径（福利页 VIP 横幅叠压处）。
@@ -246,6 +253,8 @@ abstract final class AppSizes {
   static const double bookshelfClaimWelfareCtaPaddingHorizontal = 11;
   static const double bookshelfClaimWelfareCtaPaddingVertical = 7;
   static const double bookshelfManageActionFontSize = 14;
+  /// 通用选择标记（[AppSelectionMark]）圆形直径与内部对勾尺寸（全局统一）。
+  static const double selectionMarkSize = 20;
   static const double bookshelfSelectionCheckIconSize = 16;
   static const double selectionMarkCheckStrokeWidth = 1.6;
   static const double bookshelfEmptyBlockWidth = 200;
@@ -318,8 +327,8 @@ abstract final class AppSizes {
   /// 互动消息条目：引用书评左侧竖条宽度。
   static const double myMessagesQuoteBarWidth = 3;
 
-  /// Tab 未读数字红点最小直径。
-  static const double myMessagesUnreadBadgeMinSize = 16;
+  /// Tab 悬浮计数角标最小直径（顶部一级 Tab 通用，`AppTopTabBar` 复用）。
+  static const double tabBadgeMinSize = 16;
 
   /// 已读通知整条置灰不透明度。
   static const double myMessagesReadOpacity = 0.45;
@@ -464,6 +473,9 @@ abstract final class AppSizes {
   static const double bookDetailTabOuterPadding = 2;
   static const double bookDetailTabItemPaddingVertical = 10;
 
+  /// 讨论 Tab 右上角悬浮红点直径（不占布局宽度）。
+  static const double bookDetailTabBadgeDotSize = 6;
+
   static const double bookDetailCatalogPaddingH = 12.5;
   static const double bookDetailCatalogPaddingV = 16.5;
   static const double bookDetailCatalogArrowSize = 12;
@@ -477,8 +489,6 @@ abstract final class AppSizes {
 
   static const double bookDetailCharCoverWidth = 132;
   static const double bookDetailCharCoverHeight = 179;
-  static const double bookDetailCharFavPaddingH = 24;
-  static const double bookDetailCharFavPaddingV = 8;
   static const double bookDetailCharacterHelpDialogWidthRatio = 0.84;
   static const double bookDetailCharacterHelpDialogMaxHeightRatio = 0.62;
   static const double bookDetailCharacterHelpCloseSize = 32;
@@ -516,6 +526,17 @@ abstract final class AppSizes {
   static const double bookDetailReadCtaPaddingH = 28;
   static const double bookDetailReadCtaPaddingV = 14;
   static const double bookDetailGiftBadgePaddingH = 2;
+
+  // 悬浮促销条 (Figma 1598:4319)
+  static const double bookDetailPromoIconSize = 38;
+  static const double bookDetailPromoClaimHeight = 26;
+  static const double bookDetailPromoClaimMinWidth = 72;
+  static const double bookDetailPromoCloseSize = 12;
+  static const double bookDetailPromoRewardTagWidth = 30;
+  static const double bookDetailPromoRewardTagHeight = 21;
+  static const double bookDetailPromoRewardTagLeft = 30;
+  static const double bookDetailPromoRewardTagTopOverhang = 8;
+  static const double bookDetailPromoRewardTextTop = 2;
 
   // ── 搜索页（深色态） ──
   static const double searchAppBarBackIconWidth = 14;
@@ -617,8 +638,6 @@ abstract final class AppSizes {
   static const double partnerTopAuroraOpacity = 0.26;
   static const double partnerPageTitleFontSize = 22;
   static const double partnerTopTabFontSize = 16;
-  static const double partnerNotificationBadgeMinSize = 16;
-  static const double partnerNotificationBadgePaddingH = 4;
   static const double partnerSearchIconSize = 20;
   static const double partnerHeaderToCategoryGap = 12;
   static const double partnerCategoryChipHeight = 32;
@@ -733,10 +752,16 @@ abstract final class AppSizes {
 
   // ── 帮助与反馈页 ──
   static const double helpFeedbackTabBarReserveHeight = 40;
-  static const double helpFeedbackIssueTypeRadioSize = 18;
   static const double helpFeedbackInputMinHeight = 48;
   static const double helpFeedbackDescriptionMinHeight = 164;
-  static const double helpFeedbackUploadBoxSize = 64;
+  static const double helpFeedbackUploadRemoveIconSize = 14;
   static const int helpFeedbackDescriptionMaxLines = 6;
   static const int helpFeedbackDescriptionMaxLength = 300;
+
+  // ── 分享底部弹层 ──
+  /// 分享渠道圆形图标底直径。
+  static const double shareSheetChannelSize = 48;
+
+  /// 分享渠道图标字形尺寸。
+  static const double shareSheetChannelIconSize = 24;
 }

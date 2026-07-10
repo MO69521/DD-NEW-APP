@@ -7,7 +7,7 @@ import '../../core/theme/app_sizes.dart';
 import '../widgets/app_icon.dart';
 import '../widgets/app_pressable.dart';
 
-/// L2 — 顶部栏通用图标按钮：32×32 半透明模糊底框 + 居中图标。
+/// L2 — 顶部栏通用图标按钮：32×32 白色半透明（8%）模糊底框 + 居中图标。
 class AppTopBarIconButton extends StatelessWidget {
   const AppTopBarIconButton({
     super.key,

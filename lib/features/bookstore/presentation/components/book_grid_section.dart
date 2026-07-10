@@ -15,6 +15,7 @@ class BookGridSection extends StatelessWidget {
     this.actionLabel,
     this.onActionTap,
     this.onBookTap,
+    this.heroNamespace,
   });
 
   final String title;
@@ -22,7 +23,12 @@ class BookGridSection extends StatelessWidget {
   final int crossAxisCount;
   final String? actionLabel;
   final VoidCallback? onActionTap;
-  final ValueChanged<Book>? onBookTap;
+
+  /// 回调携带该卡封面的屏内唯一 Hero 标签，供详情页同 tag 飞行。
+  final void Function(Book book, Object coverHeroTag)? onBookTap;
+
+  /// Hero 标签命名空间；非空时封面参与飞行，标签为 `book-cover-<ns>-<id>`。
+  final String? heroNamespace;
 
   @override
   Widget build(BuildContext context) {
@@ -48,12 +54,22 @@ class BookGridSection extends StatelessWidget {
                 for (final book in books)
                   SizedBox(
                     width: itemWidth,
-                    child: BookGridCard(
-                      title: book.title,
-                      category: book.category,
-                      coverAsset: book.coverAsset,
-                      coverTag: book.coverTag,
-                      onTap: onBookTap == null ? null : () => onBookTap!(book),
+                    child: Builder(
+                      builder: (context) {
+                        final heroTag = heroNamespace == null
+                            ? null
+                            : 'book-cover-$heroNamespace-${book.id}';
+                        return BookGridCard(
+                          title: book.title,
+                          category: book.category,
+                          coverAsset: book.coverAsset,
+                          coverTag: book.coverTag,
+                          heroTag: heroTag,
+                          onTap: onBookTap == null
+                              ? null
+                              : () => onBookTap!(book, heroTag ?? book.id),
+                        );
+                      },
                     ),
                   ),
               ],

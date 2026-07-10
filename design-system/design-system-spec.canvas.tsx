@@ -89,6 +89,7 @@ export default function DesignSystemSpec() {
     { part: "02", title: "按压反馈", keywords: "", render: <PressableSection /> },
     { part: "02", title: "按钮", keywords: "", render: <ButtonSection /> },
     { part: "02", title: "卡片", keywords: "", render: <CardSection /> },
+    { part: "02", title: "角标", keywords: "", render: <CornerBadgeSection /> },
     { part: "02", title: "弹窗", keywords: "", render: <DialogSection /> },
     { part: "02", title: "底部弹层", keywords: "", render: <SheetSection /> },
     { part: "02", title: "顶栏", keywords: "", render: <TopBarSection /> },
@@ -97,6 +98,7 @@ export default function DesignSystemSpec() {
     { part: "02", title: "选中指示线", keywords: "", render: <TabIndicatorSection /> },
     { part: "02", title: "搜索框", keywords: "", render: <SearchSection /> },
     { part: "02", title: "开关", keywords: "", render: <SwitchSection /> },
+    { part: "02", title: "选项选择", keywords: "", render: <OptionSelectSection /> },
     { part: "02", title: "扫光高亮层", keywords: "", render: <SweepHighlightSection /> },
     { part: "02", title: "轻提示", keywords: "", render: <ToastSection /> },
     { part: "02", title: "空状态", keywords: "", render: <EmptyStateSection /> },
@@ -289,7 +291,7 @@ const MOTION_CATEGORIES: Array<{ title: string; items: MotionEffect[] }> = [
     items: [
       {
         name: "ElasticTabIndicator",
-        desc: "黄色下划线平移 + 宽度拉伸回弹（架构 §3.5）",
+        desc: "黄条平移 + 沿主轴长度拉伸回弹（架构 §3.5）；横向下划线 / 竖向侧边条（axis）",
         tech: "AnimationController + 分段 _stretchProgress",
         path: "lib/shared/components/elastic_tab_indicator.dart",
       },
@@ -460,7 +462,7 @@ const MOTION_CATEGORIES: Array<{ title: string; items: MotionEffect[] }> = [
       },
       {
         name: "继续阅读封面底纹",
-        desc: "页面背景色 + 放大封面背景层（撑满宽度、居中、半透明 + 模糊 sigma 90），随书籍变化",
+        desc: "页面背景色 + 放大封面背景层（撑满宽度、居中、半透明 + 模糊 continueReadingBgBlurSigma），随书籍变化；左侧封面缩略图放大溢出卡片顶部 + 投影，悬浮抬起",
         tech: "Opacity + ImageFiltered(continueReadingBgBlurSigma)",
         path: "lib/features/bookstore/presentation/components/continue_reading_card.dart",
       },
@@ -518,8 +520,8 @@ const MOTION_CATEGORIES: Array<{ title: string; items: MotionEffect[] }> = [
       },
       {
         name: "AppVerticalRailSwitch",
-        desc: "竖向轨道黄条滑动（榜单维度导航）",
-        tech: "AnimatedPositioned",
+        desc: "竖向轨道黄条平移 + 高度拉伸回弹（榜单维度导航），复用 ElasticTabIndicator",
+        tech: "ElasticTabIndicator(axis: Axis.vertical)",
         path: "lib/shared/components/app_vertical_rail_switch.dart",
       },
     ],
@@ -718,7 +720,7 @@ function SummaryStats() {
     ["6", "字重档"],
     ["8", "间距档"],
     ["5", "圆角档"],
-    ["14", "核心组件"],
+    ["16", "核心组件"],
     [`${MOTION_CATEGORIES.length}`, "动效类"],
     [`${motionItems}`, "动效项"],
   ];
@@ -935,7 +937,7 @@ const BTN_VARIANTS: Record<
 };
 
 const BTN_SIZES: Record<BtnSize, { pad: string; fs: number; fw: number }> = {
-  normal: { pad: "12px 24px", fs: 16, fw: 700 },
+  normal: { pad: "16px 24px", fs: 16, fw: 700 },
   compact: { pad: "8px 24px", fs: 14, fw: 500 },
   small: { pad: "8px 16px", fs: 14, fw: 500 },
 };
@@ -1255,8 +1257,9 @@ function ColorSection() {
         <Text tone="tertiary" size="small">
           福利金 <Code>#935C1A</Code>、伙伴粉 <Code>#FF4D88</Code>、VIP 粉{" "}
           <Code>#F393DC</Code>、签到高亮 <Code>#FFDD47</Code>、会员金渐变{" "}
-          <Code>#FFE794→#FFCD5A</Code>、面板深字 <Code>#202020</Code> 等 feature
-          色均定义于此，被各 feature 色板引用。
+          <Code>#FFE794→#FFCD5A</Code>、面板深字 <Code>#202020</Code>、中性图标灰{" "}
+          <Code>#B2B3BA</Code>/<Code>#ABACB3</Code>、榜单头图标题{" "}
+          <Code>#FFFAD7</Code> 等 feature 色均定义于此，被各 feature 色板引用。
         </Text>
       </Stack>
 
@@ -1285,6 +1288,14 @@ function ColorSection() {
             ["planSelectedSecondary", "white60", "选中卡次要文字"],
             ["planSelectedFooterText", "#202020（textOnLightPanel）", "选中卡脚文字"],
             ["searchHotAccent", "#FF7E32（accentOrange）", "搜索热词强调"],
+            ["bookDetailUpdateHighlight", "#F0B16A", "书详情「更新」高亮：日期 / 圆点边 / 文字"],
+            ["rankingSegmentedSelectedText", "#202020（textOnLightPanel）", "榜单分段控件选中字"],
+            ["segmentedSelectedBorder", "white00（透明）", "分段控件选中去描边（仅 fill + 黄字）"],
+            ["bookDetailPromoGradientStart/Mid/End", "#FF4E6C / #FF6F4B / #FF9359", "悬浮促销条底暖渐变（约 94°）"],
+            ["bookDetailPromoTitle", "white100", "促销条主标题"],
+            ["bookDetailPromoSubtitle", "#FFF9F2（promoSubtitle）", "促销条副标题"],
+            ["bookDetailPromoRewardText", "#E64D00（promoRewardText）", "+N 能量角标文字"],
+            ["bookDetailPromoCloseIcon", "white100", "促销条关闭 X"],
           ].map((r) => r.map(cell))}
         />
       </Stack>
@@ -1593,7 +1604,7 @@ function ButtonSection() {
         headers={["尺寸", "内边距 H×V", "文字", "使用场景"]}
         columnAlign={["left", "left", "left", "left"]}
         rows={[
-          ["normal", "24 × 12", "16 · bold", "页面 / 弹窗主按钮（默认）"],
+          ["normal", "24 × 16", "16 · bold", "页面 / 弹窗主按钮（默认）"],
           ["small", "16 × 8", "14 · medium", "卡片内 / 行内小操作（领取、去书城）"],
           ["compact", "24 × 8", "14 · medium", "紧凑行内操作（卡包页）"],
         ].map((r) => r.map(cell))}
@@ -1637,6 +1648,66 @@ function CardSection() {
           </Pressable>
         </div>
       </Stage>
+    </Stack>
+  );
+}
+
+function CornerBadgeSection() {
+  const badges: Array<{ label: string; bg: string; fg: string }> = [
+    { label: "热", bg: "#FF7E32", fg: "#FFFFFF" },
+    { label: "新手福利", bg: "#FF7E32", fg: "#FFFFFF" },
+    { label: "会员免费领", bg: "#FFCD50", fg: "#131820" },
+  ];
+  return (
+    <Stack gap={16}>
+      <SectionTitle
+        zh="角标"
+        note="AppCornerBadge（L2）· 卡片右上角斜切胶囊（topRight + bottomLeft 圆角 md，另两角直角）· 底色/文字色/水平内边距按语义传入 · 充值/兑换档位「热」「新手福利」「会员免费领」等共用"
+        src="lib/shared/components/app_corner_badge.dart"
+      />
+      <Stage>
+        <div style={{ display: "flex", gap: 20, flexWrap: "wrap" }}>
+          {badges.map((b) => (
+            <div key={b.label} style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+              <div
+                style={{
+                  position: "relative",
+                  width: 100,
+                  height: 128,
+                  background: APP.glass,
+                  borderRadius: 12,
+                  border: `${APP.hair} solid ${APP.border}`,
+                  overflow: "hidden",
+                }}
+              >
+                <div
+                  style={{
+                    position: "absolute",
+                    top: 0,
+                    right: 0,
+                    padding: "2px 6px",
+                    background: b.bg,
+                    color: b.fg,
+                    fontSize: 10,
+                    fontWeight: 600,
+                    lineHeight: 1.2,
+                    borderRadius: "0 12px 0 12px",
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  {b.label}
+                </div>
+              </div>
+              <Caption>{b.label}</Caption>
+            </div>
+          ))}
+        </div>
+      </Stage>
+      <Text tone="tertiary" size="small">
+        必须作 <Code>Stack</Code> 直接子节点（内部返回 <Code>Positioned</Code> 贴右上角）。
+        形状固定，仅 <Code>label</Code> / <Code>color</Code> / <Code>textColor</Code> /
+        <Code>horizontalPadding</Code> 按调用方语义传入。改组件，全项目角标同步。
+      </Text>
     </Stack>
   );
 }
@@ -1726,6 +1797,11 @@ function SheetSection() {
           </div>
         </div>
       </Stage>
+      <Text tone="tertiary" size="small">
+        通用分享弹层 <Code>ShareBottomSheet</Code>（
+        <Code>lib/shared/components/share_bottom_sheet.dart</Code>，L2）同规范：玻璃态 + 顶部圆角，
+        一行渠道（QQ好友/QQ空间/微信/朋友圈/分享海报）+「取消」，点渠道回调 <Code>onChannelTap</Code>。
+      </Text>
     </Stack>
   );
 }
@@ -1832,7 +1908,7 @@ function SegmentedSection() {
     <Stack gap={16}>
       <SectionTitle
         zh="分段切换"
-        note="AppSegmentedSwitch · 玻璃态 + 黄色滑块动画 · 书籍详情「详情/讨论/更新」、榜单频道同款（圆角 46）"
+        note="AppSegmentedSwitch · 玻璃态 + 滑块动画（选中无描边，8% 黄底 + 黄字）· 书籍详情「详情/讨论/更新」、榜单频道同款（圆角 46）"
         src="lib/shared/components/app_segmented_switch.dart"
       />
       <Stage>
@@ -1867,7 +1943,7 @@ function SegmentedDemo() {
           left: pad + sel * segWidth,
           width: segWidth,
           background: APP.segFill,
-          border: `${APP.hair} solid ${APP.accent}`,
+          border: "none",
           borderRadius: 999,
           transition: "left 0.25s cubic-bezier(0.2,0,0,1)",
         }}
@@ -1904,12 +1980,24 @@ function TabIndicatorSection() {
     <Stack gap={16}>
       <SectionTitle
         zh="选中指示线"
-        note="ElasticTabIndicator · 线宽 24 · 平移时先拉长再回弹"
+        note="ElasticTabIndicator · 线宽 24 · 平移时先拉长再回弹 · 竖向变体做侧边条"
         src="lib/shared/components/elastic_tab_indicator.dart"
       />
       <Stage>
         <TabIndicatorDemo />
       </Stage>
+      <Text tone="tertiary" size="small">
+        变宽（按文案实测）横向 Tab 行统一用 <Code>ElasticTabRow</Code>（
+        <Code>lib/shared/components/elastic_tab_row.dart</Code>）封装测量 + 叠加指示条，
+        支持跟手 <Code>swipeProgress</Code> 与主题色（书架 / 装扮 Tab 共用）。
+      </Text>
+      <Text tone="tertiary" size="small">
+        顶部同级 Tab 栏统一用 <Code>AppTopTabBar</Code>（
+        <Code>lib/shared/components/app_top_tab_bar.dart</Code>）：组合{" "}
+        <Code>AppAnimatedTabLabel</Code>（选中↔未选文字 <Code>TextStyle.lerp</Code> 平滑过渡）
+        + <Code>ElasticTabIndicator</Code> 黄条 + 可选未读角标（<Code>AppTopTabItem.badgeCount</Code>）；
+        伙伴顶栏「探索/消息/互动」、帮助与反馈「常见问题/意见反馈」共用。
+      </Text>
     </Stack>
   );
 }
@@ -2050,6 +2138,82 @@ function InteractiveSwitch({ stateKey, initial }: { stateKey: string; initial: b
         }}
       />
     </div>
+  );
+}
+
+function OptionSelectSection() {
+  const [gender, setGender] = useCanvasState<number>("demoGender", 0);
+  const [age, setAge] = useCanvasState<number>("demoAge", 1);
+  const genders = ["女生", "男生"];
+  const ages = ["18岁以下", "18-24岁", "25-30岁", "31岁以上"];
+  return (
+    <Stack gap={16}>
+      <SectionTitle
+        zh="选项选择"
+        note="GenderAvatarOption（圆形头像 · 选中彩色 + 黄描边环、未选灰 + 60% 白字）· AgeRangeOption（整行胶囊 · 选中 8% 黄底 + 黄字加粗、无描边）· 新手弹窗与偏好设置页共用"
+        src="lib/shared/components/gender_avatar_option.dart"
+      />
+      <Stage>
+        <Stack gap={20}>
+          <div style={{ display: "flex", gap: 24 }}>
+            {genders.map((g, i) => {
+              const active = i === gender;
+              return (
+                <div
+                  key={g}
+                  onClick={() => setGender(i)}
+                  style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8, cursor: "pointer", userSelect: "none" }}
+                >
+                  <div
+                    style={{
+                      width: 64,
+                      height: 64,
+                      borderRadius: "50%",
+                      background: active ? "rgba(255,232,71,0.10)" : APP.glass,
+                      border: active ? `2px solid ${APP.accent}` : `${APP.hair} solid ${APP.border}`,
+                      filter: active ? "none" : "grayscale(1)",
+                      opacity: active ? 1 : 0.6,
+                      transition: "all 0.18s",
+                    }}
+                  />
+                  <span style={{ fontSize: 13, color: active ? APP.text : APP.textMuted, fontWeight: active ? 600 : 400 }}>{g}</span>
+                </div>
+              );
+            })}
+          </div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 10, width: 260 }}>
+            {ages.map((a, i) => {
+              const active = i === age;
+              return (
+                <div
+                  key={a}
+                  onClick={() => setAge(i)}
+                  style={{
+                    padding: "10px 12px",
+                    borderRadius: 999,
+                    textAlign: "center",
+                    cursor: "pointer",
+                    userSelect: "none",
+                    fontSize: 14,
+                    background: active ? APP.segFill : APP.surface,
+                    border: active ? "none" : `${APP.hair} solid ${APP.border}`,
+                    color: active ? APP.accent : APP.textMuted,
+                    fontWeight: active ? 600 : 400,
+                    transition: "all 0.15s",
+                  }}
+                >
+                  {a}
+                </div>
+              );
+            })}
+          </div>
+        </Stack>
+      </Stage>
+      <Text tone="tertiary" size="small">
+        年龄胶囊源码 <Code>lib/shared/components/age_range_option.dart</Code>；两组选项在
+        新手弹窗与偏好设置页共用同一组件，选中样式全局统一。
+      </Text>
+    </Stack>
   );
 }
 

@@ -5,6 +5,7 @@ import '../../../../core/theme/app_radius.dart';
 import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
+import '../../../../shared/widgets/app_icon.dart';
 import '../../../../shared/widgets/app_pressable.dart';
 import '../../../../shared/widgets/app_text.dart';
 import '../../domain/entities/help_feedback_page_content.dart';
@@ -31,16 +32,24 @@ class HelpFeedbackFaqView extends StatelessWidget {
       ),
       children: [
         for (final group in groups) ...[
-          _FaqGroupCard(group: group, onQuestionTap: onQuestionTap),
+          // 分组标题独立于卡片之上，不被卡片块包裹。
+          AppText(
+            group.title,
+            style: AppTextStyles.labelMedium.copyWith(
+              color: AppColors.textOnDarkMuted,
+            ),
+          ),
           const SizedBox(height: AppSpacing.sm),
+          _FaqQuestionsCard(group: group, onQuestionTap: onQuestionTap),
+          const SizedBox(height: AppSpacing.lg),
         ],
       ],
     );
   }
 }
 
-class _FaqGroupCard extends StatelessWidget {
-  const _FaqGroupCard({required this.group, this.onQuestionTap});
+class _FaqQuestionsCard extends StatelessWidget {
+  const _FaqQuestionsCard({required this.group, this.onQuestionTap});
 
   final HelpFeedbackFaqGroup group;
   final ValueChanged<String>? onQuestionTap;
@@ -59,20 +68,6 @@ class _FaqGroupCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(
-              AppSpacing.md,
-              AppSpacing.sm,
-              AppSpacing.md,
-              AppSpacing.xs,
-            ),
-            child: AppText(
-              group.title,
-              style: AppTextStyles.labelMedium.copyWith(
-                color: AppColors.textOnDarkMuted,
-              ),
-            ),
-          ),
           for (var i = 0; i < group.questions.length; i++) ...[
             if (i > 0) const _FaqDivider(),
             _FaqQuestionRow(
@@ -116,10 +111,11 @@ class _FaqQuestionRow extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: AppSpacing.xs),
-              const Icon(
-                Icons.chevron_right_rounded,
-                color: AppColors.textOnDarkMuted,
-                size: AppSizes.topBarActionIconSize,
+              const AppIcon(
+                assetPath: 'assets/icons/arrow_right.svg',
+                width: AppSpacing.sm,
+                height: AppSpacing.sm,
+                color: AppColors.textOnDarkPlaceholder,
               ),
             ],
           ),

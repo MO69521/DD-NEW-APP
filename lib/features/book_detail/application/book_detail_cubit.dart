@@ -140,6 +140,25 @@ class BookDetailCubit extends Cubit<BookDetailState> {
     _emitActionToast('这部作品的热度值又提升了');
   }
 
+  void dismissPromo() {
+    if (state.interaction.isPromoDismissed) return;
+    emit(
+      state.copyWith(
+        interaction: state.interaction.copyWith(isPromoDismissed: true),
+      ),
+    );
+  }
+
+  void claimPromo() {
+    if (state.interaction.isPromoDismissed) return;
+    emit(
+      state.copyWith(
+        interaction: state.interaction.copyWith(isPromoDismissed: true),
+      ),
+    );
+    _emitActionToast('提示词已复制，去 APP 粘贴生成专属角色');
+  }
+
   void _emitActionToast(String message) {
     emit(
       state.copyWith(

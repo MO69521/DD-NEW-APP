@@ -38,6 +38,7 @@ class AppButton extends StatelessWidget {
     this.isLoading = false,
     this.isExpanded = false,
     this.leadingIcon,
+    this.fitLabel = false,
   });
 
   final String label;
@@ -48,6 +49,9 @@ class AppButton extends StatelessWidget {
   final bool isLoading;
   final bool isExpanded;
   final Widget? leadingIcon;
+
+  /// 窄容器内完整显示：为 true 时标签随宽度自动缩小而非省略号截断。
+  final bool fitLabel;
 
   Color get _backgroundColor => switch (variant) {
     AppButtonVariant.accent => AppColors.accentYellow,
@@ -67,19 +71,12 @@ class AppButton extends StatelessWidget {
     _ => null,
   };
 
-  static const double _disabledForegroundOpacity = 0.4;
-
   Color get _foregroundColor => switch (variant) {
     AppButtonVariant.accent => AppColors.rankingSegmentedSelectedText,
     AppButtonVariant.secondary => AppColors.textOnDark,
     AppButtonVariant.outline => AppColors.textOnDark,
     AppButtonVariant.vip => AppBrandColors.vipOnGradientText,
   };
-
-  Color _foregroundColorFor(bool enabled) {
-    if (enabled || isLoading) return _foregroundColor;
-    return _foregroundColor.withValues(alpha: _disabledForegroundOpacity);
-  }
 
   bool get _hasBorder => variant == AppButtonVariant.outline;
 
@@ -100,19 +97,29 @@ class AppButton extends StatelessWidget {
     ),
   };
 
-  TextStyle _textStyleFor(bool enabled) {
+  TextStyle _textStyle(Color color) {
     final base = size == AppButtonSize.normal
         ? AppTextStyles.buttonLabel16
         : AppTextStyles.bodyMedium.copyWith(fontWeight: AppFontWeights.medium);
-    return base.copyWith(color: _foregroundColorFor(enabled), height: AppLineHeights.none);
+    return base.copyWith(color: color, height: AppLineHeights.none);
   }
 
   @override
   Widget build(BuildContext context) {
-    final enabled = !isLoading && onPressed != null;
     final tapHandler = isLoading ? null : onPressed ?? onDisabledPressed;
     final radius = BorderRadius.circular(_radius);
-    final foregroundColor = _foregroundColorFor(enabled);
+
+    // 不可点击（禁用）态：非 loading 且无 onPressed。统一样式——4% 纯白填充 +
+    // 30% 白字，无渐变、无描边（全局一致，覆盖各变体）。
+    final isDisabled = onPressed == null && !isLoading;
+    final backgroundColor = isDisabled
+        ? AppColors.buttonDisabledFill
+        : _backgroundColor;
+    final gradient = isDisabled ? null : _gradient;
+    final showBorder = _hasBorder && !isDisabled;
+    final foregroundColor = isDisabled
+        ? AppColors.buttonDisabledText
+        : _foregroundColor;
 
     Widget content = isLoading
         ? SizedBox(
@@ -132,13 +139,23 @@ class AppButton extends StatelessWidget {
                 const SizedBox(width: AppSizes.buttonIconLabelGap),
               ],
               Flexible(
-                child: AppText(
-                  label,
-                  style: _textStyleFor(enabled),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  textAlign: TextAlign.center,
-                ),
+                child: fitLabel
+                    ? FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: AppText(
+                          label,
+                          style: _textStyle(foregroundColor),
+                          maxLines: 1,
+                          textAlign: TextAlign.center,
+                        ),
+                      )
+                    : AppText(
+                        label,
+                        style: _textStyle(foregroundColor),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.center,
+                      ),
               ),
             ],
           );
@@ -159,10 +176,10 @@ class AppButton extends StatelessWidget {
       onTap: tapHandler,
       child: Container(
         decoration: BoxDecoration(
-          color: _gradient == null ? _backgroundColor : null,
-          gradient: _gradient,
+          color: gradient == null ? backgroundColor : null,
+          gradient: gradient,
           borderRadius: radius,
-          border: _hasBorder
+          border: showBorder
               ? Border.all(
                   color: AppColors.borderGlass,
                   width: AppSizes.hairline,

@@ -53,12 +53,28 @@ abstract final class AppRouter {
     router.go(location, extra: extra);
   }
 
+  /// 跳转主 Tab 容器并切换到指定 Tab（如二级页「去福利页」→ 福利中心）。
+  static void goMainTab(int index) {
+    go('${AppRoutes.home}?tab=$index');
+  }
+
   /// 书籍详情页跳转入口：所有书卡点击统一走此方法，携带书籍以渲染真实封面。
-  static void goBookDetail(Book book, {bool isInShelf = false}) {
+  ///
+  /// [coverHeroTag] 为入口书卡封面的 Hero 标签；同一屏内同书多次出现时传入
+  /// 各自唯一的 tag，详情头图会用该 tag 飞行（缺省回退 `book-cover-<id>`）。
+  static void goBookDetail(
+    Book book, {
+    bool isInShelf = false,
+    Object? coverHeroTag,
+  }) {
     router.pushNamed(
       AppRoutes.bookDetailName,
       pathParameters: {'id': book.id},
-      extra: BookDetailRouteExtra(book: book, isInShelf: isInShelf),
+      extra: BookDetailRouteExtra(
+        book: book,
+        isInShelf: isInShelf,
+        coverHeroTag: coverHeroTag,
+      ),
     );
   }
 

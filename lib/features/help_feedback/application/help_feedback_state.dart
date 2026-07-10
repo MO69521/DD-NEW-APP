@@ -15,6 +15,7 @@ class HelpFeedbackState extends Equatable {
     this.bookName = '',
     this.phone = '',
     this.qq = '',
+    this.screenshotPaths = const [],
     this.errorMessage,
     this.submitMessage,
   });
@@ -27,8 +28,15 @@ class HelpFeedbackState extends Equatable {
   final String bookName;
   final String phone;
   final String qq;
+
+  /// 已选问题截图的本地文件路径（最多 [maxScreenshots] 张）。
+  final List<String> screenshotPaths;
   final String? errorMessage;
   final String? submitMessage;
+
+  static const int maxScreenshots = 4;
+
+  bool get canAddScreenshot => screenshotPaths.length < maxScreenshots;
 
   int get descriptionLength => description.length;
 
@@ -41,6 +49,7 @@ class HelpFeedbackState extends Equatable {
     String? bookName,
     String? phone,
     String? qq,
+    List<String>? screenshotPaths,
     String? errorMessage,
     bool clearErrorMessage = false,
     String? submitMessage,
@@ -55,6 +64,7 @@ class HelpFeedbackState extends Equatable {
       bookName: bookName ?? this.bookName,
       phone: phone ?? this.phone,
       qq: qq ?? this.qq,
+      screenshotPaths: screenshotPaths ?? this.screenshotPaths,
       errorMessage: clearErrorMessage
           ? null
           : errorMessage ?? this.errorMessage,
@@ -74,6 +84,7 @@ class HelpFeedbackState extends Equatable {
     bookName,
     phone,
     qq,
+    screenshotPaths,
     errorMessage,
     submitMessage,
   ];

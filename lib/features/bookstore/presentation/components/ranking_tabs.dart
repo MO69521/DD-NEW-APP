@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/theme/app_theme_context.dart';
+import '../../../../shared/components/app_animated_tab_label.dart';
 import '../../../../shared/widgets/app_pressable.dart';
-import '../../../../shared/widgets/app_text.dart';
 import '../../../../core/domain/entities/book.dart';
 
 /// 榜单 Tab 切换（推荐榜 / 人气榜 / 飙升榜 / 完结榜）。
@@ -54,18 +54,35 @@ class _RankingTabsState extends State<RankingTabs> {
   Widget build(BuildContext context) {
     final tabs = RankingTab.values;
 
-    return SingleChildScrollView(
-      controller: _scrollController,
-      scrollDirection: Axis.horizontal,
-      physics: const BouncingScrollPhysics(),
-      child: Row(
+    // 横向滚动到右缘时渐隐（不硬切）：ShaderMask 在右侧做透明渐变。
+    return ShaderMask(
+      blendMode: BlendMode.dstIn,
+      shaderCallback: (bounds) {
+        // 加宽渐隐区（40px）使右缘淡出更柔和自然。
+        const fadeWidth = AppSpacing.xl + AppSpacing.xs;
+        final fadeStop = bounds.width <= 0
+            ? 1.0
+            : (1 - (fadeWidth / bounds.width)).clamp(0.0, 1.0);
+        return LinearGradient(
+          begin: Alignment.centerLeft,
+          end: Alignment.centerRight,
+          colors: const [Colors.white, Colors.white, Colors.transparent],
+          stops: [0.0, fadeStop, 1.0],
+        ).createShader(bounds);
+      },
+      child: SingleChildScrollView(
+        controller: _scrollController,
+        scrollDirection: Axis.horizontal,
+        physics: const BouncingScrollPhysics(),
+        child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           for (var i = 0; i < tabs.length; i++) ...[
             if (i > 0) const SizedBox(width: AppSpacing.md),
             _RankingTabItem(
               tab: tabs[i],
-              isSelected: tabs[i] == widget.selected,
+              index: i,
+              selectedIndex: tabs.indexOf(widget.selected),
               onTap: () {
                 widget.onSelected(tabs[i]);
                 _syncScrollPosition(i);
@@ -73,8 +90,9 @@ class _RankingTabsState extends State<RankingTabs> {
             ),
           ],
         ],
-      ),
-    );
+          ),
+        ),
+      );
   }
 
   void _syncScrollPosition(int selectedIndex) {
@@ -90,12 +108,14 @@ class _RankingTabsState extends State<RankingTabs> {
 class _RankingTabItem extends StatelessWidget {
   const _RankingTabItem({
     required this.tab,
-    required this.isSelected,
+    required this.index,
+    required this.selectedIndex,
     required this.onTap,
   });
 
   final RankingTab tab;
-  final bool isSelected;
+  final int index;
+  final int selectedIndex;
   final VoidCallback? onTap;
 
   @override
@@ -104,16 +124,16 @@ class _RankingTabItem extends StatelessWidget {
 
     return AppPressable(
       onTap: onTap,
-      child: AppText(
-        tab.label,
-        style:
-            (isSelected
-                    ? AppTextStyles.tabActiveDark
-                    : AppTextStyles.tabInactiveDark)
-                .copyWith(
-                  color: isSelected ? colors.textPrimary : colors.textMuted,
-                ),
-        maxLines: 1,
+      child: AppAnimatedTabLabel(
+        index: index,
+        selectedIndex: selectedIndex,
+        label: tab.label,
+        activeStyle: AppTextStyles.tabActiveDark.copyWith(
+          color: colors.textPrimary,
+        ),
+        inactiveStyle: AppTextStyles.tabInactiveDark.copyWith(
+          color: colors.textMuted,
+        ),
       ),
     );
   }

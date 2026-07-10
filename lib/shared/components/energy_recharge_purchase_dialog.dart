@@ -258,11 +258,7 @@ class _PaymentMethodRow extends StatelessWidget {
             Expanded(
               child: AppText(method.label, style: AppTextStyles.bodyMediumDark),
             ),
-            AppSelectionMark(
-              isSelected: isSelected,
-              unselectedBorderColor: AppColors.borderGlass,
-              unselectedBorderWidth: AppSizes.hairline,
-            ),
+            AppSelectionMark(isSelected: isSelected),
           ],
         ),
       ),

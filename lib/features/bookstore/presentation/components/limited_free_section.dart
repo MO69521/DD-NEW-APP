@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../../../../core/domain/entities/book.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_radius.dart';
+import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/theme/app_welfare_colors.dart';
@@ -24,7 +25,9 @@ class LimitedFreeSection extends StatefulWidget {
 
   final List<Book> books;
   final VoidCallback? onMoreTap;
-  final ValueChanged<Book>? onBookTap;
+
+  /// 回调携带该卡封面的屏内唯一 Hero 标签，供详情页同 tag 飞行。
+  final void Function(Book book, Object coverHeroTag)? onBookTap;
 
   @override
   State<LimitedFreeSection> createState() => _LimitedFreeSectionState();
@@ -99,14 +102,21 @@ class _LimitedFreeSectionState extends State<LimitedFreeSection> {
                         ),
                         child: SizedBox(
                           width: itemWidth,
-                          child: BookGridCard(
-                            title: visibleBooks[index].title,
-                            category: visibleBooks[index].category,
-                            coverAsset: visibleBooks[index].coverAsset,
-                            coverTag: visibleBooks[index].coverTag,
-                            onTap: widget.onBookTap == null
-                                ? null
-                                : () => widget.onBookTap!(visibleBooks[index]),
+                          child: Builder(
+                            builder: (context) {
+                              final book = visibleBooks[index];
+                              final heroTag = 'book-cover-limitedfree-${book.id}';
+                              return BookGridCard(
+                                title: book.title,
+                                category: book.category,
+                                coverAsset: book.coverAsset,
+                                coverTag: book.coverTag,
+                                heroTag: heroTag,
+                                onTap: widget.onBookTap == null
+                                    ? null
+                                    : () => widget.onBookTap!(book, heroTag),
+                              );
+                            },
                           ),
                         ),
                       ),
@@ -205,18 +215,18 @@ class _CountdownValue extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DecoratedBox(
+    return Container(
+      width: AppSizes.limitedFreeCountdownBoxSize,
+      height: AppSizes.limitedFreeCountdownBoxSize,
+      alignment: Alignment.center,
       decoration: BoxDecoration(
         color: AppWelfareColors.hotSaleBadge,
         borderRadius: BorderRadius.circular(AppRadius.xs),
       ),
-      child: Padding(
-        padding: const EdgeInsets.all(AppSpacing.xxsHalf),
-        child: AppText(
-          value,
-          style: AppTextStyles.captionMd.copyWith(
-            color: AppWelfareColors.hotSaleBadgeText,
-          ),
+      child: AppText(
+        value,
+        style: AppTextStyles.captionMd.copyWith(
+          color: AppWelfareColors.hotSaleBadgeText,
         ),
       ),
     );

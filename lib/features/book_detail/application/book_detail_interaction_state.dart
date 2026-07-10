@@ -10,6 +10,7 @@ class BookDetailInteractionState extends Equatable {
     this.selectedDiscussionFilter = BookDiscussionFilter.all,
     this.isInShelf = false,
     this.isGiftSent = false,
+    this.isPromoDismissed = false,
   });
 
   final BookDetailTab selectedTab;
@@ -17,11 +18,15 @@ class BookDetailInteractionState extends Equatable {
   final bool isInShelf;
   final bool isGiftSent;
 
+  /// 悬浮促销条本次进入详情页是否已被关闭（会话级，不持久化）。
+  final bool isPromoDismissed;
+
   BookDetailInteractionState copyWith({
     BookDetailTab? selectedTab,
     BookDiscussionFilter? selectedDiscussionFilter,
     bool? isInShelf,
     bool? isGiftSent,
+    bool? isPromoDismissed,
   }) {
     return BookDetailInteractionState(
       selectedTab: selectedTab ?? this.selectedTab,
@@ -29,6 +34,7 @@ class BookDetailInteractionState extends Equatable {
           selectedDiscussionFilter ?? this.selectedDiscussionFilter,
       isInShelf: isInShelf ?? this.isInShelf,
       isGiftSent: isGiftSent ?? this.isGiftSent,
+      isPromoDismissed: isPromoDismissed ?? this.isPromoDismissed,
     );
   }
 
@@ -38,5 +44,6 @@ class BookDetailInteractionState extends Equatable {
     selectedDiscussionFilter,
     isInShelf,
     isGiftSent,
+    isPromoDismissed,
   ];
 }

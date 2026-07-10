@@ -98,8 +98,11 @@ class BookLargeRowListSkeleton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // 作为整屏加载占位：视口高度不足以容纳全部行时，多余行裁剪而非溢出报错
+    // （占位不需要滚动，仅需在有界高度内安全绘制）。
     return AppShimmer(
-      child: Padding(
+      child: SingleChildScrollView(
+        physics: const NeverScrollableScrollPhysics(),
         padding: padding,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,

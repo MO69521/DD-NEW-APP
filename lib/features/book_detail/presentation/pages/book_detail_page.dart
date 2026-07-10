@@ -9,6 +9,7 @@ import '../../../../shared/components/app_blurred_chrome_bar.dart';
 import '../../../../shared/components/app_top_bar.dart';
 import '../../../../shared/components/app_toast.dart';
 import '../../../../shared/components/empty_state.dart';
+import '../../../../shared/components/share_bottom_sheet.dart';
 import '../../../../shared/layouts/app_scroll_blur_scope.dart';
 import '../../../../shared/widgets/app_button.dart';
 import '../../../../shared/widgets/overscroll_stretch.dart';
@@ -22,11 +23,15 @@ import '../components/book_detail_catalog_drawer.dart';
 import '../components/book_detail_bottom_bar.dart';
 import '../components/book_detail_content.dart';
 import '../components/book_detail_hero_cover.dart';
+import '../components/book_detail_promo_bar.dart';
 import '../components/book_detail_quick_reply_sheet.dart';
 
 /// 书籍详情页（Figma 183:1874）：仅渲染 state、触发 action。
 class BookDetailPage extends StatelessWidget {
-  const BookDetailPage({super.key});
+  const BookDetailPage({super.key, this.coverHeroTag});
+
+  /// 入口书卡传入的封面 Hero 标签；缺省回退 `book-cover-<id>`。
+  final Object? coverHeroTag;
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +73,7 @@ class BookDetailPage extends StatelessWidget {
                 children: [
                   BookDetailHeroCover(
                     coverAsset: seed.coverAsset,
-                    heroTag: 'book-cover-${cubit.bookId}',
+                    heroTag: coverHeroTag ?? 'book-cover-${cubit.bookId}',
                   ),
                   const Expanded(
                     child: Center(child: CircularProgressIndicator()),
@@ -95,11 +100,13 @@ class BookDetailPage extends StatelessWidget {
 
           return _BookDetailView(
             detail: detail,
+            coverHeroTag: coverHeroTag,
             selectedTab: state.interaction.selectedTab,
             selectedDiscussionFilter:
                 state.interaction.selectedDiscussionFilter,
             isInShelf: state.interaction.isInShelf,
             isGiftSent: state.interaction.isGiftSent,
+            isPromoDismissed: state.interaction.isPromoDismissed,
           );
         },
       ),
@@ -110,17 +117,21 @@ class BookDetailPage extends StatelessWidget {
 class _BookDetailView extends StatefulWidget {
   const _BookDetailView({
     required this.detail,
+    required this.coverHeroTag,
     required this.selectedTab,
     required this.selectedDiscussionFilter,
     required this.isInShelf,
     required this.isGiftSent,
+    required this.isPromoDismissed,
   });
 
   final BookDetail detail;
+  final Object? coverHeroTag;
   final BookDetailTab selectedTab;
   final BookDiscussionFilter selectedDiscussionFilter;
   final bool isInShelf;
   final bool isGiftSent;
+  final bool isPromoDismissed;
 
   @override
   State<_BookDetailView> createState() => _BookDetailViewState();
@@ -165,6 +176,15 @@ class _BookDetailViewState extends State<_BookDetailView> {
     AppToast.show(context, '$label功能开发中');
   }
 
+  /// 促销条文案用的角色名：优先取角色列表首位，缺省回退书名。
+  String get _promoCharacterName {
+    final characters = widget.detail.characters;
+    if (characters.isNotEmpty && characters.first.name.trim().isNotEmpty) {
+      return characters.first.name;
+    }
+    return widget.detail.title;
+  }
+
   Future<void> _openQuickReply(
     BuildContext context,
     BookDiscussionPost post,
@@ -202,13 +222,24 @@ class _BookDetailViewState extends State<_BookDetailView> {
 
     return Scaffold(
       backgroundColor: AppColors.backgroundDark,
-      bottomNavigationBar: BookDetailBottomBar(
-        isInShelf: widget.isInShelf,
-        isGiftSent: widget.isGiftSent,
-        giftCount: widget.detail.giftCount,
-        onShelfTap: cubit.toggleShelf,
-        onGiftTap: cubit.sendHeart,
-        onReadTap: () => _comingSoon(context, '阅读器'),
+      bottomNavigationBar: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (!widget.isPromoDismissed)
+            BookDetailPromoBar(
+              title: '打开腾讯元宝生成专属${_promoCharacterName}',
+              onClaim: cubit.claimPromo,
+              onClose: cubit.dismissPromo,
+            ),
+          BookDetailBottomBar(
+            isInShelf: widget.isInShelf,
+            isGiftSent: widget.isGiftSent,
+            giftCount: widget.detail.giftCount,
+            onShelfTap: cubit.toggleShelf,
+            onGiftTap: cubit.sendHeart,
+            onReadTap: () => _comingSoon(context, '阅读器'),
+          ),
+        ],
       ),
       body: AppScrollBlurScope(
         builder: (context, topBlurEnabled) => Stack(
@@ -231,7 +262,9 @@ class _BookDetailViewState extends State<_BookDetailView> {
                             AppSizes.bookDetailHeroAspectRatio,
                         child: BookDetailHeroCover(
                           coverAsset: widget.detail.coverAsset,
-                          heroTag: 'book-cover-${widget.detail.id}',
+                          heroTag:
+                              widget.coverHeroTag ??
+                              'book-cover-${widget.detail.id}',
                         ),
                       ),
                       const SizedBox(
@@ -287,7 +320,11 @@ class _BookDetailViewState extends State<_BookDetailView> {
                   actions: [
                     AppTopBarAction(
                       iconAsset: 'assets/icons/ranking/share.svg',
-                      onTap: () => _comingSoon(context, '分享'),
+                      onTap: () => ShareBottomSheet.show(
+                        context,
+                        onChannelTap: (channel) =>
+                            AppToast.show(context, '分享到$channel'),
+                      ),
                     ),
                   ],
                 ),

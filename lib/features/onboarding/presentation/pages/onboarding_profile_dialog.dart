@@ -10,14 +10,14 @@ import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../shared/components/app_blurred_dialog.dart';
 import '../../../../shared/components/app_page_dots.dart';
+import '../../../../shared/components/age_range_option.dart';
 import '../../../../shared/components/app_swipe_tab_switcher.dart';
 import '../../../../shared/components/dialog_close_button.dart';
+import '../../../../shared/components/gender_avatar_option.dart';
 import '../../../../shared/widgets/app_button.dart';
 import '../../../../shared/widgets/app_text.dart';
 import '../../application/onboarding_cubit.dart';
 import '../../application/onboarding_state.dart';
-import '../components/onboarding_age_option.dart';
-import '../components/onboarding_gender_option.dart';
 
 /// L3 页面 — 新手基础信息收集弹窗（性别 / 年龄，深色主题）。
 ///
@@ -161,20 +161,32 @@ class _GenderStep extends StatelessWidget {
       children: [
         const _SectionLabel('选择性别'),
         const SizedBox(height: AppSpacing.lg),
-        OnboardingGenderOption(
-          label: UserGender.female.label,
-          activeAsset: 'assets/images/onboarding/gender_female_active.png',
-          inactiveAsset: 'assets/images/onboarding/gender_female_inactive.png',
-          selected: gender == UserGender.female,
-          onTap: () => _selectGenderWithPreview(context, UserGender.female),
-        ),
-        const SizedBox(height: AppSpacing.lg),
-        OnboardingGenderOption(
-          label: UserGender.male.label,
-          activeAsset: 'assets/images/onboarding/gender_male_active.png',
-          inactiveAsset: 'assets/images/onboarding/gender_male_inactive.png',
-          selected: gender == UserGender.male,
-          onTap: () => _selectGenderWithPreview(context, UserGender.male),
+        Row(
+          children: [
+            Expanded(
+              child: GenderAvatarOption(
+                label: UserGender.female.label,
+                activeAsset:
+                    'assets/images/onboarding/gender_female_active.png',
+                inactiveAsset:
+                    'assets/images/onboarding/gender_female_inactive.png',
+                selected: gender == UserGender.female,
+                onTap: () =>
+                    _selectGenderWithPreview(context, UserGender.female),
+              ),
+            ),
+            const SizedBox(width: AppSpacing.md),
+            Expanded(
+              child: GenderAvatarOption(
+                label: UserGender.male.label,
+                activeAsset: 'assets/images/onboarding/gender_male_active.png',
+                inactiveAsset:
+                    'assets/images/onboarding/gender_male_inactive.png',
+                selected: gender == UserGender.male,
+                onTap: () => _selectGenderWithPreview(context, UserGender.male),
+              ),
+            ),
+          ],
         ),
       ],
     );
@@ -214,7 +226,7 @@ class _AgeStep extends StatelessWidget {
         const SizedBox(height: AppSpacing.lg),
         for (var i = 0; i < values.length; i++) ...[
           if (i > 0) const SizedBox(height: AppSpacing.sm),
-          OnboardingAgeOption(
+          AgeRangeOption(
             label: values[i].label,
             selected: ageRange == values[i],
             onTap: () => cubit.selectAgeRange(values[i]),

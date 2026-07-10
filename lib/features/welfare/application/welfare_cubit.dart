@@ -6,6 +6,7 @@ import '../../../routes/app_router.dart';
 import '../../../routes/app_routes.dart';
 import '../data/datasources/welfare_mock_datasource.dart';
 import '../data/repositories/welfare_repository_impl.dart';
+import '../domain/entities/welfare_models.dart';
 import '../domain/repositories/welfare_repository.dart';
 import 'welfare_domain_state.dart';
 import 'welfare_state.dart';
@@ -18,6 +19,9 @@ class WelfareCubit extends Cubit<WelfareState> {
       super(const WelfareState());
 
   final WelfareRepository _repository;
+
+  /// 每日签到聚合数据（未加载时为 null）；供首页首启签到弹窗复用。
+  CheckInSummary? get checkInSummary => state.domain.content?.checkInSummary;
 
   Future<void> load() async {
     emit(
@@ -42,6 +46,12 @@ class WelfareCubit extends Cubit<WelfareState> {
         ),
       );
     }
+  }
+
+  /// 每日签到：标记今日已签到（一天仅可签到一次，签到后按钮切换为看视频）。
+  void checkIn() {
+    if (state.ui.hasCheckedInToday) return;
+    emit(state.copyWith(ui: state.ui.copyWith(hasCheckedInToday: true)));
   }
 
   void onCurrencyTap(CurrencyType type) {

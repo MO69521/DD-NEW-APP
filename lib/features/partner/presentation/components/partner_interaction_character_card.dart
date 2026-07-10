@@ -4,6 +4,7 @@ import '../../../../core/theme/app_partner_colors.dart';
 import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
+import '../../../../shared/widgets/app_icon.dart';
 import '../../../../shared/widgets/app_pressable.dart';
 import '../../../../shared/widgets/app_text.dart';
 import '../../domain/entities/partner_interaction_scene.dart';
@@ -70,9 +71,10 @@ class PartnerInteractionCharacterCard extends StatelessWidget {
               size: AppSizes.partnerInteractionSideActionIconSize,
               color: AppPartnerColors.textSecondary,
             ),
-            Icon(
-              Icons.chevron_right,
-              size: AppSizes.partnerInteractionSideActionIconSize,
+            AppIcon(
+              assetPath: 'assets/icons/arrow_right.svg',
+              width: AppSizes.partnerInteractionSideActionIconSize,
+              height: AppSizes.partnerInteractionSideActionIconSize,
               color: AppPartnerColors.textSecondary,
             ),
           ],

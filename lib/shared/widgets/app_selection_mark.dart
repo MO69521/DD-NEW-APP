@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_sizes.dart';
-import '../../core/theme/app_spacing.dart';
 
 class AppSelectionMark extends StatelessWidget {
   const AppSelectionMark({
@@ -14,7 +13,7 @@ class AppSelectionMark extends StatelessWidget {
     this.selectedBackgroundColor = AppColors.accentYellow,
     this.selectedBorderColor = AppColors.accentYellow,
     this.selectedBorderWidth = AppSizes.hairline,
-    this.unselectedBorderWidth = AppSizes.borderWidthEmphasis,
+    this.unselectedBorderWidth = AppSizes.hairline,
   });
 
   final bool isSelected;
@@ -37,7 +36,7 @@ class AppSelectionMark extends StatelessWidget {
         ),
       ),
       child: SizedBox.square(
-        dimension: AppSpacing.lg,
+        dimension: AppSizes.selectionMarkSize,
         child: isSelected
             ? const Center(
                 child: SizedBox.square(

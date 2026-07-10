@@ -68,6 +68,13 @@ abstract final class AppBrandColors {
   static const Color checkInYellow = Color(0xFFFCE64D);
   static const Color checkInHighlightHeader = Color(0xFFFFDD47);
 
+  // ── 书籍详情悬浮促销条（Figma 1598:4319）──
+  static const Color promoBarGradientStart = Color(0xFFFF4E6C);
+  static const Color promoBarGradientMid = Color(0xFFFF6F4B);
+  static const Color promoBarGradientEnd = Color(0xFFFF9359);
+  static const Color promoSubtitle = Color(0xFFFFF9F2);
+  static const Color promoRewardText = Color(0xFFE64D00);
+
   // ── 中性辅助 ──
   static const Color textOnLightPanel = Color(0xFF202020);
   static const Color originalPriceMuted = Color(0xFF9B9B9B);

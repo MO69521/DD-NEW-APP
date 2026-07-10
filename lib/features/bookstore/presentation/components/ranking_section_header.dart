@@ -54,14 +54,14 @@ class RankingSectionHeader extends StatelessWidget {
                 AppText(
                   '完整榜单',
                   style: AppTextStyles.linkSmallDark.copyWith(
-                    color: AppColors.accentYellow,
+                    color: AppColors.textOnDark,
                   ),
                 ),
                 AppIcon(
                   assetPath: 'assets/icons/arrow_right.svg',
                   width: AppSizes.rankingFullListIconSize,
                   height: AppSizes.rankingFullListIconSize,
-                  color: AppColors.accentYellow,
+                  color: AppColors.textOnDark,
                 ),
               ],
             ),

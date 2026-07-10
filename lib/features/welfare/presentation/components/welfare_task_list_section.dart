@@ -100,11 +100,13 @@ class _TaskVipEntry extends StatelessWidget {
       onTap: onTap,
       pressScale: AppSizes.tapPressScaleSubtle,
       child: Container(
+        // 底部内边距加大：横幅粉色向下延伸，在 VIP 徽标与任务卡之间留出明显间距，
+        // 且延伸段被任务卡向上叠压覆盖（见 welfareTaskCardOverlap），两侧不露底。
         padding: const EdgeInsets.only(
           left: AppSpacing.sm,
           right: AppSpacing.sm,
           top: AppSpacing.md,
-          bottom: AppSpacing.lg,
+          bottom: AppSpacing.xxl,
         ),
         decoration: BoxDecoration(
           gradient: const LinearGradient(

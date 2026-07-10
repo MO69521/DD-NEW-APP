@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../core/theme/app_radius.dart';
 import '../../core/theme/app_sizes.dart';
 import '../../core/theme/app_colors.dart';
+import 'book_cover_hero.dart';
 
 /// Level 1 — 书籍封面图，支持固定尺寸或宽高比。
 class BookCover extends StatelessWidget {
@@ -76,7 +77,12 @@ class BookCover extends StatelessWidget {
     );
 
     if (heroTag == null) return cover;
-    return Hero(tag: heroTag!, child: cover);
+    return Hero(
+      tag: heroTag!,
+      createRectTween: bookCoverHeroRectTween,
+      flightShuttleBuilder: bookCoverHeroFlightShuttleBuilder,
+      child: cover,
+    );
   }
 
   Widget _buildLayeredCover(int? cacheWidth) {

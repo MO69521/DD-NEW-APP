@@ -49,16 +49,45 @@ filter_undocumented_literals() {
   while IFS= read -r value; do
     [ -z "$value" ] && continue
     local raw="$value"
+    local hexhash=""
     case "$value" in
-      Color\(0x*\)) raw="${value#Color(}"; raw="${raw%)}" ;;
+      Color\(0x*\))
+        raw="${value#Color(}"; raw="${raw%)}"          # 0xAARRGGBB
+        # 规范文档以 #RRGGBB 记录颜色：从 0x[AA]RRGGBB 取末 6 位转 #RRGGBB。
+        local hexbody="${raw#0x}"
+        local rgb="${hexbody: -6}"
+        hexhash="#$(printf '%s' "$rgb" | tr '[:lower:]' '[:upper:]')"
+        ;;
       fontSize:*) raw="$(printf '%s' "$value" | awk -F: '{gsub(/[[:space:]]/, "", $2); print $2}')" ;;
       height:*) raw="$(printf '%s' "$value" | awk -F: '{gsub(/[[:space:]]/, "", $2); print $2}')" ;;
     esac
-    if ! rg -Fq "$value" "$SPEC" 2>/dev/null && ! rg -Fq "$raw" "$SPEC" 2>/dev/null; then
+    if ! rg -Fq "$value" "$SPEC" 2>/dev/null \
+      && ! rg -Fq "$raw" "$SPEC" 2>/dev/null \
+      && { [ -z "$hexhash" ] || ! rg -Fiq "$hexhash" "$SPEC" 2>/dev/null; }; then
       missing="${missing}${value}"$'\n'
     fi
   done <<< "$values"
   printf '%s' "$missing"
+}
+
+# token 是否已登记：①全名被提及；或 ②被 README「前缀分组」通配覆盖
+# （§6.5 尺寸表以 `bookDetail*` / `topBar*` / `tab*` 等前缀 glob 收录，非逐名列出）。
+token_documented() {
+  local token="$1"
+  rg -q "(^|[^A-Za-z0-9_])${token}([^A-Za-z0-9_]|$)" "$SPEC" 2>/dev/null && return 0
+  local pfx
+  while read -r pfx; do
+    [ -z "$pfx" ] && continue
+    rg -Fq "${pfx}*" "$SPEC" 2>/dev/null && return 0
+  done < <(printf '%s' "$token" | awk '{
+    s=$0; out="";
+    for(i=1;i<=length(s);i++){
+      c=substr(s,i,1);
+      if(i>1 && c ~ /[A-Z]/){ print out }
+      out=out c;
+    }
+  }')
+  return 1
 }
 
 filter_undocumented_tokens() {
@@ -66,11 +95,7 @@ filter_undocumented_tokens() {
   local missing=""
   while IFS= read -r token; do
     [ -z "$token" ] && continue
-    if rg -q "(^|[^A-Za-z0-9_])${token}([^A-Za-z0-9_]|$)" "$SPEC" 2>/dev/null; then
-      :
-    else
-      missing="${missing}${token}"$'\n'
-    fi
+    token_documented "$token" || missing="${missing}${token}"$'\n'
   done <<< "$tokens"
   printf '%s' "$missing"
 }

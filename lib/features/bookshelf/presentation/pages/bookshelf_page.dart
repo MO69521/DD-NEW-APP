@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/constants/main_tab_config.dart';
 import '../../../../core/constants/bookshelf_tab_intent.dart';
-import '../../../../core/domain/entities/book.dart';
 import '../../../../core/theme/app_layout.dart';
 import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
@@ -12,19 +11,14 @@ import '../../../../shared/components/app_blurred_chrome_bar.dart';
 import '../../../../shared/components/book_card_skeletons.dart';
 import '../../../../shared/components/empty_state.dart';
 import '../../../../shared/layouts/app_bottom_nav.dart';
-import '../../../../routes/app_router.dart';
 import '../../../../shared/layouts/main_tab_controller.dart';
 import '../../../../shared/widgets/app_button.dart';
 import '../../application/bookshelf_cubit.dart';
 import '../../application/bookshelf_state.dart';
 import '../../domain/entities/bookshelf_tab.dart';
-import '../components/bookshelf_book_grid.dart';
-import '../components/bookshelf_empty_view.dart';
-import '../components/bookshelf_load_more_footer.dart';
 import '../components/bookshelf_manage_action_overlay.dart';
 import '../components/bookshelf_page_header.dart';
-import '../components/bookshelf_recommendation_section.dart';
-import '../components/daily_reading_banner.dart';
+import '../components/bookshelf_tab_scroll_view.dart';
 import '../../../../core/theme/app_colors.dart';
 
 /// 书架页（Figma 220:9341）：仅渲染 state、触发 action。
@@ -178,108 +172,13 @@ class _BookshelfViewState extends State<_BookshelfView> {
     required double headerHeight,
     required double gridWidth,
   }) {
-    final isShelfTab = tab == BookshelfTab.shelf;
-
-    return CustomScrollView(
-      controller: _scrollControllers[tab],
-      slivers: [
-        SliverPadding(
-          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm),
-          sliver: SliverList(
-            delegate: SliverChildListDelegate([
-              SizedBox(
-                height: headerHeight + AppSizes.bookshelfHeaderToBannerGap,
-              ),
-              BlocSelector<BookshelfCubit, BookshelfState, int>(
-                selector: (state) => state.domain.todayReadingMinutes,
-                builder: (context, minutes) {
-                  return DailyReadingBanner(
-                    todayReadingMinutes: minutes,
-                    onClaimWelfareTap: () => widget.mainTabController?.switchTo(
-                      MainTabConfig.welfareIndex,
-                    ),
-                  );
-                },
-              ),
-              const SizedBox(height: AppSizes.bookshelfBannerToGridGap),
-            ]),
-          ),
-        ),
-        BlocBuilder<BookshelfCubit, BookshelfState>(
-          buildWhen: (previous, current) =>
-              previous.domain.content != current.domain.content ||
-              previous.interaction.isManaging !=
-                  current.interaction.isManaging ||
-              previous.interaction.selectedBookIds !=
-                  current.interaction.selectedBookIds,
-          builder: (context, state) {
-            final books = state.domain.content?.booksFor(tab) ?? const <Book>[];
-
-            if (isShelfTab && books.isEmpty && !state.interaction.isManaging) {
-              return SliverToBoxAdapter(
-                child: BookshelfEmptyView(
-                  onExploreTap:
-                      widget.mainTabController?.openBookstoreCategoryTab,
-                ),
-              );
-            }
-
-            return SliverPadding(
-              padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm),
-              sliver: BookshelfBookGrid.sliver(
-                books: books,
-                gridWidth: gridWidth,
-                onBookTap: (book) =>
-                    AppRouter.goBookDetail(book, isInShelf: isShelfTab),
-                isManaging: state.interaction.isManaging,
-                selectedBookIds: state.interaction.selectedBookIds,
-                onBookSelectionToggle: context
-                    .read<BookshelfCubit>()
-                    .toggleBookSelection,
-              ),
-            );
-          },
-        ),
-        BlocBuilder<BookshelfCubit, BookshelfState>(
-          buildWhen: (previous, current) =>
-              previous.recommendationBooks != current.recommendationBooks ||
-              previous.interaction.isManaging != current.interaction.isManaging,
-          builder: (context, state) {
-            if (!isShelfTab || state.interaction.isManaging) {
-              return const SliverToBoxAdapter(child: SizedBox.shrink());
-            }
-
-            return SliverPadding(
-              padding: const EdgeInsets.fromLTRB(
-                AppSpacing.sm,
-                AppSpacing.xl,
-                AppSpacing.sm,
-                0,
-              ),
-              sliver: SliverToBoxAdapter(
-                child: BookshelfRecommendationSection(
-                  books: state.recommendationBooks,
-                  onBookTap: AppRouter.goBookDetail,
-                ),
-              ),
-            );
-          },
-        ),
-        BlocBuilder<BookshelfCubit, BookshelfState>(
-          buildWhen: (previous, current) =>
-              previous.ui.isLoadingMore != current.ui.isLoadingMore,
-          builder: (context, state) {
-            return SliverToBoxAdapter(
-              child: BookshelfLoadMoreFooter(
-                isVisible: state.ui.isLoadingMore && isShelfTab,
-              ),
-            );
-          },
-        ),
-        const SliverToBoxAdapter(
-          child: SizedBox(height: _BookshelfView._bottomNavReserve),
-        ),
-      ],
+    return BookshelfTabScrollView(
+      tab: tab,
+      scrollController: _scrollControllers[tab],
+      headerHeight: headerHeight,
+      gridWidth: gridWidth,
+      bottomReserve: _BookshelfView._bottomNavReserve,
+      mainTabController: widget.mainTabController,
     );
   }
 

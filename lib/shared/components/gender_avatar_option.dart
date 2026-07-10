@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/theme/app_colors.dart';
-import '../../../../core/theme/app_sizes.dart';
-import '../../../../core/theme/app_spacing.dart';
-import '../../../../core/theme/app_text_styles.dart';
-import '../../../../shared/widgets/app_asset_image.dart';
-import '../../../../shared/widgets/app_pressable.dart';
-import '../../../../shared/widgets/app_text.dart';
+import '../../core/theme/app_colors.dart';
+import '../../core/theme/app_sizes.dart';
+import '../../core/theme/app_spacing.dart';
+import '../../core/theme/app_text_styles.dart';
+import '../widgets/app_asset_image.dart';
+import '../widgets/app_pressable.dart';
+import '../widgets/app_text.dart';
 
-/// L3 组件 — 性别选项（圆形头像 + 文字标签）。
+/// L2 组件 — 性别选项（圆形头像 + 文字标签）。
 ///
 /// 选中显示彩色头像 [activeAsset]、黄色描边高亮（参照装扮选中）+ 白色文字；
 /// 未选显示灰色头像 [inactiveAsset]、细描边 + 60% 白文字。不填充底色。
-class OnboardingGenderOption extends StatelessWidget {
-  const OnboardingGenderOption({
+///
+/// 跨 feature 复用（新手引导弹窗、偏好设置页）以保持视觉一致。
+class GenderAvatarOption extends StatelessWidget {
+  const GenderAvatarOption({
     super.key,
     required this.label,
     required this.activeAsset,

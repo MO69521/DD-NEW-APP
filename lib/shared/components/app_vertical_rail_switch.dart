@@ -5,8 +5,12 @@ import '../../core/theme/app_durations.dart';
 import '../../core/theme/app_radius.dart';
 import '../../core/theme/app_spacing.dart';
 import 'app_segmented_switch.dart';
+import 'elastic_tab_indicator.dart';
 
-/// 竖向选项轨：左侧指示条随选中项平滑移动（对标 [AppSegmentedSwitch] 横向滑块）。
+/// 竖向选项轨：左侧指示条随选中项平移，并沿高度先拉长再快速回弹。
+///
+/// 指示条效果复用 [ElasticTabIndicator]（`axis: Axis.vertical`），与横向 Tab
+/// 黄条保持一致（架构 §3.5）。
 class AppVerticalRailSwitch extends StatelessWidget {
   const AppVerticalRailSwitch({
     super.key,
@@ -21,6 +25,8 @@ class AppVerticalRailSwitch extends StatelessWidget {
     this.indicatorHeight = 16,
     this.indicatorColor = AppColors.accentYellow,
     this.indicatorRadius = AppRadius.full,
+    this.duration = AppDurations.normal,
+    this.stretchFactor = 1.6,
   });
 
   final int itemCount;
@@ -34,6 +40,8 @@ class AppVerticalRailSwitch extends StatelessWidget {
   final double indicatorHeight;
   final Color indicatorColor;
   final double indicatorRadius;
+  final Duration duration;
+  final double stretchFactor;
 
   @override
   Widget build(BuildContext context) {
@@ -45,14 +53,24 @@ class AppVerticalRailSwitch extends StatelessWidget {
       horizontal: itemPaddingHorizontal,
       vertical: itemPaddingVertical,
     );
-    final indicatorTop = itemSlotHeight * selectedIndex +
-        (itemSlotHeight - indicatorHeight) / 2;
+
+    Widget buildItem(int index) => SizedBox(
+      height: itemSlotHeight,
+      child: Padding(
+        padding: itemPadding,
+        child: Align(
+          alignment: Alignment.centerLeft,
+          child: itemBuilder(context, index, index == selectedIndex),
+        ),
+      ),
+    );
 
     return SizedBox(
       height: itemSlotHeight * itemCount,
       child: Stack(
         clipBehavior: Clip.none,
         children: [
+          // 占位测量层：撑开轨道尺寸（不可点，不可见）。
           IgnorePointer(
             child: Opacity(
               opacity: 0,
@@ -60,37 +78,22 @@ class AppVerticalRailSwitch extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   for (var index = 0; index < itemCount; index++)
-                    SizedBox(
-                      height: itemSlotHeight,
-                      child: Padding(
-                        padding: itemPadding,
-                        child: Align(
-                          alignment: Alignment.centerLeft,
-                          child: itemBuilder(
-                            context,
-                            index,
-                            index == selectedIndex,
-                          ),
-                        ),
-                      ),
-                    ),
+                    buildItem(index),
                 ],
               ),
             ),
           ),
-          AnimatedPositioned(
-            duration: AppDurations.normal,
-            curve: Curves.easeInOut,
-            left: 0,
-            top: indicatorTop,
+          ElasticTabIndicator(
+            axis: Axis.vertical,
+            selectedIndex: selectedIndex,
+            slotWidth: itemSlotHeight,
+            slotPitch: itemSlotHeight,
             width: indicatorWidth,
             height: indicatorHeight,
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                color: indicatorColor,
-                borderRadius: BorderRadius.circular(indicatorRadius),
-              ),
-            ),
+            color: indicatorColor,
+            radius: indicatorRadius,
+            duration: duration,
+            stretchFactor: stretchFactor,
           ),
           for (var index = 0; index < itemCount; index++)
             Positioned(
@@ -101,17 +104,7 @@ class AppVerticalRailSwitch extends StatelessWidget {
               child: GestureDetector(
                 onTap: () => onChanged(index),
                 behavior: HitTestBehavior.opaque,
-                child: Padding(
-                  padding: itemPadding,
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: itemBuilder(
-                      context,
-                      index,
-                      index == selectedIndex,
-                    ),
-                  ),
-                ),
+                child: buildItem(index),
               ),
             ),
         ],

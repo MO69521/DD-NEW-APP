@@ -23,7 +23,9 @@ class RankingSection extends StatelessWidget {
   final RankingTab selectedTab;
   final ValueChanged<RankingTab> onTabSelected;
   final VoidCallback? onFullListTap;
-  final ValueChanged<Book>? onBookTap;
+
+  /// 回调携带该卡封面的屏内唯一 Hero 标签，供详情页同 tag 飞行。
+  final void Function(Book book, Object coverHeroTag)? onBookTap;
 
   @override
   Widget build(BuildContext context) {
@@ -56,6 +58,7 @@ class RankingSection extends StatelessWidget {
                 for (final tab in tabs)
                   RankingBookGrid(
                     books: booksByTab[tab] ?? const [],
+                    heroNamespace: 'ranking-${tab.name}',
                     onBookTap: onBookTap,
                   ),
               ],

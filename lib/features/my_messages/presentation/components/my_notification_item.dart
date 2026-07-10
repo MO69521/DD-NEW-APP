@@ -5,6 +5,7 @@ import '../../../../core/theme/app_radius.dart';
 import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
+import '../../../../shared/widgets/app_icon.dart';
 import '../../../../shared/widgets/app_pressable.dart';
 import '../../../../shared/widgets/app_text.dart';
 import '../../domain/entities/my_notification.dart';
@@ -52,10 +53,11 @@ class MyNotificationItem extends StatelessWidget {
                 _StatusBadge(status: notification.status),
               ],
               const Spacer(),
-              const Icon(
-                Icons.chevron_right_rounded,
-                color: AppColors.textOnDarkMuted,
-                size: AppSizes.topBarActionIconSize,
+              const AppIcon(
+                assetPath: 'assets/icons/arrow_right.svg',
+                width: AppSpacing.sm,
+                height: AppSpacing.sm,
+                color: AppColors.textOnDarkPlaceholder,
               ),
             ],
           ),

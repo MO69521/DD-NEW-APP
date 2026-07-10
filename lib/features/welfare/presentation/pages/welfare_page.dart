@@ -9,6 +9,7 @@ import '../../../../routes/app_routes.dart';
 import '../../../../shared/components/currency_balance_bar.dart';
 import '../../../../shared/components/empty_state.dart';
 import '../../../../shared/components/app_blurred_dialog.dart';
+import '../../../../shared/components/app_toast.dart';
 import '../../../../shared/components/recharge_packages_section.dart';
 import '../../../../shared/layouts/app_bottom_nav.dart';
 import '../../../../shared/widgets/app_button.dart';
@@ -78,6 +79,7 @@ class WelfarePage extends StatelessWidget {
 
         return _WelfareView(
           content: content,
+          hasCheckedInToday: state.ui.hasCheckedInToday,
           onRechargePackageTap: onRechargePackageTap,
           onRechargeMoreTap: onRechargeMoreTap,
         );
@@ -89,11 +91,13 @@ class WelfarePage extends StatelessWidget {
 class _WelfareView extends StatelessWidget {
   const _WelfareView({
     required this.content,
+    required this.hasCheckedInToday,
     this.onRechargePackageTap,
     this.onRechargeMoreTap,
   });
 
   final WelfarePageContent content;
+  final bool hasCheckedInToday;
   final ValueChanged<RechargePackage>? onRechargePackageTap;
   final VoidCallback? onRechargeMoreTap;
 
@@ -143,12 +147,18 @@ class _WelfareView extends StatelessWidget {
                 const SizedBox(height: AppSpacing.sm),
                 DailyCheckInSection(
                   summary: content.checkInSummary,
-                  onCheckInTap: () => CheckInSuccessDialog.show(
-                    context,
-                    summary: content.checkInSummary,
-                    onVipClaim: () =>
-                        AppRouter.pushNamed(AppRoutes.membershipName),
-                  ),
+                  checkedIn: hasCheckedInToday,
+                  onCheckInTap: () {
+                    cubit.checkIn();
+                    CheckInSuccessDialog.show(
+                      context,
+                      summary: content.checkInSummary,
+                      onVipClaim: () =>
+                          AppRouter.pushNamed(AppRoutes.membershipName),
+                      onWatchVideo: () => _showWatchVideoToast(context),
+                    );
+                  },
+                  onWatchVideoTap: () => _showWatchVideoToast(context),
                 ),
                 const SizedBox(height: AppSpacing.sm),
                 MealCheckInSection(
@@ -170,6 +180,10 @@ class _WelfareView extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  void _showWatchVideoToast(BuildContext context) {
+    AppToast.show(context, '视频功能开发中');
   }
 }
 

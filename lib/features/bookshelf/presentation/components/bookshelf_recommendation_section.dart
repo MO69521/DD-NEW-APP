@@ -20,7 +20,9 @@ class BookshelfRecommendationSection extends StatelessWidget {
   });
 
   final List<Book> books;
-  final ValueChanged<Book>? onBookTap;
+
+  /// 回调携带该卡封面的屏内唯一 Hero 标签，供详情页同 tag 飞行。
+  final void Function(Book book, Object coverHeroTag)? onBookTap;
 
   @override
   Widget build(BuildContext context) {
@@ -43,9 +45,17 @@ class BookshelfRecommendationSection extends StatelessWidget {
                 for (final book in books)
                   SizedBox(
                     width: itemWidth,
-                    child: _BookshelfRecommendationCard(
-                      book: book,
-                      onTap: onBookTap == null ? null : () => onBookTap!(book),
+                    child: Builder(
+                      builder: (context) {
+                        final heroTag = 'book-cover-shelfrec-${book.id}';
+                        return _BookshelfRecommendationCard(
+                          book: book,
+                          heroTag: heroTag,
+                          onTap: onBookTap == null
+                              ? null
+                              : () => onBookTap!(book, heroTag),
+                        );
+                      },
                     ),
                   ),
               ],
@@ -58,12 +68,17 @@ class BookshelfRecommendationSection extends StatelessWidget {
 }
 
 class _BookshelfRecommendationCard extends StatelessWidget {
-  const _BookshelfRecommendationCard({required this.book, this.onTap});
+  const _BookshelfRecommendationCard({
+    required this.book,
+    this.heroTag,
+    this.onTap,
+  });
 
   static const String _defaultSummary = '精选高热剧情与人气设定，适合从书架继续发现下一本想读的故事。';
   static const List<String> _defaultAnnotations = ['高甜', '爽文', '人气'];
 
   final Book book;
+  final Object? heroTag;
   final VoidCallback? onTap;
 
   @override
@@ -89,6 +104,7 @@ class _BookshelfRecommendationCard extends StatelessWidget {
             BookCover(
               assetPath: book.coverAsset,
               aspectRatio: AppSizes.bookCoverGridAspectRatio,
+              heroTag: heroTag,
             ),
             Padding(
               padding: const EdgeInsets.all(AppSpacing.xs),

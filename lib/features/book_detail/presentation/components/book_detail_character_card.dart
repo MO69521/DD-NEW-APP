@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/theme/app_colors.dart';
-import '../../../../core/theme/app_radius.dart';
 import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
-import '../../../../shared/widgets/app_pressable.dart';
+import '../../../../shared/widgets/app_button.dart';
 import '../../../../shared/widgets/app_text.dart';
 import '../../../../shared/widgets/book_cover.dart';
 import '../../domain/entities/book_detail.dart';
@@ -41,38 +39,15 @@ class BookDetailCharacterCard extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
           ),
           const SizedBox(height: AppSpacing.sm),
-          _FavButton(onTap: onFavTap),
+          AppButton(
+            label: '收藏和表白',
+            onPressed: onFavTap,
+            variant: AppButtonVariant.secondary,
+            size: AppButtonSize.small,
+            isExpanded: true,
+            fitLabel: true,
+          ),
         ],
-      ),
-    );
-  }
-}
-
-class _FavButton extends StatelessWidget {
-  const _FavButton({this.onTap});
-
-  final VoidCallback? onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return AppPressable(
-      onTap: onTap,
-      pressScale: AppSizes.tapPressScaleSubtle,
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.symmetric(
-          horizontal: AppSizes.bookDetailCharFavPaddingH,
-          vertical: AppSizes.bookDetailCharFavPaddingV,
-        ),
-        decoration: BoxDecoration(
-          color: AppColors.bookDetailCharFavBackground,
-          borderRadius: BorderRadius.circular(AppRadius.bookDetailCharFav),
-        ),
-        child: const AppText(
-          '收藏和表白',
-          style: AppTextStyles.bookDetailCharFav,
-          textAlign: TextAlign.center,
-        ),
       ),
     );
   }

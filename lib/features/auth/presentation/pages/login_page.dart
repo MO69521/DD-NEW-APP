@@ -19,6 +19,7 @@ import '../../../../shared/widgets/app_asset_image.dart';
 import '../../../../shared/widgets/app_button.dart';
 import '../../../../shared/widgets/app_icon.dart';
 import '../../../../shared/widgets/app_pressable.dart';
+import '../../../../shared/widgets/app_selection_mark.dart';
 import '../../../../shared/widgets/app_text.dart';
 import '../../application/login_cubit.dart';
 import '../../application/login_state.dart';
@@ -283,29 +284,9 @@ class _AuthAgreementNoticeState extends State<_AuthAgreementNotice> {
       children: [
         AppPressable(
           onTap: widget.onToggle,
-          child: Container(
-            width: AppSizes.iconSm,
-            height: AppSizes.iconSm,
-            margin: const EdgeInsets.only(top: AppSpacing.xxsHalf),
-            decoration: BoxDecoration(
-              color: widget.isSelected
-                  ? AppColors.accentYellow
-                  : Colors.transparent,
-              shape: BoxShape.circle,
-              border: Border.all(
-                color: widget.isSelected
-                    ? AppColors.accentYellow
-                    : AppColors.textOnDarkMuted,
-                width: AppSizes.hairline,
-              ),
-            ),
-            child: widget.isSelected
-                ? const Icon(
-                    Icons.check_rounded,
-                    size: AppSpacing.sm,
-                    color: AppColors.rankingSegmentedSelectedText,
-                  )
-                : null,
+          child: Padding(
+            padding: const EdgeInsets.only(top: AppSpacing.xxsHalf),
+            child: AppSelectionMark(isSelected: widget.isSelected),
           ),
         ),
         const SizedBox(width: AppSpacing.xs),

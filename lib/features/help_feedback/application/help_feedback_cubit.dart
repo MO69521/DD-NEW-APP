@@ -1,5 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../core/services/image_picker_service.dart';
+import '../../../core/services/service_locator.dart';
 import '../data/datasources/help_feedback_mock_datasource.dart';
 import '../domain/entities/help_feedback_tab.dart';
 import 'help_feedback_state.dart';
@@ -7,9 +9,12 @@ import 'help_feedback_state.dart';
 class HelpFeedbackCubit extends Cubit<HelpFeedbackState> {
   HelpFeedbackCubit({
     this.dataSource = const HelpFeedbackMockDataSource(),
-  }) : super(const HelpFeedbackState());
+    ImagePickerService? imagePicker,
+  }) : _imagePicker = imagePicker ?? ServiceLocator.imagePicker,
+       super(const HelpFeedbackState());
 
   final HelpFeedbackMockDataSource dataSource;
+  final ImagePickerService _imagePicker;
 
   Future<void> load() async {
     emit(
@@ -79,6 +84,31 @@ class HelpFeedbackCubit extends Cubit<HelpFeedbackState> {
 
   void updateQq(String value) {
     emit(state.copyWith(qq: value, clearSubmitMessage: true));
+  }
+
+  /// 调起系统相册，追加所选问题截图（总数不超过上限）。
+  Future<void> pickScreenshots() async {
+    final remaining =
+        HelpFeedbackState.maxScreenshots - state.screenshotPaths.length;
+    if (remaining <= 0) return;
+
+    final picked = await _imagePicker.pickImages(limit: remaining);
+    if (picked.isEmpty) return;
+
+    final combined = [...state.screenshotPaths, ...picked]
+        .take(HelpFeedbackState.maxScreenshots)
+        .toList();
+    emit(state.copyWith(screenshotPaths: combined, clearSubmitMessage: true));
+  }
+
+  void removeScreenshot(String path) {
+    emit(
+      state.copyWith(
+        screenshotPaths: state.screenshotPaths
+            .where((item) => item != path)
+            .toList(),
+      ),
+    );
   }
 
   void submitFeedback() {

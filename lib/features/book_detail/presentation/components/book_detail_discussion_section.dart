@@ -342,7 +342,7 @@ class _Tag extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(
         horizontal: AppSpacing.xs,
-        vertical: AppSpacing.xxsHalf,
+        vertical: AppSpacing.xxs,
       ),
       decoration: BoxDecoration(
         color: AppColors.navBarBackground,

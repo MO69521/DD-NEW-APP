@@ -36,7 +36,6 @@ abstract final class AppRadius {
   static const double bookDetailCatalog = 10;
   static const double bookDetailCatalogDrawerCover = bookCover;
   static const double bookDetailReadCta = xl;
-  static const double bookDetailCharFav = xl;
   static const double bookDetailDiscussionCard = md;
   static const double bookDetailDiscussionReply = md;
   static const double bookDetailDiscussionFilter = 20;

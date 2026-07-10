@@ -49,13 +49,33 @@ class DressUpPage extends StatelessWidget {
   }
 }
 
-class _DressUpView extends StatelessWidget {
+class _DressUpView extends StatefulWidget {
   const _DressUpView({required this.state});
 
   final DressUpState state;
 
   @override
+  State<_DressUpView> createState() => _DressUpViewState();
+}
+
+class _DressUpViewState extends State<_DressUpView> {
+  late final ValueNotifier<double> _tabSwipeProgress;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabSwipeProgress = ValueNotifier<double>(0);
+  }
+
+  @override
+  void dispose() {
+    _tabSwipeProgress.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final state = widget.state;
     final cubit = context.read<DressUpCubit>();
     final statusBarHeight = AppLayout.statusBarHeight(context);
     final tabs = DressUpTab.values;
@@ -78,11 +98,14 @@ class _DressUpView extends StatelessWidget {
             child: DressUpTabBar(
               selected: selectedTab,
               onSelected: cubit.selectTab,
+              swipeProgress: _tabSwipeProgress,
             ),
           ),
           Expanded(
             child: AppSwipeTabSwitcher(
               selectedIndex: tabs.indexOf(selectedTab),
+              onSwipeProgressChanged: (progress) =>
+                  _tabSwipeProgress.value = progress,
               onIndexChanged: (index) => cubit.selectTab(tabs[index]),
               children: [
                 for (final tab in tabs)

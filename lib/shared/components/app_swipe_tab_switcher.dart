@@ -57,12 +57,17 @@ class _AppSwipeTabSwitcherState extends State<AppSwipeTabSwitcher> {
     if (widget.selectedIndex == oldWidget.selectedIndex) {
       return;
     }
-    if (!_pageController.hasClients) return;
-    _pageController.animateToPage(
-      widget.selectedIndex,
-      duration: AppDurations.normal,
-      curve: Curves.easeOutCubic,
-    );
+    // 延后到本帧构建结束再翻页：animateToPage 会同步派发 ScrollStartNotification，
+    // 若在 didUpdateWidget（构建阶段）内触发，祖先（如 AppPageChrome）在滚动通知
+    // 回调里 setState 会命中「build 期间 setState」断言导致崩溃。
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted || !_pageController.hasClients) return;
+      _pageController.animateToPage(
+        widget.selectedIndex,
+        duration: AppDurations.normal,
+        curve: Curves.easeOutCubic,
+      );
+    });
   }
 
   @override

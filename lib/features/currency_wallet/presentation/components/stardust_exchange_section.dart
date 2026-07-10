@@ -7,8 +7,11 @@ import '../../../../core/theme/app_radius.dart';
 import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
+import '../../../../core/theme/app_welfare_colors.dart';
+import '../../../../shared/components/app_corner_badge.dart';
 import '../../../../shared/widgets/app_asset_image.dart';
 import '../../../../shared/widgets/animated_count_text.dart';
+import '../../../../shared/widgets/app_button.dart';
 import '../../../../shared/widgets/app_pressable.dart';
 import '../../../../shared/widgets/app_text.dart';
 import '../../domain/entities/currency_wallet_page_content.dart';
@@ -98,44 +101,29 @@ class _StardustOptionCard extends StatelessWidget {
                   value: option.energyAmount,
                   style: AppTextStyles.titleMediumDark,
                 ),
-                const SizedBox(height: AppSpacing.xs),
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.symmetric(
-                    vertical: AppSpacing.xs,
+                const SizedBox(height: AppSpacing.xxs),
+                AppButton(
+                  label: '${option.stardustCost}',
+                  variant: AppButtonVariant.secondary,
+                  size: AppButtonSize.small,
+                  isExpanded: true,
+                  fitLabel: true,
+                  leadingIcon: AppAssetImage(
+                    assetPath: CurrencyConfig.iconAsset(
+                      CurrencyType.stardust,
+                    ),
+                    width: AppSizes.welfareCurrencyIconSize,
+                    height: AppSizes.welfareCurrencyIconSize,
                   ),
-                  decoration: BoxDecoration(
-                    color: AppColors.accentYellow,
-                    borderRadius: BorderRadius.circular(AppRadius.full),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      AppAssetImage(
-                        assetPath: CurrencyConfig.iconAsset(
-                          CurrencyType.stardust,
-                        ),
-                        width: AppSizes.welfareCurrencyIconSize,
-                        height: AppSizes.welfareCurrencyIconSize,
-                      ),
-                      const SizedBox(width: AppSpacing.xxs),
-                      AppText(
-                        '${option.stardustCost}',
-                        style: AppTextStyles.buttonLabel14.copyWith(
-                          color: AppColors.rankingSegmentedSelectedText,
-                        ),
-                      ),
-                    ],
-                  ),
+                  onPressed: onTap,
                 ),
               ],
             ),
           ),
           if (option.badgeLabel != null)
-            Positioned(
-              top: -AppSpacing.xxsHalf,
-              right: -AppSpacing.xxs,
-              child: _StardustOptionBadge(label: option.badgeLabel!),
+            AppCornerBadge(
+              label: option.badgeLabel!,
+              color: AppWelfareColors.accentOrange,
             ),
         ],
       ),
@@ -143,43 +131,3 @@ class _StardustOptionCard extends StatelessWidget {
   }
 }
 
-class _StardustOptionBadge extends StatelessWidget {
-  const _StardustOptionBadge({required this.label});
-
-  static const String _assetPath =
-      'assets/images/welfare/stardust_exchange_badge.png';
-
-  final String label;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: AppSizes.stardustExchangeBadgeWidth,
-      height: AppSizes.welfareRechargeHotBadgeHeight,
-      child: Stack(
-        fit: StackFit.expand,
-        children: [
-          const AppAssetImage(assetPath: _assetPath, fit: BoxFit.fill),
-          Positioned(
-            left: AppSpacing.xs,
-            right: AppSpacing.xxs,
-            top: AppSpacing.xxsHalf,
-            bottom: AppSpacing.xxsHalf,
-            child: Center(
-              child: FittedBox(
-                fit: BoxFit.scaleDown,
-                child: AppText(
-                  label,
-                  style: AppTextStyles.welfareHotSaleBadge,
-                  textAlign: TextAlign.center,
-                  maxLines: 1,
-                  overflow: TextOverflow.visible,
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}

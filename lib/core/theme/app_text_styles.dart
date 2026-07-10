@@ -352,6 +352,11 @@ abstract final class AppTextStyles {
     height: AppLineHeights.none,
   );
 
+  /// 免费领取卡片 CTA 文案（「VIP领取」/「免费领」）：较价格数字小一档（14px），
+  /// 中文文案在窄卡内视觉不至于过大。
+  static TextStyle get welfareRechargeClaimCta =>
+      welfareRechargePriceAmount.copyWith(fontSize: AppFontSizes.base);
+
   /// 能量充值「更多福利」入口（Figma · 12px #FFE847）。
   static TextStyle get welfareRechargeMoreAction => captionMd.copyWith(
     fontSize: AppFontSizes.md,
@@ -650,13 +655,6 @@ abstract final class AppTextStyles {
     height: AppLineHeights.normal,
   );
 
-  static const TextStyle bookDetailCharFav = TextStyle(
-    fontSize: AppFontSizes.md,
-    fontWeight: AppFontWeights.medium,
-    color: AppColors.accentYellow,
-    height: AppLineHeights.none,
-  );
-
   static const TextStyle bookDetailReadCta = TextStyle(
     fontSize: AppFontSizes.base,
     fontWeight: AppFontWeights.medium,
@@ -668,6 +666,28 @@ abstract final class AppTextStyles {
     fontSize: AppFontSizes.xs,
     fontWeight: AppFontWeights.regular,
     color: AppColors.iconMutedSecondary,
+    height: AppLineHeights.none,
+  );
+
+  // 悬浮促销条 (Figma 1598:4319)。设计标题 13，复用 base(14) 档位。
+  static const TextStyle bookDetailPromoTitle = TextStyle(
+    fontSize: AppFontSizes.base,
+    fontWeight: AppFontWeights.bold,
+    color: AppColors.bookDetailPromoTitle,
+    height: AppLineHeights.none,
+  );
+
+  static const TextStyle bookDetailPromoSubtitle = TextStyle(
+    fontSize: AppFontSizes.md,
+    fontWeight: AppFontWeights.regular,
+    color: AppColors.bookDetailPromoSubtitle,
+    height: AppLineHeights.none,
+  );
+
+  static const TextStyle bookDetailPromoReward = TextStyle(
+    fontSize: AppFontSizes.md,
+    fontWeight: AppFontWeights.bold,
+    color: AppColors.bookDetailPromoRewardText,
     height: AppLineHeights.none,
   );
 

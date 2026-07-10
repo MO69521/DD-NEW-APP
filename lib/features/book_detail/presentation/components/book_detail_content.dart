@@ -128,18 +128,22 @@ class _DetailTabBody extends StatelessWidget {
         BookDetailRecommendationSection(
           title: '作者其他作品',
           books: detail.authorOtherBooks,
+          heroNamespace: 'detail-author',
           actionLabel: '查看全部',
-          onBookTap: AppRouter.goBookDetail,
+          onBookTap: (book, heroTag) =>
+              AppRouter.goBookDetail(book, coverHeroTag: heroTag),
         ),
         const SizedBox(height: AppSizes.bookDetailSectionGap),
         BookDetailRecommendationSection(
           title: '猜你喜欢',
           books: detail.recommendedBooks,
+          heroNamespace: 'detail-recommend',
           actionLabel: '换一换',
           actionIconAsset: 'assets/icons/book_detail/refresh.svg',
           rotateActionIconOnTap: true,
           onActionTap: onRecommendationRefreshTap,
-          onBookTap: AppRouter.goBookDetail,
+          onBookTap: (book, heroTag) =>
+              AppRouter.goBookDetail(book, coverHeroTag: heroTag),
         ),
         const SizedBox(height: AppSizes.bookDetailSectionGap),
         _BookDetailLegalInfo(detail: detail),

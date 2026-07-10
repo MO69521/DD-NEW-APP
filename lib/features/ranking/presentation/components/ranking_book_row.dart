@@ -65,7 +65,7 @@ class _RankingRowBadge extends StatelessWidget {
       height: AppSizes.rankingMutedBadgeSize,
       alignment: Alignment.center,
       decoration: BoxDecoration(
-        color: AppColors.overlayScrim,
+        color: AppColors.rankingMutedBadgeScrim,
         borderRadius: BorderRadius.circular(AppRadius.xs),
       ),
       child: AppText(

@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../core/constants/main_tab_config.dart';
 import '../../../core/domain/entities/commerce_entities.dart';
 import '../../../routes/app_router.dart';
 import '../../../routes/app_routes.dart';
@@ -99,6 +100,10 @@ class CurrencyWalletCubit extends Cubit<CurrencyWalletState> {
   }
 
   void performAction(CurrencyWalletAction action) {
+    if (action == CurrencyWalletAction.welfare) {
+      AppRouter.goMainTab(MainTabConfig.welfareIndex);
+      return;
+    }
     emit(
       state.copyWith(
         ui: state.ui.copyWith(feedbackMessage: _feedbackForAction(action)),

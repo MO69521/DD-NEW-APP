@@ -5,6 +5,7 @@ import '../../../../core/theme/app_radius.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../routes/app_router.dart';
+import '../../../../shared/widgets/app_button.dart';
 import '../../../../shared/widgets/app_text.dart';
 
 /// 讨论区快速回复弹层，仅负责输入与返回文本。
@@ -97,18 +98,15 @@ class _QuickReplySheetContentState extends State<_QuickReplySheetContent> {
           const SizedBox(height: AppSpacing.sm),
           Align(
             alignment: Alignment.centerRight,
-            child: TextButton(
+            child: AppButton(
+              label: '发送',
+              variant: AppButtonVariant.accent,
+              size: AppButtonSize.small,
               onPressed: () {
                 final text = _controller.text.trim();
                 if (text.isEmpty) return;
                 AppRouter.pop(text);
               },
-              child: AppText(
-                '发送',
-                style: AppTextStyles.bodyMedium.copyWith(
-                  color: AppColors.accentYellow,
-                ),
-              ),
             ),
           ),
         ],

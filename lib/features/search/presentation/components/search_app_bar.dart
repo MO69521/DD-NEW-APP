@@ -41,15 +41,36 @@ class SearchAppBar extends StatefulWidget {
 class _SearchAppBarState extends State<SearchAppBar> {
   late final TextEditingController _controller;
   final FocusNode _focusNode = FocusNode();
+  Animation<double>? _routeAnimation;
 
   @override
   void initState() {
     super.initState();
     _controller = TextEditingController(text: widget.initialQuery);
+    // 键盘在页面转场结束后再升起，避免与 push 动画抢帧导致的顿挫。
+    WidgetsBinding.instance.addPostFrameCallback((_) => _focusAfterTransition());
+  }
+
+  void _focusAfterTransition() {
+    if (!mounted) return;
+    final animation = ModalRoute.of(context)?.animation;
+    if (animation == null || animation.isCompleted) {
+      _focusNode.requestFocus();
+      return;
+    }
+    _routeAnimation = animation..addStatusListener(_onRouteAnimationStatus);
+  }
+
+  void _onRouteAnimationStatus(AnimationStatus status) {
+    if (status != AnimationStatus.completed) return;
+    _routeAnimation?.removeStatusListener(_onRouteAnimationStatus);
+    _routeAnimation = null;
+    if (mounted) _focusNode.requestFocus();
   }
 
   @override
   void dispose() {
+    _routeAnimation?.removeStatusListener(_onRouteAnimationStatus);
     _controller.dispose();
     _focusNode.dispose();
     super.dispose();
@@ -162,7 +183,6 @@ class _SearchInputField extends StatelessWidget {
             child: TextField(
               controller: controller,
               focusNode: focusNode,
-              autofocus: true,
               maxLines: 1,
               style: AppTextStyles.searchInputText,
               cursorColor: AppColors.searchCursor,

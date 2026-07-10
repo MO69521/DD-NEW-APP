@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_layout.dart';
-import '../../../../core/theme/app_radius.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../routes/app_router.dart';
@@ -36,38 +35,23 @@ class SettingsDocumentPage extends StatelessWidget {
             AppSpacing.xl,
           ),
           children: [
-            DecoratedBox(
-              decoration: BoxDecoration(
-                color: AppColors.surfaceCard,
-                borderRadius: BorderRadius.circular(AppRadius.lg),
-                border: Border.all(color: AppColors.borderGlass),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(AppSpacing.lg),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    AppText(
-                      document.heading,
-                      style: AppTextStyles.titleMedium.copyWith(
-                        color: AppColors.textOnDark,
-                      ),
-                    ),
-                    const SizedBox(height: AppSpacing.xs),
-                    AppText(
-                      document.updatedAt,
-                      style: AppTextStyles.captionMdDarkMuted,
-                    ),
-                    const SizedBox(height: AppSpacing.lg),
-                    for (final section in document.sections) ...[
-                      _DocumentSection(section: section),
-                      if (section != document.sections.last)
-                        const SizedBox(height: AppSpacing.lg),
-                    ],
-                  ],
-                ),
+            AppText(
+              document.heading,
+              style: AppTextStyles.titleMedium.copyWith(
+                color: AppColors.textOnDark,
               ),
             ),
+            const SizedBox(height: AppSpacing.xs),
+            AppText(
+              document.updatedAt,
+              style: AppTextStyles.captionMdDarkMuted,
+            ),
+            const SizedBox(height: AppSpacing.lg),
+            for (final section in document.sections) ...[
+              _DocumentSection(section: section),
+              if (section != document.sections.last)
+                const SizedBox(height: AppSpacing.lg),
+            ],
           ],
         ),
       ),

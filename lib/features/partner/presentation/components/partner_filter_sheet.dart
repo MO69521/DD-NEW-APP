@@ -121,13 +121,16 @@ class _FilterOptionTileState extends State<_FilterOptionTile> {
         ? AppTextStyles.partnerFilterSheetOptionSelected
         : AppTextStyles.partnerFilterSheetOption;
 
-    return Material(
-      color: _pressed
-          ? AppPartnerColors.chipPressedOverlay
-          : Colors.transparent,
-      child: InkWell(
-        onTap: widget.onTap,
-        onHighlightChanged: (value) => setState(() => _pressed = value),
+    return GestureDetector(
+      onTap: widget.onTap,
+      onTapDown: (_) => setState(() => _pressed = true),
+      onTapUp: (_) => setState(() => _pressed = false),
+      onTapCancel: () => setState(() => _pressed = false),
+      behavior: HitTestBehavior.opaque,
+      child: ColoredBox(
+        color: _pressed
+            ? AppPartnerColors.chipPressedOverlay
+            : Colors.transparent,
         child: SizedBox(
           height: AppSizes.partnerFilterSheetOptionHeight,
           child: Padding(

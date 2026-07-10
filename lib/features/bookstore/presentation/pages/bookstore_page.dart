@@ -245,7 +245,10 @@ class _BookstoreViewState extends State<_BookstoreView> {
                   }
                   return ContinueReadingCard(
                     book: book,
-                    onContinue: () => AppRouter.goBookDetail(book),
+                    onContinue: () => AppRouter.goBookDetail(
+                      book,
+                      coverHeroTag: ContinueReadingCard.heroTagFor(book),
+                    ),
                     onClose: cubit.dismissContinueReading,
                   );
                 },

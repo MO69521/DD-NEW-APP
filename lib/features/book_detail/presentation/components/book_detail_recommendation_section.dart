@@ -18,6 +18,7 @@ class BookDetailRecommendationSection extends StatelessWidget {
     super.key,
     required this.title,
     required this.books,
+    required this.heroNamespace,
     this.actionLabel,
     this.actionIconAsset,
     this.rotateActionIconOnTap = false,
@@ -27,11 +28,17 @@ class BookDetailRecommendationSection extends StatelessWidget {
 
   final String title;
   final List<Book> books;
+
+  /// Hero 标签命名空间；封面标签为 `book-cover-<ns>-<id>`，避免与详情头图
+  /// 及另一推荐区块的相同书 id 冲突。
+  final String heroNamespace;
   final String? actionLabel;
   final String? actionIconAsset;
   final bool rotateActionIconOnTap;
   final VoidCallback? onActionTap;
-  final ValueChanged<Book>? onBookTap;
+
+  /// 回调携带该卡封面的屏内唯一 Hero 标签，供新详情页同 tag 飞行。
+  final void Function(Book book, Object coverHeroTag)? onBookTap;
 
   @override
   Widget build(BuildContext context) {
@@ -69,12 +76,20 @@ class BookDetailRecommendationSection extends StatelessWidget {
                 for (final book in books)
                   SizedBox(
                     width: itemWidth,
-                    child: BookGridCard(
-                      title: book.title,
-                      category: book.category,
-                      coverAsset: book.coverAsset,
-                      coverTag: book.coverTag,
-                      onTap: onBookTap == null ? null : () => onBookTap!(book),
+                    child: Builder(
+                      builder: (context) {
+                        final heroTag = 'book-cover-$heroNamespace-${book.id}';
+                        return BookGridCard(
+                          title: book.title,
+                          category: book.category,
+                          coverAsset: book.coverAsset,
+                          coverTag: book.coverTag,
+                          heroTag: heroTag,
+                          onTap: onBookTap == null
+                              ? null
+                              : () => onBookTap!(book, heroTag),
+                        );
+                      },
                     ),
                   ),
               ],

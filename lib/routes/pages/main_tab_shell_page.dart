@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../core/services/service_locator.dart';
+import '../../core/theme/app_durations.dart';
 import '../../core/theme/app_layout.dart';
 import '../../core/theme/app_sizes.dart';
 import '../../core/theme/app_spacing.dart';
@@ -19,10 +20,15 @@ import '../../features/onboarding/index.dart';
 import '../../features/ranking/index.dart';
 import '../../features/welfare/application/welfare_cubit.dart';
 import '../../features/welfare/index.dart';
+import '../../features/welfare/presentation/components/check_in_success_dialog.dart';
+import '../../features/welfare/presentation/components/daily_check_in_dialog.dart';
+import '../../shared/components/app_toast.dart';
 import '../../shared/components/energy_recharge_purchase_dialog.dart';
 import '../../shared/layouts/app_bottom_nav.dart';
 import '../../shared/layouts/main_tab_controller.dart';
 import '../../shared/layouts/main_tab_shell.dart';
+import '../app_router.dart';
+import '../app_routes.dart';
 
 /// 主 Tab Shell 页面：在 application 层注入各 Tab Cubit。
 class MainTabShellPage extends StatefulWidget {
@@ -53,16 +59,6 @@ class _MainTabShellPageState extends State<MainTabShellPage> {
         _mainTabController.openBookshelfTab(intent);
       });
     }
-    _maybeShowOnboarding();
-  }
-
-  /// 新用户首次进入首页时弹出性别 / 年龄收集弹窗（必填，本会话仅一次）。
-  void _maybeShowOnboarding() {
-    if (!ServiceLocator.onboarding.needsBasicInfo) return;
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!mounted) return;
-      OnboardingProfileDialog.show(context);
-    });
   }
 
   @override
@@ -87,7 +83,8 @@ class _MainTabShellPageState extends State<MainTabShellPage> {
         BlocProvider(create: (_) => BookshelfCubit()..load()),
         BlocProvider(create: (_) => ProfileCubit()..load()),
       ],
-      child: BlocSelector<BookshelfCubit, BookshelfState, bool>(
+      child: _FirstLaunchDialogs(
+        child: BlocSelector<BookshelfCubit, BookshelfState, bool>(
         selector: (state) => state.interaction.isManaging,
         builder: (context, isBookshelfManaging) {
           return MainTabShell(
@@ -133,6 +130,7 @@ class _MainTabShellPageState extends State<MainTabShellPage> {
             ],
           );
         },
+        ),
       ),
     );
   }
@@ -144,4 +142,59 @@ class _MainTabShellPageState extends State<MainTabShellPage> {
     }
     return null;
   }
+}
+
+/// 新用户首启弹窗编排：性别 / 年龄收集 → 每日签到弹窗 → 签到成功弹窗。
+///
+/// 置于各 Tab Cubit provider 之下，以便读取 [WelfareCubit] 的签到数据。
+class _FirstLaunchDialogs extends StatefulWidget {
+  const _FirstLaunchDialogs({required this.child});
+
+  final Widget child;
+
+  @override
+  State<_FirstLaunchDialogs> createState() => _FirstLaunchDialogsState();
+}
+
+class _FirstLaunchDialogsState extends State<_FirstLaunchDialogs> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => _runFirstLaunchFlow());
+  }
+
+  /// 仅新用户本会话首次进入首页触发：先收集性别/年龄，完成后弹出签到弹窗。
+  Future<void> _runFirstLaunchFlow() async {
+    if (!ServiceLocator.onboarding.needsBasicInfo) return;
+    if (!mounted) return;
+
+    await OnboardingProfileDialog.show(context);
+    if (!mounted) return;
+
+    // 与性别/年龄弹窗拉开时间间隔，避免关闭后立即紧接弹出显得突兀。
+    await Future<void>.delayed(AppDurations.slow * 3);
+    if (!mounted) return;
+
+    final cubit = context.read<WelfareCubit>();
+    final summary = cubit.checkInSummary;
+    if (summary == null) return;
+
+    await DailyCheckInDialog.show(
+      context,
+      summary: summary,
+      onCheckIn: () {
+        cubit.checkIn();
+        if (!mounted) return;
+        CheckInSuccessDialog.show(
+          context,
+          summary: summary,
+          onVipClaim: () => AppRouter.pushNamed(AppRoutes.membershipName),
+          onWatchVideo: () => AppToast.show(context, '视频功能开发中'),
+        );
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) => widget.child;
 }

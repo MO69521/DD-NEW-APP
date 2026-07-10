@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_sizes.dart';
 import '../../../../shared/widgets/app_asset_image.dart';
+import '../../../../shared/widgets/book_cover_hero.dart';
 
 /// 顶部氛围头图：375×219 固定比例自适应屏宽。
 class BookDetailHeroCover extends StatelessWidget {
@@ -27,7 +28,14 @@ class BookDetailHeroCover extends StatelessWidget {
 
     return AspectRatio(
       aspectRatio: AppSizes.bookDetailHeroAspectRatio,
-      child: heroTag == null ? image : Hero(tag: heroTag!, child: image),
+      child: heroTag == null
+          ? image
+          : Hero(
+              tag: heroTag!,
+              createRectTween: bookCoverHeroRectTween,
+              flightShuttleBuilder: bookCoverHeroFlightShuttleBuilder,
+              child: image,
+            ),
     );
   }
 }

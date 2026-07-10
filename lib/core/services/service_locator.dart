@@ -4,6 +4,7 @@ import 'auth_service.dart';
 import 'auth_service_config.dart';
 import 'auth_session_service.dart';
 import 'bookshelf_membership_service.dart';
+import 'image_picker_service.dart';
 import 'membership_status_service.dart';
 import 'mock_auth_service.dart';
 import 'onboarding_service.dart';
@@ -25,6 +26,7 @@ abstract final class ServiceLocator {
   static AuthSessionService? _authSession;
   static AuthService? _authService;
   static OnboardingService? _onboarding;
+  static ImagePickerService? _imagePicker;
   static const AuthServiceConfig _authConfig = AuthServiceConfig();
 
   /// 会员状态共享服务（单例）。
@@ -38,6 +40,10 @@ abstract final class ServiceLocator {
   /// 新手基础信息收集状态服务（单例）。
   static OnboardingService get onboarding =>
       _onboarding ??= OnboardingService();
+
+  /// 系统相册图片选择服务（单例）。
+  static ImagePickerService get imagePicker =>
+      _imagePicker ??= ImagePickerService();
 
   /// 登录会话共享服务（单例）。
   static AuthSessionService get authSession =>

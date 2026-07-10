@@ -62,9 +62,9 @@ class MyMessagesMockDataSource {
     await Future<void>.delayed(const Duration(milliseconds: 240));
 
     return const MyMessagesPageContent(
-      unreadReplies: 4,
+      unreadReplies: 0,
       unreadLikes: 16,
-      unreadNotifications: 3,
+      unreadNotifications: 0,
       notifications: _notifications,
       replies: [
         MyMessage(

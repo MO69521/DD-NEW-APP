@@ -6,13 +6,12 @@ import '../../../../core/theme/app_radius.dart';
 import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
-import '../../../../core/theme/app_welfare_colors.dart';
-import '../../../../shared/components/sweep_highlight_overlay.dart';
 import '../../../../shared/widgets/app_icon.dart';
 import '../../../../shared/widgets/app_pressable.dart';
 import '../../../../shared/widgets/app_text.dart';
 import '../../domain/entities/welfare_models.dart';
 import 'check_in_calendar.dart';
+import 'check_in_cta_button.dart';
 import 'check_in_milestone_progress.dart';
 import 'check_in_subtitle.dart';
 import '../../../../core/theme/app_theme_context.dart';
@@ -25,11 +24,17 @@ class DailyCheckInSection extends StatefulWidget {
   const DailyCheckInSection({
     super.key,
     required this.summary,
+    this.checkedIn = false,
     this.onCheckInTap,
+    this.onWatchVideoTap,
   });
 
   final CheckInSummary summary;
+
+  /// 今日是否已签到；为 true 时底部按钮切换为「看视频再领星辰」。
+  final bool checkedIn;
   final VoidCallback? onCheckInTap;
+  final VoidCallback? onWatchVideoTap;
 
   @override
   State<DailyCheckInSection> createState() => _DailyCheckInSectionState();
@@ -110,9 +115,14 @@ class _DailyCheckInSectionState extends State<DailyCheckInSection> {
                       const SizedBox(height: AppSpacing.lg),
                       CheckInCalendar(days: summary.weekDays),
                       const SizedBox(height: AppSpacing.lg),
-                      _AnimatedCheckInCta(
-                        rewardEnergy: summary.todayRewardEnergy,
-                        onTap: widget.onCheckInTap,
+                      CheckInCtaButton(
+                        leadingLabel: widget.checkedIn ? '看视频' : '立即签到',
+                        trailingLabel: widget.checkedIn
+                            ? '再领${summary.videoExtraStardust}星辰'
+                            : '+${summary.todayRewardEnergy}能量',
+                        onTap: widget.checkedIn
+                            ? widget.onWatchVideoTap
+                            : widget.onCheckInTap,
                       ),
                     ],
                   )
@@ -124,94 +134,4 @@ class _DailyCheckInSectionState extends State<DailyCheckInSection> {
   }
 }
 
-class _AnimatedCheckInCta extends StatefulWidget {
-  const _AnimatedCheckInCta({required this.rewardEnergy, this.onTap});
-
-  final int rewardEnergy;
-  final VoidCallback? onTap;
-
-  @override
-  State<_AnimatedCheckInCta> createState() => _AnimatedCheckInCtaState();
-}
-
-class _AnimatedCheckInCtaState extends State<_AnimatedCheckInCta>
-    with SingleTickerProviderStateMixin {
-  late final AnimationController _breathController;
-  late final Animation<double> _breathScale;
-
-  @override
-  void initState() {
-    super.initState();
-    _breathController = AnimationController(
-      vsync: this,
-      duration: AppDurations.membershipCtaBreath,
-    )..repeat(reverse: true);
-    _breathScale =
-        Tween<double>(
-          begin: AppSizes.membershipCtaBreathScaleMin,
-          end: AppSizes.membershipCtaBreathScaleMax,
-        ).animate(
-          CurvedAnimation(parent: _breathController, curve: Curves.easeInOut),
-        );
-  }
-
-  @override
-  void dispose() {
-    _breathController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return ScaleTransition(
-      scale: _breathScale,
-      child: AppPressable(
-        onTap: widget.onTap,
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(AppRadius.welfareCheckInCta),
-          child: DecoratedBox(
-            decoration: const BoxDecoration(
-              color: AppWelfareColors.checkInCtaSolid,
-            ),
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                const Positioned.fill(
-                  child: SweepHighlightOverlay(
-                    highlightColor: AppWelfareColors.checkInCtaSweepHighlight,
-                    edgeColor: AppWelfareColors.checkInCtaSweepEdge,
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: AppSizes.welfareCheckInCtaPaddingHorizontal,
-                    vertical: AppSizes.welfareCheckInCtaPaddingVertical,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      AppText(
-                        '立即签到',
-                        style: AppTextStyles.welfareCtaText.copyWith(
-                          color: AppWelfareColors.checkInCtaTextDark,
-                        ),
-                      ),
-                      const SizedBox(width: AppSpacing.xxsHalf),
-                      AppText(
-                        '+${widget.rewardEnergy}能量',
-                        style: AppTextStyles.welfareCtaText.copyWith(
-                          color: AppWelfareColors.checkInCtaTextDark,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
 

@@ -14,7 +14,9 @@ class EditorPickSection extends StatelessWidget {
 
   final List<Book> books;
   final VoidCallback? onMoreTap;
-  final ValueChanged<Book>? onBookTap;
+
+  /// 回调携带该卡封面的屏内唯一 Hero 标签，供详情页同 tag 飞行。
+  final void Function(Book book, Object coverHeroTag)? onBookTap;
 
   @override
   Widget build(BuildContext context) {
@@ -24,6 +26,7 @@ class EditorPickSection extends StatelessWidget {
       onActionTap: onMoreTap,
       books: books,
       crossAxisCount: 3,
+      heroNamespace: 'editorpick',
       onBookTap: onBookTap,
     );
   }

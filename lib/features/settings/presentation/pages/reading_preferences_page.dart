@@ -3,15 +3,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_layout.dart';
-import '../../../../core/theme/app_radius.dart';
-import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../routes/app_router.dart';
+import '../../../../shared/components/age_range_option.dart';
 import '../../../../shared/components/app_top_bar.dart';
+import '../../../../shared/components/gender_avatar_option.dart';
 import '../../../../shared/layouts/app_page_chrome.dart';
 import '../../../../shared/widgets/app_button.dart';
-import '../../../../shared/widgets/app_pressable.dart';
 import '../../../../shared/widgets/app_text.dart';
 import '../../application/reading_preferences_cubit.dart';
 import '../../application/reading_preferences_state.dart';
@@ -79,8 +78,8 @@ class ReadingPreferencesPage extends StatelessWidget {
                 _SectionLabel(label: '选择年龄'),
                 const SizedBox(height: AppSpacing.md),
                 for (final age in ReadingPreferenceAge.values) ...[
-                  _AgeOption(
-                    age: age,
+                  AgeRangeOption(
+                    label: age.label,
                     selected: state.age == age,
                     onTap: () => cubit.selectAge(age),
                   ),
@@ -131,100 +130,18 @@ class _GenderCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppPressable(
+    final isFemale = gender == ReadingPreferenceGender.female;
+    return GenderAvatarOption(
+      label: gender.label,
+      activeAsset: isFemale
+          ? 'assets/images/onboarding/gender_female_active.png'
+          : 'assets/images/onboarding/gender_male_active.png',
+      inactiveAsset: isFemale
+          ? 'assets/images/onboarding/gender_female_inactive.png'
+          : 'assets/images/onboarding/gender_male_inactive.png',
+      selected: selected,
       onTap: onTap,
-      pressScale: AppSizes.tapPressScaleSubtle,
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          color: selected
-              ? AppColors.segmentedSelectedFill
-              : AppColors.surfaceCard,
-          borderRadius: BorderRadius.circular(AppRadius.lg),
-          border: Border.all(
-            color: selected
-                ? AppColors.segmentedSelectedBorder
-                : AppColors.borderGlass,
-            width: AppSizes.hairline,
-          ),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: AppSpacing.md,
-            vertical: AppSpacing.lg,
-          ),
-          child: Column(
-            children: [
-              AppText(
-                gender == ReadingPreferenceGender.female ? '♀' : '♂',
-                style: AppTextStyles.titleMedium.copyWith(
-                  color: selected
-                      ? AppColors.accentYellow
-                      : AppColors.textOnDarkMuted,
-                ),
-              ),
-              const SizedBox(height: AppSpacing.xs),
-              AppText(
-                gender.label,
-                style: AppTextStyles.bodyMedium.copyWith(
-                  color: selected
-                      ? AppColors.accentYellow
-                      : AppColors.textOnDarkMuted,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
     );
   }
 }
 
-class _AgeOption extends StatelessWidget {
-  const _AgeOption({
-    required this.age,
-    required this.selected,
-    required this.onTap,
-  });
-
-  final ReadingPreferenceAge age;
-  final bool selected;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return AppPressable(
-      onTap: onTap,
-      pressScale: AppSizes.tapPressScaleSubtle,
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          color: selected
-              ? AppColors.segmentedSelectedFill
-              : AppColors.surfaceCard,
-          borderRadius: BorderRadius.circular(AppRadius.full),
-          border: Border.all(
-            color: selected
-                ? AppColors.segmentedSelectedBorder
-                : AppColors.borderGlass,
-            width: AppSizes.hairline,
-          ),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: AppSpacing.md,
-            vertical: AppSpacing.xs,
-          ),
-          child: Center(
-            child: AppText(
-              age.label,
-              style: AppTextStyles.bodyMedium.copyWith(
-                color: selected
-                    ? AppColors.accentYellow
-                    : AppColors.textOnDarkMuted,
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}

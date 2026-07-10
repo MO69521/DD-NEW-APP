@@ -33,7 +33,8 @@ class BookshelfBookGrid extends StatelessWidget {
   static Widget sliver({
     required List<Book> books,
     required double gridWidth,
-    ValueChanged<Book>? onBookTap,
+    void Function(Book book, Object coverHeroTag)? onBookTap,
+    String? heroNamespace,
     bool isManaging = false,
     Set<String> selectedBookIds = const {},
     ValueChanged<Book>? onBookSelectionToggle,
@@ -63,14 +64,19 @@ class BookshelfBookGrid extends StatelessWidget {
           );
         }
 
+        // 书架 / 阅读历史两个 Tab 同时挂载，同一本书可能同时出现，
+        // 故按 Tab 命名空间隔离 Hero 标签，避免同 tag 冲突。
+        final heroTag = heroNamespace == null
+            ? 'book-cover-${book.id}'
+            : 'book-cover-$heroNamespace-${book.id}';
         return BookGridCard(
           key: ValueKey(book.id),
           title: book.title,
           category: book.category,
           coverAsset: book.coverAsset,
           coverTag: book.coverTag,
-          onTap: onBookTap == null ? null : () => onBookTap(book),
-          heroTag: 'book-cover-${book.id}',
+          onTap: onBookTap == null ? null : () => onBookTap(book, heroTag),
+          heroTag: heroTag,
         );
       }, childCount: books.length),
     );

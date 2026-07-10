@@ -61,13 +61,14 @@ class BookstoreRecommendBody extends StatelessWidget {
                       booksByTab: data.booksByTab,
                       selectedTab: data.selectedTab,
                       onTabSelected: cubit.switchRankingTab,
-                      onBookTap: AppRouter.goBookDetail,
+                      onBookTap: (book, heroTag) =>
+                          AppRouter.goBookDetail(book, coverHeroTag: heroTag),
                       onFullListTap: () =>
                           cubit.switchTopTab(BookstoreTopTab.ranking),
                     );
                   },
                 ),
-                const SizedBox(height: AppSpacing.xl),
+                const SizedBox(height: AppSpacing.md),
                 BlocSelector<BookstoreCubit, BookstoreState, List<Book>>(
                   selector: (state) => state.domain.editorPicks,
                   builder: (context, books) {
@@ -77,11 +78,12 @@ class BookstoreRecommendBody extends StatelessWidget {
                         AppRoutes.editorPickName,
                         extra: '限时免费',
                       ),
-                      onBookTap: AppRouter.goBookDetail,
+                      onBookTap: (book, heroTag) =>
+                          AppRouter.goBookDetail(book, coverHeroTag: heroTag),
                     );
                   },
                 ),
-                const SizedBox(height: AppSpacing.xl),
+                const SizedBox(height: AppSpacing.md),
                 BlocSelector<BookstoreCubit, BookstoreState, List<Book>>(
                   selector: (state) => state.domain.editorPicks,
                   builder: (context, books) {
@@ -90,11 +92,12 @@ class BookstoreRecommendBody extends StatelessWidget {
                       onMoreTap: () => AppRouter.pushNamed(
                         AppRoutes.editorPickName,
                       ),
-                      onBookTap: AppRouter.goBookDetail,
+                      onBookTap: (book, heroTag) =>
+                          AppRouter.goBookDetail(book, coverHeroTag: heroTag),
                     );
                   },
                 ),
-                const SizedBox(height: AppSpacing.xl),
+                const SizedBox(height: AppSpacing.md),
                 BlocBuilder<BookstoreCubit, BookstoreState>(
                   buildWhen: (previous, current) =>
                       previous.guessLikeBooks != current.guessLikeBooks ||
@@ -106,7 +109,8 @@ class BookstoreRecommendBody extends StatelessWidget {
                       children: [
                         GuessLikeSection(
                           books: state.guessLikeBooks,
-                          onBookTap: AppRouter.goBookDetail,
+                          onBookTap: (book, heroTag) =>
+                              AppRouter.goBookDetail(book, coverHeroTag: heroTag),
                         ),
                         if (state.ui.isLoadingMoreGuessLike) ...[
                           const SizedBox(height: AppSpacing.md),

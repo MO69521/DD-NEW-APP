@@ -155,7 +155,7 @@ class AppBottomNav extends StatelessWidget {
   }
 }
 
-class _NavTabItem extends StatelessWidget {
+class _NavTabItem extends StatefulWidget {
   const _NavTabItem({
     required this.item,
     required this.isSelected,
@@ -167,9 +167,21 @@ class _NavTabItem extends StatelessWidget {
   final VoidCallback onTap;
 
   @override
+  State<_NavTabItem> createState() => _NavTabItemState();
+}
+
+class _NavTabItemState extends State<_NavTabItem> {
+  int _tapEpoch = 0;
+
+  void _handleTap() {
+    setState(() => _tapEpoch++);
+    widget.onTap();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
+      onTap: _handleTap,
       behavior: HitTestBehavior.opaque,
       child: SizedBox(
         height: AppSizes.bottomNavItemHeight,
@@ -184,11 +196,15 @@ class _NavTabItem extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                AppNavIcon(item: item, isSelected: isSelected),
+                AppNavIcon(
+                  item: widget.item,
+                  isSelected: widget.isSelected,
+                  tapEpoch: _tapEpoch,
+                ),
                 SizedBox(height: AppSizes.bottomNavIconLabelGap),
                 AppText(
-                  item.label,
-                  style: isSelected
+                  widget.item.label,
+                  style: widget.isSelected
                       ? AppTextStyles.navLabelActiveDark
                       : AppTextStyles.navLabelInactiveDark,
                   maxLines: 1,

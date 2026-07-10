@@ -47,12 +47,18 @@ enum RankingTab {
   recommend,
   popular,
   rising,
-  completed;
+  completed,
+  following,
+  potential,
+  interaction;
 
   String get label => switch (this) {
     RankingTab.recommend => '推荐榜',
     RankingTab.popular => '人气榜',
     RankingTab.rising => '飙升榜',
     RankingTab.completed => '完结榜',
+    RankingTab.following => '追更榜',
+    RankingTab.potential => '潜力榜',
+    RankingTab.interaction => '互动榜',
   };
 }

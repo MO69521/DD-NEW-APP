@@ -13,6 +13,7 @@ abstract final class AppColors {
   static const Color white08 = Color(0x14FFFFFF);
   static const Color white20 = Color(0x33FFFFFF);
   static const Color white24 = Color(0x3DFFFFFF);
+  static const Color white30 = Color(0x4DFFFFFF);
   static const Color white50 = Color(0x80FFFFFF);
   static const Color white60 = Color(0x99FFFFFF);
   static const Color white85 = Color(0xD9FFFFFF);
@@ -64,8 +65,8 @@ abstract final class AppColors {
   /// 顶/底 Chrome 毛玻璃半透明底色（约 60% 不透明，弱化内容透出）。
   static const Color chromeBarScrim = bgTint60;
 
-  /// 底部导航毛玻璃底色（约 80% 不透明，减少透出下方内容）。
-  static const Color bottomNavScrim = bgTint80;
+  /// 底部导航毛玻璃底色（约 90% 不透明，减少透出下方内容）。
+  static const Color bottomNavScrim = bgTint90;
 
   /// 顶栏滚动后毛玻璃底色：更接近页面背景，避免头图文字透出干扰导航。
   static const Color topChromeBarScrolledScrim = bgTint80;
@@ -104,12 +105,12 @@ abstract final class AppColors {
 
   /// 热门搜索置顶热词强调色（复用品牌橙）。
   static const Color searchHotAccent = AppBrandColors.accentOrange;
-  static const Color iconMuted = Color(0xFFB2B3BA);
-  static const Color iconMutedSecondary = Color(0xFFABACB3);
+  static const Color iconMuted = AppBrandColors.iconMuted;
+  static const Color iconMutedSecondary = AppBrandColors.iconMutedSecondary;
   static const Color navActiveBackground = Color(0xFFFFFFFF);
   static const Color navActiveText = Color(0xFF090E17);
   static const Color navBarBackground = white20;
-  static const Color topBarIconFrameBackground = black08;
+  static const Color topBarIconFrameBackground = white08;
   static const Color topBarIconFrameBorder = white04;
   static const Color borderGlass = white04;
   static const Color dividerOnDark = white08;
@@ -118,15 +119,28 @@ abstract final class AppColors {
   static const Color discussionItemReplyBackground = white06;
   static const Color discussionLikeIcon = white60;
   static const Color bookDetailUpdateDate = white50;
-  static const Color bookDetailUpdateDateHighlighted = Color(0xFFF0B16A);
+  static const Color bookDetailUpdateHighlight = Color(0xFFF0B16A);
+  static const Color bookDetailUpdateDateHighlighted = bookDetailUpdateHighlight;
   static const Color bookDetailUpdateLine = white20;
   static const Color bookDetailUpdateDotBorder = white50;
-  static const Color bookDetailUpdateDotBorderHighlighted = Color(0xFFF0B16A);
+  static const Color bookDetailUpdateDotBorderHighlighted = bookDetailUpdateHighlight;
   static const Color bookDetailUpdateDotInner = white100;
   static const Color bookDetailUpdateText = white85;
-  static const Color bookDetailUpdateTextHighlighted = Color(0xFFF0B16A);
+  static const Color bookDetailUpdateTextHighlighted = bookDetailUpdateHighlight;
   static const Color bookDetailUpdateSectionBackground = white05;
-  static const Color bookDetailCharFavBackground = accentYellow04;
+
+  // 书籍详情悬浮促销条 (Figma 1598:4319)
+  static const Color bookDetailPromoGradientStart =
+      AppBrandColors.promoBarGradientStart;
+  static const Color bookDetailPromoGradientMid =
+      AppBrandColors.promoBarGradientMid;
+  static const Color bookDetailPromoGradientEnd =
+      AppBrandColors.promoBarGradientEnd;
+  static const Color bookDetailPromoTitle = white100;
+  static const Color bookDetailPromoSubtitle = AppBrandColors.promoSubtitle;
+  static const Color bookDetailPromoRewardText = AppBrandColors.promoRewardText;
+  static const Color bookDetailPromoCloseIcon = white100;
+
   static const Color guessLikeCardBackground = white05;
   static const Color guessLikeTagBackground = white04;
   static const Color guessLikeTagBorder = white04;
@@ -135,6 +149,13 @@ abstract final class AppColors {
   static const Color gradientFadeEnd = backgroundDark;
   static const Color coverBorder = black04;
   static const Color overlayScrim = black30;
+
+  /// 榜单名次角标（第 4 名起）深色底：60% 黑，保证白色名次数字清晰可读。
+  static const Color rankingMutedBadgeScrim = black60;
+
+  /// 按钮不可点击（禁用）态：4% 纯白填充 + 30% 白字，全局统一（覆盖各变体）。
+  static const Color buttonDisabledFill = white04;
+  static const Color buttonDisabledText = white30;
 
   /// 弹窗遮罩（80% 不透明黑，无背景模糊）。
   static const Color overlayScrim80 = black80;
@@ -146,7 +167,7 @@ abstract final class AppColors {
   static const Color bookshelfManageCoverOverlaySelected = black40;
 
   /// 书架管理态未选中选择框描边（60% 白）。
-  static const Color bookshelfSelectionMarkBorderUnselected = white60;
+  static const Color bookshelfSelectionMarkBorderUnselected = white20;
 
   /// 书架空态文案（Figma 1319:9953）。
   static const Color bookshelfEmptyText = Color(0xFF757575);
@@ -161,14 +182,15 @@ abstract final class AppColors {
 
   // 全局分段控件 (Figma 1297:827)
   static const Color segmentedSelectedFill = Color(0x14FFE847);
-  static const Color segmentedSelectedBorder = accentYellow;
+  // 选中态去描边（全局统一）：仅靠 fill + 文字色区分选中
+  static const Color segmentedSelectedBorder = white00;
   static const Color segmentedSelectedText = accentYellow;
   static const Color segmentedUnselectedText = textOnDarkPlaceholder;
 
   // 榜单详情页 (Figma 220:8376)
-  static const Color rankingHeroTitle = Color(0xFFFFFAD7);
+  static const Color rankingHeroTitle = AppBrandColors.rankingHeroTitle;
   static const Color rankingHeroSubtitle = Color(0xE6FFFAD7);
-  static const Color rankingSegmentedSelectedText = Color(0xFF202020);
+  static const Color rankingSegmentedSelectedText = AppBrandColors.textOnLightPanel;
   static const Color rankingCircleButtonBackground = black30;
   static const Color rankingDimensionIndicator = accentYellow;
 
@@ -212,13 +234,4 @@ abstract final class AppColors {
   /// 通知「NEW / 未读」标识（复用品牌橙）。
   static const Color myMessagesNoticeBadge = searchHotAccent;
 
-  // 新手基础信息收集弹窗（性别 / 年龄）——语义均复用既有色值。
-  /// 年龄选项选中底（复用品牌黄）。
-  static const Color onboardingAgeSelected = accentYellow;
-
-  /// 年龄选项选中字（深色，复用导航激活字色）。
-  static const Color onboardingAgeSelectedText = navActiveText;
-
-  /// 年龄选项未选中底（纯白 8%）。
-  static const Color onboardingAgeUnselected = surfaceGlass;
 }

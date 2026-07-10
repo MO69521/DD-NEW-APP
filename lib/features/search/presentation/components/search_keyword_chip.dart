@@ -11,7 +11,7 @@ import '../../../../shared/widgets/app_text.dart';
 
 /// L3 — 搜索关键词标签（历史 / 热门共用）。
 ///
-/// [isHot] 为置顶热词：橙色描边 + 火焰图标强调。
+/// [isHot] 为置顶热词：橙色浅底 + 橙色文字 + 火焰图标强调（无描边）。
 class SearchKeywordChip extends StatelessWidget {
   const SearchKeywordChip({
     super.key,
@@ -42,10 +42,12 @@ class SearchKeywordChip extends StatelessWidget {
               ? AppColors.searchHotAccent.withValues(alpha: _hotTintOpacity)
               : AppColors.surfaceCard,
           borderRadius: BorderRadius.circular(AppRadius.md),
-          border: Border.all(
-            color: isHot ? AppColors.searchHotAccent : AppColors.borderGlass,
-            width: AppSizes.hairline,
-          ),
+          border: isHot
+              ? null
+              : Border.all(
+                  color: AppColors.borderGlass,
+                  width: AppSizes.hairline,
+                ),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_layout.dart';
-import '../../../../core/theme/app_radius.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../routes/app_router.dart';
@@ -36,24 +35,11 @@ class HelpFeedbackFaqDetailPage extends StatelessWidget {
             AppSpacing.xl,
           ),
           children: [
-            Container(
-              padding: const EdgeInsets.all(AppSpacing.md),
-              decoration: BoxDecoration(
-                color: AppColors.surfaceCard,
-                borderRadius: BorderRadius.circular(AppRadius.lg),
-                border: Border.all(color: AppColors.borderGlass),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  AppText(question, style: AppTextStyles.titleMediumDark),
-                  const SizedBox(height: AppSpacing.md),
-                  AppText(
-                    '该问题的详细说明正在整理中。你可以先返回帮助与反馈页提交问题描述，我们会根据你的反馈继续完善帮助内容。',
-                    style: AppTextStyles.bodyMediumDarkMuted,
-                  ),
-                ],
-              ),
+            AppText(question, style: AppTextStyles.titleMediumDark),
+            const SizedBox(height: AppSpacing.md),
+            AppText(
+              '该问题的详细说明正在整理中。你可以先返回帮助与反馈页提交问题描述，我们会根据你的反馈继续完善帮助内容。',
+              style: AppTextStyles.bodyMediumDarkMuted,
             ),
           ],
         ),

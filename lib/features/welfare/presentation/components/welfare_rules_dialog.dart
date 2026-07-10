@@ -101,8 +101,8 @@ class _RuleSection extends StatelessWidget {
         const SizedBox(height: AppSpacing.xxs),
         AppText(
           section.body,
-          style: AppTextStyles.bodyMedium.copyWith(
-            color: AppColors.textOnDarkMuted,
+          style: AppTextStyles.bodyMediumDarkMuted.copyWith(
+            height: AppLineHeights.loose,
           ),
         ),
       ],

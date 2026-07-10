@@ -23,13 +23,17 @@ List<RouteBase> bookDetailRoutes() => [
         BookDetailRouteExtra(:final isInShelf) => isInShelf,
         _ => state.uri.queryParameters['inShelf'] == '1',
       };
+      final coverHeroTag = switch (extra) {
+        BookDetailRouteExtra(:final coverHeroTag) => coverHeroTag,
+        _ => null,
+      };
       return BlocProvider(
         create: (_) => BookDetailCubit(
           bookId: bookId,
           seedBook: seed,
           initialIsInShelf: isInShelf,
         )..load(),
-        child: const BookDetailPage(),
+        child: BookDetailPage(coverHeroTag: coverHeroTag),
       );
     },
   ),

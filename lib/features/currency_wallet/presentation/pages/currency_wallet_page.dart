@@ -22,7 +22,6 @@ import '../components/currency_ledger_section.dart';
 import '../components/currency_info_dialog.dart';
 import '../components/currency_obtain_ways_section.dart';
 import '../components/currency_payment_section.dart';
-import '../components/currency_rules_section.dart';
 import '../components/stardust_exchange_section.dart';
 
 class CurrencyWalletPage extends StatelessWidget {
@@ -154,7 +153,10 @@ class _CurrencyWalletBody extends StatelessWidget {
                 .selectStardustOption,
           ),
           const SizedBox(height: AppSpacing.sm),
-          CurrencyRulesSection(rules: content.ruleDescriptions),
+          CurrencyLedgerSection(
+            type: content.type,
+            records: content.ledgerRecords,
+          ),
         ] else ...[
           CurrencyObtainWaysSection(
             ways: content.obtainWays,
@@ -209,7 +211,7 @@ class _CurrencyWalletBottomBar extends StatelessWidget {
               const SizedBox(height: AppSpacing.sm),
               AppButton(
                 label: secondaryActionLabel,
-                variant: AppButtonVariant.outline,
+                variant: AppButtonVariant.secondary,
                 isExpanded: true,
                 onPressed: () => onAction(CurrencyWalletAction.welfare),
               ),

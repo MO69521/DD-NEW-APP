@@ -98,7 +98,6 @@ class ProfileMockDataSource {
       energyAmount: 25000,
       originalAmount: 15000,
       priceYuan: 100,
-      badgeLabel: '热',
       illustrationAsset: 'assets/images/welfare/recharge_tier_5.png',
     ),
     RechargePackage(

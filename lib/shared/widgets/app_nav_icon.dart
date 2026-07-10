@@ -12,11 +12,15 @@ class AppNavIcon extends StatefulWidget {
     super.key,
     required this.item,
     required this.isSelected,
+    this.tapEpoch = 0,
     this.size = AppSizes.bottomNavIconSize,
   });
 
   final MainTabItem item;
   final bool isSelected;
+
+  /// 每次点击自增的计数：即使已选中，变化时也重放一次微动画。
+  final int tapEpoch;
   final double size;
 
   @override
@@ -64,7 +68,12 @@ class _AppNavIconState extends State<AppNavIcon>
   @override
   void didUpdateWidget(covariant AppNavIcon oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (!oldWidget.isSelected && widget.isSelected) {
+    final becameSelected = !oldWidget.isSelected && widget.isSelected;
+    final retappedWhileSelected =
+        widget.isSelected &&
+        oldWidget.isSelected &&
+        widget.tapEpoch != oldWidget.tapEpoch;
+    if (becameSelected || retappedWhileSelected) {
       _controller.forward(from: 0);
       return;
     }

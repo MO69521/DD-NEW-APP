@@ -51,9 +51,61 @@ class SearchPage extends StatelessWidget {
           onSubmit: cubit.search,
           onChanged: cubit.queryChanged,
         ),
-        body: const _SearchBody(),
+        // 转场期间只滑入轻量空底，图片列表 / 骨架待滑入完成后再构建，
+        // 避免首帧重绘与 push 动画抢帧导致的卡顿。
+        body: const _TransitionGate(child: _SearchBody()),
       ),
     );
+  }
+}
+
+/// 门控：路由 push 转场结束后再构建 [child]，转场期间只渲染轻量占位。
+class _TransitionGate extends StatefulWidget {
+  const _TransitionGate({required this.child});
+
+  final Widget child;
+
+  @override
+  State<_TransitionGate> createState() => _TransitionGateState();
+}
+
+class _TransitionGateState extends State<_TransitionGate> {
+  bool _ready = false;
+  Animation<double>? _animation;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => _gateOnTransition());
+  }
+
+  void _gateOnTransition() {
+    if (!mounted) return;
+    final animation = ModalRoute.of(context)?.animation;
+    if (animation == null || animation.isCompleted) {
+      setState(() => _ready = true);
+      return;
+    }
+    _animation = animation..addStatusListener(_onStatus);
+  }
+
+  void _onStatus(AnimationStatus status) {
+    if (status != AnimationStatus.completed) return;
+    _animation?.removeStatusListener(_onStatus);
+    _animation = null;
+    if (mounted) setState(() => _ready = true);
+  }
+
+  @override
+  void dispose() {
+    _animation?.removeStatusListener(_onStatus);
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (!_ready) return const SizedBox.expand();
+    return widget.child;
   }
 }
 

@@ -19,12 +19,20 @@ class CurrencyLedgerSection extends StatelessWidget {
   final CurrencyType type;
   final List<CurrencyLedgerRecord> records;
 
+  bool get _isExchange => type == CurrencyType.stardust;
+
+  String get _title => _isExchange ? '兑换明细' : '获得记录';
+
+  String get _recentLabel => _isExchange
+      ? '只展示最近30天兑换记录'
+      : '只展示最近30天获得${CurrencyConfig.label(type)}记录';
+
   @override
   Widget build(BuildContext context) {
     return CurrencyWalletSectionCard(
-      title: '获得记录',
+      title: _title,
       trailing: AppText(
-        '只展示最近30天获得${CurrencyConfig.label(type)}记录',
+        _recentLabel,
         style: AppTextStyles.captionMdDarkMuted,
       ),
       child: records.isEmpty

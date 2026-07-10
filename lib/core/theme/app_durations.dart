@@ -37,6 +37,6 @@ abstract final class AppDurations {
   /// 数字滚动（数值变化时从旧值滚到新值）的时长。
   static const Duration numberRoll = Duration(milliseconds: 600);
 
-  /// 跑马灯每轮滚动前的起始停顿时长。
-  static const Duration marqueePause = Duration(milliseconds: 1000);
+  /// 跑马灯滚动一轮后、下一轮开始前的静止间隔（滚过一次即停 6 秒再滚）。
+  static const Duration marqueeInterval = Duration(seconds: 6);
 }

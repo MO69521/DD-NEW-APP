@@ -17,7 +17,9 @@ class GuessLikeSection extends StatelessWidget {
   const GuessLikeSection({super.key, required this.books, this.onBookTap});
 
   final List<Book> books;
-  final ValueChanged<Book>? onBookTap;
+
+  /// 回调携带该卡封面的屏内唯一 Hero 标签，供详情页同 tag 飞行。
+  final void Function(Book book, Object coverHeroTag)? onBookTap;
 
   @override
   Widget build(BuildContext context) {
@@ -36,9 +38,17 @@ class GuessLikeSection extends StatelessWidget {
                 for (final book in books)
                   SizedBox(
                     width: itemWidth,
-                    child: _GuessLikeBookCard(
-                      book: book,
-                      onTap: onBookTap == null ? null : () => onBookTap!(book),
+                    child: Builder(
+                      builder: (context) {
+                        final heroTag = 'book-cover-guesslike-${book.id}';
+                        return _GuessLikeBookCard(
+                          book: book,
+                          heroTag: heroTag,
+                          onTap: onBookTap == null
+                              ? null
+                              : () => onBookTap!(book, heroTag),
+                        );
+                      },
                     ),
                   ),
               ],
@@ -51,13 +61,18 @@ class GuessLikeSection extends StatelessWidget {
 }
 
 class _GuessLikeBookCard extends StatelessWidget {
-  const _GuessLikeBookCard({required this.book, this.onTap});
+  const _GuessLikeBookCard({
+    required this.book,
+    this.heroTag,
+    this.onTap,
+  });
 
   static const String _defaultSummary =
       '在这个充满竞争的商业世界里，病娇总裁李昊天以其独特的魅力和阴郁个性吸引了众多追随者。';
   static const List<String> _defaultAnnotations = ['纯爱', '升级流', '系统'];
 
   final Book book;
+  final Object? heroTag;
   final VoidCallback? onTap;
 
   @override
@@ -83,6 +98,7 @@ class _GuessLikeBookCard extends StatelessWidget {
             BookCover(
               assetPath: book.coverAsset,
               aspectRatio: AppSizes.bookCoverGridAspectRatio,
+              heroTag: heroTag,
               topEndBadge: book.coverTag == null
                   ? null
                   : BookCoverTagBadge(tag: book.coverTag!),
