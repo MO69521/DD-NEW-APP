@@ -20,16 +20,29 @@ collect_changed_files() {
   } | rg '\.dart$' 2>/dev/null | sort -u || true
 }
 
-CHANGED_FILES="$(collect_changed_files)"
+collect_changed_all_files() {
+  {
+    git diff --name-only --diff-filter=ACMR 2>/dev/null || true
+    git diff --cached --name-only --diff-filter=ACMR 2>/dev/null || true
+  } | sort -u || true
+}
 
-if [ -z "$CHANGED_FILES" ]; then
-  echo -e "${YELLOW}No changed .dart files detected. Audit skipped.${NC}"
+has_changed_match() {
+  local pattern="$1"
+  printf '%s\n' "$CHANGED_ALL_FILES" | rg -q "$pattern" 2>/dev/null
+}
+
+CHANGED_FILES="$(collect_changed_files)"
+CHANGED_ALL_FILES="$(collect_changed_all_files)"
+
+if [ -z "$CHANGED_ALL_FILES" ]; then
+  echo -e "${YELLOW}No changed files detected. Audit skipped.${NC}"
   exit 0
 fi
 
 echo "=== Flutter Post-Edit Audit ==="
 echo "Changed files:"
-echo "$CHANGED_FILES" | sed 's/^/  /'
+echo "$CHANGED_ALL_FILES" | sed 's/^/  /'
 echo ""
 
 report_issue() {
@@ -42,30 +55,48 @@ report_warning() {
   warnings=$((warnings + 1))
 }
 
+run_required_check() {
+  local title="$1"
+  local command="$2"
+  echo ""
+  echo "--- $title ---"
+  set +e
+  bash -c "$command"
+  local code=$?
+  set -e
+  if [ "$code" -ne 0 ]; then
+    report_issue "$title failed (exit $code)"
+  fi
+}
+
 # --- 1. Hardcoded styles in non-theme UI files ---
 echo "--- Token / hardcoded style check ---"
-while IFS= read -r file; do
-  [ -f "$file" ] || continue
-  case "$file" in
-    lib/core/theme/*) continue ;;
-  esac
-  case "$file" in
-    lib/features/*/presentation/*|lib/shared/*|lib/routes/*)
-      if rg -n "Color\(0x" "$file" 2>/dev/null; then
-        report_issue "$file: hardcoded Color(0x...) — use AppColors"
-      fi
-      if rg -n "fontSize:\s*[0-9]" "$file" 2>/dev/null; then
-        report_issue "$file: hardcoded fontSize — use AppTextStyles"
-      fi
-      if rg -n "EdgeInsets\.(all|symmetric|only)\(\s*[0-9]" "$file" 2>/dev/null; then
-        report_issue "$file: hardcoded EdgeInsets — use AppSpacing"
-      fi
-      if rg -n "BorderRadius\.circular\(\s*[0-9]" "$file" 2>/dev/null; then
-        report_issue "$file: hardcoded BorderRadius — use AppRadius"
-      fi
-      ;;
-  esac
-done <<< "$CHANGED_FILES"
+if [ -z "$CHANGED_FILES" ]; then
+  echo "No changed Dart files detected."
+else
+  while IFS= read -r file; do
+    [ -f "$file" ] || continue
+    case "$file" in
+      lib/core/theme/*) continue ;;
+    esac
+    case "$file" in
+      lib/features/*/presentation/*|lib/shared/*|lib/routes/*)
+        if rg -n "Color\(0x" "$file" 2>/dev/null; then
+          report_issue "$file: hardcoded Color(0x...) — use AppColors"
+        fi
+        if rg -n "fontSize:\s*[0-9]" "$file" 2>/dev/null; then
+          report_issue "$file: hardcoded fontSize — use AppTextStyles"
+        fi
+        if rg -n "EdgeInsets\.(all|symmetric|only)\(\s*[0-9]" "$file" 2>/dev/null; then
+          report_issue "$file: hardcoded EdgeInsets — use AppSpacing"
+        fi
+        if rg -n "BorderRadius\.circular\(\s*[0-9]" "$file" 2>/dev/null; then
+          report_issue "$file: hardcoded BorderRadius — use AppRadius"
+        fi
+        ;;
+    esac
+  done <<< "$CHANGED_FILES"
+fi
 
 # --- 2. New tokens added ---
 echo ""
@@ -82,6 +113,15 @@ while IFS= read -r file; do
       ;;
   esac
 done <<< "$CHANGED_FILES"
+
+# --- 2.5 Design-system authority gates ---
+if has_changed_match '^lib/core/theme/' || has_changed_match '^design-system/'; then
+  run_required_check "Design-system token check" ".cursor/skills/flutter-post-edit-audit/scripts/design-system-check.sh"
+fi
+
+if has_changed_match '^design-system/'; then
+  run_required_check "Design-system consistency check" ".cursor/skills/flutter-post-edit-audit/scripts/design-system-consistency.sh"
+fi
 
 # --- 3. Cross-feature imports ---
 echo ""

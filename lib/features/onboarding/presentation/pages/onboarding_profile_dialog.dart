@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/domain/entities/user_basic_info.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_durations.dart';
 import '../../../../core/theme/app_radius.dart';
 import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
@@ -110,9 +111,7 @@ class OnboardingProfileDialog extends StatelessWidget {
           Positioned(
             top: AppSpacing.lg,
             right: AppSpacing.lg,
-            child: DialogCloseButton(
-              onTap: () => Navigator.of(context).pop(),
-            ),
+            child: DialogCloseButton(onTap: () => Navigator.of(context).pop()),
           ),
         ],
       ),
@@ -139,8 +138,8 @@ class _StepSwitcher extends StatelessWidget {
           index == 0 ? OnboardingStep.gender : OnboardingStep.age,
         ),
         children: const [
-          SingleChildScrollView(child: _GenderStep()),
-          SingleChildScrollView(child: _AgeStep()),
+          Center(child: _GenderStep()),
+          Center(child: _AgeStep()),
         ],
       ),
     );
@@ -149,11 +148,10 @@ class _StepSwitcher extends StatelessWidget {
 
 /// 步骤一：选择性别（选后自动横切到年龄）。
 class _GenderStep extends StatelessWidget {
-  const _GenderStep({super.key});
+  const _GenderStep();
 
   @override
   Widget build(BuildContext context) {
-    final cubit = context.read<OnboardingCubit>();
     final gender = context.select<OnboardingCubit, UserGender?>(
       (c) => c.state.gender,
     );
@@ -168,7 +166,7 @@ class _GenderStep extends StatelessWidget {
           activeAsset: 'assets/images/onboarding/gender_female_active.png',
           inactiveAsset: 'assets/images/onboarding/gender_female_inactive.png',
           selected: gender == UserGender.female,
-          onTap: () => cubit.selectGender(UserGender.female),
+          onTap: () => _selectGenderWithPreview(context, UserGender.female),
         ),
         const SizedBox(height: AppSpacing.lg),
         OnboardingGenderOption(
@@ -176,16 +174,30 @@ class _GenderStep extends StatelessWidget {
           activeAsset: 'assets/images/onboarding/gender_male_active.png',
           inactiveAsset: 'assets/images/onboarding/gender_male_inactive.png',
           selected: gender == UserGender.male,
-          onTap: () => cubit.selectGender(UserGender.male),
+          onTap: () => _selectGenderWithPreview(context, UserGender.male),
         ),
       ],
     );
+  }
+
+  Future<void> _selectGenderWithPreview(
+    BuildContext context,
+    UserGender selectedGender,
+  ) async {
+    final cubit = context.read<OnboardingCubit>();
+    cubit.selectGender(selectedGender);
+    await Future<void>.delayed(AppDurations.slow);
+    if (!context.mounted) return;
+    if (cubit.state.gender == selectedGender &&
+        cubit.state.step == OnboardingStep.gender) {
+      cubit.setStep(OnboardingStep.age);
+    }
   }
 }
 
 /// 步骤二：选择年龄。
 class _AgeStep extends StatelessWidget {
-  const _AgeStep({super.key});
+  const _AgeStep();
 
   @override
   Widget build(BuildContext context) {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_radius.dart';
@@ -17,10 +18,12 @@ class MyMessagesTabBar extends StatelessWidget {
     required this.selected,
     required this.onSelected,
     this.unreadCounts = const {},
+    this.swipeProgress,
   });
 
   final MyMessageTab selected;
   final ValueChanged<MyMessageTab> onSelected;
+  final ValueListenable<double>? swipeProgress;
 
   /// 各 Tab 未读数；选中的 Tab 视为已读不展示红点。
   final Map<MyMessageTab, int> unreadCounts;
@@ -60,6 +63,7 @@ class MyMessagesTabBar extends StatelessWidget {
             selectedIndex: tabs.indexOf(selected),
             slotWidth: slotWidth,
             slotPitch: slotPitch,
+            swipeProgress: swipeProgress,
           ),
         ],
       ),

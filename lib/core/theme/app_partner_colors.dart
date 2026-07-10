@@ -23,11 +23,7 @@ abstract final class AppPartnerColors {
   static const Color tagPurpleBg = Color(0x24B8A4FF);
   static const Color tagPurpleBorder = Color(0x38B8A4FF);
 
-  // ── 页面大背景（Figma 1022:1062，独立色体系）──
-  /// 全屏渐变顶色：深酒红棕 #331E25。
-  static const Color pageBackgroundTop = AppBrandColors.partnerPageBackgroundTop;
-
-  /// 全屏渐变底色：深蓝黑 #090E17（随 THEME 换色系）。
+  // ── 页面大背景：复用全局深色背景 ──
   static const Color pageBackgroundBottom = AppColors.backgroundDark;
 
   // ── 深色中性系（复用全局）──

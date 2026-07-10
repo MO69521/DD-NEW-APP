@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_durations.dart';
@@ -19,6 +20,7 @@ class ElasticTabIndicator extends StatefulWidget {
     this.duration = AppDurations.normal,
     this.stretchFactor = 0.75,
     this.bottom = 0,
+    this.swipeProgress,
   });
 
   final int selectedIndex;
@@ -31,6 +33,7 @@ class ElasticTabIndicator extends StatefulWidget {
   final Duration duration;
   final double stretchFactor;
   final double bottom;
+  final ValueListenable<double>? swipeProgress;
 
   @override
   State<ElasticTabIndicator> createState() => _ElasticTabIndicatorState();
@@ -55,6 +58,7 @@ class _ElasticTabIndicatorState extends State<ElasticTabIndicator>
   void didUpdateWidget(covariant ElasticTabIndicator oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.selectedIndex == widget.selectedIndex) return;
+    if (widget.swipeProgress != null) return;
     _fromIndex = oldWidget.selectedIndex;
     _toIndex = widget.selectedIndex;
     _controller
@@ -71,18 +75,13 @@ class _ElasticTabIndicatorState extends State<ElasticTabIndicator>
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
-      animation: _controller,
+      animation: widget.swipeProgress ?? _controller,
       builder: (context, child) {
-        final rawProgress = _controller.value;
-        final progress = Curves.easeOutCubic.transform(rawProgress);
-        final stretchProgress = _stretchProgress(rawProgress);
+        final progressData = _progressData();
         final width =
             widget.width *
-            (1 + widget.stretchFactor * stretchProgress.clamp(0, 1));
-        final center =
-            _indicatorCenter(_fromIndex) +
-            (_indicatorCenter(_toIndex) - _indicatorCenter(_fromIndex)) *
-                progress;
+            (1 + widget.stretchFactor * progressData.stretch.clamp(0, 1));
+        final center = progressData.center;
 
         return Positioned(
           left: center - width / 2,
@@ -98,6 +97,31 @@ class _ElasticTabIndicatorState extends State<ElasticTabIndicator>
         );
       },
     );
+  }
+
+  ({double center, double stretch}) _progressData() {
+    final swipeProgress = widget.swipeProgress?.value;
+    if (swipeProgress != null) {
+      final clampedProgress = swipeProgress.clamp(0.0, double.infinity);
+      final fromIndex = clampedProgress.floor();
+      final toIndex = clampedProgress.ceil();
+      final localProgress = clampedProgress - fromIndex;
+      final center =
+          _indicatorCenter(fromIndex) +
+          (_indicatorCenter(toIndex) - _indicatorCenter(fromIndex)) *
+              localProgress;
+      final stretch = localProgress <= 0.5
+          ? localProgress / 0.5
+          : (1 - localProgress) / 0.5;
+      return (center: center, stretch: stretch);
+    }
+
+    final rawProgress = _controller.value;
+    final progress = Curves.easeOutCubic.transform(rawProgress);
+    final center =
+        _indicatorCenter(_fromIndex) +
+        (_indicatorCenter(_toIndex) - _indicatorCenter(_fromIndex)) * progress;
+    return (center: center, stretch: _stretchProgress(rawProgress));
   }
 
   double _indicatorCenter(int index) {

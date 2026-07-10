@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_partner_colors.dart';
@@ -6,6 +7,7 @@ import '../../../../core/theme/app_radius.dart';
 import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
+import '../../../../shared/components/elastic_tab_indicator.dart';
 import '../../../../shared/widgets/app_pressable.dart';
 import '../../../../shared/widgets/app_text.dart';
 import '../../domain/entities/partner_top_tab.dart';
@@ -20,12 +22,14 @@ class PartnerTopTabs extends StatelessWidget {
     required this.messageUnreadCount,
     this.interactionUnreadCount = 0,
     this.onSelected,
+    this.swipeProgress,
   });
 
   final PartnerTopTab selected;
   final int messageUnreadCount;
   final int interactionUnreadCount;
   final ValueChanged<PartnerTopTab>? onSelected;
+  final ValueListenable<double>? swipeProgress;
 
   @override
   Widget build(BuildContext context) {
@@ -34,23 +38,35 @@ class PartnerTopTabs extends StatelessWidget {
 
     return SizedBox(
       width: slotWidth * tabs.length + AppSpacing.md * (tabs.length - 1),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
+      child: Stack(
+        clipBehavior: Clip.none,
         children: [
-          for (var i = 0; i < tabs.length; i++) ...[
-            if (i > 0) const SizedBox(width: AppSpacing.md),
-            _PartnerTopTabItem(
-              tab: tabs[i],
-              isSelected: tabs[i] == selected,
-              width: slotWidth,
-              badgeCount: switch (tabs[i]) {
-                PartnerTopTab.message => messageUnreadCount,
-                PartnerTopTab.interaction => interactionUnreadCount,
-                _ => 0,
-              },
-              onTap: onSelected == null ? null : () => onSelected!(tabs[i]),
-            ),
-          ],
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              for (var i = 0; i < tabs.length; i++) ...[
+                if (i > 0) const SizedBox(width: AppSpacing.md),
+                _PartnerTopTabItem(
+                  tab: tabs[i],
+                  isSelected: tabs[i] == selected,
+                  width: slotWidth,
+                  badgeCount: switch (tabs[i]) {
+                    PartnerTopTab.message => messageUnreadCount,
+                    PartnerTopTab.interaction => interactionUnreadCount,
+                    _ => 0,
+                  },
+                  onTap: onSelected == null ? null : () => onSelected!(tabs[i]),
+                ),
+              ],
+            ],
+          ),
+          ElasticTabIndicator(
+            selectedIndex: tabs.indexOf(selected),
+            slotWidth: slotWidth,
+            slotPitch: slotWidth + AppSpacing.md,
+            color: AppPartnerColors.primary,
+            swipeProgress: swipeProgress,
+          ),
         ],
       ),
     );
@@ -78,26 +94,31 @@ class _PartnerTopTabItem extends StatelessWidget {
       onTap: onTap,
       child: SizedBox(
         width: width,
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
+        child: Stack(
+          clipBehavior: Clip.none,
+          alignment: Alignment.center,
           children: [
-            AppText(
-              tab.label,
-              style:
-                  (isSelected
-                          ? AppTextStyles.tabActiveDark
-                          : AppTextStyles.tabInactiveDark)
-                      .copyWith(
-                        color: isSelected
-                            ? AppColors.textOnDark
-                            : AppColors.textOnDarkMuted,
-                      ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: AppSpacing.xs),
+              child: AppText(
+                tab.label,
+                style:
+                    (isSelected
+                            ? AppTextStyles.tabActiveDark
+                            : AppTextStyles.tabInactiveDark)
+                        .copyWith(
+                          color: isSelected
+                              ? AppColors.textOnDark
+                              : AppColors.textOnDarkMuted,
+                        ),
+              ),
             ),
-            if (badgeCount > 0) ...[
-              const SizedBox(width: AppSpacing.xxs),
-              _NotificationBadge(count: badgeCount),
-            ],
+            if (badgeCount > 0)
+              Positioned(
+                top: -AppSpacing.sm,
+                right: AppSpacing.xs,
+                child: _NotificationBadge(count: badgeCount),
+              ),
           ],
         ),
       ),

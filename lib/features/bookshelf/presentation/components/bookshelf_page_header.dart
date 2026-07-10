@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 
 import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
@@ -20,12 +21,14 @@ class BookshelfPageHeader extends StatelessWidget {
     required this.selectedTab,
     required this.onTabSelected,
     required this.onManageTap,
+    this.swipeProgress,
     this.isManaging = false,
   });
 
   final BookshelfTab selectedTab;
   final ValueChanged<BookshelfTab> onTabSelected;
   final VoidCallback onManageTap;
+  final ValueListenable<double>? swipeProgress;
   final bool isManaging;
 
   @override
@@ -38,7 +41,11 @@ class BookshelfPageHeader extends StatelessWidget {
               color: colors.textPrimary,
             ),
           )
-        : BookshelfPageTabs(selected: selectedTab, onSelected: onTabSelected);
+        : BookshelfPageTabs(
+            selected: selectedTab,
+            onSelected: onTabSelected,
+            swipeProgress: swipeProgress,
+          );
 
     return AppTopBar(
       height: AppSizes.bookshelfHeaderHeight,

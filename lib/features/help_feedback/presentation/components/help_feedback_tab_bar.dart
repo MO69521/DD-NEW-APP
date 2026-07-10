@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_spacing.dart';
@@ -14,10 +15,12 @@ class HelpFeedbackTabBar extends StatelessWidget {
     super.key,
     required this.selected,
     required this.onSelected,
+    this.swipeProgress,
   });
 
   final HelpFeedbackTab selected;
   final ValueChanged<HelpFeedbackTab> onSelected;
+  final ValueListenable<double>? swipeProgress;
 
   @override
   Widget build(BuildContext context) {
@@ -53,6 +56,7 @@ class HelpFeedbackTabBar extends StatelessWidget {
             selectedIndex: tabs.indexOf(selected),
             slotWidth: slotWidth,
             slotPitch: slotPitch,
+            swipeProgress: swipeProgress,
           ),
         ],
       ),

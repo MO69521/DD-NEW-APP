@@ -1,13 +1,14 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_radius.dart';
 import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
+import '../../../../core/theme/app_theme_context.dart';
 import '../../../../shared/widgets/app_pressable.dart';
 import '../../../../shared/widgets/app_text.dart';
 import '../../domain/entities/bookshelf_tab.dart';
-import '../../../../core/theme/app_theme_context.dart';
 
 /// 书架页顶部 Tab 切换（书架 / 阅读历史）。
 ///
@@ -17,10 +18,12 @@ class BookshelfPageTabs extends StatelessWidget {
     super.key,
     required this.selected,
     required this.onSelected,
+    this.swipeProgress,
   });
 
   final BookshelfTab selected;
   final ValueChanged<BookshelfTab> onSelected;
+  final ValueListenable<double>? swipeProgress;
 
   @override
   Widget build(BuildContext context) {
@@ -28,6 +31,7 @@ class BookshelfPageTabs extends StatelessWidget {
 
     return _IntrinsicElasticTabRow(
       selectedIndex: tabs.indexOf(selected),
+      swipeProgress: swipeProgress,
       children: [
         for (var i = 0; i < tabs.length; i++) ...[
           if (i > 0) const SizedBox(width: AppSpacing.md),
@@ -46,10 +50,12 @@ class _IntrinsicElasticTabRow extends StatefulWidget {
   const _IntrinsicElasticTabRow({
     required this.selectedIndex,
     required this.children,
+    this.swipeProgress,
   });
 
   final int selectedIndex;
   final List<Widget> children;
+  final ValueListenable<double>? swipeProgress;
 
   @override
   State<_IntrinsicElasticTabRow> createState() =>
@@ -60,7 +66,6 @@ class _IntrinsicElasticTabRowState extends State<_IntrinsicElasticTabRow> {
   final GlobalKey _rowKey = GlobalKey();
   late List<GlobalKey> _tabKeys;
   List<double>? _centers;
-  List<double>? _widths;
 
   @override
   void initState() {
@@ -91,18 +96,15 @@ class _IntrinsicElasticTabRowState extends State<_IntrinsicElasticTabRow> {
     if (rowBox == null) return;
 
     final centers = <double>[];
-    final widths = <double>[];
     for (final key in _tabKeys) {
       final box = key.currentContext?.findRenderObject() as RenderBox?;
       if (box == null) continue;
       final topLeft = box.localToGlobal(Offset.zero, ancestor: rowBox);
       centers.add(topLeft.dx + box.size.width / 2);
-      widths.add(box.size.width);
     }
     if (centers.length != _tabKeys.length) return;
     setState(() {
       _centers = centers;
-      _widths = widths;
     });
   }
 
@@ -123,11 +125,11 @@ class _IntrinsicElasticTabRowState extends State<_IntrinsicElasticTabRow> {
                 KeyedSubtree(key: _tabKeys[keyIndex++], child: child),
           ],
         ),
-        if (_centers != null && _widths != null)
+        if (_centers != null)
           _MeasuredElasticIndicator(
             selectedIndex: widget.selectedIndex,
             centers: _centers!,
-            widths: _widths!,
+            swipeProgress: widget.swipeProgress,
           ),
       ],
     );
@@ -138,12 +140,12 @@ class _MeasuredElasticIndicator extends StatefulWidget {
   const _MeasuredElasticIndicator({
     required this.selectedIndex,
     required this.centers,
-    required this.widths,
+    this.swipeProgress,
   });
 
   final int selectedIndex;
   final List<double> centers;
-  final List<double> widths;
+  final ValueListenable<double>? swipeProgress;
 
   @override
   State<_MeasuredElasticIndicator> createState() =>
@@ -171,6 +173,7 @@ class _MeasuredElasticIndicatorState extends State<_MeasuredElasticIndicator>
   void didUpdateWidget(covariant _MeasuredElasticIndicator oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.selectedIndex == widget.selectedIndex) return;
+    if (widget.swipeProgress != null) return;
     _fromIndex = oldWidget.selectedIndex;
     _toIndex = widget.selectedIndex;
     _controller.forward(from: 0);
@@ -185,16 +188,12 @@ class _MeasuredElasticIndicatorState extends State<_MeasuredElasticIndicator>
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
-      animation: _controller,
+      animation: widget.swipeProgress ?? _controller,
       builder: (context, child) {
-        final rawProgress = _controller.value;
-        final progress = Curves.easeOutCubic.transform(rawProgress);
-        final stretchProgress = _stretchProgress(rawProgress);
+        final progressData = _progressData();
         final baseWidth = AppSizes.tabIndicatorWidth;
-        final width = baseWidth * (1 + 0.75 * stretchProgress.clamp(0, 1));
-        final center =
-            widget.centers[_fromIndex] +
-            (widget.centers[_toIndex] - widget.centers[_fromIndex]) * progress;
+        final width = baseWidth * (1 + 0.75 * progressData.stretch.clamp(0, 1));
+        final center = progressData.center;
 
         return Positioned(
           left: center - width / 2,
@@ -210,6 +209,36 @@ class _MeasuredElasticIndicatorState extends State<_MeasuredElasticIndicator>
         );
       },
     );
+  }
+
+  ({double center, double stretch}) _progressData() {
+    final swipeProgress = widget.swipeProgress?.value;
+    if (swipeProgress != null) {
+      final clampedProgress = swipeProgress.clamp(
+        0.0,
+        widget.centers.length - 1,
+      );
+      final fromIndex = clampedProgress.floor();
+      final toIndex = clampedProgress.ceil().clamp(
+        0,
+        widget.centers.length - 1,
+      );
+      final localProgress = clampedProgress - fromIndex;
+      final center =
+          widget.centers[fromIndex] +
+          (widget.centers[toIndex] - widget.centers[fromIndex]) * localProgress;
+      final stretch = localProgress <= 0.5
+          ? localProgress / 0.5
+          : (1 - localProgress) / 0.5;
+      return (center: center, stretch: stretch);
+    }
+
+    final rawProgress = _controller.value;
+    final progress = Curves.easeOutCubic.transform(rawProgress);
+    final center =
+        widget.centers[_fromIndex] +
+        (widget.centers[_toIndex] - widget.centers[_fromIndex]) * progress;
+    return (center: center, stretch: _stretchProgress(rawProgress));
   }
 
   double _stretchProgress(double progress) {

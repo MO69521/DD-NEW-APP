@@ -28,7 +28,7 @@ import {
 const APP = {
   bg: "#090E17",
   surface: "rgba(255,255,255,0.04)", // white04
-  glass: "rgba(255,255,255,0.08)", // white08
+  glass: "rgba(255,255,255,0.04)", // white04 · surfaceGlass
   navBg: "rgba(255,255,255,0.20)", // white20 · navBarBackground
   border: "rgba(255,255,255,0.08)",
   panelEdge: "rgba(255,255,255,0.10)",
@@ -1215,10 +1215,10 @@ function ColorSection() {
             ["white50", "50%", "0x80FFFFFF", "弱化文字 / 扫光"],
             ["white24", "24%", "0x3DFFFFFF", "头图蒙版软档"],
             ["white20", "20%", "0x33FFFFFF", "分隔线 / 导航底"],
-            ["white08", "8%", "0x14FFFFFF", "玻璃面 / 分隔"],
+            ["white08", "8%", "0x14FFFFFF", "分隔"],
             ["white06", "6%", "0x0FFFFFFF", "回复区底"],
             ["white05", "5%", "0x0DFFFFFF", "卡片弱底"],
-            ["white04", "4%", "0x0AFFFFFF", "卡片面 / 描边 / 标签底"],
+            ["white04", "4%", "0x0AFFFFFF", "玻璃面 / 卡片面 / 描边 / 标签底"],
             ["white00", "0%", "0x00FFFFFF", "渐变透明端"],
           ].map((r) => r.map(cell))}
         />
@@ -1443,7 +1443,7 @@ function SizeIndexSection() {
     ["书籍详情页", "头图 / 目录抽屉 / 角色卡 / 讨论区 / 更新时间线", "bookDetail* · bookDiscussionDetail*"],
     ["搜索页", "顶栏返回 / 输入图标 / 空状态", "searchAppBar* · searchInput* · searchEmpty*"],
     ["会员页", "Hero 轮播 / 方案卡 / 权益宫格 / CTA / 特权详情", "membership*"],
-    ["伙伴页", "头部 / 角色卡 / 消息 Tab / 互动 Tab", "partner*"],
+    ["伙伴页", "头部 / 顶部极光 / 角色卡 / 消息 Tab / 互动 Tab", "partner* · partnerTopAuroraHeight · partnerTopAuroraOpacity"],
     ["分类页", "筛选组 / chip / 下划线", "categoryFilter*"],
     ["帮助与反馈", "Banner / 输入 / 上传框", "helpFeedback*"],
     ["Toast / 交互阈值", "轻提示内边距 / 滑动切换阈值", "toast* · swipeTabVelocityThreshold"],

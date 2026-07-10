@@ -4,10 +4,7 @@ import 'app_chrome_blur.dart';
 
 /// 监听子树滚动，向 [builder] 提供顶栏 Chrome 毛玻璃是否启用。
 class AppScrollBlurScope extends StatefulWidget {
-  const AppScrollBlurScope({
-    super.key,
-    required this.builder,
-  });
+  const AppScrollBlurScope({super.key, required this.builder});
 
   final Widget Function(BuildContext context, bool blurEnabled) builder;
 
@@ -19,6 +16,7 @@ class _AppScrollBlurScopeState extends State<AppScrollBlurScope> {
   bool _blurEnabled = false;
 
   bool _onScrollNotification(ScrollNotification notification) {
+    if (notification.metrics.axis != Axis.vertical) return false;
     final enabled = AppChromeBlur.shouldBlurForScroll(notification.metrics);
     if (enabled != _blurEnabled) {
       setState(() => _blurEnabled = enabled);

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/theme/app_layout.dart';
+import '../../../../core/theme/app_durations.dart';
 import '../../../../core/theme/app_partner_colors.dart';
 import '../../../../core/theme/app_sizes.dart';
 import '../../../../routes/app_router.dart';
@@ -10,8 +12,8 @@ import '../../../../shared/components/app_swipe_tab_switcher.dart';
 import '../../../../shared/components/empty_state.dart';
 import '../../../../shared/widgets/app_button.dart';
 import '../../../../shared/components/app_blurred_chrome_bar.dart';
-import '../../../../shared/layouts/app_chrome_blur.dart';
 import '../../../../shared/layouts/app_scroll_blur_scope.dart';
+import '../../../../shared/widgets/aurora_background.dart';
 import '../../application/partner_cubit.dart';
 import '../../application/partner_state.dart';
 import '../../domain/entities/partner_character.dart';
@@ -21,7 +23,6 @@ import '../components/partner_explore_body.dart';
 import '../components/partner_filter_sheet.dart';
 import '../components/partner_interaction_body.dart';
 import '../components/partner_message_body.dart';
-import '../components/partner_page_background.dart';
 import '../components/partner_page_header.dart';
 
 /// 伙伴页：深色基底 + 粉色强调，仅渲染 state、触发 action。
@@ -67,24 +68,114 @@ class PartnerPage extends StatelessWidget {
   }
 }
 
-class _PartnerView extends StatelessWidget {
+class _PartnerView extends StatefulWidget {
   const _PartnerView();
+
+  @override
+  State<_PartnerView> createState() => _PartnerViewState();
+}
+
+class _PartnerViewState extends State<_PartnerView> {
+  late final ValueNotifier<double> _tabSwipeProgress;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabSwipeProgress = ValueNotifier<double>(
+      context.read<PartnerCubit>().state.interaction.topTab.index.toDouble(),
+    );
+  }
+
+  @override
+  void dispose() {
+    _tabSwipeProgress.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final statusBarHeight = AppLayout.statusBarHeight(context);
+    final headerHeight = statusBarHeight + AppSizes.partnerHeaderHeight;
+
+    return _PartnerPageShell(
+      body: AppScrollBlurScope(
+        builder: (context, topBlurEnabled) => Stack(
+          children: [
+            const Positioned(
+              top: 0,
+              left: 0,
+              right: 0,
+              height: AppSizes.partnerTopAuroraHeight,
+              child: _PartnerTopAurora(),
+            ),
+            Positioned.fill(
+              child: BlocSelector<PartnerCubit, PartnerState, PartnerTopTab>(
+                selector: (state) => state.interaction.topTab,
+                builder: (context, topTab) {
+                  return AppSwipeTabSwitcher(
+                    selectedIndex: topTab.index,
+                    onSwipeProgressChanged: (progress) =>
+                        _tabSwipeProgress.value = progress,
+                    onIndexChanged: (index) => context
+                        .read<PartnerCubit>()
+                        .switchTopTab(PartnerTopTab.values[index]),
+                    children: [
+                      _PartnerScrollView(
+                        tab: PartnerTopTab.explore,
+                        headerHeight: headerHeight,
+                      ),
+                      _PartnerScrollView(
+                        tab: PartnerTopTab.message,
+                        headerHeight: headerHeight,
+                      ),
+                      const _PartnerInteractionView(),
+                    ],
+                  );
+                },
+              ),
+            ),
+            Positioned(
+              top: 0,
+              left: 0,
+              right: 0,
+              child: _PartnerFixedHeader(
+                statusBarHeight: statusBarHeight,
+                topBlurEnabled: topBlurEnabled,
+                swipeProgress: _tabSwipeProgress,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _PartnerTopAurora extends StatelessWidget {
+  const _PartnerTopAurora();
 
   @override
   Widget build(BuildContext context) {
     return BlocSelector<PartnerCubit, PartnerState, PartnerTopTab>(
       selector: (state) => state.interaction.topTab,
       builder: (context, topTab) {
-        return AppSwipeTabSwitcher(
-          selectedIndex: topTab.index,
-          onIndexChanged: (index) => context.read<PartnerCubit>().switchTopTab(
-            PartnerTopTab.values[index],
+        final isVisible = topTab != PartnerTopTab.interaction;
+
+        return IgnorePointer(
+          child: AnimatedOpacity(
+            duration: AppDurations.normal,
+            opacity: isVisible ? 1 : 0,
+            child: const ClipRect(
+              child: AuroraBackground(
+                opacity: AppSizes.partnerTopAuroraOpacity,
+                colorStops: [
+                  AppPartnerColors.primary,
+                  AppPartnerColors.primary,
+                  AppPartnerColors.primary,
+                ],
+              ),
+            ),
           ),
-          children: const [
-            _PartnerScrollView(),
-            _PartnerScrollView(),
-            _PartnerInteractionView(),
-          ],
         );
       },
     );
@@ -92,52 +183,40 @@ class _PartnerView extends StatelessWidget {
 }
 
 class _PartnerScrollView extends StatelessWidget {
-  const _PartnerScrollView();
+  const _PartnerScrollView({required this.tab, required this.headerHeight});
+
+  final PartnerTopTab tab;
+  final double headerHeight;
 
   @override
   Widget build(BuildContext context) {
-    final statusBarHeight = AppLayout.statusBarHeight(context);
-    final headerHeight = statusBarHeight + AppSizes.partnerHeaderHeight;
     final cubit = context.read<PartnerCubit>();
 
-    return _PartnerPageShell(
-      body: NotificationListener<ScrollNotification>(
-        onNotification: (notification) {
-          if (notification.metrics.axis != Axis.vertical) return false;
-          cubit.onScrollNearEnd(
-            notification.metrics.pixels,
-            notification.metrics.maxScrollExtent,
-          );
-          return false;
-        },
-        child: CustomScrollView(
-          slivers: [
-            SliverPersistentHeader(
-              pinned: true,
-              delegate: _PartnerHeaderDelegate(
-                height: headerHeight,
-                child: _PartnerHeaderContent(statusBarHeight: statusBarHeight),
-              ),
+    return NotificationListener<ScrollNotification>(
+      onNotification: (notification) {
+        if (notification.metrics.axis != Axis.vertical) return false;
+        cubit.onScrollNearEnd(
+          notification.metrics.pixels,
+          notification.metrics.maxScrollExtent,
+        );
+        return false;
+      },
+      child: CustomScrollView(
+        slivers: [
+          SliverToBoxAdapter(child: SizedBox(height: headerHeight)),
+          switch (tab) {
+            PartnerTopTab.message => PartnerMessageBody(
+              onConversationTap: _onConversationTap,
             ),
-            BlocSelector<PartnerCubit, PartnerState, PartnerTopTab>(
-              selector: (state) => state.interaction.topTab,
-              builder: (context, topTab) {
-                return switch (topTab) {
-                  PartnerTopTab.message => PartnerMessageBody(
-                    onConversationTap: _onConversationTap,
-                  ),
-                  PartnerTopTab.explore => PartnerExploreBody(
-                    onCharacterTap: _onCharacterTap,
-                    onFilterTap: () => _openFilterSheet(context),
-                  ),
-                  PartnerTopTab.interaction => const SliverToBoxAdapter(
-                    child: SizedBox.shrink(),
-                  ),
-                };
-              },
+            PartnerTopTab.explore => PartnerExploreBody(
+              onCharacterTap: _onCharacterTap,
+              onFilterTap: () => _openFilterSheet(context),
             ),
-          ],
-        ),
+            PartnerTopTab.interaction => const SliverToBoxAdapter(
+              child: SizedBox.shrink(),
+            ),
+          },
+        ],
       ),
     );
   }
@@ -163,28 +242,55 @@ class _PartnerInteractionView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const _PartnerPageShell(
-      showPageBackground: false,
-      body: _PartnerInteractionBody(),
-    );
+    return const PartnerInteractionBody();
   }
 }
 
-class _PartnerInteractionBody extends StatelessWidget {
-  const _PartnerInteractionBody();
+class _PartnerFixedHeader extends StatelessWidget {
+  const _PartnerFixedHeader({
+    required this.statusBarHeight,
+    required this.topBlurEnabled,
+    required this.swipeProgress,
+  });
+
+  final double statusBarHeight;
+  final bool topBlurEnabled;
+  final ValueListenable<double> swipeProgress;
 
   @override
   Widget build(BuildContext context) {
-    return AppScrollBlurScope(
-      builder: (context, topBlurEnabled) => Stack(
-        fit: StackFit.expand,
+    final cubit = context.read<PartnerCubit>();
+
+    return AppBlurredChromeBar(
+      enabled: topBlurEnabled,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          const PartnerInteractionBody(),
-          Positioned(
-            top: 0,
-            left: 0,
-            right: 0,
-            child: _PartnerInteractionHeader(topBlurEnabled: topBlurEnabled),
+          SizedBox(height: statusBarHeight),
+          BlocSelector<
+            PartnerCubit,
+            PartnerState,
+            ({
+              PartnerTopTab topTab,
+              int messageUnreadCount,
+              int interactionUnreadCount,
+            })
+          >(
+            selector: (state) => (
+              topTab: state.interaction.topTab,
+              messageUnreadCount: state.domain.messageUnreadCount,
+              interactionUnreadCount: state.domain.interactionUnreadCount,
+            ),
+            builder: (context, data) {
+              return PartnerPageHeader(
+                selectedTopTab: data.topTab,
+                messageUnreadCount: data.messageUnreadCount,
+                interactionUnreadCount: data.interactionUnreadCount,
+                onTopTabSelected: cubit.switchTopTab,
+                swipeProgress: swipeProgress,
+                onSearchTap: () => AppRouter.pushNamed(AppRoutes.searchName),
+              );
+            },
           ),
         ],
       ),
@@ -192,146 +298,16 @@ class _PartnerInteractionBody extends StatelessWidget {
   }
 }
 
-class _PartnerInteractionHeader extends StatelessWidget {
-  const _PartnerInteractionHeader({required this.topBlurEnabled});
-
-  final bool topBlurEnabled;
-
-  @override
-  Widget build(BuildContext context) {
-    final statusBarHeight = AppLayout.statusBarHeight(context);
-    final headerHeight = AppSizes.partnerInteractionHeaderOverlayHeight(
-      statusBarHeight,
-    );
-    final cubit = context.read<PartnerCubit>();
-
-    return AppBlurredChromeBar(
-      enabled: topBlurEnabled,
-      child: SizedBox(
-        height: headerHeight,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            SizedBox(height: statusBarHeight),
-            BlocSelector<
-              PartnerCubit,
-              PartnerState,
-              ({
-                PartnerTopTab topTab,
-                int messageUnreadCount,
-                int interactionUnreadCount,
-              })
-            >(
-              selector: (state) => (
-                topTab: state.interaction.topTab,
-                messageUnreadCount: state.domain.messageUnreadCount,
-                interactionUnreadCount: state.domain.interactionUnreadCount,
-              ),
-              builder: (context, data) {
-                return PartnerPageHeader(
-                  selectedTopTab: data.topTab,
-                  messageUnreadCount: data.messageUnreadCount,
-                  interactionUnreadCount: data.interactionUnreadCount,
-                  onTopTabSelected: cubit.switchTopTab,
-                  onSearchTap: () => AppRouter.pushNamed(AppRoutes.searchName),
-                );
-              },
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _PartnerHeaderContent extends StatelessWidget {
-  const _PartnerHeaderContent({required this.statusBarHeight});
-
-  final double statusBarHeight;
-
-  @override
-  Widget build(BuildContext context) {
-    final cubit = context.read<PartnerCubit>();
-
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        SizedBox(height: statusBarHeight),
-        BlocSelector<
-          PartnerCubit,
-          PartnerState,
-          ({
-            PartnerTopTab topTab,
-            int messageUnreadCount,
-            int interactionUnreadCount,
-          })
-        >(
-          selector: (state) => (
-            topTab: state.interaction.topTab,
-            messageUnreadCount: state.domain.messageUnreadCount,
-            interactionUnreadCount: state.domain.interactionUnreadCount,
-          ),
-          builder: (context, data) {
-            return PartnerPageHeader(
-              selectedTopTab: data.topTab,
-              messageUnreadCount: data.messageUnreadCount,
-              interactionUnreadCount: data.interactionUnreadCount,
-              onTopTabSelected: cubit.switchTopTab,
-              onSearchTap: () => AppRouter.pushNamed(AppRoutes.searchName),
-            );
-          },
-        ),
-      ],
-    );
-  }
-}
-
 class _PartnerPageShell extends StatelessWidget {
-  const _PartnerPageShell({required this.body, this.showPageBackground = true});
+  const _PartnerPageShell({required this.body});
 
   final Widget body;
-  final bool showPageBackground;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppPartnerColors.pageBackgroundBottom,
-      body: Stack(
-        children: [if (showPageBackground) const PartnerPageBackground(), body],
-      ),
+      body: body,
     );
-  }
-}
-
-class _PartnerHeaderDelegate extends SliverPersistentHeaderDelegate {
-  _PartnerHeaderDelegate({required this.height, required this.child});
-
-  final double height;
-  final Widget child;
-
-  @override
-  double get minExtent => height;
-
-  @override
-  double get maxExtent => height;
-
-  @override
-  Widget build(
-    BuildContext context,
-    double shrinkOffset,
-    bool overlapsContent,
-  ) {
-    return AppBlurredChromeBar(
-      enabled: AppChromeBlur.shouldBlurForSliver(
-        shrinkOffset: shrinkOffset,
-        overlapsContent: overlapsContent,
-      ),
-      child: child,
-    );
-  }
-
-  @override
-  bool shouldRebuild(covariant _PartnerHeaderDelegate oldDelegate) {
-    return oldDelegate.height != height || oldDelegate.child != child;
   }
 }

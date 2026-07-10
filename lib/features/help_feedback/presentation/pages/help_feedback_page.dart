@@ -19,8 +19,27 @@ import '../components/help_feedback_form_view.dart';
 import '../components/help_feedback_tab_bar.dart';
 
 /// L3 页面 — 帮助与反馈（深色主题）。
-class HelpFeedbackPage extends StatelessWidget {
+class HelpFeedbackPage extends StatefulWidget {
   const HelpFeedbackPage({super.key});
+
+  @override
+  State<HelpFeedbackPage> createState() => _HelpFeedbackPageState();
+}
+
+class _HelpFeedbackPageState extends State<HelpFeedbackPage> {
+  late final ValueNotifier<double> _tabSwipeProgress;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabSwipeProgress = ValueNotifier<double>(0);
+  }
+
+  @override
+  void dispose() {
+    _tabSwipeProgress.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,20 +63,23 @@ class HelpFeedbackPage extends StatelessWidget {
                 return HelpFeedbackTabBar(
                   selected: selectedTab,
                   onSelected: context.read<HelpFeedbackCubit>().selectTab,
+                  swipeProgress: _tabSwipeProgress,
                 );
               },
             ),
             const SizedBox(height: AppSpacing.sm),
           ],
         ),
-        body: const _HelpFeedbackBody(),
+        body: _HelpFeedbackBody(swipeProgress: _tabSwipeProgress),
       ),
     );
   }
 }
 
 class _HelpFeedbackBody extends StatelessWidget {
-  const _HelpFeedbackBody();
+  const _HelpFeedbackBody({required this.swipeProgress});
+
+  final ValueNotifier<double> swipeProgress;
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +99,10 @@ class _HelpFeedbackBody extends StatelessWidget {
               title: '加载失败',
               description: state.errorMessage,
             ),
-            HelpFeedbackPhase.loaded => _LoadedHelpFeedbackBody(state: state),
+            HelpFeedbackPhase.loaded => _LoadedHelpFeedbackBody(
+              state: state,
+              swipeProgress: swipeProgress,
+            ),
           };
         },
       ),
@@ -86,9 +111,13 @@ class _HelpFeedbackBody extends StatelessWidget {
 }
 
 class _LoadedHelpFeedbackBody extends StatelessWidget {
-  const _LoadedHelpFeedbackBody({required this.state});
+  const _LoadedHelpFeedbackBody({
+    required this.state,
+    required this.swipeProgress,
+  });
 
   final HelpFeedbackState state;
+  final ValueNotifier<double> swipeProgress;
 
   @override
   Widget build(BuildContext context) {
@@ -102,6 +131,7 @@ class _LoadedHelpFeedbackBody extends StatelessWidget {
 
     return AppSwipeTabSwitcher(
       selectedIndex: tabs.indexOf(state.selectedTab),
+      onSwipeProgressChanged: (progress) => swipeProgress.value = progress,
       onIndexChanged: (index) => cubit.selectTab(tabs[index]),
       children: [
         HelpFeedbackFaqView(

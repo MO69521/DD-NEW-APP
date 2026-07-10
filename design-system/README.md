@@ -88,10 +88,10 @@
 | `white50` | 50% | `0x80FFFFFF` | 弱化文字 / 扫光高亮 |
 | `white24` | 24% | `0x3DFFFFFF` | 头图蒙版软档 |
 | `white20` | 20% | `0x33FFFFFF` | 分隔线 / 导航底 |
-| `white08` | 8% | `0x14FFFFFF` | surfaceGlass / divider |
+| `white08` | 8% | `0x14FFFFFF` | divider |
 | `white06` | 6% | `0x0FFFFFFF` | 回复区底 |
 | `white05` | 5% | `0x0DFFFFFF` | 卡片弱底 |
-| `white04` | 4% | `0x0AFFFFFF` | surfaceCard / 描边 / 标签底 |
+| `white04` | 4% | `0x0AFFFFFF` | surfaceGlass / surfaceCard / 描边 / 标签底 |
 | `white00` | 0% | `0x00FFFFFF` | 渐变透明端 |
 
 ### 4.2 中性阶 · 黑色透明度（遮罩 / 蒙版，`AppColors.blackNN`）
@@ -111,6 +111,8 @@
 基于基础背景 `#090E17` 的不同透明度，用于渐隐 / 毛玻璃底 / 头图蒙版；换色系时整条随基础背景色相变化。
 
 `bgTint00 · bgTint35 · bgTint45 · bgTint55 · bgTint60 · bgTint80 · bgTint90`
+
+语义引用：`chromeBarScrim = bgTint60`，`bottomNavScrim = bgTint80`，用于压实全局毛玻璃、减少下方内容透出。
 
 ### 4.4 品牌 / 主题源色（`AppBrandColors`，换色系唯一入口）
 
@@ -216,7 +218,7 @@ feature 专用圆角（在基阶之上按页面命名，如 `navOuter 47` / `sea
 | 按钮 `AppButton` | 各尺寸内边距 / loading / 图标间距 | `buttonPadding*` · `buttonLoadingIndicatorSize` |
 | 搜索栏 / 玻璃模糊 | 搜索框高 / 各级磨砂半径 | `searchBarHeight` · `glassBlurSigma` · `strongBlurSigma` · `chromeBarBlurSigma` |
 | 书城首页 | 顶栏 / 加载 / 「继续阅读」浮层 | `bookstore*` · `continueReading*` |
-| 底部导航 `AppBottomNav` | 胶囊尺寸 / 图标 / 弹跳缩放 | `bottomNav*` |
+| 底部导航 `AppBottomNav` | 胶囊尺寸 / 图标 / 毛玻璃 / 弹跳缩放 | `bottomNav*` · `bottomNavBlurSigma` |
 | 榜单 | Tab 指示器 / 轮播 / 头图 / 维度导航 | `ranking*` · `tab*` |
 | 书籍封面 / 书卡 | 列表/网格封面 / 大封面横向书卡 | `bookCover*` · `bookGrid*` · `bookCardLarge*` |
 | 福利页 | 头图 / 签到里程碑 / 任务时间线 / 充值弹窗 | `welfare*` · `rechargePurchaseDialog*` |
@@ -227,7 +229,7 @@ feature 专用圆角（在基阶之上按页面命名，如 `navOuter 47` / `sea
 | 书籍详情页 | 头图 / 目录抽屉 / 角色卡 / 讨论区 / 更新时间线 | `bookDetail*` · `bookDiscussionDetail*` |
 | 搜索页 | 顶栏返回 / 输入图标 / 空状态 | `searchAppBar*` · `searchInput*` · `searchEmpty*` |
 | 会员页 | Hero 轮播 / 方案卡 / 权益宫格 / CTA / 特权详情 | `membership*` |
-| 伙伴页 | 头部 / 角色卡 / 消息 Tab / 互动 Tab | `partner*` |
+| 伙伴页 | 头部 / 顶部极光 / 角色卡 / 消息 Tab / 互动 Tab | `partner*` · `partnerTopAuroraHeight` · `partnerTopAuroraOpacity` |
 | 分类页 | 筛选组 / chip / 下划线 | `categoryFilter*` |
 | 帮助与反馈 | Banner / 输入 / 上传框 | `helpFeedback*` |
 | Toast / 交互阈值 | 轻提示内边距 / 滑动切换阈值 | `toast*` · `swipeTabVelocityThreshold` |
@@ -274,7 +276,7 @@ feature 专用圆角（在基阶之上按页面命名，如 `navOuter 47` / `sea
 | `BookCoverTagBadge` | `shared/components/` | 封面角标 |
 | `MyMessagesList` / `MyMessageItem` | `features/my_messages/presentation/components/` | 互动消息（回复/获赞）：头像 + 发信人（可带「作者」标）+ 时间 + 回复正文 + 引用书评（左竖条）+ 书籍引用块；条目间 `dividerOnDark` 细线分隔 |
 | `MyNotificationsList` / `MyNotificationItem` | `features/my_messages/presentation/components/` | 通知卡片（客服/系统）：标题 + `NEW`/`未读`（橙 `myMessagesNoticeBadge`）标 + 内容 + 时间 + chevron；已读整条置灰 `myMessagesReadOpacity`；页脚「没有更多数据了」|
-| `OnboardingProfileDialog` | `features/onboarding/presentation/pages/` | 新用户首页首启弹窗：性别 → 年龄两步**横向切换**（高度固定、底部分页器可回退，右上角统一 `DialogCloseButton` X，标题统一 `titleMedium`，底部固定「完成」）；性别圆形头像（选中彩色插画 + 黄色描边环、未选灰色插画 + 细描边，不填充底色，参照装扮选中）+ 文字标签（选中白、未选 60% 白）；年龄选中 `onboardingAgeSelected`(黄底深字) |
+| `OnboardingProfileDialog` | `features/onboarding/presentation/pages/` | 新用户首页首启弹窗：性别 → 年龄两步**横向切换**（高度固定、内容区无上下滚动、底部分页器可回退，右上角统一 `DialogCloseButton` X，标题统一 `titleMedium`，底部固定「完成」）；性别圆形头像 `onboardingGenderAvatarSize` 80px（选中彩色插画 + 黄色描边环、未选灰色插画 + 细描边，不填充底色，参照装扮选中）+ 文字标签（选中白、未选 60% 白），选中性别后短暂停留展示反馈再切到年龄；年龄选中 `onboardingAgeSelected`(黄底深字) |
 
 ### 7.3 Dialog · 居中弹窗
 

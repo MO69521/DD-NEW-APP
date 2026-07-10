@@ -102,6 +102,7 @@ class _BookshelfView extends StatefulWidget {
 
 class _BookshelfViewState extends State<_BookshelfView> {
   late final Map<BookshelfTab, ScrollController> _scrollControllers;
+  late final ValueNotifier<double> _tabSwipeProgress;
   late final void Function(int index) _tabChangeListener;
   late final void Function(String tabIntent) _bookshelfTabIntentListener;
 
@@ -124,6 +125,7 @@ class _BookshelfViewState extends State<_BookshelfView> {
       for (final tab in BookshelfTab.values)
         tab: ScrollController()..addListener(() => _handleScroll(tab)),
     };
+    _tabSwipeProgress = ValueNotifier<double>(0);
     _tabChangeListener = (index) {
       if (index == MainTabConfig.bookshelfIndex) {
         _scheduleScrollCheck();
@@ -146,6 +148,7 @@ class _BookshelfViewState extends State<_BookshelfView> {
     for (final controller in _scrollControllers.values) {
       controller.dispose();
     }
+    _tabSwipeProgress.dispose();
     super.dispose();
   }
 
@@ -310,6 +313,8 @@ class _BookshelfViewState extends State<_BookshelfView> {
                 return AppSwipeTabSwitcher(
                   enabled: !data.isManaging,
                   selectedIndex: tabs.indexOf(data.selectedTab),
+                  onSwipeProgressChanged: (progress) =>
+                      _tabSwipeProgress.value = progress,
                   onIndexChanged: (index) =>
                       context.read<BookshelfCubit>().switchTab(tabs[index]),
                   children: [
@@ -351,6 +356,7 @@ class _BookshelfViewState extends State<_BookshelfView> {
                       builder: (context, data) {
                         return BookshelfPageHeader(
                           selectedTab: data.selectedTab,
+                          swipeProgress: _tabSwipeProgress,
                           isManaging: data.isManaging,
                           onTabSelected: context
                               .read<BookshelfCubit>()

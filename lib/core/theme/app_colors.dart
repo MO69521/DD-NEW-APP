@@ -61,18 +61,18 @@ abstract final class AppColors {
   static const Color bgTint80 = AppBrandColors.bgTint80;
   static const Color bgTint90 = AppBrandColors.bgTint90;
 
-  /// 顶/底 Chrome 毛玻璃半透明底色（约 45% 不透明，配合 blur 透出内容）。
-  static const Color chromeBarScrim = bgTint45;
+  /// 顶/底 Chrome 毛玻璃半透明底色（约 60% 不透明，弱化内容透出）。
+  static const Color chromeBarScrim = bgTint60;
 
-  /// 底部导航毛玻璃底色（约 60% 不透明，弱化毛玻璃、减少透出下方内容）。
-  static const Color bottomNavScrim = bgTint60;
+  /// 底部导航毛玻璃底色（约 80% 不透明，减少透出下方内容）。
+  static const Color bottomNavScrim = bgTint80;
 
   /// 顶栏滚动后毛玻璃底色：更接近页面背景，避免头图文字透出干扰导航。
   static const Color topChromeBarScrolledScrim = bgTint80;
   static const Color topBarHeroScrimStart = black30;
   static const Color topBarHeroScrimEnd = black00;
 
-  static const Color surfaceGlass = white08;
+  static const Color surfaceGlass = white04;
   static const Color surfaceCard = white04;
 
   /// 骨架屏底色 / 扫光高光（复用中性白阶：底 8%、高光 24%）。

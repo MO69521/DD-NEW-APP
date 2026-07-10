@@ -16,6 +16,7 @@ class AppSwipeTabSwitcher extends StatefulWidget {
     required this.onIndexChanged,
     this.tabCount,
     this.enabled = true,
+    this.onSwipeProgressChanged,
   }) : assert(
          child != null || children != null,
          'Either child or children must be provided',
@@ -29,6 +30,7 @@ class AppSwipeTabSwitcher extends StatefulWidget {
   final int selectedIndex;
   final ValueChanged<int> onIndexChanged;
   final int? tabCount;
+  final ValueChanged<double>? onSwipeProgressChanged;
 
   /// 为 false 时仅透传内容，不启用滑动（如分类页只允许点击切换）。
   final bool enabled;
@@ -44,6 +46,9 @@ class _AppSwipeTabSwitcherState extends State<AppSwipeTabSwitcher> {
   void initState() {
     super.initState();
     _pageController = PageController(initialPage: widget.selectedIndex);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      widget.onSwipeProgressChanged?.call(widget.selectedIndex.toDouble());
+    });
   }
 
   @override
@@ -92,10 +97,21 @@ class _AppSwipeTabSwitcherState extends State<AppSwipeTabSwitcher> {
         }
         return false;
       },
-      child: PageView(
-        controller: _pageController,
-        physics: const PageScrollPhysics(),
-        children: children,
+      child: NotificationListener<ScrollUpdateNotification>(
+        onNotification: (notification) {
+          final page = _pageController.hasClients ? _pageController.page : null;
+          if (page != null) {
+            widget.onSwipeProgressChanged?.call(
+              page.clamp(0, children.length - 1).toDouble(),
+            );
+          }
+          return false;
+        },
+        child: PageView(
+          controller: _pageController,
+          physics: const PageScrollPhysics(),
+          children: children,
+        ),
       ),
     );
   }

@@ -55,13 +55,13 @@ abstract final class AppSizes {
 
   // ── 搜索栏 / 玻璃态胶囊 ──
   static const double searchBarHeight = 40;
-  static const double glassBlurSigma = 8;
+  static const double glassBlurSigma = 4;
 
   /// 通用强玻璃模糊半径（重度磨砂，如任务卡 / 浮层）。
-  static const double strongBlurSigma = 180;
+  static const double strongBlurSigma = 90;
   static const double statusBarPlaceholderHeight = 44;
   static const double bookstoreHeaderVerticalInset = 2;
-  static const double chromeBarBlurSigma = 24;
+  static const double chromeBarBlurSigma = 16;
   static const double bookstoreTopHeaderHeight = 44;
   static const double bookstoreSearchIconSize = 20;
   static const double bookstoreStickyHeaderHeight = bookstoreTopHeaderHeight;
@@ -76,7 +76,7 @@ abstract final class AppSizes {
   static const double bottomNavCapsuleHeight = 50;
   static const double bottomNavHorizontalInset = 24;
   static const double bottomNavBottomInset = 4;
-  static const double bottomNavBlurSigma = 12;
+  static const double bottomNavBlurSigma = 8;
   static const double bottomNavIconSize = 26;
   static const double bottomNavSelectedIconPeakScale = 1.18;
   static const double bottomNavSelectedIconDipScale = 0.92;
@@ -172,7 +172,7 @@ abstract final class AppSizes {
 
   // ── 新手基础信息收集弹窗 ──
   /// 性别头像圆底直径。
-  static const double onboardingGenderAvatarSize = 96;
+  static const double onboardingGenderAvatarSize = 80;
 
   /// 步骤内容视口固定高度（PageView 跟手切换需有界高度，取较高的步骤）。
   static const double onboardingStepViewportHeight = 300;
@@ -613,6 +613,8 @@ abstract final class AppSizes {
 
   // ── 伙伴页 / 探索（深色 + 粉紫主题） ──
   static const double partnerHeaderHeight = 44;
+  static const double partnerTopAuroraHeight = 180;
+  static const double partnerTopAuroraOpacity = 0.26;
   static const double partnerPageTitleFontSize = 22;
   static const double partnerTopTabFontSize = 16;
   static const double partnerNotificationBadgeMinSize = 16;

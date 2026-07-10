@@ -12,9 +12,9 @@ class OnboardingCubit extends Cubit<OnboardingState> {
 
   final OnboardingService _service;
 
-  /// 选择性别后自动进入「选择年龄」步骤（横向切换）。
+  /// 选择性别；是否切到年龄步骤由 UI 层延时触发，以便展示选中反馈。
   void selectGender(UserGender gender) {
-    emit(state.copyWith(gender: gender, step: OnboardingStep.age));
+    emit(state.copyWith(gender: gender));
   }
 
   void selectAgeRange(UserAgeRange ageRange) {

@@ -59,7 +59,6 @@ abstract final class AppBrandColors {
   static const Color partnerPrimary = Color(0xFFFF4D88);
   static const Color partnerPrimaryLight = Color(0xFFFF7AA8);
   static const Color partnerPrimaryDark = Color(0xFFE03D74);
-  static const Color partnerPageBackgroundTop = Color(0xFF331E25);
 
   // ── 福利金/橙系 ──
   static const Color goldMedium = Color(0xFF935C1A);

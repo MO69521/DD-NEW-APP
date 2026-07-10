@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/theme/app_layout.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_durations.dart';
 import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../routes/app_router.dart';
@@ -102,6 +103,7 @@ class _BookstoreView extends StatefulWidget {
 class _BookstoreViewState extends State<_BookstoreView> {
   late final void Function() _bookstoreCategoryIntentListener;
   late final PageController _pageController;
+  late final ValueNotifier<double> _topTabSwipeProgress;
 
   @override
   void initState() {
@@ -113,6 +115,15 @@ class _BookstoreViewState extends State<_BookstoreView> {
           .interaction
           .selectedTopTab
           .index,
+    );
+    _topTabSwipeProgress = ValueNotifier<double>(
+      context
+          .read<BookstoreCubit>()
+          .state
+          .interaction
+          .selectedTopTab
+          .index
+          .toDouble(),
     );
     _bookstoreCategoryIntentListener = () {
       if (!mounted) return;
@@ -129,7 +140,15 @@ class _BookstoreViewState extends State<_BookstoreView> {
       _bookstoreCategoryIntentListener,
     );
     _pageController.dispose();
+    _topTabSwipeProgress.dispose();
     super.dispose();
+  }
+
+  void _updateTopTabSwipeProgress() {
+    if (!_pageController.hasClients || _pageController.page == null) return;
+    _topTabSwipeProgress.value = _pageController.page!
+        .clamp(0, BookstoreTopTab.values.length - 1)
+        .toDouble();
   }
 
   @override
@@ -143,7 +162,11 @@ class _BookstoreViewState extends State<_BookstoreView> {
           current.interaction.selectedTopTab,
       listener: (context, state) {
         if (!_pageController.hasClients) return;
-        _pageController.jumpToPage(state.interaction.selectedTopTab.index);
+        _pageController.animateToPage(
+          state.interaction.selectedTopTab.index,
+          duration: AppDurations.normal,
+          curve: Curves.easeOutCubic,
+        );
       },
       child: Scaffold(
         backgroundColor: AppColors.backgroundDark,
@@ -160,6 +183,7 @@ class _BookstoreViewState extends State<_BookstoreView> {
                       BookstorePageHeader(
                         selectedTopTab: selectedTopTab,
                         onTopTabSelected: cubit.switchTopTab,
+                        swipeProgress: _topTabSwipeProgress,
                         onSearchTap: () =>
                             AppRouter.pushNamed(AppRoutes.searchName),
                       ),
@@ -183,14 +207,20 @@ class _BookstoreViewState extends State<_BookstoreView> {
                         }
                         return false;
                       },
-                      child: PageView(
-                        controller: _pageController,
-                        physics: const PageScrollPhysics(),
-                        children: [
-                          const BookstoreRecommendBody(),
-                          widget.categoryTabBuilder(context),
-                          widget.rankingTabBuilder(context),
-                        ],
+                      child: NotificationListener<ScrollUpdateNotification>(
+                        onNotification: (notification) {
+                          _updateTopTabSwipeProgress();
+                          return false;
+                        },
+                        child: PageView(
+                          controller: _pageController,
+                          physics: const PageScrollPhysics(),
+                          children: [
+                            const BookstoreRecommendBody(),
+                            widget.categoryTabBuilder(context),
+                            widget.rankingTabBuilder(context),
+                          ],
+                        ),
                       ),
                     ),
                   ),

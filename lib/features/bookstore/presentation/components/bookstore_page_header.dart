@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 
 import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
@@ -16,11 +17,13 @@ class BookstorePageHeader extends StatelessWidget {
     required this.selectedTopTab,
     this.onTopTabSelected,
     this.onSearchTap,
+    this.swipeProgress,
   });
 
   final BookstoreTopTab selectedTopTab;
   final ValueChanged<BookstoreTopTab>? onTopTabSelected;
   final VoidCallback? onSearchTap;
+  final ValueListenable<double>? swipeProgress;
 
   static const String searchIconAsset = 'assets/icons/search.svg';
 
@@ -33,6 +36,7 @@ class BookstorePageHeader extends StatelessWidget {
       center: BookstoreTopTabs(
         selected: selectedTopTab,
         onSelected: onTopTabSelected,
+        swipeProgress: swipeProgress,
       ),
       trailing: _SearchIconButton(onTap: onSearchTap),
     );

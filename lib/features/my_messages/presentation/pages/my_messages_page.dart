@@ -17,8 +17,27 @@ import '../components/my_messages_tab_bar.dart';
 import '../components/my_notifications_list.dart';
 
 /// L3 页面 — 我的消息（深色主题）。
-class MyMessagesPage extends StatelessWidget {
+class MyMessagesPage extends StatefulWidget {
   const MyMessagesPage({super.key});
+
+  @override
+  State<MyMessagesPage> createState() => _MyMessagesPageState();
+}
+
+class _MyMessagesPageState extends State<MyMessagesPage> {
+  late final ValueNotifier<double> _tabSwipeProgress;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabSwipeProgress = ValueNotifier<double>(0);
+  }
+
+  @override
+  void dispose() {
+    _tabSwipeProgress.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,6 +63,7 @@ class MyMessagesPage extends StatelessWidget {
                 selected: state.interaction.selectedTab,
                 onSelected: context.read<MyMessagesCubit>().onTabSelected,
                 unreadCounts: _unreadCounts(state.content),
+                swipeProgress: _tabSwipeProgress,
               );
             },
           ),
@@ -64,11 +84,14 @@ class MyMessagesPage extends StatelessWidget {
                 final content = state.content!;
                 return AppSwipeTabSwitcher(
                   selectedIndex: tabs.indexOf(state.interaction.selectedTab),
+                  onSwipeProgressChanged: (progress) =>
+                      _tabSwipeProgress.value = progress,
                   onIndexChanged: (index) => context
                       .read<MyMessagesCubit>()
                       .onTabSelected(tabs[index]),
                   children: [
-                    for (final tab in tabs) _TabBody(content: content, tab: tab),
+                    for (final tab in tabs)
+                      _TabBody(content: content, tab: tab),
                   ],
                 );
               },
@@ -81,9 +104,7 @@ class MyMessagesPage extends StatelessWidget {
 
   Map<MyMessageTab, int> _unreadCounts(MyMessagesPageContent? content) {
     if (content == null) return const {};
-    return {
-      for (final tab in MyMessageTab.values) tab: content.unreadFor(tab),
-    };
+    return {for (final tab in MyMessageTab.values) tab: content.unreadFor(tab)};
   }
 }
 

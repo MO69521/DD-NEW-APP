@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
@@ -9,10 +10,16 @@ import '../../domain/entities/bookstore_top_tab.dart';
 
 /// 书城顶栏一级 Tab（推荐 / 分类 / 排行）。
 class BookstoreTopTabs extends StatelessWidget {
-  const BookstoreTopTabs({super.key, required this.selected, this.onSelected});
+  const BookstoreTopTabs({
+    super.key,
+    required this.selected,
+    this.onSelected,
+    this.swipeProgress,
+  });
 
   final BookstoreTopTab selected;
   final ValueChanged<BookstoreTopTab>? onSelected;
+  final ValueListenable<double>? swipeProgress;
 
   @override
   Widget build(BuildContext context) {
@@ -45,6 +52,7 @@ class BookstoreTopTabs extends StatelessWidget {
             selectedIndex: tabs.indexOf(selected),
             slotWidth: slotWidth,
             slotPitch: slotPitch,
+            swipeProgress: swipeProgress,
           ),
         ],
       ),
