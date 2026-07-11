@@ -17,6 +17,9 @@ class SweepHighlightOverlay extends StatefulWidget {
     this.edgeColor = AppColors.white00,
     this.bandWidthRatio = AppSizes.membershipCtaSweepBandWidthRatio,
     this.duration = AppDurations.membershipCtaSweep,
+    this.progress,
+    this.slant = 0,
+    this.softEdges = false,
   });
 
   /// 高亮带中心颜色。
@@ -31,24 +34,59 @@ class SweepHighlightOverlay extends StatefulWidget {
   /// 单次扫光时长（左 → 右）。
   final Duration duration;
 
+  /// 可选外部进度；用于宿主组件将扫光与自绘形变同步。
+  final Animation<double>? progress;
+
+  /// 高亮带倾斜量，0 为垂直矩形。
+  final double slant;
+
+  /// 是否使用更宽、更柔和的高亮过渡。
+  final bool softEdges;
+
   @override
   State<SweepHighlightOverlay> createState() => _SweepHighlightOverlayState();
 }
 
 class _SweepHighlightOverlayState extends State<SweepHighlightOverlay>
     with SingleTickerProviderStateMixin {
-  late final AnimationController _controller;
+  AnimationController? _controller;
+
+  Animation<double> get _animation => widget.progress ?? _controller!;
 
   @override
   void initState() {
     super.initState();
+    _syncController();
+  }
+
+  @override
+  void didUpdateWidget(covariant SweepHighlightOverlay oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.progress != widget.progress ||
+        oldWidget.duration != widget.duration) {
+      _syncController();
+    }
+  }
+
+  void _syncController() {
+    if (widget.progress != null) {
+      _controller?.dispose();
+      _controller = null;
+      return;
+    }
+    final existing = _controller;
+    if (existing != null) {
+      existing.duration = widget.duration;
+      if (!existing.isAnimating) existing.repeat();
+      return;
+    }
     _controller = AnimationController(vsync: this, duration: widget.duration)
       ..repeat();
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    _controller?.dispose();
     super.dispose();
   }
 
@@ -56,33 +94,49 @@ class _SweepHighlightOverlayState extends State<SweepHighlightOverlay>
   Widget build(BuildContext context) {
     return IgnorePointer(
       child: AnimatedBuilder(
-        animation: _controller,
+        animation: _animation,
         builder: (context, child) {
           return LayoutBuilder(
             builder: (context, constraints) {
               final width = constraints.maxWidth;
               final bandWidth = width * widget.bandWidthRatio;
               final travelDistance = width + bandWidth;
-              final offsetX = -bandWidth + travelDistance * _controller.value;
+              final offsetX = -bandWidth + travelDistance * _animation.value;
+              final colors = widget.softEdges
+                  ? [
+                      widget.edgeColor,
+                      widget.highlightColor.withValues(alpha: 0.28),
+                      widget.highlightColor.withValues(alpha: 0.50),
+                      widget.highlightColor.withValues(alpha: 0.28),
+                      widget.edgeColor,
+                    ]
+                  : [
+                      widget.edgeColor,
+                      widget.highlightColor,
+                      widget.edgeColor,
+                    ];
+              final stops = widget.softEdges
+                  ? const [0.0, 0.28, 0.5, 0.72, 1.0]
+                  : const [0.0, 0.5, 1.0];
 
               return Stack(
                 clipBehavior: Clip.hardEdge,
                 children: [
                   Transform.translate(
                     offset: Offset(offsetX, 0),
-                    child: Container(
-                      width: bandWidth,
-                      height: constraints.maxHeight,
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.centerLeft,
-                          end: Alignment.centerRight,
-                          colors: [
-                            widget.edgeColor,
-                            widget.highlightColor,
-                            widget.edgeColor,
-                          ],
-                          stops: const [0, 0.5, 1],
+                    child: Transform(
+                      alignment: Alignment.center,
+                      transform: Matrix4.skewX(widget.slant),
+                      child: Container(
+                        width: bandWidth,
+                        height: constraints.maxHeight,
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.centerLeft,
+                            end: Alignment.centerRight,
+                            colors: colors,
+                            stops: stops,
+                          ),
                         ),
                       ),
                     ),

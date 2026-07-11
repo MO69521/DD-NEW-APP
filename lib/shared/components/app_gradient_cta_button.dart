@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../core/theme/app_durations.dart';
 import '../../core/theme/app_sizes.dart';
+import 'liquid_sweep_cta_clip.dart';
 import 'sweep_highlight_overlay.dart';
 
 /// L2 — 渐变 CTA 按钮：渐变底 + 循环扫光 + 呼吸缩放 + 加载态。
@@ -40,8 +41,9 @@ class AppGradientCtaButton extends StatefulWidget {
 }
 
 class _AppGradientCtaButtonState extends State<AppGradientCtaButton>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   late final AnimationController _breathController;
+  late final AnimationController _sweepController;
   late final Animation<double> _breathScale;
 
   @override
@@ -50,6 +52,10 @@ class _AppGradientCtaButtonState extends State<AppGradientCtaButton>
     _breathController = AnimationController(
       vsync: this,
       duration: AppDurations.membershipCtaBreath,
+    );
+    _sweepController = AnimationController(
+      vsync: this,
+      duration: AppDurations.membershipCtaSweep,
     );
     _breathScale = Tween<double>(
       begin: AppSizes.membershipCtaBreathScaleMin,
@@ -73,16 +79,23 @@ class _AppGradientCtaButtonState extends State<AppGradientCtaButton>
       _breathController
         ..stop()
         ..value = 0;
+      _sweepController
+        ..stop()
+        ..value = 0;
       return;
     }
     if (!_breathController.isAnimating) {
       _breathController.repeat(reverse: true);
+    }
+    if (!_sweepController.isAnimating) {
+      _sweepController.repeat();
     }
   }
 
   @override
   void dispose() {
     _breathController.dispose();
+    _sweepController.dispose();
     super.dispose();
   }
 
@@ -109,28 +122,34 @@ class _AppGradientCtaButtonState extends State<AppGradientCtaButton>
             child: GestureDetector(
               onTap: widget.isLoading ? null : widget.onTap,
               behavior: HitTestBehavior.opaque,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(widget.borderRadius),
-                child: SizedBox(
-                  width: innerWidth,
-                  height: ctaHeight,
+              child: SizedBox(
+                width: innerWidth,
+                height: ctaHeight,
+                child: LiquidSweepCtaClip(
+                  progress: _sweepController,
+                  borderRadius: widget.borderRadius,
+                  gradientColors: widget.gradientColors,
+                  borderColor: widget.borderColor,
                   child: Stack(
                     alignment: Alignment.center,
                     children: [
-                      DecoratedBox(
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(colors: widget.gradientColors),
-                          border: widget.borderColor == null
-                              ? null
-                              : Border.all(color: widget.borderColor!),
+                      Positioned.fill(
+                        child: DecoratedBox(
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: widget.gradientColors,
+                            ),
+                          ),
                         ),
-                        child: const SizedBox.expand(),
                       ),
                       if (!widget.isLoading)
                         Positioned.fill(
                           child: SweepHighlightOverlay(
                             highlightColor: widget.sweepHighlight,
                             edgeColor: widget.sweepEdge,
+                            progress: _sweepController,
+                            slant: -0.16,
+                            softEdges: true,
                           ),
                         ),
                       if (widget.isLoading)

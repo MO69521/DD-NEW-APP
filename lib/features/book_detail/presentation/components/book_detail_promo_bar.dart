@@ -7,6 +7,7 @@ import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../shared/components/sweep_highlight_overlay.dart';
+import '../../../../shared/components/liquid_sweep_cta_clip.dart';
 import '../../../../shared/widgets/app_asset_image.dart';
 import '../../../../shared/widgets/app_pressable.dart';
 import '../../../../shared/widgets/app_text.dart';
@@ -175,8 +176,9 @@ class _ClaimButton extends StatefulWidget {
 }
 
 class _ClaimButtonState extends State<_ClaimButton>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   late final AnimationController _breathController;
+  late final AnimationController _sweepController;
   late final Animation<double> _breathScale;
 
   @override
@@ -186,6 +188,10 @@ class _ClaimButtonState extends State<_ClaimButton>
       vsync: this,
       duration: AppDurations.membershipCtaBreath,
     )..repeat(reverse: true);
+    _sweepController = AnimationController(
+      vsync: this,
+      duration: AppDurations.membershipCtaSweep,
+    )..repeat();
     _breathScale = Tween<double>(
       begin: AppSizes.membershipCtaBreathScaleMin,
       end: AppSizes.membershipCtaBreathScaleMax,
@@ -197,6 +203,7 @@ class _ClaimButtonState extends State<_ClaimButton>
   @override
   void dispose() {
     _breathController.dispose();
+    _sweepController.dispose();
     super.dispose();
   }
 
@@ -210,16 +217,17 @@ class _ClaimButtonState extends State<_ClaimButton>
         child: SizedBox(
           width: AppSizes.bookDetailPromoClaimMinWidth,
           height: AppSizes.bookDetailPromoClaimHeight,
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(AppRadius.full),
-            child: const Stack(
+          child: LiquidSweepCtaClip(
+            progress: _sweepController,
+            borderRadius: AppRadius.full,
+            child: Stack(
               fit: StackFit.expand,
               children: [
-                AppAssetImage(
+                const AppAssetImage(
                   assetPath: _ClaimButton._asset,
                   fit: BoxFit.fill,
                 ),
-                SweepHighlightOverlay(),
+                SweepHighlightOverlay(progress: _sweepController),
               ],
             ),
           ),

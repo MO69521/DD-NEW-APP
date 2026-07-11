@@ -8,6 +8,7 @@ import '../../core/theme/app_sizes.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../core/theme/app_welfare_colors.dart';
+import 'liquid_sweep_cta_clip.dart';
 import 'sweep_highlight_overlay.dart';
 import '../widgets/app_asset_image.dart';
 import '../widgets/app_pressable.dart';
@@ -33,10 +34,11 @@ class VipPromoBanner extends StatefulWidget {
 }
 
 class _VipPromoBannerState extends State<VipPromoBanner>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   static const String _vipBadgeAsset = 'assets/icons/welfare/vip_badge.png';
 
   late final AnimationController _breathController;
+  late final AnimationController _sweepController;
   late final Animation<double> _breathScale;
 
   @override
@@ -46,6 +48,10 @@ class _VipPromoBannerState extends State<VipPromoBanner>
       vsync: this,
       duration: AppDurations.membershipCtaBreath,
     )..repeat(reverse: true);
+    _sweepController = AnimationController(
+      vsync: this,
+      duration: AppDurations.membershipCtaSweep,
+    )..repeat();
     _breathScale =
         Tween<double>(
           begin: AppSizes.membershipCtaBreathScaleMin,
@@ -58,6 +64,7 @@ class _VipPromoBannerState extends State<VipPromoBanner>
   @override
   void dispose() {
     _breathController.dispose();
+    _sweepController.dispose();
     super.dispose();
   }
 
@@ -151,31 +158,33 @@ class _VipPromoBannerState extends State<VipPromoBanner>
                       ),
                       ScaleTransition(
                         scale: _breathScale,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(
-                            AppRadius.welfareVipCta,
-                          ),
+                        child: LiquidSweepCtaClip(
+                          progress: _sweepController,
+                          borderRadius: AppRadius.welfareVipCta,
+                          gradientColors: const [
+                            AppWelfareColors.vipCtaGradientStart,
+                            AppWelfareColors.vipCtaGradientEnd,
+                          ],
+                          borderColor: AppWelfareColors.vipCtaBorder,
+                          borderWidth: AppSizes.welfareVipCtaBorderWidth,
                           child: DecoratedBox(
-                            decoration: BoxDecoration(
-                              gradient: const LinearGradient(
+                            decoration: const BoxDecoration(
+                              gradient: LinearGradient(
                                 colors: [
                                   AppWelfareColors.vipCtaGradientStart,
                                   AppWelfareColors.vipCtaGradientEnd,
                                 ],
                               ),
-                              borderRadius: BorderRadius.circular(
-                                AppRadius.welfareVipCta,
-                              ),
-                              border: Border.all(
-                                color: AppWelfareColors.vipCtaBorder,
-                                width: AppSizes.welfareVipCtaBorderWidth,
-                              ),
                             ),
                             child: Stack(
                               alignment: Alignment.center,
                               children: [
-                                const Positioned.fill(
-                                  child: SweepHighlightOverlay(),
+                                Positioned.fill(
+                                  child: SweepHighlightOverlay(
+                                    progress: _sweepController,
+                                    slant: -0.16,
+                                    softEdges: true,
+                                  ),
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.symmetric(

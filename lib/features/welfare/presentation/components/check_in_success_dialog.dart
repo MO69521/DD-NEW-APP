@@ -10,6 +10,7 @@ import '../../../../core/theme/app_welfare_colors.dart';
 import '../../../../shared/components/app_blurred_dialog.dart';
 import '../../../../shared/components/app_confetti.dart';
 import '../../../../shared/components/dialog_close_button.dart';
+import '../../../../shared/components/liquid_sweep_cta_clip.dart';
 import '../../../../shared/components/sweep_highlight_overlay.dart';
 import '../../../../shared/widgets/app_asset_image.dart';
 import '../../../../shared/widgets/app_button.dart';
@@ -202,8 +203,9 @@ class _VipRewardButton extends StatefulWidget {
 }
 
 class _VipRewardButtonState extends State<_VipRewardButton>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   late final AnimationController _breathController;
+  late final AnimationController _sweepController;
   late final Animation<double> _breathScale;
 
   @override
@@ -213,6 +215,10 @@ class _VipRewardButtonState extends State<_VipRewardButton>
       vsync: this,
       duration: AppDurations.membershipCtaBreath,
     )..repeat(reverse: true);
+    _sweepController = AnimationController(
+      vsync: this,
+      duration: AppDurations.membershipCtaSweep,
+    )..repeat();
     _breathScale =
         Tween<double>(
           begin: AppSizes.membershipCtaBreathScaleMin,
@@ -225,6 +231,7 @@ class _VipRewardButtonState extends State<_VipRewardButton>
   @override
   void dispose() {
     _breathController.dispose();
+    _sweepController.dispose();
     super.dispose();
   }
 
@@ -234,8 +241,13 @@ class _VipRewardButtonState extends State<_VipRewardButton>
       scale: _breathScale,
       child: AppPressable(
         onTap: widget.onTap,
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(AppRadius.full),
+        child: LiquidSweepCtaClip(
+          progress: _sweepController,
+          borderRadius: AppRadius.full,
+          gradientColors: const [
+            AppWelfareColors.vipBannerGradientStart,
+            AppWelfareColors.vipBannerGradientEnd,
+          ],
           child: DecoratedBox(
             decoration: const BoxDecoration(
               gradient: LinearGradient(
@@ -250,7 +262,13 @@ class _VipRewardButtonState extends State<_VipRewardButton>
               child: Stack(
                 alignment: Alignment.center,
                 children: [
-                  const Positioned.fill(child: SweepHighlightOverlay()),
+                  Positioned.fill(
+                    child: SweepHighlightOverlay(
+                      progress: _sweepController,
+                      slant: -0.16,
+                      softEdges: true,
+                    ),
+                  ),
                   Padding(
                     padding: const EdgeInsets.symmetric(
                       horizontal: AppSizes.buttonPaddingHNormal,

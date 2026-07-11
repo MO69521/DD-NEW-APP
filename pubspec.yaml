@@ -113,6 +113,7 @@ flutter:
   # 片元着色器：极光动画背景（AuroraBackground）。
   shaders:
     - assets/shaders/aurora.frag
+    - assets/shaders/liquid_button.frag
 
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package

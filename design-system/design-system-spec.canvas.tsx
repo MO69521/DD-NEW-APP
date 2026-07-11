@@ -327,15 +327,21 @@ const MOTION_CATEGORIES: Array<{ title: string; items: MotionEffect[] }> = [
     title: "呼吸 / 循环 / 引导 / 加载",
     items: [
       {
+        name: "LiquidSweepCtaClip",
+        desc: "强 CTA 液态扫光裁剪壳,保留宿主原尺寸",
+        tech: "CustomClipper + CustomPainter border + shared sweep progress",
+        path: "lib/shared/components/liquid_sweep_cta_clip.dart",
+      },
+      {
         name: "SweepHighlightOverlay",
-        desc: "CTA 循环左 → 右扫光",
-        tech: "repeat() + Transform.translate + LinearGradient",
+        desc: "CTA 循环左 → 右扫光,可同步外部进度",
+        tech: "repeat() + Transform.translate/skew + LinearGradient",
         path: "lib/shared/components/sweep_highlight_overlay.dart",
       },
       {
         name: "AppGradientCtaButton",
-        desc: "共享渐变强动效 CTA:呼吸缩放 + 扫光 + loading;各处传渐变/高度/圆角/扫光色",
-        tech: "ScaleTransition + SweepHighlightOverlay",
+        desc: "共享渐变强动效 CTA:呼吸缩放 + 柔边倾斜扫光 + 液态边缘形变 + loading",
+        tech: "ScaleTransition + CustomPainter/ClipPath + SweepHighlightOverlay",
         path: "lib/shared/components/app_gradient_cta_button.dart",
       },
       {
@@ -346,15 +352,27 @@ const MOTION_CATEGORIES: Array<{ title: string; items: MotionEffect[] }> = [
       },
       {
         name: "福利签到 CTA",
-        desc: "「立即签到」呼吸 + 扫光",
-        tech: "呼吸 token + SweepHighlightOverlay",
-        path: "lib/features/welfare/presentation/components/daily_check_in_section.dart",
+        desc: "「立即签到」呼吸 + 扫光 + 液态边缘形变",
+        tech: "CheckInCtaButton → AppGradientCtaButton",
+        path: "lib/features/welfare/presentation/components/check_in_cta_button.dart",
       },
       {
         name: "VIP 领取按钮",
-        desc: "签到成功弹窗粉色 VIP 按钮呼吸 + 扫光",
-        tech: "repeat(reverse) + 扫光层",
+        desc: "签到成功弹窗粉色 VIP 按钮呼吸 + 扫光 + 液态边缘形变",
+        tech: "LiquidSweepCtaClip + SweepHighlightOverlay",
         path: "lib/features/welfare/presentation/components/check_in_success_dialog.dart",
+      },
+      {
+        name: "书详情领取按钮",
+        desc: "书详情悬浮促销条切图按钮呼吸 + 扫光 + 液态边缘形变",
+        tech: "LiquidSweepCtaClip + SweepHighlightOverlay + image fill",
+        path: "lib/features/book_detail/presentation/components/book_detail_promo_bar.dart",
+      },
+      {
+        name: "福利 VIP 横幅小按钮",
+        desc: "福利/我的页 VIP 开通小 CTA 呼吸 + 扫光 + 液态边缘形变",
+        tech: "LiquidSweepCtaClip + SweepHighlightOverlay",
+        path: "lib/shared/components/vip_promo_banner.dart",
       },
       {
         name: "验证码光标闪烁",
@@ -2348,7 +2366,7 @@ function SweepHighlightSection() {
   return (
     <SpecSection
         zh="扫光高亮层"
-        note="SweepHighlightOverlay · 仅高亮带本身（白 50%→透明）· 粉渐变是宿主 CTA 示意"
+        note="SweepHighlightOverlay · 仅高亮带本身（白 50%→透明）· 可传外部 progress 与 CTA 液态边缘形变同步"
         src="lib/shared/components/sweep_highlight_overlay.dart"
       >
       <Stage>
@@ -2383,7 +2401,7 @@ function SweepHighlightSection() {
             </span>
           </div>
           <Caption>
-            组件本身只有扫光带（默认 white50→透明，带宽约 42%，周期约 2200ms）；粉金底与文案来自宿主按钮（会员/福利 CTA），不是 Overlay 的样式。
+            组件本身只有扫光带（默认 white50→透明，带宽约 42%，周期约 2200ms）；强 CTA 中使用柔边倾斜扫光，并由宿主按钮传入 progress 同步边缘微形变。
           </Caption>
         </div>
       </Stage>

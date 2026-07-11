@@ -366,8 +366,9 @@ feature 专用圆角（在基阶之上按页面命名，如 `navOuter 47` / `sea
 | `AppSwitch` | `shared/widgets/app_switch.dart` | 开关：on 品牌黄 4% 大色块底（`accentYellow04`）+ 黄色圆钮 / off 玻璃底 + 白钮 |
 | `AppSelectionMark` | `shared/widgets/app_selection_mark.dart` | 圆形多选勾选标记：选中黄底 + 深色勾（`selectionMarkSize` 圆 + `bookshelfSelectionCheckIconSize` 勾）、未选透明底 + 描边（`bookshelfSelectionMarkBorderUnselected`）；书架多选等复用 |
 | `DialogCloseButton` | `shared/components/dialog_close_button.dart` | 统一居中弹窗关闭按钮：`close_rounded` X 图标（`textOnDarkMuted`）；`Positioned` 于卡片右上角，距顶/右 `lg`=24 |
-| `SweepHighlightOverlay` | `shared/components/sweep_highlight_overlay.dart` | 扫光高亮层：高亮带循环滑过（会员/福利 CTA、签到成功 VIP 按钮统一复用）；参数 `highlightColor` / `edgeColor` / `bandWidthRatio` / `duration` |
-| `AppGradientCtaButton` | `shared/components/app_gradient_cta_button.dart` | 渐变强动效 CTA：渐变底 + 呼吸缩放 + 循环扫光 + loading；固定高度。各处传入自己的渐变/高度/圆角/扫光色。`MembershipCtaButton` 委派于它;福利 padding 型 VIP 胶囊暂未纳入 |
+| `LiquidSweepCtaClip` | `shared/components/liquid_sweep_cta_clip.dart` | 强 CTA 液态扫光裁剪壳：保留宿主原尺寸/渐变/切图，只让扫光经过的边缘产生轻微液态形变；用于所有“呼吸缩放 + 扫光”的 CTA |
+| `SweepHighlightOverlay` | `shared/components/sweep_highlight_overlay.dart` | 扫光高亮层：高亮带循环滑过（会员/福利 CTA、签到成功 VIP 按钮统一复用）；参数 `highlightColor` / `edgeColor` / `bandWidthRatio` / `duration`，强 CTA 可传外部 `progress` 同步液态边缘形变 |
+| `AppGradientCtaButton` | `shared/components/app_gradient_cta_button.dart` | 渐变强动效 CTA：渐变底 + 呼吸缩放 + 柔边倾斜扫光 + 液态边缘微形变 + loading；固定高度。各处传入自己的渐变/高度/圆角/扫光色。`MembershipCtaButton` 与福利 `CheckInCtaButton` 委派于它；其它已存在的缩放扫光按钮通过 `LiquidSweepCtaClip` 保留原尺寸接入形变 |
 | `CurrencyBalanceBar` / `RechargePackagesSection` / `VipPromoBanner` | `shared/components/` | 业务复用组合组件；充值区价格按钮与「免费领 / VIP领取」CTA 共用同款暗色胶囊（`surfaceCard` 底、`welfareRechargePrice` 圆角、`welfareRechargePriceButtonHeight` 高），价格按钮用单段落 rich text 使 `¥` 与数字底对齐 |
 
 ### 7.8 Pressable · 通用按压反馈 `AppPressable`（L1 · `shared/widgets/app_pressable.dart`）
@@ -413,8 +414,9 @@ feature 专用圆角（在基阶之上按页面命名，如 `navOuter 47` / `sea
 - 伙伴互动弹簧物理（`features/partner/presentation/components/partner_interaction_page_physics.dart`，`ScrollSpringSimulation`）：已接入 `partner_interaction_body.dart` 的 `PageView`，单次手势最多翻一页 + 弹簧回稳。
 
 ### 9.3 呼吸 / 循环 / 引导 / 加载
-- `SweepHighlightOverlay`（`shared/components/sweep_highlight_overlay.dart`）：CTA 循环扫光。
-- `AppGradientCtaButton`（`shared/components/app_gradient_cta_button.dart`）：共享渐变强动效 CTA（呼吸 + 扫光 + loading）；`MembershipCtaButton` 委派于它。福利签到黄色 CTA 抽为 `CheckInCtaButton`（`features/welfare/presentation/components/check_in_cta_button.dart`），签到区块与首页签到弹窗共用（前后两段文案：立即签到+能量 / 看视频+星辰）。
+- `LiquidSweepCtaClip`（`shared/components/liquid_sweep_cta_clip.dart`）：强 CTA 液态扫光裁剪壳；所有“呼吸缩放 + 扫光”的 CTA 均接入（会员/福利签到共享 CTA、福利 VIP 横幅小按钮、签到成功 VIP 按钮、书详情领取按钮），保留宿主原尺寸。
+- `SweepHighlightOverlay`（`shared/components/sweep_highlight_overlay.dart`）：CTA 循环扫光；强 CTA 可传外部进度以同步液态边缘形变。
+- `AppGradientCtaButton`（`shared/components/app_gradient_cta_button.dart`）：共享渐变强动效 CTA（呼吸 + 柔边倾斜扫光 + 液态边缘微形变 + loading）；`MembershipCtaButton` 与福利 `CheckInCtaButton` 委派于它。福利签到黄色 CTA 签到区块与首页签到弹窗共用（前后两段文案：立即签到+能量 / 看视频+星辰）。
 - 验证码光标闪烁（`features/auth/presentation/pages/login_page.dart`）。
 - `AppConfetti`（`shared/components/app_confetti.dart`）：庆祝礼花迸发。
 - `AppShimmer` + 书卡骨架（`shared/widgets/app_shimmer.dart`、`shared/components/book_card_skeletons.dart`）：加载时高光扫过骨架占位，替代整屏 spinner（榜单 / 分类 / 搜索 / 书架）。
