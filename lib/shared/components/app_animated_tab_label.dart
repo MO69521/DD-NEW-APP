@@ -23,6 +23,7 @@ class AppAnimatedTabLabel extends StatefulWidget {
     this.swipeProgress,
     this.duration = AppDurations.normal,
     this.textAlign = TextAlign.center,
+    this.lockGeometryDuringSwipe = false,
   });
 
   final int index;
@@ -39,6 +40,10 @@ class AppAnimatedTabLabel extends StatefulWidget {
   final ValueListenable<double>? swipeProgress;
   final Duration duration;
   final TextAlign textAlign;
+
+  /// 为 true 时，在 [swipeProgress] 跟手滑动阶段锁定文字几何（字号/字重/字体族），
+  /// 改用 inactive/active 双层透明度混合，避免抖动且不生硬硬切。
+  final bool lockGeometryDuringSwipe;
 
   @override
   State<AppAnimatedTabLabel> createState() => _AppAnimatedTabLabelState();
@@ -96,11 +101,10 @@ class _AppAnimatedTabLabelState extends State<AppAnimatedTabLabel>
           1.0,
         );
         final t = 1 - distance;
-        final style = TextStyle.lerp(
-          widget.inactiveStyle,
-          widget.activeStyle,
-          t,
-        )!;
+        if (widget.lockGeometryDuringSwipe && widget.swipeProgress != null) {
+          return _buildLockedGeometryLabel(t);
+        }
+        final style = _lerpTabStyle(t);
         return AppText(
           widget.label,
           style: style,
@@ -109,6 +113,59 @@ class _AppAnimatedTabLabelState extends State<AppAnimatedTabLabel>
           overflow: TextOverflow.visible,
         );
       },
+    );
+  }
+
+  TextStyle _lerpTabStyle(double t) {
+    if (t <= 0) return widget.inactiveStyle;
+    if (t >= 1) return widget.activeStyle;
+    final inactiveForLerp = _normalizeLerpEndpoint(
+      widget.inactiveStyle,
+      widget.activeStyle,
+    );
+    final activeForLerp = _normalizeLerpEndpoint(
+      widget.activeStyle,
+      widget.inactiveStyle,
+    );
+    return TextStyle.lerp(inactiveForLerp, activeForLerp, t)!;
+  }
+
+  TextStyle _normalizeLerpEndpoint(TextStyle base, TextStyle peer) {
+    final resolvedFamily = base.fontFamily ?? peer.fontFamily;
+    final resolvedFallback = base.fontFamilyFallback ?? peer.fontFamilyFallback;
+    return base.copyWith(
+      fontFamily: resolvedFamily,
+      fontFamilyFallback: resolvedFallback,
+    );
+  }
+
+  Widget _buildLockedGeometryLabel(double t) {
+    final inactiveOpacity = (1 - t).clamp(0.0, 1.0);
+    final activeOpacity = t.clamp(0.0, 1.0);
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        Opacity(
+          opacity: inactiveOpacity,
+          child: AppText(
+            widget.label,
+            style: widget.inactiveStyle,
+            textAlign: widget.textAlign,
+            maxLines: 1,
+            overflow: TextOverflow.visible,
+          ),
+        ),
+        Opacity(
+          opacity: activeOpacity,
+          child: AppText(
+            widget.label,
+            style: widget.activeStyle,
+            textAlign: widget.textAlign,
+            maxLines: 1,
+            overflow: TextOverflow.visible,
+          ),
+        ),
+      ],
     );
   }
 }

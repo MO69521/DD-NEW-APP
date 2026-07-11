@@ -27,6 +27,7 @@ class AppPressable extends StatefulWidget {
     this.onLongPress,
     this.behavior = HitTestBehavior.opaque,
     this.pressScale,
+    this.pressEffectEnabled = true,
   });
 
   final Widget child;
@@ -37,6 +38,9 @@ class AppPressable extends StatefulWidget {
   /// 按下缩小到的比例（全宽列表行等大面积模块可传更柔和的 [AppSizes.tapPressScaleSubtle]）。
   /// 为空时使用 [AppSizes.tapPressScale]。
   final double? pressScale;
+
+  /// 是否启用按压缩放脚本。关闭时仍可点击，但不播放缩放/回弹动画。
+  final bool pressEffectEnabled;
 
   @override
   State<AppPressable> createState() => _AppPressableState();
@@ -102,11 +106,15 @@ class _AppPressableState extends State<AppPressable>
   }
 
   void _handleTap() {
+    final callback = widget.onTap;
+    if (callback == null) return;
+    if (!widget.pressEffectEnabled) {
+      callback();
+      return;
+    }
     _controller
       ..stop()
       ..forward(from: 0);
-    final callback = widget.onTap;
-    if (callback == null) return;
     // 先让「按下 → 反弹」可见，再触发动作 / 跳转。
     Future.delayed(AppDurations.tapPressActionDelay, () {
       if (mounted) callback();
@@ -119,17 +127,19 @@ class _AppPressableState extends State<AppPressable>
       behavior: widget.behavior,
       onTap: widget.onTap == null ? null : _handleTap,
       onLongPress: widget.onLongPress,
-      child: AnimatedBuilder(
-        animation: _controller,
-        builder: (context, child) {
-          return Transform.scale(
-            scale: _scale.value,
-            alignment: Alignment.center,
-            child: child,
-          );
-        },
-        child: widget.child,
-      ),
+      child: widget.pressEffectEnabled
+          ? AnimatedBuilder(
+              animation: _controller,
+              builder: (context, child) {
+                return Transform.scale(
+                  scale: _scale.value,
+                  alignment: Alignment.center,
+                  child: child,
+                );
+              },
+              child: widget.child,
+            )
+          : widget.child,
     );
   }
 }

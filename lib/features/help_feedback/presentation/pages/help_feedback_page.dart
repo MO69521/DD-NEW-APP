@@ -7,6 +7,7 @@ import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../routes/app_router.dart';
 import '../../../../routes/app_routes.dart';
+import '../../../../shared/components/app_async_page_body.dart';
 import '../../../../shared/components/app_swipe_tab_switcher.dart';
 import '../../../../shared/components/app_top_bar.dart';
 import '../../../../shared/components/empty_state.dart';
@@ -91,19 +92,16 @@ class _HelpFeedbackBody extends StatelessWidget {
       ),
       child: BlocBuilder<HelpFeedbackCubit, HelpFeedbackState>(
         builder: (context, state) {
-          return switch (state.phase) {
-            HelpFeedbackPhase.loading => const Center(
-              child: CircularProgressIndicator(),
-            ),
-            HelpFeedbackPhase.failure => EmptyState(
-              title: '加载失败',
-              description: state.errorMessage,
-            ),
-            HelpFeedbackPhase.loaded => _LoadedHelpFeedbackBody(
+          return AppAsyncPageBody(
+            isLoading: state.phase == HelpFeedbackPhase.loading,
+            errorMessage: state.phase == HelpFeedbackPhase.failure
+                ? (state.errorMessage ?? '')
+                : null,
+            child: _LoadedHelpFeedbackBody(
               state: state,
               swipeProgress: swipeProgress,
             ),
-          };
+          );
         },
       ),
     );

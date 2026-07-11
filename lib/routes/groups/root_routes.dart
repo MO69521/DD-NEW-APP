@@ -21,7 +21,7 @@ List<RouteBase> rootRoutes() => [
     path: AppRoutes.login,
     name: AppRoutes.loginName,
     builder: (context, state) => BlocProvider(
-      create: (_) => LoginCubit(),
+      create: (_) => LoginCubit()..detectLocalPhone(),
       child: const LoginPage(),
     ),
   ),

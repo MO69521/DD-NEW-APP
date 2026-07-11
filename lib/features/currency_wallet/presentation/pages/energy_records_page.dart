@@ -10,12 +10,11 @@ import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../routes/app_router.dart';
+import '../../../../shared/components/app_async_page_body.dart';
 import '../../../../shared/components/app_swipe_tab_switcher.dart';
 import '../../../../shared/components/app_top_bar.dart';
 import '../../../../shared/components/elastic_tab_indicator.dart';
-import '../../../../shared/components/empty_state.dart';
 import '../../../../shared/widgets/app_asset_image.dart';
-import '../../../../shared/widgets/app_button.dart';
 import '../../../../shared/widgets/app_pressable.dart';
 import '../../../../shared/widgets/app_text.dart';
 import '../../../../shared/layouts/app_page_chrome.dart';
@@ -59,59 +58,53 @@ class _EnergyRecordsPageState extends State<EnergyRecordsPage> {
         ),
         body: BlocBuilder<EnergyRecordsCubit, EnergyRecordsState>(
           builder: (context, state) {
-            if (state.phase == EnergyRecordsPhase.loading) {
-              return const Center(child: CircularProgressIndicator());
-            }
-
-            if (state.errorMessage != null) {
-              return EmptyState(
-                title: '加载失败',
-                description: state.errorMessage,
-                action: AppButton(
-                  label: '重试',
-                  onPressed: () => context.read<EnergyRecordsCubit>().load(),
-                ),
-              );
-            }
-
             final content = state.content;
-            if (content == null) {
-              return const EmptyState(title: '暂无记录');
-            }
-
-            const tabs = EnergyRecordsTab.values;
-
-            return Padding(
-              padding: EdgeInsets.only(top: AppLayout.chromeTopHeight(context)),
-              child: Column(
-                children: [
-                  EnergyRecordsTabBar(
-                    selectedTab: state.selectedTab,
-                    onTabTap: context.read<EnergyRecordsCubit>().selectTab,
-                    swipeProgress: _tabSwipeProgress,
-                  ),
-                  Expanded(
-                    child: AppSwipeTabSwitcher(
-                      selectedIndex: tabs.indexOf(state.selectedTab),
-                      onSwipeProgressChanged: (progress) =>
-                          _tabSwipeProgress.value = progress,
-                      onIndexChanged: (index) => context
-                          .read<EnergyRecordsCubit>()
-                          .selectTab(tabs[index]),
-                      children: [
-                        content.rechargeRecords.isEmpty
-                            ? const EnergyRecordsEmptyView()
-                            : EnergyRecordsList(
-                                records: content.rechargeRecords,
-                              ),
-                        content.otherRecords.isEmpty
-                            ? const EnergyRecordsEmptyView()
-                            : EnergyRecordsList(records: content.otherRecords),
-                      ],
+            return AppAsyncPageBody(
+              isLoading: state.phase == EnergyRecordsPhase.loading,
+              errorMessage: state.errorMessage,
+              onRetry: () => context.read<EnergyRecordsCubit>().load(),
+              isEmpty: content == null,
+              emptyTitle: '暂无记录',
+              child: content == null
+                  ? const SizedBox.shrink()
+                  : Padding(
+                      padding: EdgeInsets.only(
+                        top: AppLayout.chromeTopHeight(context),
+                      ),
+                      child: Column(
+                        children: [
+                          EnergyRecordsTabBar(
+                            selectedTab: state.selectedTab,
+                            onTabTap:
+                                context.read<EnergyRecordsCubit>().selectTab,
+                            swipeProgress: _tabSwipeProgress,
+                          ),
+                          Expanded(
+                            child: AppSwipeTabSwitcher(
+                              selectedIndex: EnergyRecordsTab.values
+                                  .indexOf(state.selectedTab),
+                              onSwipeProgressChanged: (progress) =>
+                                  _tabSwipeProgress.value = progress,
+                              onIndexChanged: (index) => context
+                                  .read<EnergyRecordsCubit>()
+                                  .selectTab(EnergyRecordsTab.values[index]),
+                              children: [
+                                content.rechargeRecords.isEmpty
+                                    ? const EnergyRecordsEmptyView()
+                                    : EnergyRecordsList(
+                                        records: content.rechargeRecords,
+                                      ),
+                                content.otherRecords.isEmpty
+                                    ? const EnergyRecordsEmptyView()
+                                    : EnergyRecordsList(
+                                        records: content.otherRecords,
+                                      ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
-              ),
             );
           },
         ),

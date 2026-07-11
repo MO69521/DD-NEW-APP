@@ -5,10 +5,9 @@ import '../../../../core/theme/app_layout.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../routes/app_router.dart';
+import '../../../../shared/components/app_async_page_body.dart';
 import '../../../../shared/components/app_toast.dart';
 import '../../../../shared/components/app_top_bar.dart';
-import '../../../../shared/components/empty_state.dart';
-import '../../../../shared/widgets/app_button.dart';
 import '../../../../shared/layouts/app_page_chrome.dart';
 import '../../application/account_settings_cubit.dart';
 import '../../application/account_settings_state.dart';
@@ -33,32 +32,19 @@ class AccountSettingsPage extends StatelessWidget {
         context.read<AccountSettingsCubit>().consumeActionMessage();
       },
       builder: (context, state) {
-        if (state.ui.isLoading) {
-          return const Scaffold(
-            backgroundColor: AppColors.backgroundDark,
-            body: Center(child: CircularProgressIndicator()),
-          );
-        }
-
-        if (state.ui.errorMessage != null) {
+        final content = state.domain.content;
+        if (state.ui.isLoading ||
+            state.ui.errorMessage != null ||
+            content == null) {
           return Scaffold(
             backgroundColor: AppColors.backgroundDark,
-            body: EmptyState(
-              title: '加载失败',
-              description: state.ui.errorMessage,
-              action: AppButton(
-                label: '重试',
-                onPressed: () => context.read<AccountSettingsCubit>().load(),
-              ),
+            body: AppAsyncPageBody(
+              isLoading: state.ui.isLoading,
+              errorMessage: state.ui.errorMessage,
+              onRetry: () => context.read<AccountSettingsCubit>().load(),
+              isEmpty: content == null,
+              child: const SizedBox.shrink(),
             ),
-          );
-        }
-
-        final content = state.domain.content;
-        if (content == null) {
-          return const Scaffold(
-            backgroundColor: AppColors.backgroundDark,
-            body: EmptyState(title: '暂无数据'),
           );
         }
 

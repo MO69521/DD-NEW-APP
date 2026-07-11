@@ -20,6 +20,9 @@ class AuthRepositoryImpl implements AuthRepository {
   bool get isAuthenticated => sessionService.isAuthenticated;
 
   @override
+  Future<String?> detectLocalPhone() => authService.detectLocalPhone();
+
+  @override
   Future<void> sendCode(String phone) async {
     _validatePhone(phone);
     await authService.sendCode(phone);
@@ -34,6 +37,14 @@ class AuthRepositoryImpl implements AuthRepository {
     _validateCode(code);
 
     final session = await authService.login(phone, code);
+    await sessionService.save(session);
+    return session;
+  }
+
+  @override
+  Future<AuthSession> oneClickLogin({required String phone}) async {
+    _validatePhone(phone);
+    final session = await authService.oneClickLogin(phone);
     await sessionService.save(session);
     return session;
   }

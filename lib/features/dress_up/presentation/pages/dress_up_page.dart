@@ -3,9 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_layout.dart';
+import '../../../../shared/components/app_async_page_body.dart';
 import '../../../../shared/components/app_swipe_tab_switcher.dart';
-import '../../../../shared/components/empty_state.dart';
-import '../../../../shared/widgets/app_button.dart';
 import '../../application/dress_up_cubit.dart';
 import '../../application/dress_up_state.dart';
 import '../../domain/entities/dress_up_tab.dart';
@@ -22,23 +21,20 @@ class DressUpPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<DressUpCubit, DressUpState>(
       builder: (context, state) {
-        if (state.phase == DressUpPhase.loading) {
-          return const Scaffold(
-            backgroundColor: AppColors.backgroundDark,
-            body: Center(child: CircularProgressIndicator()),
-          );
-        }
-
-        if (state.phase == DressUpPhase.error || state.content == null) {
+        final isGate =
+            state.phase == DressUpPhase.loading ||
+            state.phase == DressUpPhase.error ||
+            state.content == null;
+        if (isGate) {
           return Scaffold(
             backgroundColor: AppColors.backgroundDark,
-            body: EmptyState(
-              title: '加载失败',
-              description: state.errorMessage,
-              action: AppButton(
-                label: '重试',
-                onPressed: () => context.read<DressUpCubit>().load(),
-              ),
+            body: AppAsyncPageBody(
+              isLoading: state.phase == DressUpPhase.loading,
+              errorMessage: state.phase == DressUpPhase.loading
+                  ? null
+                  : (state.errorMessage ?? ''),
+              onRetry: () => context.read<DressUpCubit>().load(),
+              child: const SizedBox.shrink(),
             ),
           );
         }

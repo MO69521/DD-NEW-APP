@@ -9,10 +9,9 @@ import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../routes/app_router.dart';
 import '../../../../routes/app_routes.dart';
-import '../../../../shared/components/empty_state.dart';
+import '../../../../shared/components/app_async_page_body.dart';
 import '../../../../shared/layouts/app_page_chrome.dart';
 import '../../../../shared/layouts/main_tab_controller.dart';
-import '../../../../shared/widgets/app_button.dart';
 import '../../application/bookstore_cubit.dart';
 import '../../application/bookstore_state.dart';
 import '../../domain/entities/bookstore_top_tab.dart';
@@ -39,23 +38,14 @@ class BookstorePage extends StatelessWidget {
       buildWhen: (previous, current) =>
           previous.ui != current.ui || previous.domain != current.domain,
       builder: (context, state) {
-        if (state.ui.isLoading) {
+        if (state.ui.isLoading || state.ui.errorMessage != null) {
           return Scaffold(
             backgroundColor: AppColors.backgroundDark,
-            body: const Center(child: CircularProgressIndicator()),
-          );
-        }
-
-        if (state.ui.errorMessage != null) {
-          return Scaffold(
-            backgroundColor: AppColors.backgroundDark,
-            body: EmptyState(
-              title: '加载失败',
-              description: state.ui.errorMessage,
-              action: AppButton(
-                label: '重试',
-                onPressed: () => context.read<BookstoreCubit>().load(),
-              ),
+            body: AppAsyncPageBody(
+              isLoading: state.ui.isLoading,
+              errorMessage: state.ui.errorMessage,
+              onRetry: () => context.read<BookstoreCubit>().load(),
+              child: const SizedBox.shrink(),
             ),
           );
         }

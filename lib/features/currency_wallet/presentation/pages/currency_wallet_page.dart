@@ -7,9 +7,9 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_layout.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../routes/app_router.dart';
+import '../../../../shared/components/app_async_page_body.dart';
 import '../../../../shared/components/app_toast.dart';
 import '../../../../shared/components/app_top_bar.dart';
-import '../../../../shared/components/empty_state.dart';
 import '../../../../shared/components/recharge_packages_section.dart';
 import '../../../../shared/widgets/app_button.dart';
 import '../../../../shared/layouts/app_page_chrome.dart';
@@ -96,79 +96,69 @@ class _CurrencyWalletBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (state.ui.phase == CurrencyWalletPhase.loading) {
-      return const Center(child: CircularProgressIndicator());
-    }
-
-    if (state.ui.errorMessage != null) {
-      return EmptyState(
-        title: '加载失败',
-        description: state.ui.errorMessage,
-        action: AppButton(
-          label: '重试',
-          onPressed: () => context.read<CurrencyWalletCubit>().load(),
-        ),
-      );
-    }
-
     final content = state.domain.content;
-    if (content == null) {
-      return const EmptyState(title: '暂无数据');
-    }
-
-    return ListView(
-      padding: EdgeInsets.fromLTRB(
-        AppSpacing.sm,
-        AppLayout.chromeTopHeight(context) + AppSpacing.md,
-        AppSpacing.sm,
-        AppSpacing.xxl,
-      ),
-      children: [
-        CurrencyBalanceSummaryCard(
-          type: content.type,
-          balance: content.balance,
-        ),
-        const SizedBox(height: AppSpacing.sm),
-        if (content.type == CurrencyType.energy) ...[
-          RechargePackagesSection(
-            packages: content.rechargePackages,
-            selectedPackageId: state.interaction.selectedEnergyOptionId,
-            onPackageTap: (package) => context
-                .read<CurrencyWalletCubit>()
-                .selectEnergyOption(package.id),
-          ),
-          const SizedBox(height: AppSpacing.sm),
-          CurrencyPaymentSection(
-            selectedMethod: state.interaction.selectedPaymentMethod,
-            onMethodTap: context
-                .read<CurrencyWalletCubit>()
-                .selectPaymentMethod,
-          ),
-        ] else if (content.type == CurrencyType.stardust) ...[
-          StardustExchangeSection(
-            options: content.stardustOptions,
-            selectedOptionId: state.interaction.selectedStardustOptionId,
-            onOptionTap: context
-                .read<CurrencyWalletCubit>()
-                .selectStardustOption,
-          ),
-          const SizedBox(height: AppSpacing.sm),
-          CurrencyLedgerSection(
-            type: content.type,
-            records: content.ledgerRecords,
-          ),
-        ] else ...[
-          CurrencyObtainWaysSection(
-            ways: content.obtainWays,
-            onAction: context.read<CurrencyWalletCubit>().performAction,
-          ),
-          const SizedBox(height: AppSpacing.sm),
-          CurrencyLedgerSection(
-            type: content.type,
-            records: content.ledgerRecords,
-          ),
-        ],
-      ],
+    return AppAsyncPageBody(
+      isLoading: state.ui.phase == CurrencyWalletPhase.loading,
+      errorMessage: state.ui.errorMessage,
+      onRetry: () => context.read<CurrencyWalletCubit>().load(),
+      isEmpty: content == null,
+      child: content == null
+          ? const SizedBox.shrink()
+          : ListView(
+              padding: EdgeInsets.fromLTRB(
+                AppSpacing.sm,
+                AppLayout.chromeTopHeight(context) + AppSpacing.md,
+                AppSpacing.sm,
+                AppSpacing.xxl,
+              ),
+              children: [
+                CurrencyBalanceSummaryCard(
+                  type: content.type,
+                  balance: content.balance,
+                ),
+                const SizedBox(height: AppSpacing.sm),
+                if (content.type == CurrencyType.energy) ...[
+                  RechargePackagesSection(
+                    packages: content.rechargePackages,
+                    selectedPackageId: state.interaction.selectedEnergyOptionId,
+                    onPackageTap: (package) => context
+                        .read<CurrencyWalletCubit>()
+                        .selectEnergyOption(package.id),
+                  ),
+                  const SizedBox(height: AppSpacing.sm),
+                  CurrencyPaymentSection(
+                    selectedMethod: state.interaction.selectedPaymentMethod,
+                    onMethodTap: context
+                        .read<CurrencyWalletCubit>()
+                        .selectPaymentMethod,
+                  ),
+                ] else if (content.type == CurrencyType.stardust) ...[
+                  StardustExchangeSection(
+                    options: content.stardustOptions,
+                    selectedOptionId:
+                        state.interaction.selectedStardustOptionId,
+                    onOptionTap: context
+                        .read<CurrencyWalletCubit>()
+                        .selectStardustOption,
+                  ),
+                  const SizedBox(height: AppSpacing.sm),
+                  CurrencyLedgerSection(
+                    type: content.type,
+                    records: content.ledgerRecords,
+                  ),
+                ] else ...[
+                  CurrencyObtainWaysSection(
+                    ways: content.obtainWays,
+                    onAction: context.read<CurrencyWalletCubit>().performAction,
+                  ),
+                  const SizedBox(height: AppSpacing.sm),
+                  CurrencyLedgerSection(
+                    type: content.type,
+                    records: content.ledgerRecords,
+                  ),
+                ],
+              ],
+            ),
     );
   }
 }

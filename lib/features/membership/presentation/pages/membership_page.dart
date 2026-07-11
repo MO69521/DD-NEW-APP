@@ -7,9 +7,8 @@ import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../routes/app_router.dart';
 import '../../../../routes/app_routes.dart';
+import '../../../../shared/components/app_async_page_body.dart';
 import '../../../../shared/components/app_toast.dart';
-import '../../../../shared/components/empty_state.dart';
-import '../../../../shared/widgets/app_button.dart';
 import '../../../../shared/widgets/overscroll_stretch.dart';
 import '../../../../shared/components/app_blurred_chrome_bar.dart';
 import '../../../../shared/layouts/app_scroll_blur_scope.dart';
@@ -43,32 +42,19 @@ class MembershipPage extends StatelessWidget {
         context.read<MembershipCubit>().consumePurchaseMessage();
       },
       builder: (context, state) {
-        if (state.ui.isLoading) {
-          return const Scaffold(
-            backgroundColor: AppColors.backgroundDark,
-            body: Center(child: CircularProgressIndicator()),
-          );
-        }
-
-        if (state.ui.errorMessage != null) {
+        final content = state.domain.content;
+        if (state.ui.isLoading ||
+            state.ui.errorMessage != null ||
+            content == null) {
           return Scaffold(
             backgroundColor: AppColors.backgroundDark,
-            body: EmptyState(
-              title: '加载失败',
-              description: state.ui.errorMessage,
-              action: AppButton(
-                label: '重试',
-                onPressed: () => context.read<MembershipCubit>().load(),
-              ),
+            body: AppAsyncPageBody(
+              isLoading: state.ui.isLoading,
+              errorMessage: state.ui.errorMessage,
+              onRetry: () => context.read<MembershipCubit>().load(),
+              isEmpty: content == null,
+              child: const SizedBox.shrink(),
             ),
-          );
-        }
-
-        final content = state.domain.content;
-        if (content == null) {
-          return const Scaffold(
-            backgroundColor: AppColors.backgroundDark,
-            body: EmptyState(title: '暂无数据'),
           );
         }
 

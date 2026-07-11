@@ -307,6 +307,7 @@ feature 专用圆角（在基阶之上按页面命名，如 `navOuter 47` / `sea
 | 弹窗底 | `dialogBackground` `#131820` |
 | 圆角 | `xl`（24）|
 | 关闭 | 点遮罩 / `DialogCloseButton`（弹窗**右上角** `close_rounded` X 图标，距顶/右 `lg`=24，见 §7.7）· 统一 `Navigator.pop` |
+| 确认壳 | `AppConfirmDialog`（`shared/components/app_confirm_dialog.dart`，L2）— 面板 chrome + 标题/正文 + 双按钮（默认可取消/确认；可覆写变体、单主按钮、关闭钮）；业务 L3 只填文案 |
 | 业务示例 | `EnergyRechargePurchaseDialog` / `WelfareRulesDialog` / `DailyCheckInDialog`（首页首启签到弹窗，性别/年龄收集后弹出，内容同「每日签到」区块）→ `CheckInSuccessDialog`（点签到后弹出）（L3） |
 
 ### 7.4 BottomSheet · 底部弹层
@@ -354,7 +355,12 @@ feature 专用圆角（在基阶之上按页面命名，如 `navOuter 47` / `sea
 | 组件 | 位置 | 变体 / 说明 |
 |------|------|------|
 | `SectionHeader` | `shared/components/section_header.dart` | 区块标题 + 可选右侧操作链接 |
-| `EmptyState` | `shared/components/empty_state.dart` | 空状态：`title` / `description` / `action` |
+| `EmptyState` | `shared/components/empty_state.dart` | 空状态：`title` / `description` / `action`；可选 `illustration` + `contentWidth` / 间距（插图引导空态） |
+| `AppAsyncPageBody` | `shared/components/app_async_page_body.dart` | 页面异步门闸：加载中 / 失败重试 / 空数据 / 内容 |
+| `AppConfirmDialog` | `shared/components/app_confirm_dialog.dart` | 居中确认弹窗壳（见 §7.3） |
+| `AppGroupedListCard` | `shared/components/app_grouped_list_card.dart` | 分组列表卡：可选区块标题 + `surfaceCard` + 行间分割线（禁止卡中卡） |
+| `AppNavigationListRow` | `shared/components/app_navigation_list_row.dart` | 设置/账号导航行：标题 + 可选副标题/尾部 + 箭头 |
+| `AppListLoadMoreFooter` | `shared/components/app_list_load_more_footer.dart` | 列表底部上拉加载指示器；`asSliver` 可选 |
 | `AppToast` | `shared/components/app_toast.dart` | 全局轻提示，黄底、淡入淡出自动消失 |
 | `GlassChipButton` | `shared/components/glass_chip_button.dart` | 玻璃胶囊 / 搜索框容器；`blur` / `expanded` |
 | `AppSwitch` | `shared/widgets/app_switch.dart` | 开关：on 品牌黄 4% 大色块底（`accentYellow04`）+ 黄色圆钮 / off 玻璃底 + 白钮 |

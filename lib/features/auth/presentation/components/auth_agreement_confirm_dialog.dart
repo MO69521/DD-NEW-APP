@@ -1,17 +1,12 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../core/theme/app_colors.dart';
-import '../../../../core/theme/app_radius.dart';
-import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../routes/app_router.dart';
 import '../../../../routes/app_routes.dart';
+import '../../../../shared/components/app_confirm_dialog.dart';
 import '../../../../shared/components/app_toast.dart';
-import '../../../../shared/components/dialog_close_button.dart';
-import '../../../../shared/widgets/app_button.dart';
-import '../../../../shared/widgets/app_text.dart';
 
 /// L3 — 登录前协议确认弹窗。
 class AuthAgreementConfirmDialog extends StatefulWidget {
@@ -52,59 +47,18 @@ class _AuthAgreementConfirmDialogState
 
   @override
   Widget build(BuildContext context) {
-    return Dialog(
-      backgroundColor: Colors.transparent,
-      insetPadding: const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          color: AppColors.dialogBackground,
-          borderRadius: BorderRadius.circular(AppRadius.xl),
-          border: Border.all(color: AppColors.borderGlass),
-        ),
-        child: Stack(
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(
-                AppSpacing.xl,
-                AppSpacing.xl,
-                AppSpacing.xl,
-                AppSpacing.lg,
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  AppText(
-                    '服务协议及隐私保护',
-                    style: AppTextStyles.titleMedium.copyWith(
-                      color: AppColors.textOnDark,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: AppSpacing.lg),
-                  _AgreementDescription(
-                    mobileTermsRecognizer: _mobileTermsRecognizer,
-                    userAgreementRecognizer: _userAgreementRecognizer,
-                    privacyPolicyRecognizer: _privacyPolicyRecognizer,
-                    minorProtectionRecognizer: _minorProtectionRecognizer,
-                  ),
-                  const SizedBox(height: AppSpacing.xl),
-                  AppButton(
-                    label: '同意并登录',
-                    variant: AppButtonVariant.accent,
-                    isExpanded: true,
-                    onPressed: () => AppRouter.pop(true),
-                  ),
-                ],
-              ),
-            ),
-            Positioned(
-              top: AppSpacing.lg,
-              right: AppSpacing.lg,
-              child: DialogCloseButton(onTap: () => AppRouter.pop(false)),
-            ),
-          ],
-        ),
+    return AppConfirmDialog(
+      title: '服务协议及隐私保护',
+      titleBodyGap: AppSpacing.lg,
+      body: _AgreementDescription(
+        mobileTermsRecognizer: _mobileTermsRecognizer,
+        userAgreementRecognizer: _userAgreementRecognizer,
+        privacyPolicyRecognizer: _privacyPolicyRecognizer,
+        minorProtectionRecognizer: _minorProtectionRecognizer,
       ),
+      singlePrimary: true,
+      showCloseButton: true,
+      primaryLabel: '同意并登录',
     );
   }
 

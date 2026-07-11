@@ -7,6 +7,12 @@ class RestAuthService implements AuthService {
   const RestAuthService();
 
   @override
+  Future<String?> detectLocalPhone() async {
+    // Phase 2: 接入运营商 SDK 或服务端预取能力后替换为真实实现。
+    return null;
+  }
+
+  @override
   Future<void> sendCode(String phone) async {
     final request = SendCodeRequest(phone: phone);
     await _post('/auth/sms/send', request.toJson());
@@ -16,6 +22,13 @@ class RestAuthService implements AuthService {
   Future<AuthSession> login(String phone, String code) async {
     final request = LoginRequest(phone: phone, code: code);
     final response = await _post('/auth/sms/login', request.toJson());
+    return LoginResponse.fromJson(response).session;
+  }
+
+  @override
+  Future<AuthSession> oneClickLogin(String phone) async {
+    final request = OneClickLoginRequest(phone: phone);
+    final response = await _post('/auth/carrier/login', request.toJson());
     return LoginResponse.fromJson(response).session;
   }
 
@@ -60,4 +73,12 @@ class LoginResponse {
       session: AuthSession.fromJson(json['data'] as Map<String, Object?>),
     );
   }
+}
+
+class OneClickLoginRequest {
+  const OneClickLoginRequest({required this.phone});
+
+  final String phone;
+
+  Map<String, Object?> toJson() => {'phone': phone};
 }

@@ -12,6 +12,13 @@ class MockAuthService implements AuthService {
 
   final MockAuthScenario scenario;
   final Duration delay;
+  static const String _detectedPhone = '15812348890';
+
+  @override
+  Future<String?> detectLocalPhone() async {
+    await Future<void>.delayed(delay);
+    return _detectedPhone;
+  }
 
   @override
   Future<void> sendCode(String phone) async {
@@ -35,6 +42,24 @@ class MockAuthService implements AuthService {
       avatarUrl: 'https://i.pravatar.cc/150?img=32',
     );
 
+    return AuthSession(
+      accessToken: 'mock_access_token_10001',
+      refreshToken: 'mock_refresh_token_10001',
+      expiresAt: DateTime.now().add(const Duration(days: 30)),
+      user: user,
+    );
+  }
+
+  @override
+  Future<AuthSession> oneClickLogin(String phone) async {
+    await Future<void>.delayed(delay);
+    _throwConfiguredFailure();
+    final user = AuthUser(
+      id: 'mock-user-10001',
+      phone: phone,
+      nickname: '点点读者',
+      avatarUrl: 'https://i.pravatar.cc/150?img=32',
+    );
     return AuthSession(
       accessToken: 'mock_access_token_10001',
       refreshToken: 'mock_refresh_token_10001',

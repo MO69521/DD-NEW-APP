@@ -102,6 +102,10 @@ export default function DesignSystemSpec() {
     { part: "02", title: "扫光高亮层", keywords: "", render: <SweepHighlightSection /> },
     { part: "02", title: "轻提示", keywords: "", render: <ToastSection /> },
     { part: "02", title: "空状态", keywords: "", render: <EmptyStateSection /> },
+    { part: "02", title: "异步门闸", keywords: "", render: <AsyncPageBodySection /> },
+    { part: "02", title: "分组列表卡", keywords: "", render: <GroupedListCardSection /> },
+    { part: "02", title: "导航列表行", keywords: "", render: <NavigationListRowSection /> },
+    { part: "02", title: "加载更多脚", keywords: "", render: <ListLoadMoreFooterSection /> },
     { part: "02", title: "区块标题", keywords: "", render: <SectionHeaderSection /> },
   ];
 
@@ -122,13 +126,13 @@ export default function DesignSystemSpec() {
             <Stack gap={4}>
               <Text>
                 这份可视化文档是 <Text weight="semibold">组件目录 / 预览</Text>
-                ，用于对照与定位；它本身是 React 预览，<Text weight="semibold">不是</Text>
-                应用的运行源码。
+                ，用于对照与定位；它本身是 React 手写近似，<Text weight="semibold">不是</Text>
+                应用的运行源码，也<Text weight="semibold">不会</Text>像素级复刻 Flutter 渲染。
               </Text>
               <Text>
-                真正「改一处即全局生效」的源头是 Dart 代码：设计 token 在{" "}
+                真正「改一处即全局生效」的源头是 Dart：设计 token 在{" "}
                 <Code>lib/core/theme/*</Code>，共享组件在 <Code>lib/shared/*</Code>。
-                全项目都引用它们，改动即全局同步。
+                画廊与 APP 观感不一致时，以源码路径打开的 Flutter 组件为准。
               </Text>
               <Text>
                 用法：在下方找到组件 → 点它的「源码」路径打开真源 → 告诉我要改什么，我改这一处 Dart，页面即全局更新。
@@ -222,24 +226,22 @@ function FilterBar({
         {chips.map((c) => {
           const active = activePart === c.id;
           return (
-            <div
+            <SelectableItem
               key={c.id}
+              active={active}
               onClick={() => onPart(c.id)}
+              activeColor={APP.onAccent}
+              fontSize={13}
               style={{
                 padding: "7px 14px",
                 borderRadius: 999,
-                cursor: "pointer",
-                userSelect: "none",
-                fontSize: 13,
-                fontWeight: active ? 600 : 400,
-                color: active ? APP.onAccent : APP.textMuted,
                 background: active ? APP.accent : APP.surface,
                 border: `${APP.hair} solid ${active ? APP.accent : APP.border}`,
                 transition: "background 0.15s, color 0.15s, border-color 0.15s",
               }}
             >
               {c.label}
-            </div>
+            </SelectableItem>
           );
         })}
       </Row>
@@ -767,7 +769,7 @@ function PartBanner({
             background: theme.stroke.secondary,
           }}
         />
-        <Stack gap={8}>
+        <Stack gap={12}>
           <span
             style={{ fontSize: 20, fontWeight: 700, color: theme.text.primary }}
           >
@@ -828,6 +830,108 @@ function SectionTitle({
         </Row>
       ) : null}
     </Stack>
+  );
+}
+
+/** 规范条目外壳：标题行 + 内容区，统一各 *Section 脚手架。 */
+function SpecSection({
+  zh,
+  note,
+  src,
+  gap = 16,
+  children,
+}: {
+  zh: string;
+  note?: string;
+  src?: string;
+  gap?: number;
+  children: ReactNode;
+}) {
+  return (
+    <Stack gap={gap}>
+      <SectionTitle zh={zh} note={note} src={src} />
+      {children}
+    </Stack>
+  );
+}
+
+/** 选中态文案：黄字加粗 / 灰字常规（可覆写色与附加样式）。 */
+function SelectableItem({
+  active,
+  onClick,
+  children,
+  activeColor = APP.accent,
+  inactiveColor = APP.textMuted,
+  fontSize = 14,
+  style,
+}: {
+  active: boolean;
+  onClick?: () => void;
+  children: ReactNode;
+  activeColor?: string;
+  inactiveColor?: string;
+  fontSize?: number;
+  style?: CSSProperties;
+}) {
+  return (
+    <div
+      onClick={onClick}
+      style={mergeStyle(
+        {
+          cursor: "pointer",
+          userSelect: "none",
+          color: active ? activeColor : inactiveColor,
+          fontWeight: active ? 600 : 400,
+          fontSize,
+          transition: "color 0.15s",
+        },
+        style,
+      )}
+    >
+      {children}
+    </div>
+  );
+}
+
+/** 玻璃面占位 / 容器：APP.glass + 默认圆角 md。 */
+function GlassPlaceholder({
+  width,
+  height,
+  borderRadius = 12,
+  border,
+  style,
+  onClick,
+  children,
+}: {
+  width?: number | string;
+  height?: number | string;
+  borderRadius?: number | string;
+  border?: boolean | string;
+  style?: CSSProperties;
+  onClick?: () => void;
+  children?: ReactNode;
+}) {
+  return (
+    <div
+      onClick={onClick}
+      style={mergeStyle(
+        {
+          width,
+          height,
+          flexShrink: 0,
+          background: APP.glass,
+          borderRadius,
+          ...(border === true
+            ? { border: `${APP.hair} solid ${APP.border}` }
+            : typeof border === "string"
+              ? { border }
+              : {}),
+        },
+        style,
+      )}
+    >
+      {children}
+    </div>
   );
 }
 
@@ -1085,12 +1189,11 @@ function TypeScaleSection() {
     ["display", 32, "Hero / 展示级"],
   ];
   return (
-    <Stack gap={16}>
-      <SectionTitle
+    <SpecSection
         zh="字号（8 档）"
         note="AppFontSizes"
         src="lib/core/theme/app_text_styles.dart"
-      />
+      >
       <Table
         headers={["档位", "px", "用途", "示例"]}
         columnAlign={["left", "center", "left", "left"]}
@@ -1103,18 +1206,17 @@ function TypeScaleSection() {
           </span>,
         ].map(cell))}
       />
-    </Stack>
+    </SpecSection>
   );
 }
 
 function LineHeightSection() {
   return (
-    <Stack gap={16}>
-      <SectionTitle
+    <SpecSection
         zh="行高（4 档）"
         note="AppLineHeights"
         src="lib/core/theme/app_text_styles.dart"
-      />
+      >
       <Table
         headers={["档位", "值", "用途"]}
         columnAlign={["left", "center", "left"]}
@@ -1125,7 +1227,7 @@ function LineHeightSection() {
           ["loose", "1.75", "多行说明 / 协议类长文"],
         ].map((r) => r.map(cell))}
       />
-    </Stack>
+    </SpecSection>
   );
 }
 
@@ -1139,12 +1241,11 @@ function WeightSection() {
     ["black", 900, "会员价格等极强调"],
   ];
   return (
-    <Stack gap={16}>
-      <SectionTitle
+    <SpecSection
         zh="字重（6 档）"
         note="AppFontWeights"
         src="lib/core/theme/app_text_styles.dart"
-      />
+      >
       <Table
         headers={["档位", "值", "用途", "示例"]}
         columnAlign={["left", "center", "left", "left"]}
@@ -1157,18 +1258,17 @@ function WeightSection() {
           </span>,
         ].map(cell))}
       />
-    </Stack>
+    </SpecSection>
   );
 }
 
 function FontFamilySection() {
   return (
-    <Stack gap={16}>
-      <SectionTitle
+    <SpecSection
         zh="字体族 · 定制数字字体"
         note="AppFontFamilies"
         src="lib/core/theme/app_text_styles.dart"
-      />
+      >
       <Table
         headers={["Token", "值", "使用场景"]}
         columnAlign={["left", "left", "left"]}
@@ -1192,18 +1292,18 @@ function FontFamilySection() {
           </Text>
         </Stack>
       </Callout>
-    </Stack>
+    </SpecSection>
   );
 }
 
 function ColorSection() {
   return (
-    <Stack gap={14}>
-      <SectionTitle
+    <SpecSection
         zh="颜色(单一真源)"
         note="AppColors · AppBrandColors"
         src="lib/core/theme/app_colors.dart"
-      />
+        gap={14}
+      >
 
       <Stack gap={8}>
         <Text weight="semibold">中性阶 · 白色透明度叠加（深色态真源）</Text>
@@ -1299,7 +1399,7 @@ function ColorSection() {
           ].map((r) => r.map(cell))}
         />
       </Stack>
-    </Stack>
+    </SpecSection>
   );
 }
 
@@ -1369,12 +1469,11 @@ function SpacingSection() {
     ["xxl", 48, "超大间距"],
   ];
   return (
-    <Stack gap={16}>
-      <SectionTitle
+    <SpecSection
         zh="间距（8 档）"
         note="AppSpacing · 基阶 2·4·8·12·16·24·32·48"
         src="lib/core/theme/app_spacing.dart"
-      />
+      >
       <Table
         headers={["档位", "px", "用途", "示意"]}
         columnAlign={["left", "center", "left", "left"]}
@@ -1393,7 +1492,7 @@ function SpacingSection() {
           />,
         ].map(cell))}
       />
-    </Stack>
+    </SpecSection>
   );
 }
 
@@ -1407,12 +1506,11 @@ function RadiusSection() {
     ["full", 999, "全圆 / 药丸"],
   ];
   return (
-    <Stack gap={16}>
-      <SectionTitle
+    <SpecSection
         zh="圆角（5 档）"
         note="AppRadius · 基阶 4·12·16·24·full"
         src="lib/core/theme/app_radius.dart"
-      />
+      >
       <Table
         headers={["档位", "px", "用途", "示意"]}
         columnAlign={["left", "center", "left", "left"]}
@@ -1432,7 +1530,7 @@ function RadiusSection() {
           />,
         ].map(cell))}
       />
-    </Stack>
+    </SpecSection>
   );
 }
 
@@ -1460,12 +1558,11 @@ function SizeIndexSection() {
     ["Toast / 交互阈值", "轻提示内边距 / 滑动切换阈值", "toast* · swipeTabVelocityThreshold"],
   ];
   return (
-    <Stack gap={16}>
-      <SectionTitle
+    <SpecSection
         zh="组件尺寸 token · 分组索引"
         note="AppSizes · 组件级布局精确值（真值随源码为准）"
         src="lib/core/theme/app_sizes.dart"
-      />
+      >
       <Text tone="tertiary" size="small">
         尺寸档不同于上方基阶体系，是按页面/组件命名的精确值集合。下表仅作「按 feature 分组」的导航索引，改值只改 <Code>app_sizes.dart</Code> 一处。
       </Text>
@@ -1474,7 +1571,7 @@ function SizeIndexSection() {
         columnAlign={["left", "left", "left"]}
         rows={groups.map(([g, cover, prefix]) => [g, cover, <Code key={g}>{prefix}</Code>])}
       />
-    </Stack>
+    </SpecSection>
   );
 }
 
@@ -1482,12 +1579,11 @@ function SizeIndexSection() {
 
 function PressableSection() {
   return (
-    <Stack gap={16}>
-      <SectionTitle
+    <SpecSection
         zh="按压反馈"
         note="AppPressable（L1）· 按下缩小 → 松手 overshoot 回弹 · 全局可点击模块统一微交互"
         src="lib/shared/widgets/app_pressable.dart"
-      />
+      >
       <Stage>
         <div style={{ display: "flex", gap: 20, alignItems: "center", flexWrap: "wrap" }}>
           <Pressable
@@ -1540,7 +1636,7 @@ function PressableSection() {
         动作/跳转延后 <Code>tapPressActionDelay</Code> 触发，保证「按下 → 弹起 → 跳转」可见。已全局接入
         <Code>AppButton</Code> 与书卡 / 列表行 / 图标 / Tab / chip；新可点击组件应优先用它替代裸 <Code>GestureDetector</Code>。
       </Text>
-    </Stack>
+    </SpecSection>
   );
 }
 
@@ -1553,12 +1649,12 @@ function ButtonSection() {
   ];
   const sizes: BtnSize[] = ["normal", "compact", "small"];
   return (
-    <Stack gap={12}>
-      <SectionTitle
+    <SpecSection
         zh="按钮"
         note="AppButton（L1）· 4 视觉变体 × 3 尺寸 · 弹窗等组件复用它"
         src="lib/shared/widgets/app_button.dart"
-      />
+        gap={12}
+      >
 
       <Text tone="tertiary" size="small">
         4 视觉变体 × 3 尺寸 组合总览（每行一个变体，每列一个尺寸）：
@@ -1614,22 +1710,21 @@ function ButtonSection() {
         状态：默认 · 加载中 · 禁用（前景 40%）· 撑满宽度 <Code>isExpanded</Code>；
         可选前置图标 <Code>leadingIcon</Code>。描边一律 0.5px hairline。
       </Text>
-    </Stack>
+    </SpecSection>
   );
 }
 
 function CardSection() {
   return (
-    <Stack gap={16}>
-      <SectionTitle
+    <SpecSection
         zh="卡片"
         note="书卡族 · 底 4% 白底 + 圆角 · 禁止卡中卡 · 可点按"
         src="lib/shared/components/book_card_variants.dart"
-      />
+      >
       <Stage>
         <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
           <Pressable style={{ width: 112 }}>
-            <div style={{ height: 150, background: APP.glass, borderRadius: 12, marginBottom: 8 }} />
+            <GlassPlaceholder height={150} style={{ marginBottom: 8 }} />
             <div style={{ color: APP.text, fontSize: 14, fontWeight: 600 }}>示例书名标题</div>
             <div style={{ color: APP.textMuted, fontSize: 12, marginTop: 4 }}>都市 · 悬疑</div>
             <div style={{ marginTop: 8 }}>
@@ -1637,7 +1732,7 @@ function CardSection() {
             </div>
           </Pressable>
           <Pressable style={{ display: "flex", gap: 12, width: 300 }}>
-            <div style={{ width: 72, height: 96, flexShrink: 0, background: APP.glass, borderRadius: 12 }} />
+            <GlassPlaceholder width={72} height={96} />
             <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
               <div style={{ color: APP.text, fontSize: 14, fontWeight: 600 }}>示例书名标题较长会省略</div>
               <div style={{ color: APP.textMuted, fontSize: 12 }}>古言 · 甜宠</div>
@@ -1648,7 +1743,7 @@ function CardSection() {
           </Pressable>
         </div>
       </Stage>
-    </Stack>
+    </SpecSection>
   );
 }
 
@@ -1659,26 +1754,20 @@ function CornerBadgeSection() {
     { label: "会员免费领", bg: "#FFCD50", fg: "#131820" },
   ];
   return (
-    <Stack gap={16}>
-      <SectionTitle
+    <SpecSection
         zh="角标"
         note="AppCornerBadge（L2）· 卡片右上角斜切胶囊（topRight + bottomLeft 圆角 md，另两角直角）· 底色/文字色/水平内边距按语义传入 · 充值/兑换档位「热」「新手福利」「会员免费领」等共用"
         src="lib/shared/components/app_corner_badge.dart"
-      />
+      >
       <Stage>
         <div style={{ display: "flex", gap: 20, flexWrap: "wrap" }}>
           {badges.map((b) => (
             <div key={b.label} style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-              <div
-                style={{
-                  position: "relative",
-                  width: 100,
-                  height: 128,
-                  background: APP.glass,
-                  borderRadius: 12,
-                  border: `${APP.hair} solid ${APP.border}`,
-                  overflow: "hidden",
-                }}
+              <GlassPlaceholder
+                width={100}
+                height={128}
+                border
+                style={{ position: "relative", overflow: "hidden" }}
               >
                 <div
                   style={{
@@ -1697,7 +1786,7 @@ function CornerBadgeSection() {
                 >
                   {b.label}
                 </div>
-              </div>
+              </GlassPlaceholder>
               <Caption>{b.label}</Caption>
             </div>
           ))}
@@ -1708,18 +1797,17 @@ function CornerBadgeSection() {
         形状固定，仅 <Code>label</Code> / <Code>color</Code> / <Code>textColor</Code> /
         <Code>horizontalPadding</Code> 按调用方语义传入。改组件，全项目角标同步。
       </Text>
-    </Stack>
+    </SpecSection>
   );
 }
 
 function DialogSection() {
   return (
-    <Stack gap={16}>
-      <SectionTitle
+    <SpecSection
         zh="弹窗"
-        note="showAppBlurredDialog · 80% 纯黑遮罩(无模糊) · 圆角 xl · 关闭钮 DialogCloseButton"
-        src="lib/shared/components/app_blurred_dialog.dart"
-      />
+        note="showAppBlurredDialog 遮罩入口 + AppConfirmDialog 确认壳 · 80% 纯黑遮罩 · 圆角 xl"
+        src="lib/shared/components/app_confirm_dialog.dart"
+      >
       <Stage style={{ padding: 0, overflow: "hidden" }}>
         <div
           style={{
@@ -1732,26 +1820,29 @@ function DialogSection() {
           }}
         >
           <div style={{ width: 280, background: APP.dialogBg, borderRadius: 24, padding: 20, border: `1px solid ${APP.panelEdge}` }}>
-            <div style={{ color: APP.text, fontSize: 16, fontWeight: 700, textAlign: "center" }}>提示标题</div>
+            <div style={{ color: APP.text, fontSize: 16, fontWeight: 700, textAlign: "center" }}>删除提示</div>
             <div style={{ color: APP.textMuted, fontSize: 13, lineHeight: 1.5, textAlign: "center", marginTop: 8 }}>
-              居中弹窗，弹窗底 #131820、圆角 xl，背后 80% 纯黑遮罩（无模糊）。
+              确认删除全部搜索历史吗？
             </div>
             <div style={{ display: "flex", gap: 10, marginTop: 18 }}>
               <DemoButton variant="outline" expand>
                 取消
               </DemoButton>
               <DemoButton variant="accent" expand>
-                确定
+                确认
               </DemoButton>
             </div>
           </div>
         </div>
       </Stage>
       <Text tone="tertiary" size="small">
-        弹窗内的「取消 / 确定」即 <Code>AppButton</Code>（取消 <Code>outline</Code>、
-        确定 <Code>accent</Code>，各 <Code>Expanded</Code> 平分宽度）。改按钮组件，全项目弹窗按钮同步。
+        两层分工：遮罩入口{" "}
+        <Code>lib/shared/components/app_blurred_dialog.dart</Code>
+        （<Code>showAppBlurredDialog</Code>）+ 确认壳{" "}
+        <Code>AppConfirmDialog</Code>。自定义内容弹窗也走遮罩入口，只是不用确认壳。
+        按钮即 <Code>AppButton</Code>（取消 <Code>outline</Code> / 确认 <Code>accent</Code>）。
       </Text>
-    </Stack>
+    </SpecSection>
   );
 }
 
@@ -1759,12 +1850,11 @@ function SheetSection() {
   const options = ["综合排序", "最新更新", "人气最高", "字数最多"];
   const [selected, setSelected] = useCanvasState<number>("demoSheetSelected", 0);
   return (
-    <Stack gap={16}>
-      <SectionTitle
+    <SpecSection
         zh="底部弹层"
         note="showModalBottomSheet · 顶部圆角 + 玻璃 · 可选中"
         src="lib/features/partner/presentation/components/partner_filter_sheet.dart"
-      />
+      >
       <Stage style={{ padding: 0, overflow: "hidden" }}>
         <div style={{ background: "rgba(0,0,0,0.45)", paddingTop: 36 }}>
           <div style={{ background: APP.dialogBg, borderTopLeftRadius: 16, borderTopRightRadius: 16, borderTop: `${APP.hair} solid ${APP.border}`, padding: "16px 0" }}>
@@ -1772,26 +1862,22 @@ function SheetSection() {
             {options.map((o, i) => {
               const active = i === selected;
               return (
-                <div
+                <SelectableItem
                   key={o}
+                  active={active}
                   onClick={() => setSelected(i)}
                   style={{
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "space-between",
                     padding: "12px 16px",
-                    cursor: "pointer",
-                    userSelect: "none",
-                    color: active ? APP.accent : APP.textMuted,
-                    fontSize: 14,
-                    fontWeight: active ? 600 : 400,
                     background: active ? "rgba(255,232,71,0.06)" : "transparent",
                     transition: "color 0.15s, background 0.15s",
                   }}
                 >
                   <span>{o}</span>
                   <span style={{ opacity: active ? 1 : 0, transition: "opacity 0.15s" }}>✓</span>
-                </div>
+                </SelectableItem>
               );
             })}
           </div>
@@ -1802,21 +1888,23 @@ function SheetSection() {
         <Code>lib/shared/components/share_bottom_sheet.dart</Code>，L2）同规范：玻璃态 + 顶部圆角，
         一行渠道（QQ好友/QQ空间/微信/朋友圈/分享海报）+「取消」，点渠道回调 <Code>onChannelTap</Code>。
       </Text>
-    </Stack>
+    </SpecSection>
   );
 }
 
 function TopBarSection() {
   return (
-    <Stack gap={16}>
-      <SectionTitle
+    <SpecSection
         zh="顶栏"
         note="AppTopBar（L2）· 高 44 · 图标框 32 · 三槽位 leading / center / trailing"
         src="lib/shared/components/app_top_bar.dart"
-      />
+      >
       <Stage>
         <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-          <div style={{ display: "flex", alignItems: "center", height: 44, padding: "0 8px", background: APP.glass, borderRadius: 12 }}>
+          <GlassPlaceholder
+            height={44}
+            style={{ display: "flex", alignItems: "center", padding: "0 8px" }}
+          >
             <Pressable style={{ width: 32, height: 32, display: "flex", alignItems: "center", justifyContent: "center" }}>
               <Glyph name="back" color={APP.text} size={20} strokeWidth={2} />
             </Pressable>
@@ -1824,29 +1912,28 @@ function TopBarSection() {
             <Pressable style={{ width: 32, height: 32, display: "flex", alignItems: "center", justifyContent: "center" }}>
               <Glyph name="search" color={APP.text} size={24} strokeWidth={2} />
             </Pressable>
-          </div>
+          </GlassPlaceholder>
           <Caption>二级页：返回 + 标题 + 动作（图标可按压）</Caption>
         </div>
       </Stage>
-    </Stack>
+    </SpecSection>
   );
 }
 
 function BottomNavSection() {
   return (
-    <Stack gap={16}>
-      <SectionTitle
+    <SpecSection
         zh="底部导航"
         note="AppBottomNav · 图标 26 · 选中弹跳（1.18→0.92→1）· hairline 描边"
         src="lib/shared/layouts/app_bottom_nav.dart"
-      />
+      >
       <Stage>
         <BottomNavDemo />
         <div style={{ marginTop: 8 }}>
           <Caption>点击切换 Tab，选中图标会弹跳（放大 → 回缩 → 复位）</Caption>
         </div>
       </Stage>
-    </Stack>
+    </SpecSection>
   );
 }
 
@@ -1895,7 +1982,13 @@ function BottomNavDemo() {
                 transition: "transform 0.09s ease, background 0.2s",
               }}
             />
-            <span style={{ fontSize: 11, color: active ? APP.accent : APP.textMuted, transition: "color 0.2s" }}>{t.zh}</span>
+            <SelectableItem
+              active={active}
+              fontSize={11}
+              style={{ transition: "color 0.2s", fontWeight: 400 }}
+            >
+              {t.zh}
+            </SelectableItem>
           </div>
         );
       })}
@@ -1905,16 +1998,15 @@ function BottomNavDemo() {
 
 function SegmentedSection() {
   return (
-    <Stack gap={16}>
-      <SectionTitle
+    <SpecSection
         zh="分段切换"
         note="AppSegmentedSwitch · 玻璃态 + 滑块动画（选中无描边，8% 黄底 + 黄字）· 书籍详情「详情/讨论/更新」、榜单频道同款（圆角 46）"
         src="lib/shared/components/app_segmented_switch.dart"
-      />
+      >
       <Stage>
         <SegmentedDemo />
       </Stage>
-    </Stack>
+    </SpecSection>
   );
 }
 
@@ -1951,24 +2043,20 @@ function SegmentedDemo() {
       {segs.map((s, i) => {
         const active = i === sel;
         return (
-          <div
+          <SelectableItem
             key={s}
+            active={active}
             onClick={() => setSel(i)}
             style={{
               position: "relative",
               width: segWidth,
               textAlign: "center",
               padding: "7px 0",
-              fontSize: 14,
-              cursor: "pointer",
-              userSelect: "none",
-              color: active ? APP.accent : APP.textMuted,
-              fontWeight: active ? 600 : 400,
               transition: "color 0.2s",
             }}
           >
             {s}
-          </div>
+          </SelectableItem>
         );
       })}
     </div>
@@ -1977,12 +2065,11 @@ function SegmentedDemo() {
 
 function TabIndicatorSection() {
   return (
-    <Stack gap={16}>
-      <SectionTitle
+    <SpecSection
         zh="选中指示线"
         note="ElasticTabIndicator · 线宽 24 · 平移时先拉长再回弹 · 竖向变体做侧边条"
         src="lib/shared/components/elastic_tab_indicator.dart"
-      />
+      >
       <Stage>
         <TabIndicatorDemo />
       </Stage>
@@ -1998,7 +2085,7 @@ function TabIndicatorSection() {
         + <Code>ElasticTabIndicator</Code> 黄条 + 可选未读角标（<Code>AppTopTabItem.badgeCount</Code>）；
         伙伴顶栏「探索/消息/互动」、帮助与反馈「常见问题/意见反馈」共用。
       </Text>
-    </Stack>
+    </SpecSection>
   );
 }
 
@@ -2020,23 +2107,21 @@ function TabIndicatorDemo() {
         {tabs.map((t, i) => {
           const active = i === sel;
           return (
-            <div
+            <SelectableItem
               key={t}
+              active={active}
               onClick={() => select(i)}
+              activeColor={APP.text}
+              fontSize={15}
               style={{
                 width: slot,
                 textAlign: "center",
                 paddingBottom: 9,
-                fontSize: 15,
-                cursor: "pointer",
-                userSelect: "none",
-                color: active ? APP.text : APP.textMuted,
-                fontWeight: active ? 600 : 400,
                 transition: "color 0.2s",
               }}
             >
               {t}
-            </div>
+            </SelectableItem>
           );
         })}
       </div>
@@ -2058,32 +2143,30 @@ function TabIndicatorDemo() {
 
 function SearchSection() {
   return (
-    <Stack gap={16}>
-      <SectionTitle
+    <SpecSection
         zh="搜索框"
         note="GlassChipButton · 高 40 · 圆角 35 · 放大镜图标 · hairline 描边"
         src="lib/shared/components/glass_chip_button.dart"
-      />
+      >
       <Stage>
         <SearchDemo />
       </Stage>
-    </Stack>
+    </SpecSection>
   );
 }
 
 function SearchDemo() {
   const [focused, setFocused] = useState(false);
   return (
-    <div
+    <GlassPlaceholder
+      height={40}
+      borderRadius={35}
+      border={`${APP.hair} solid ${focused ? APP.accent : APP.border}`}
       onClick={() => setFocused((v) => !v)}
       style={{
         display: "flex",
         alignItems: "center",
         gap: 8,
-        height: 40,
-        borderRadius: 35,
-        background: APP.glass,
-        border: `${APP.hair} solid ${focused ? APP.accent : APP.border}`,
         padding: "0 16px",
         color: APP.textMuted,
         fontSize: 14,
@@ -2097,18 +2180,17 @@ function SearchDemo() {
       {focused ? (
         <span style={{ width: 1.5, height: 16, marginLeft: 2, background: APP.accent }} />
       ) : null}
-    </div>
+    </GlassPlaceholder>
   );
 }
 
 function SwitchSection() {
   return (
-    <Stack gap={16}>
-      <SectionTitle
+    <SpecSection
         zh="开关"
         note="AppSwitch · 50×30 · 滑块 24 · 开(黄4%底+黄钮) / 关(玻璃+白钮)"
         src="lib/shared/widgets/app_switch.dart"
-      />
+      >
       <Stage>
         <div style={{ display: "flex", gap: 16, alignItems: "center" }}>
           <InteractiveSwitch stateKey="demoSwitchA" initial={true} />
@@ -2116,25 +2198,37 @@ function SwitchSection() {
           <Caption>点击切换</Caption>
         </div>
       </Stage>
-    </Stack>
+    </SpecSection>
   );
 }
 
 function InteractiveSwitch({ stateKey, initial }: { stateKey: string; initial: boolean }) {
   const [on, setOn] = useCanvasState<boolean>(stateKey, initial);
+  // 对齐 AppSwitch：50×30 · inset 3 · thumb 24 · 开 accentYellow04+黄钮 / 关 surfaceGlass+白钮
   return (
     <div
       onClick={() => setOn((v) => !v)}
-      style={{ width: 50, height: 30, borderRadius: 999, background: on ? "rgba(255,232,71,0.04)" : APP.glass, padding: 3, cursor: "pointer", transition: "background 0.2s" }}
+      style={{
+        width: 50,
+        height: 30,
+        borderRadius: 999,
+        background: on ? "rgba(255,232,71,0.04)" : APP.glass,
+        padding: 3,
+        boxSizing: "border-box",
+        cursor: "pointer",
+        transition: "background 0.2s",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: on ? "flex-end" : "flex-start",
+      }}
     >
       <div
         style={{
           width: 24,
           height: 24,
           borderRadius: 999,
-          background: on ? APP.accent : "#FFFFFF",
-          transform: on ? "translateX(20px)" : "translateX(0)",
-          transition: "transform 0.2s cubic-bezier(0.2,0,0,1)",
+          background: on ? APP.accent : APP.text,
+          transition: "background 0.2s",
         }}
       />
     </div>
@@ -2147,12 +2241,11 @@ function OptionSelectSection() {
   const genders = ["女生", "男生"];
   const ages = ["18岁以下", "18-24岁", "25-30岁", "31岁以上"];
   return (
-    <Stack gap={16}>
-      <SectionTitle
+    <SpecSection
         zh="选项选择"
-        note="GenderAvatarOption（圆形头像 · 选中彩色 + 黄描边环、未选灰 + 60% 白字）· AgeRangeOption（整行胶囊 · 选中 8% 黄底 + 黄字加粗、无描边）· 新手弹窗与偏好设置页共用"
+        note="GenderAvatarOption（头像图 + 黄描边环）· AgeRangeOption（选中 8% 黄底+黄字加粗；未选白字+细描边）"
         src="lib/shared/components/gender_avatar_option.dart"
-      />
+      >
       <Stage>
         <Stack gap={20}>
           <div style={{ display: "flex", gap: 24 }}>
@@ -2162,21 +2255,50 @@ function OptionSelectSection() {
                 <div
                   key={g}
                   onClick={() => setGender(i)}
-                  style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8, cursor: "pointer", userSelect: "none" }}
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    gap: 8,
+                    cursor: "pointer",
+                    userSelect: "none",
+                  }}
                 >
+                  {/* 对齐 GenderAvatarOption：80 圆 · surfaceCard · 选中 1.5 黄环+内间隙 · 未选 hairline；真机为彩色/灰色头像资源 */}
                   <div
                     style={{
-                      width: 64,
-                      height: 64,
+                      width: 80,
+                      height: 80,
                       borderRadius: "50%",
-                      background: active ? "rgba(255,232,71,0.10)" : APP.glass,
-                      border: active ? `2px solid ${APP.accent}` : `${APP.hair} solid ${APP.border}`,
-                      filter: active ? "none" : "grayscale(1)",
-                      opacity: active ? 1 : 0.6,
-                      transition: "all 0.18s",
+                      background: APP.surface,
+                      border: active
+                        ? `1.5px solid ${APP.accent}`
+                        : `${APP.hair} solid ${APP.border}`,
+                      boxSizing: "border-box",
+                      padding: active ? 4 : 0,
+                      transition: "border-color 0.15s, padding 0.15s",
                     }}
-                  />
-                  <span style={{ fontSize: 13, color: active ? APP.text : APP.textMuted, fontWeight: active ? 600 : 400 }}>{g}</span>
+                  >
+                    <div
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        borderRadius: "50%",
+                        background: active
+                          ? "linear-gradient(160deg,#FFE8A3 0%,#F0B16A 55%,#C47A4A 100%)"
+                          : "linear-gradient(160deg,#6A6E76 0%,#3A3E46 100%)",
+                      }}
+                    />
+                  </div>
+                  <span
+                    style={{
+                      fontSize: 14,
+                      color: active ? APP.text : APP.textMuted,
+                      fontWeight: 400,
+                    }}
+                  >
+                    {g}
+                  </span>
                 </div>
               );
             })}
@@ -2189,15 +2311,18 @@ function OptionSelectSection() {
                   key={a}
                   onClick={() => setAge(i)}
                   style={{
-                    padding: "10px 12px",
+                    padding: "12px 16px",
                     borderRadius: 999,
                     textAlign: "center",
                     cursor: "pointer",
                     userSelect: "none",
                     fontSize: 14,
+                    // 对齐 AgeRangeOption：选中 segFill+黄字加粗；未选 surfaceCard+白字+细描边
                     background: active ? APP.segFill : APP.surface,
-                    border: active ? "none" : `${APP.hair} solid ${APP.border}`,
-                    color: active ? APP.accent : APP.textMuted,
+                    border: active
+                      ? `${APP.hair} solid transparent`
+                      : `${APP.hair} solid ${APP.border}`,
+                    color: active ? APP.accent : APP.text,
                     fontWeight: active ? 600 : 400,
                     transition: "all 0.15s",
                   }}
@@ -2210,21 +2335,22 @@ function OptionSelectSection() {
         </Stack>
       </Stage>
       <Text tone="tertiary" size="small">
-        年龄胶囊源码 <Code>lib/shared/components/age_range_option.dart</Code>；两组选项在
-        新手弹窗与偏好设置页共用同一组件，选中样式全局统一。
+        画廊用渐变块代替头像 PNG；真源资源在{" "}
+        <Code>assets/images/onboarding/gender_*.png</Code>。年龄胶囊源码{" "}
+        <Code>lib/shared/components/age_range_option.dart</Code>
+        ；新手弹窗与偏好设置页共用。
       </Text>
-    </Stack>
+    </SpecSection>
   );
 }
 
 function SweepHighlightSection() {
   return (
-    <Stack gap={16}>
-      <SectionTitle
+    <SpecSection
         zh="扫光高亮层"
-        note="SweepHighlightOverlay · 高亮带循环左→右滑过"
+        note="SweepHighlightOverlay · 仅高亮带本身（白 50%→透明）· 粉渐变是宿主 CTA 示意"
         src="lib/shared/components/sweep_highlight_overlay.dart"
-      />
+      >
       <Stage>
         <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
           <div
@@ -2240,7 +2366,6 @@ function SweepHighlightSection() {
               justifyContent: "center",
             }}
           >
-            {/* 静态示意：实际为高亮带循环从左滑到右 */}
             <div
               style={{
                 position: "absolute",
@@ -2250,6 +2375,7 @@ function SweepHighlightSection() {
                 height: "100%",
                 background:
                   "linear-gradient(90deg,rgba(255,255,255,0),rgba(255,255,255,0.5),rgba(255,255,255,0))",
+                pointerEvents: "none",
               }}
             />
             <span style={{ position: "relative", color: "#740551", fontWeight: 700 }}>
@@ -2257,26 +2383,25 @@ function SweepHighlightSection() {
             </span>
           </div>
           <Caption>
-            高亮带（默认 white50→透明）循环从左滑到右；带宽 42% · 周期 2200ms。会员开通 CTA、福利签到 CTA、签到成功弹窗 VIP 按钮统一复用。
+            组件本身只有扫光带（默认 white50→透明，带宽约 42%，周期约 2200ms）；粉金底与文案来自宿主按钮（会员/福利 CTA），不是 Overlay 的样式。
           </Caption>
         </div>
       </Stage>
-    </Stack>
+    </SpecSection>
   );
 }
 
 function ToastSection() {
   return (
-    <Stack gap={16}>
-      <SectionTitle
+    <SpecSection
         zh="轻提示"
         note="AppToast · 黄底 · 圆角 md · 淡入后自动消失"
         src="lib/shared/components/app_toast.dart"
-      />
+      >
       <Stage>
         <ToastDemo />
       </Stage>
-    </Stack>
+    </SpecSection>
   );
 }
 
@@ -2312,30 +2437,135 @@ function ToastDemo() {
 
 function EmptyStateSection() {
   return (
-    <Stack gap={16}>
-      <SectionTitle
+    <SpecSection
         zh="空状态"
-        note="EmptyState · 标题 + 说明 + 操作"
+        note="EmptyState · 标题 + 说明 + 操作 · 可选 illustration / contentWidth"
         src="lib/shared/components/empty_state.dart"
-      />
+      >
       <Stage>
         <div style={{ textAlign: "center", padding: "16px 0" }}>
           <div style={{ color: APP.text, fontSize: 16, fontWeight: 600 }}>暂无内容</div>
           <div style={{ color: APP.textMuted, fontSize: 13, marginTop: 6 }}>这里还没有数据</div>
         </div>
       </Stage>
-    </Stack>
+    </SpecSection>
+  );
+}
+
+function AsyncPageBodySection() {
+  return (
+    <SpecSection
+        zh="异步门闸"
+        note="AppAsyncPageBody（L2）· 加载中 / 失败重试 / 空数据 / 内容"
+        src="lib/shared/components/app_async_page_body.dart"
+      >
+      <Stage>
+        <div style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
+          <div style={{ flex: 1, minWidth: 120, textAlign: "center", padding: 16, background: APP.surface, borderRadius: 12 }}>
+            <Caption>isLoading</Caption>
+            <div style={{ marginTop: 12, color: APP.textMuted, fontSize: 12 }}>CircularProgress</div>
+          </div>
+          <div style={{ flex: 1, minWidth: 120, textAlign: "center", padding: 16, background: APP.surface, borderRadius: 12 }}>
+            <Caption>error</Caption>
+            <div style={{ marginTop: 8, color: APP.text, fontSize: 14, fontWeight: 600 }}>加载失败</div>
+            <div style={{ marginTop: 8 }}>
+              <DemoButton variant="accent" size="small">重试</DemoButton>
+            </div>
+          </div>
+          <div style={{ flex: 1, minWidth: 120, textAlign: "center", padding: 16, background: APP.surface, borderRadius: 12 }}>
+            <Caption>empty</Caption>
+            <div style={{ marginTop: 8, color: APP.text, fontSize: 14, fontWeight: 600 }}>暂无数据</div>
+          </div>
+        </div>
+      </Stage>
+    </SpecSection>
+  );
+}
+
+function GroupedListCardSection() {
+  return (
+    <SpecSection
+        zh="分组列表卡"
+        note="AppGroupedListCard（L2）· 可选标题 + surfaceCard + 行间分割线"
+        src="lib/shared/components/app_grouped_list_card.dart"
+      >
+      <Stage>
+        <div style={{ color: APP.textMuted, fontSize: 13, marginBottom: 8, paddingLeft: 4 }}>账号信息</div>
+        <div style={{ background: APP.surface, borderRadius: 16, overflow: "hidden" }}>
+          {["头像", "昵称", "手机号"].map((label, i, arr) => (
+            <div key={label}>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "14px 16px", color: APP.text, fontSize: 14 }}>
+                <span>{label}</span>
+                <span style={{ color: APP.textMuted, fontSize: 12 }}>›</span>
+              </div>
+              {i < arr.length - 1 ? (
+                <div style={{ height: 1, background: APP.border, margin: "0 16px" }} />
+              ) : null}
+            </div>
+          ))}
+        </div>
+      </Stage>
+    </SpecSection>
+  );
+}
+
+function NavigationListRowSection() {
+  return (
+    <SpecSection
+        zh="导航列表行"
+        note="AppNavigationListRow（L2）· 标题 + 可选副标题/尾部 + 箭头"
+        src="lib/shared/components/app_navigation_list_row.dart"
+      >
+      <Stage>
+        <div style={{ background: APP.surface, borderRadius: 16 }}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "14px 16px" }}>
+            <div>
+              <div style={{ color: APP.text, fontSize: 14 }}>消息通知</div>
+              <div style={{ color: APP.textMuted, fontSize: 12, marginTop: 2 }}>推送与站内信</div>
+            </div>
+            <span style={{ color: APP.textMuted, fontSize: 12 }}>›</span>
+          </div>
+        </div>
+      </Stage>
+    </SpecSection>
+  );
+}
+
+function ListLoadMoreFooterSection() {
+  return (
+    <SpecSection
+        zh="加载更多脚"
+        note="AppListLoadMoreFooter（L2）· 列表底部上拉加载 · asSliver 可选"
+        src="lib/shared/components/app_list_load_more_footer.dart"
+      >
+      <Stage>
+        <div style={{ textAlign: "center", padding: "20px 0" }}>
+          <div
+            style={{
+              width: 22,
+              height: 22,
+              margin: "0 auto",
+              borderRadius: "50%",
+              border: `2px solid ${APP.border}`,
+              borderTopColor: APP.accent,
+            }}
+          />
+          <div style={{ marginTop: 8 }}>
+            <Caption>isLoading · bookstoreLoadingIndicator*</Caption>
+          </div>
+        </div>
+      </Stage>
+    </SpecSection>
   );
 }
 
 function SectionHeaderSection() {
   return (
-    <Stack gap={16}>
-      <SectionTitle
+    <SpecSection
         zh="区块标题"
         note="SectionHeader · 标题 + 右侧操作链接"
         src="lib/shared/components/section_header.dart"
-      />
+      >
       <Stage>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <span style={{ color: APP.text, fontSize: 16, fontWeight: 600 }}>猜你喜欢</span>
@@ -2345,6 +2575,6 @@ function SectionHeaderSection() {
           </Pressable>
         </div>
       </Stage>
-    </Stack>
+    </SpecSection>
   );
 }

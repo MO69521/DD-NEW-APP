@@ -22,6 +22,40 @@ class LoginCubit extends Cubit<LoginState> {
   final AuthRepository _repository;
   Timer? _countdownTimer;
 
+  Future<void> detectLocalPhone() async {
+    if (state.ui.isDetectingLocalPhone) return;
+    emit(
+      state.copyWith(
+        ui: state.ui.copyWith(
+          isDetectingLocalPhone: true,
+          clearActionMessage: true,
+        ),
+      ),
+    );
+    try {
+      final detectedPhone = await _repository.detectLocalPhone();
+      if (isClosed) return;
+      emit(
+        state.copyWith(
+          ui: state.ui.copyWith(
+            detectedPhone: detectedPhone,
+            isDetectingLocalPhone: false,
+          ),
+        ),
+      );
+    } catch (_) {
+      if (isClosed) return;
+      emit(
+        state.copyWith(
+          ui: state.ui.copyWith(
+            detectedPhone: null,
+            isDetectingLocalPhone: false,
+          ),
+        ),
+      );
+    }
+  }
+
   void onPhoneChanged(String value) {
     final phone = value.trim();
     final phoneChanged = phone != state.ui.phone;
@@ -36,6 +70,42 @@ class LoginCubit extends Cubit<LoginState> {
           code: phoneChanged ? '' : null,
           countdownSeconds: phoneChanged ? 0 : null,
           hasRequestedCode: phoneChanged ? false : null,
+          useManualPhoneLogin: true,
+          clearActionMessage: true,
+          clearLoginSucceeded: true,
+        ),
+      ),
+    );
+  }
+
+  void switchToManualLogin() {
+    _countdownTimer?.cancel();
+    emit(
+      state.copyWith(
+        ui: state.ui.copyWith(
+          useManualPhoneLogin: true,
+          phone: '',
+          code: '',
+          countdownSeconds: 0,
+          hasRequestedCode: false,
+          clearActionMessage: true,
+          clearLoginSucceeded: true,
+        ),
+      ),
+    );
+  }
+
+  void switchToOneClickLogin() {
+    if (state.ui.detectedPhone == null) return;
+    _countdownTimer?.cancel();
+    emit(
+      state.copyWith(
+        ui: state.ui.copyWith(
+          useManualPhoneLogin: false,
+          phone: '',
+          code: '',
+          countdownSeconds: 0,
+          hasRequestedCode: false,
           clearActionMessage: true,
           clearLoginSucceeded: true,
         ),
@@ -156,6 +226,44 @@ class LoginCubit extends Cubit<LoginState> {
         state.copyWith(
           ui: state.ui.copyWith(
             isLoggingIn: false,
+            actionMessage: _messageFor(error),
+          ),
+        ),
+      );
+    }
+  }
+
+  Future<void> oneClickLogin() async {
+    final detectedPhone = state.ui.detectedPhone;
+    if (detectedPhone == null || state.ui.isOneClickLoggingIn) return;
+
+    emit(
+      state.copyWith(
+        ui: state.ui.copyWith(
+          isOneClickLoggingIn: true,
+          clearActionMessage: true,
+          clearLoginSucceeded: true,
+        ),
+      ),
+    );
+
+    try {
+      await _repository.oneClickLogin(phone: detectedPhone);
+      if (isClosed) return;
+      emit(
+        state.copyWith(
+          ui: state.ui.copyWith(
+            isOneClickLoggingIn: false,
+            loginSucceeded: true,
+          ),
+        ),
+      );
+    } catch (error) {
+      if (isClosed) return;
+      emit(
+        state.copyWith(
+          ui: state.ui.copyWith(
+            isOneClickLoggingIn: false,
             actionMessage: _messageFor(error),
           ),
         ),

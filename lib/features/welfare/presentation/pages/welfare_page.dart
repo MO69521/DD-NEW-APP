@@ -6,13 +6,12 @@ import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../routes/app_router.dart';
 import '../../../../routes/app_routes.dart';
+import '../../../../shared/components/app_async_page_body.dart';
 import '../../../../shared/components/currency_balance_bar.dart';
-import '../../../../shared/components/empty_state.dart';
 import '../../../../shared/components/app_blurred_dialog.dart';
 import '../../../../shared/components/app_toast.dart';
 import '../../../../shared/components/recharge_packages_section.dart';
 import '../../../../shared/layouts/app_bottom_nav.dart';
-import '../../../../shared/widgets/app_button.dart';
 import '../../../../shared/components/app_blurred_chrome_bar.dart';
 import '../../../../shared/layouts/app_chrome_blur.dart';
 import '../../application/welfare_cubit.dart';
@@ -48,32 +47,19 @@ class WelfarePage extends StatelessWidget {
       buildWhen: (previous, current) =>
           previous.ui != current.ui || previous.domain != current.domain,
       builder: (context, state) {
-        if (state.ui.isLoading) {
-          return Scaffold(
-            backgroundColor: AppColors.backgroundDark,
-            body: const Center(child: CircularProgressIndicator()),
-          );
-        }
-
-        if (state.ui.errorMessage != null) {
-          return Scaffold(
-            backgroundColor: AppColors.backgroundDark,
-            body: EmptyState(
-              title: '加载失败',
-              description: state.ui.errorMessage,
-              action: AppButton(
-                label: '重试',
-                onPressed: () => context.read<WelfareCubit>().load(),
-              ),
-            ),
-          );
-        }
-
         final content = state.domain.content;
-        if (content == null) {
+        if (state.ui.isLoading ||
+            state.ui.errorMessage != null ||
+            content == null) {
           return Scaffold(
             backgroundColor: AppColors.backgroundDark,
-            body: const EmptyState(title: '暂无数据'),
+            body: AppAsyncPageBody(
+              isLoading: state.ui.isLoading,
+              errorMessage: state.ui.errorMessage,
+              onRetry: () => context.read<WelfareCubit>().load(),
+              isEmpty: content == null,
+              child: const SizedBox.shrink(),
+            ),
           );
         }
 

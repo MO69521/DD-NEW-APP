@@ -29,6 +29,7 @@ import '../components/login_text_field.dart';
 abstract final class _LoginLayout {
   static const String topBackgroundAsset =
       'assets/images/auth/login_top_bg.png';
+  static const String appIconAsset = 'assets/images/splash/app_icon.png';
   static const double contentHorizontalInset = AppSpacing.xl + AppSpacing.xs;
   static const double titleFrameTop =
       AppSizes.statusBarPlaceholderHeight +
@@ -51,10 +52,16 @@ class LoginPage extends StatelessWidget {
         final previousUi = previous.ui;
         final currentUi = current.ui;
         return previousUi.hasRequestedCode != currentUi.hasRequestedCode ||
+            previousUi.detectedPhone != currentUi.detectedPhone ||
+            previousUi.isDetectingLocalPhone !=
+                currentUi.isDetectingLocalPhone ||
+            previousUi.showOneClickLogin != currentUi.showOneClickLogin ||
             previousUi.canSendCode != currentUi.canSendCode ||
+            previousUi.canOneClickLogin != currentUi.canOneClickLogin ||
             previousUi.isAgreementAccepted != currentUi.isAgreementAccepted ||
             previousUi.isSendingCode != currentUi.isSendingCode ||
             previousUi.isLoggingIn != currentUi.isLoggingIn ||
+            previousUi.isOneClickLoggingIn != currentUi.isOneClickLoggingIn ||
             previousUi.countdownSeconds != currentUi.countdownSeconds;
       },
       listenWhen: (previous, current) =>
@@ -89,6 +96,8 @@ class _LoginView extends StatelessWidget {
   Widget build(BuildContext context) {
     final cubit = context.read<LoginCubit>();
     final statusBarHeight = AppLayout.statusBarHeight(context);
+    final showManualBackButton =
+        state.ui.detectedPhone != null && state.ui.useManualPhoneLogin;
     final titleTop = AppLayout.figmaFrameTop(
       context,
       _LoginLayout.titleFrameTop,
@@ -118,6 +127,14 @@ class _LoginView extends StatelessWidget {
               fit: BoxFit.fitWidth,
             ),
           ),
+          if (showManualBackButton)
+            Positioned(
+              top: statusBarHeight + AppSpacing.lg,
+              left: _LoginLayout.contentHorizontalInset - AppSpacing.xs,
+              child: _BackButton(
+                onTap: () => _handleManualLoginBack(context, cubit),
+              ),
+            ),
           Padding(
             padding: const EdgeInsets.symmetric(
               horizontal: _LoginLayout.contentHorizontalInset,
@@ -129,26 +146,56 @@ class _LoginView extends StatelessWidget {
                   child: ListView(
                     padding: EdgeInsets.zero,
                     children: [
-                      AppText(
-                        '欢迎登录',
-                        style: AppTextStyles.displayLarge.copyWith(
-                          color: AppColors.textOnDark,
-                          height: AppLineHeights.none,
+                      if (!state.ui.showOneClickLogin) ...[
+                        AppText(
+                          '欢迎登录',
+                          style: AppTextStyles.displayLarge.copyWith(
+                            color: AppColors.textOnDark,
+                            height: AppLineHeights.none,
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: _LoginLayout.titleToInputGap),
-                      _PhoneLoginForm(
-                        state: state,
-                        onPhoneChanged: cubit.onPhoneChanged,
-                        onSendCode: () =>
-                            _handleSendCode(context, cubit, state),
-                        onSendCodeUnavailable: cubit.promptPhoneRequired,
-                        onAgreementTap: cubit.toggleAgreementAccepted,
-                      ),
+                        const SizedBox(height: _LoginLayout.titleToInputGap),
+                      ],
+                      if (state.ui.showOneClickLogin)
+                        _OneClickLoginForm(
+                          state: state,
+                          onOneClickLogin: () =>
+                              _handleOneClickLogin(context, cubit, state),
+                          onUseOtherPhone: cubit.switchToManualLogin,
+                          onAgreementTap: cubit.toggleAgreementAccepted,
+                        )
+                      else
+                        _PhoneLoginForm(
+                          state: state,
+                          onPhoneChanged: cubit.onPhoneChanged,
+                          onSendCode: () =>
+                              _handleSendCode(context, cubit, state),
+                          onSendCodeUnavailable: cubit.promptPhoneRequired,
+                          onAgreementTap: cubit.toggleAgreementAccepted,
+                        ),
+                      if (state.ui.isDetectingLocalPhone &&
+                          state.ui.detectedPhone == null) ...[
+                        const SizedBox(height: AppSpacing.lg),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const SizedBox.square(
+                              dimension: AppSpacing.md,
+                              child: CircularProgressIndicator(strokeWidth: 2),
+                            ),
+                            const SizedBox(width: AppSpacing.sm),
+                            AppText(
+                              '正在检测本机号码...',
+                              style: AppTextStyles.bodyMediumDarkMuted,
+                            ),
+                          ],
+                        ),
+                      ],
                     ],
                   ),
                 ),
                 const SizedBox(height: AppSpacing.xl),
+                // 一键登录 / 手动登录两种入口都保留底部第三方登录区域。
                 _SocialLoginSection(onTap: cubit.onSocialLoginTap),
                 const SizedBox(height: AppSpacing.xl),
               ],
@@ -174,6 +221,106 @@ class _LoginView extends StatelessWidget {
     }
 
     await cubit.sendCode();
+  }
+
+  Future<void> _handleOneClickLogin(
+    BuildContext context,
+    LoginCubit cubit,
+    LoginState state,
+  ) async {
+    if (!state.ui.isAgreementAccepted) {
+      final confirmed = await showAppBlurredDialog<bool>(
+        context: context,
+        builder: (_) => const AuthAgreementConfirmDialog(),
+      );
+      if (!context.mounted || confirmed != true) return;
+      cubit.toggleAgreementAccepted();
+    }
+
+    await cubit.oneClickLogin();
+  }
+
+  void _handleManualLoginBack(BuildContext context, LoginCubit cubit) {
+    cubit.switchToOneClickLogin();
+  }
+}
+
+class _OneClickLoginForm extends StatelessWidget {
+  const _OneClickLoginForm({
+    required this.state,
+    required this.onOneClickLogin,
+    required this.onUseOtherPhone,
+    required this.onAgreementTap,
+  });
+
+  final LoginState state;
+  final VoidCallback onOneClickLogin;
+  final VoidCallback onUseOtherPhone;
+  final VoidCallback onAgreementTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final ui = state.ui;
+    final detectedPhone = ui.detectedPhone ?? '';
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Center(
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(AppRadius.settingsLogo),
+            child: const AppAssetImage(
+              assetPath: _LoginLayout.appIconAsset,
+              width: AppSizes.settingsLogoSize,
+              height: AppSizes.settingsLogoSize,
+            ),
+          ),
+        ),
+        const SizedBox(height: AppSpacing.lg),
+        Center(
+          child: AppText(
+            _maskPhone(detectedPhone),
+            style: AppTextStyles.headlineMedium.copyWith(
+              color: AppColors.textOnDark,
+            ),
+            maxLines: 1,
+          ),
+        ),
+        const SizedBox(height: AppSpacing.md),
+        Center(
+          child: AppText(
+            '检测到本机号码，可一键登录',
+            style: AppTextStyles.bodyMediumDarkMuted,
+            maxLines: 1,
+          ),
+        ),
+        const SizedBox(height: _LoginLayout.inputToButtonGap),
+        TextFieldTapRegion(
+          child: AppButton(
+            label: '本机号码一键登录',
+            variant: AppButtonVariant.accent,
+            isExpanded: true,
+            isLoading: ui.isOneClickLoggingIn,
+            onPressed: ui.canOneClickLogin ? onOneClickLogin : null,
+          ),
+        ),
+        const SizedBox(height: AppSpacing.md),
+        TextFieldTapRegion(
+          child: AppButton(
+            label: '其他手机号登录',
+            variant: AppButtonVariant.secondary,
+            isExpanded: true,
+            onPressed: ui.isOneClickLoggingIn ? null : onUseOtherPhone,
+          ),
+        ),
+        const SizedBox(height: _LoginLayout.buttonToAgreementGap),
+        TextFieldTapRegion(
+          child: _AuthAgreementNotice(
+            isSelected: ui.isAgreementAccepted,
+            onToggle: onAgreementTap,
+          ),
+        ),
+      ],
+    );
   }
 }
 
@@ -376,7 +523,7 @@ class _VerificationCodeView extends StatelessWidget {
               AppText('验证码已通过短信发送至：', style: AppTextStyles.bodyMediumDarkMuted),
               const SizedBox(height: AppSpacing.sm),
               AppText(
-                _maskedPhone(ui.phone),
+                _maskPhone(ui.phone),
                 style: AppTextStyles.titleMediumDark,
               ),
               const SizedBox(height: AppSpacing.xl),
@@ -397,11 +544,11 @@ class _VerificationCodeView extends StatelessWidget {
       ),
     );
   }
+}
 
-  String _maskedPhone(String phone) {
-    if (phone.length != AppConstants.phoneNumberLength) return phone;
-    return '${phone.substring(0, 3)}****${phone.substring(7)}';
-  }
+String _maskPhone(String phone) {
+  if (phone.length != AppConstants.phoneNumberLength) return phone;
+  return '${phone.substring(0, 3)}****${phone.substring(7)}';
 }
 
 class _BackButton extends StatelessWidget {

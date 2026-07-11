@@ -60,13 +60,125 @@ class AppTopTabBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textScaler = MediaQuery.textScalerOf(context);
-    final slotWidth = _maxTabTextWidth(textScaler);
+    final metrics = _tabLabelMetrics(textScaler);
+    final slotWidth = metrics.width;
+    final labelHeight = metrics.height;
     final slotPitch = slotWidth + tabGap;
-    final activeStyle = AppTextStyles.tabActiveDark.copyWith(color: activeColor);
+    final activeStyle = AppTextStyles.tabActiveDark.copyWith(
+      color: activeColor,
+    );
     final inactiveStyle = AppTextStyles.tabInactiveDark.copyWith(
       color: inactiveColor,
     );
+    final swipe = swipeProgress;
 
+    final tabBar = _TabBarContent(
+      items: items,
+      selectedIndex: selectedIndex,
+      onSelected: onSelected,
+      tabGap: tabGap,
+      slotWidth: slotWidth,
+      labelHeight: labelHeight,
+      slotPitch: slotPitch,
+      swipeProgress: swipeProgress,
+      activeStyle: activeStyle,
+      inactiveStyle: inactiveStyle,
+      indicatorColor: indicatorColor,
+      badgeColor: badgeColor,
+      isSwipeInProgress: false,
+    );
+
+    if (swipe == null) return tabBar;
+
+    return ValueListenableBuilder<double>(
+      valueListenable: swipe,
+      builder: (context, progress, _) {
+        final isSwipeInProgress =
+            (progress - progress.roundToDouble()).abs() > 0.001;
+        return _TabBarContent(
+          items: items,
+          selectedIndex: selectedIndex,
+          onSelected: onSelected,
+          tabGap: tabGap,
+          slotWidth: slotWidth,
+          labelHeight: labelHeight,
+          slotPitch: slotPitch,
+          swipeProgress: swipeProgress,
+          activeStyle: activeStyle,
+          inactiveStyle: inactiveStyle,
+          indicatorColor: indicatorColor,
+          badgeColor: badgeColor,
+          isSwipeInProgress: isSwipeInProgress,
+        );
+      },
+    );
+  }
+
+  ({double width, double height}) _tabLabelMetrics(TextScaler textScaler) {
+    var maxWidth = 0.0;
+    var maxHeight = 0.0;
+    for (final item in items) {
+      final activePainter = TextPainter(
+        text: TextSpan(text: item.label, style: AppTextStyles.tabActiveDark),
+        textDirection: TextDirection.ltr,
+        maxLines: 1,
+        textScaler: textScaler,
+      )..layout();
+      final inactivePainter = TextPainter(
+        text: TextSpan(text: item.label, style: AppTextStyles.tabInactiveDark),
+        textDirection: TextDirection.ltr,
+        maxLines: 1,
+        textScaler: textScaler,
+      )..layout();
+      final itemMaxWidth = activePainter.width > inactivePainter.width
+          ? activePainter.width
+          : inactivePainter.width;
+      final itemMaxHeight = activePainter.height > inactivePainter.height
+          ? activePainter.height
+          : inactivePainter.height;
+      if (itemMaxWidth > maxWidth) maxWidth = itemMaxWidth;
+      if (itemMaxHeight > maxHeight) maxHeight = itemMaxHeight;
+    }
+    return (
+      width: maxWidth.ceilToDouble() + AppSpacing.xs,
+      height: maxHeight.ceilToDouble(),
+    );
+  }
+}
+
+class _TabBarContent extends StatelessWidget {
+  const _TabBarContent({
+    required this.items,
+    required this.selectedIndex,
+    required this.onSelected,
+    required this.tabGap,
+    required this.slotWidth,
+    required this.labelHeight,
+    required this.slotPitch,
+    required this.swipeProgress,
+    required this.activeStyle,
+    required this.inactiveStyle,
+    required this.indicatorColor,
+    required this.badgeColor,
+    required this.isSwipeInProgress,
+  });
+
+  final List<AppTopTabItem> items;
+  final int selectedIndex;
+  final ValueChanged<int> onSelected;
+  final double tabGap;
+  final double slotWidth;
+  final double labelHeight;
+  final double slotPitch;
+  final ValueListenable<double>? swipeProgress;
+  final TextStyle activeStyle;
+  final TextStyle inactiveStyle;
+  final Color indicatorColor;
+  final Color badgeColor;
+  final bool isSwipeInProgress;
+
+  @override
+  Widget build(BuildContext context) {
     return SizedBox(
       width: slotWidth * items.length + tabGap * (items.length - 1),
       child: Stack(
@@ -82,6 +194,8 @@ class AppTopTabBar extends StatelessWidget {
                   index: i,
                   selectedIndex: selectedIndex,
                   width: slotWidth,
+                  labelHeight: labelHeight,
+                  pressEffectEnabled: !isSwipeInProgress,
                   swipeProgress: swipeProgress,
                   activeStyle: activeStyle,
                   inactiveStyle: inactiveStyle,
@@ -102,20 +216,6 @@ class AppTopTabBar extends StatelessWidget {
       ),
     );
   }
-
-  double _maxTabTextWidth(TextScaler textScaler) {
-    var maxWidth = 0.0;
-    for (final item in items) {
-      final painter = TextPainter(
-        text: TextSpan(text: item.label, style: AppTextStyles.tabActiveDark),
-        textDirection: TextDirection.ltr,
-        maxLines: 1,
-        textScaler: textScaler,
-      )..layout();
-      if (painter.width > maxWidth) maxWidth = painter.width;
-    }
-    return maxWidth + AppSpacing.xs;
-  }
 }
 
 class _AppTopTabItemView extends StatelessWidget {
@@ -124,6 +224,8 @@ class _AppTopTabItemView extends StatelessWidget {
     required this.index,
     required this.selectedIndex,
     required this.width,
+    required this.labelHeight,
+    required this.pressEffectEnabled,
     required this.activeStyle,
     required this.inactiveStyle,
     required this.badgeColor,
@@ -135,6 +237,8 @@ class _AppTopTabItemView extends StatelessWidget {
   final int index;
   final int selectedIndex;
   final double width;
+  final double labelHeight;
+  final bool pressEffectEnabled;
   final TextStyle activeStyle;
   final TextStyle inactiveStyle;
   final Color badgeColor;
@@ -145,6 +249,7 @@ class _AppTopTabItemView extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppPressable(
       onTap: onTap,
+      pressEffectEnabled: pressEffectEnabled,
       child: SizedBox(
         width: width,
         child: Padding(
@@ -157,13 +262,20 @@ class _AppTopTabItemView extends StatelessWidget {
             child: Stack(
               clipBehavior: Clip.none,
               children: [
-                AppAnimatedTabLabel(
-                  index: index,
-                  selectedIndex: selectedIndex,
-                  label: item.label,
-                  activeStyle: activeStyle,
-                  inactiveStyle: inactiveStyle,
-                  swipeProgress: swipeProgress,
+                SizedBox(
+                  height: labelHeight,
+                  child: Align(
+                    alignment: Alignment.bottomCenter,
+                    child: AppAnimatedTabLabel(
+                      index: index,
+                      selectedIndex: selectedIndex,
+                      label: item.label,
+                      activeStyle: activeStyle,
+                      inactiveStyle: inactiveStyle,
+                      swipeProgress: swipeProgress,
+                      lockGeometryDuringSwipe: true,
+                    ),
+                  ),
                 ),
                 if (item.badgeCount > 0)
                   Positioned(

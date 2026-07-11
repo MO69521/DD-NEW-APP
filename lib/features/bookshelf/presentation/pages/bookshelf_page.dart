@@ -6,13 +6,12 @@ import '../../../../core/constants/bookshelf_tab_intent.dart';
 import '../../../../core/theme/app_layout.dart';
 import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
+import '../../../../shared/components/app_async_page_body.dart';
 import '../../../../shared/components/app_swipe_tab_switcher.dart';
 import '../../../../shared/components/app_blurred_chrome_bar.dart';
 import '../../../../shared/components/book_card_skeletons.dart';
-import '../../../../shared/components/empty_state.dart';
 import '../../../../shared/layouts/app_bottom_nav.dart';
 import '../../../../shared/layouts/main_tab_controller.dart';
-import '../../../../shared/widgets/app_button.dart';
 import '../../application/bookshelf_cubit.dart';
 import '../../application/bookshelf_state.dart';
 import '../../domain/entities/bookshelf_tab.dart';
@@ -40,6 +39,7 @@ class BookshelfPage extends StatelessWidget {
         return loadingChanged || errorChanged || contentAvailabilityChanged;
       },
       builder: (context, state) {
+        // 保留骨架屏加载，避免 AppAsyncPageBody 默认 spinner 改变 UX。
         if (state.ui.isLoading) {
           return Scaffold(
             backgroundColor: AppColors.backgroundDark,
@@ -54,25 +54,17 @@ class BookshelfPage extends StatelessWidget {
           );
         }
 
-        if (state.ui.errorMessage != null) {
-          return Scaffold(
-            backgroundColor: AppColors.backgroundDark,
-            body: EmptyState(
-              title: '加载失败',
-              description: state.ui.errorMessage,
-              action: AppButton(
-                label: '重试',
-                onPressed: () => context.read<BookshelfCubit>().load(),
-              ),
-            ),
-          );
-        }
-
         final content = state.domain.content;
-        if (content == null) {
+        if (state.ui.errorMessage != null || content == null) {
           return Scaffold(
             backgroundColor: AppColors.backgroundDark,
-            body: const EmptyState(title: '暂无数据'),
+            body: AppAsyncPageBody(
+              isLoading: false,
+              errorMessage: state.ui.errorMessage,
+              onRetry: () => context.read<BookshelfCubit>().load(),
+              isEmpty: content == null,
+              child: const SizedBox.shrink(),
+            ),
           );
         }
 
