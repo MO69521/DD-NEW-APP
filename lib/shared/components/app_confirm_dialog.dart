@@ -4,7 +4,6 @@ import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_radius.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text_styles.dart';
-import '../../routes/app_router.dart';
 import '../widgets/app_button.dart';
 import '../widgets/app_text.dart';
 import 'dialog_close_button.dart';
@@ -12,7 +11,7 @@ import 'dialog_close_button.dart';
 /// L2 — 居中确认弹窗壳（面板 chrome + 标题/正文 + 双按钮）。
 ///
 /// 遮罩仍走 [showAppBlurredDialog]；本组件只负责弹窗本体。
-/// 默认左次右主（取消 outline / 确认 accent）；退出登录等可覆写变体与文案。
+/// 默认左次右主（取消 secondary / 确认 accent）；特殊场景可覆写变体与文案。
 class AppConfirmDialog extends StatelessWidget {
   const AppConfirmDialog({
     super.key,
@@ -22,7 +21,7 @@ class AppConfirmDialog extends StatelessWidget {
     this.titleBodyGap = AppSpacing.sm,
     this.secondaryLabel = '取消',
     this.primaryLabel = '确认',
-    this.secondaryVariant = AppButtonVariant.outline,
+    this.secondaryVariant = AppButtonVariant.secondary,
     this.primaryVariant = AppButtonVariant.accent,
     this.secondaryResult = false,
     this.primaryResult = true,
@@ -51,7 +50,8 @@ class AppConfirmDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final content = body ??
+    final content =
+        body ??
         (message == null
             ? null
             : AppText(
@@ -102,7 +102,7 @@ class AppConfirmDialog extends StatelessWidget {
                       isExpanded: true,
                       onPressed: () {
                         onPrimary?.call();
-                        AppRouter.pop(primaryResult);
+                        Navigator.of(context).pop(primaryResult);
                       },
                     )
                   else
@@ -114,7 +114,7 @@ class AppConfirmDialog extends StatelessWidget {
                             variant: secondaryVariant,
                             onPressed: () {
                               onSecondary?.call();
-                              AppRouter.pop(secondaryResult);
+                              Navigator.of(context).pop(secondaryResult);
                             },
                           ),
                         ),
@@ -125,7 +125,7 @@ class AppConfirmDialog extends StatelessWidget {
                             variant: primaryVariant,
                             onPressed: () {
                               onPrimary?.call();
-                              AppRouter.pop(primaryResult);
+                              Navigator.of(context).pop(primaryResult);
                             },
                           ),
                         ),
@@ -138,7 +138,9 @@ class AppConfirmDialog extends StatelessWidget {
               Positioned(
                 top: AppSpacing.lg,
                 right: AppSpacing.lg,
-                child: DialogCloseButton(onTap: () => AppRouter.pop(secondaryResult)),
+                child: DialogCloseButton(
+                  onTap: () => Navigator.of(context).pop(secondaryResult),
+                ),
               ),
           ],
         ),

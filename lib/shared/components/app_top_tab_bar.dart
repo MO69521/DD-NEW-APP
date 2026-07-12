@@ -2,14 +2,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../../core/theme/app_colors.dart';
-import '../../core/theme/app_radius.dart';
-import '../../core/theme/app_sizes.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text_styles.dart';
 import 'app_animated_tab_label.dart';
+import 'app_tab_count_badge.dart';
 import 'elastic_tab_indicator.dart';
 import '../widgets/app_pressable.dart';
-import '../widgets/app_text.dart';
 
 /// 单个 Tab 的数据：文案 + 可选未读角标数（0 表示不显示角标）。
 class AppTopTabItem {
@@ -281,7 +279,7 @@ class _AppTopTabItemView extends StatelessWidget {
                   Positioned(
                     top: -AppSpacing.sm,
                     right: -AppSpacing.sm,
-                    child: _TabCountBadge(
+                    child: AppTabCountBadge(
                       count: item.badgeCount,
                       color: badgeColor,
                     ),
@@ -295,31 +293,3 @@ class _AppTopTabItemView extends StatelessWidget {
   }
 }
 
-/// 悬浮计数角标：红/紫等主题色圆形胶囊，承载未读数（>99 显示 99+）。
-class _TabCountBadge extends StatelessWidget {
-  const _TabCountBadge({required this.count, required this.color});
-
-  final int count;
-  final Color color;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      constraints: const BoxConstraints(
-        minWidth: AppSizes.tabBadgeMinSize,
-        minHeight: AppSizes.tabBadgeMinSize,
-      ),
-      alignment: Alignment.center,
-      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xxs),
-      decoration: BoxDecoration(
-        color: color,
-        borderRadius: BorderRadius.circular(AppRadius.full),
-      ),
-      child: AppText(
-        count > 99 ? '99+' : '$count',
-        style: AppTextStyles.captionSm.copyWith(color: AppColors.textOnDark),
-        maxLines: 1,
-      ),
-    );
-  }
-}

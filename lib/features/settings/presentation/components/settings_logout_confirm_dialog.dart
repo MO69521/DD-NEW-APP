@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../shared/components/app_confirm_dialog.dart';
-import '../../../../shared/widgets/app_button.dart';
 
 /// L3 — 设置页退出登录二次确认弹窗。
 class SettingsLogoutConfirmDialog extends StatelessWidget {
@@ -15,10 +14,8 @@ class SettingsLogoutConfirmDialog extends StatelessWidget {
       message: '退出登录后，书籍阅读记录、存档等数据将无法同步到账号',
       titleBodyGap: AppSpacing.md,
       secondaryLabel: '退出登录',
-      secondaryVariant: AppButtonVariant.secondary,
       secondaryResult: true,
       primaryLabel: '我再想想',
-      primaryVariant: AppButtonVariant.accent,
       primaryResult: false,
     );
   }

@@ -100,7 +100,7 @@
 | Token | 不透明度 | ARGB | 用途 |
 |-------|------|------|----|
 | `black80` | 80% | `0xCC000000` | 居中弹窗遮罩（80% 纯黑，无模糊）|
-| `black60` | 60% | `0x99000000` | 封面选择遮罩；榜单名次角标底（语义别名 `rankingMutedBadgeScrim`，第 4 名起，保证白色数字清晰）|
+| `black60` | 60% | `0x99000000` | 封面选择遮罩；榜单名次角标底（语义别名 `rankingMutedBadgeScrim`，第 4 名起，20px，仅右下角 `md` 圆角，保证白色数字清晰）|
 | `black40` | 40% | `0x66000000` | 选中态封面遮罩 |
 | `black30` | 30% | `0x4D000000` | 通用遮罩 `overlayScrim` |
 | `black08` | 8% | `0x14000000` | 8% 黑（备用）|
@@ -287,6 +287,7 @@ feature 专用圆角（在基阶之上按页面命名，如 `navOuter 47` / `sea
 | `BookCardRankingCompact` | 同上 | 榜单紧凑：上图下文（封面 132:179） |
 | `BookCardHorizontal` | 同上 | 榜单：左图右文（旧版保留供回滚） |
 | `BookGridCard` / `BookListTile` / `BookCardLargeRow` | `shared/components/` | 网格卡 / 列表行 / 大图行（简介 2 行，简介+作者与封面底对齐）|
+| `RankingRankBadge` | `shared/components/ranking_rank_badge.dart` | 榜单封面左上角名次角标：Top 1–3 使用切图，第 4 名起 20px 深色底数字角标，仅右下角 `md` 圆角；书城榜单与榜单详情共用 |
 | `BookCoverTagBadge` | `shared/components/` | 封面角标 |
 | `AppCornerBadge` | `shared/components/` | 卡片右上角标：斜切胶囊（`topRight` + `bottomLeft` 圆角 `md`），须作 `Stack` 直接子节点；底色 / 文字色 / 水平内边距按语义传入。充值 / 兑换档位「热」「新手福利」「会员免费领」等复用 |
 | `GenderAvatarOption` | `shared/components/` | 性别选项：圆形头像 `onboardingGenderAvatarSize` 80px（选中彩色插画 + 黄色描边环、未选灰色插画 + 细描边，不填充底色，参照装扮选中）+ 文字标签（选中白、未选 60% 白）；新手弹窗与偏好设置页共用 |
@@ -307,7 +308,7 @@ feature 专用圆角（在基阶之上按页面命名，如 `navOuter 47` / `sea
 | 弹窗底 | `dialogBackground` `#131820` |
 | 圆角 | `xl`（24）|
 | 关闭 | 点遮罩 / `DialogCloseButton`（弹窗**右上角** `close_rounded` X 图标，距顶/右 `lg`=24，见 §7.7）· 统一 `Navigator.pop` |
-| 确认壳 | `AppConfirmDialog`（`shared/components/app_confirm_dialog.dart`，L2）— 面板 chrome + 标题/正文 + 双按钮（默认可取消/确认；可覆写变体、单主按钮、关闭钮）；业务 L3 只填文案 |
+| 确认壳 | `AppConfirmDialog`（`shared/components/app_confirm_dialog.dart`，L2）— 面板 chrome + 标题/正文 + 双按钮（默认左次按钮 `secondary` / 右主按钮 `accent`；可覆写变体、单主按钮、关闭钮）；业务 L3 只填文案 |
 | 业务示例 | `EnergyRechargePurchaseDialog` / `WelfareRulesDialog` / `DailyCheckInDialog`（首页首启签到弹窗，性别/年龄收集后弹出，内容同「每日签到」区块）→ `CheckInSuccessDialog`（点签到后弹出）（L3） |
 
 ### 7.4 BottomSheet · 底部弹层
@@ -344,6 +345,7 @@ feature 专用圆角（在基阶之上按页面命名，如 `navOuter 47` / `sea
 | `ElasticTabIndicator` | `shared/components/elastic_tab_indicator.dart` | 黄色指示条，平移 + 沿主轴长度拉伸回弹（架构 §3.5）；`axis` 默认横向（下划线，宽度拉伸），传 `Axis.vertical` 作竖向侧边条（高度拉伸）；等宽 Tab 传 `slotWidth`+`slotPitch`，变宽 Tab（按文案实测）传 `centers`；`swipeProgress` 驱动跟手位移 |
 | `ElasticTabRow` | `shared/components/elastic_tab_row.dart` | 变宽（按文案实测）横向 Tab 行：内部测量各 Tab 中心点并叠加 `ElasticTabIndicator`，支持 `swipeProgress` 跟手与 `indicatorColor` 主题色；书架 / 装扮 Tab 共用 |
 | `AppTopTabBar` | `shared/components/app_top_tab_bar.dart` | **统一顶部一级 Tab 栏（书城首页同款）**：等宽槽位（按最宽文案实测）+ `ElasticTabIndicator` 弹性指示条 + `AppAnimatedTabLabel` 文字过渡/跟手。悬浮计数角标为其变体（`AppTopTabItem.badgeCount>0` 时渲染）。按语义传 `tabGap` / `indicatorColor` / `activeColor` / `inactiveColor` / `badgeColor`。书城顶栏 / 消息 / 伙伴 / 帮助反馈等**等宽顶栏统一复用**（feature 侧仅做枚举↔索引与主题色映射的薄封装）|
+| `AppTabCountBadge` | `shared/components/app_tab_count_badge.dart` | Tab 悬浮数字角标：红/紫等语义色胶囊，最小直径 `tabBadgeMinSize`，`>99` 显示 `99+`；由宿主 `Positioned` 到 Tab 文案右上角，不占布局宽度 |
 | `AppAnimatedTabLabel` | `shared/components/app_animated_tab_label.dart` | Tab 文字标签：未选中↔选中样式（字号/字重/颜色）用 `TextStyle.lerp` 平滑过渡而非硬切；与 `ElasticTabIndicator` 同一进度模型——传 `swipeProgress` 随手指连续插值，未传则选中项变化时按 `AppDurations.normal` 平滑过渡。`AppTopTabBar` 及变宽 `ElasticTabRow`（书架 / 装扮）Tab 共用 |
 | `AppTopTabBar` / `AppTopTabItem` | `shared/components/app_top_tab_bar.dart` | 顶部同级 Tab 栏：组合 `AppAnimatedTabLabel`（文字过渡）+ `ElasticTabIndicator`（黄条跟手）+ 可选未读角标（`AppTopTabItem.badgeCount`）；伙伴顶栏「探索/消息/互动」、帮助与反馈「常见问题/意见反馈」等共用 |
 | `AppSwipeTabSwitcher` | `shared/components/app_swipe_tab_switcher.dart` | Tab 内容跟手左右切换（架构 §3.4） |

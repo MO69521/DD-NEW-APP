@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_colors.dart';
-import '../../../../core/theme/app_radius.dart';
 import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/domain/entities/book.dart';
-import '../../../../shared/widgets/app_asset_image.dart';
+import '../../../../shared/components/ranking_rank_badge.dart';
 import '../../../../shared/widgets/app_pressable.dart';
 import '../../../../shared/widgets/app_text.dart';
 import '../../../../shared/widgets/book_cover.dart';
@@ -119,7 +118,7 @@ class _RankingBookItem extends StatelessWidget {
                 height: coverHeight,
                 heroTag: heroTag,
               ),
-              Positioned(top: 0, left: 0, child: _RankingBadge(rank: rank)),
+              Positioned(top: 0, left: 0, child: RankingRankBadge(rank: rank)),
             ],
           ),
           const SizedBox(width: AppSpacing.xs),
@@ -151,47 +150,6 @@ class _RankingBookItem extends StatelessWidget {
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class _RankingBadge extends StatelessWidget {
-  const _RankingBadge({required this.rank});
-
-  final int rank;
-
-  static const Map<int, String> _topRankAssets = {
-    1: 'assets/icons/ranking/rank_1.png',
-    2: 'assets/icons/ranking/rank_2.png',
-    3: 'assets/icons/ranking/rank_3.png',
-  };
-
-  @override
-  Widget build(BuildContext context) {
-    final asset = _topRankAssets[rank];
-    if (asset != null) {
-      return AppAssetImage(
-        assetPath: asset,
-        width: AppSizes.rankingTopBadgeSize,
-        height: AppSizes.rankingTopBadgeSize,
-      );
-    }
-
-    return Container(
-      width: AppSizes.rankingMutedBadgeSize,
-      height: AppSizes.rankingMutedBadgeSize,
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-        color: AppColors.rankingMutedBadgeScrim,
-        borderRadius: BorderRadius.circular(AppRadius.xs),
-      ),
-      child: AppText(
-        '$rank',
-        style: AppTextStyles.labelMedium.copyWith(
-          color: AppColors.textOnDark,
-          height: AppLineHeights.none,
-        ),
       ),
     );
   }

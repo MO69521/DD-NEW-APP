@@ -327,6 +327,18 @@ const MOTION_CATEGORIES: Array<{ title: string; items: MotionEffect[] }> = [
     title: "呼吸 / 循环 / 引导 / 加载",
     items: [
       {
+        name: "AppTabCountBadge",
+        desc: "Tab 悬浮数字角标,>99 显示 99+",
+        tech: "min tabBadgeMinSize + AppColors.badgeCount + full radius",
+        path: "lib/shared/components/app_tab_count_badge.dart",
+      },
+      {
+        name: "RankingRankBadge",
+        desc: "榜单封面左上角名次角标,书城与榜单详情共用",
+        tech: "Top 1–3 image assets, muted badge bottomRight md radius",
+        path: "lib/shared/components/ranking_rank_badge.dart",
+      },
+      {
         name: "LiquidSweepCtaClip",
         desc: "强 CTA 液态扫光裁剪壳,保留宿主原尺寸",
         tech: "CustomClipper + CustomPainter border + shared sweep progress",
@@ -1843,7 +1855,7 @@ function DialogSection() {
               确认删除全部搜索历史吗？
             </div>
             <div style={{ display: "flex", gap: 10, marginTop: 18 }}>
-              <DemoButton variant="outline" expand>
+              <DemoButton variant="secondary" expand>
                 取消
               </DemoButton>
               <DemoButton variant="accent" expand>
@@ -1858,7 +1870,7 @@ function DialogSection() {
         <Code>lib/shared/components/app_blurred_dialog.dart</Code>
         （<Code>showAppBlurredDialog</Code>）+ 确认壳{" "}
         <Code>AppConfirmDialog</Code>。自定义内容弹窗也走遮罩入口，只是不用确认壳。
-        按钮即 <Code>AppButton</Code>（取消 <Code>outline</Code> / 确认 <Code>accent</Code>）。
+        按钮即 <Code>AppButton</Code>（取消 <Code>secondary</Code> / 确认 <Code>accent</Code>）。
       </Text>
     </SpecSection>
   );

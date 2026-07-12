@@ -8,7 +8,6 @@ import '../../../../core/theme/app_text_styles.dart';
 import '../../../../shared/widgets/animated_count_text.dart';
 import '../../../../shared/widgets/app_asset_image.dart';
 import '../../../../shared/widgets/app_button.dart';
-import '../../../../shared/widgets/app_pressable.dart';
 import '../../../../shared/widgets/app_text.dart';
 
 /// 今日阅读横幅（Figma 220:9725 / 377:1909）：白熊插画 + 阅读时长 + 领福利。

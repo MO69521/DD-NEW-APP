@@ -473,9 +473,6 @@ abstract final class AppSizes {
   static const double bookDetailTabOuterPadding = 2;
   static const double bookDetailTabItemPaddingVertical = 10;
 
-  /// 讨论 Tab 右上角悬浮红点直径（不占布局宽度）。
-  static const double bookDetailTabBadgeDotSize = 6;
-
   static const double bookDetailCatalogPaddingH = 12.5;
   static const double bookDetailCatalogPaddingV = 16.5;
   static const double bookDetailCatalogArrowSize = 12;

@@ -59,49 +59,72 @@ class _PartnerMessageRowState extends State<PartnerMessageRow> {
               ),
               SizedBox(width: AppSizes.partnerMessageAvatarToContentGap),
               Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Flexible(
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Flexible(
-                                child: AppText(
-                                  conversation.characterName,
-                                  style:
-                                      AppTextStyles.partnerMessageCharacterName,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                              const SizedBox(width: AppSpacing.xs),
-                              PartnerAffectionBadge(
-                                level: conversation.affectionLevel,
-                              ),
-                            ],
+                child: SizedBox(
+                  height: AppSizes.partnerMessageAvatarSize,
+                  child: Stack(
+                    children: [
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: SizedBox(
+                          width: AppSizes.partnerMessageTimestampMinWidth,
+                          child: AppText(
+                            timestamp,
+                            style: AppTextStyles.partnerMessageTimestamp,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.right,
                           ),
                         ),
-                        const SizedBox(width: AppSpacing.xs),
-                        AppText(
-                          timestamp,
-                          style: AppTextStyles.partnerMessageTimestamp,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          right:
+                              AppSizes.partnerMessageTimestampMinWidth +
+                              AppSpacing.xs,
                         ),
-                      ],
-                    ),
-                    SizedBox(height: AppSizes.partnerMessageNameToPreviewGap),
-                    AppText(
-                      conversation.lastMessagePreview,
-                      style: AppTextStyles.partnerMessagePreview,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Flexible(
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Flexible(
+                                        child: AppText(
+                                          conversation.characterName,
+                                          style: AppTextStyles
+                                              .partnerMessageCharacterName,
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                      const SizedBox(width: AppSpacing.xs),
+                                      PartnerAffectionBadge(
+                                        level: conversation.affectionLevel,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: AppSizes.partnerMessageNameToPreviewGap,
+                            ),
+                            AppText(
+                              conversation.lastMessagePreview,
+                              style: AppTextStyles.partnerMessagePreview,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ],
