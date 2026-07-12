@@ -38,6 +38,7 @@ class AppButton extends StatelessWidget {
     this.isLoading = false,
     this.isExpanded = false,
     this.leadingIcon,
+    this.iconLabelGap,
     this.fitLabel = false,
   });
 
@@ -49,6 +50,7 @@ class AppButton extends StatelessWidget {
   final bool isLoading;
   final bool isExpanded;
   final Widget? leadingIcon;
+  final double? iconLabelGap;
 
   /// 窄容器内完整显示：为 true 时标签随宽度自动缩小而非省略号截断。
   final bool fitLabel;
@@ -136,7 +138,7 @@ class AppButton extends StatelessWidget {
             children: [
               if (leadingIcon != null) ...[
                 leadingIcon!,
-                const SizedBox(width: AppSizes.buttonIconLabelGap),
+                SizedBox(width: iconLabelGap ?? AppSizes.buttonIconLabelGap),
               ],
               Flexible(
                 child: fitLabel

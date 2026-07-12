@@ -26,50 +26,45 @@ class DailyReadingBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(AppRadius.bookshelfReadingBanner),
-      child: Container(
-        height: AppSizes.bookshelfReadingBannerHeight,
-        decoration: BoxDecoration(
-          color: AppColors.surfaceGlass,
-          borderRadius: BorderRadius.circular(AppRadius.bookshelfReadingBanner),
-        ),
-        child: Stack(
-          clipBehavior: Clip.hardEdge,
-          children: [
-            Positioned(
-              left: AppSizes.bookshelfBearIllustrationInset,
-              top: AppSizes.bookshelfBearIllustrationInset,
+    return Container(
+      height: AppSizes.bookshelfReadingBannerHeight,
+      decoration: BoxDecoration(
+        color: AppColors.surfaceGlass,
+        borderRadius: BorderRadius.circular(AppRadius.bookshelfReadingBanner),
+      ),
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          Positioned(
+            left: AppSizes.bookshelfBearIllustrationInset,
+            top: AppSizes.bookshelfBearIllustrationInset,
+            width: AppSizes.bookshelfBearIllustrationWidth,
+            height: AppSizes.bookshelfBearIllustrationPaintHeight,
+            child: AppAssetImage(
+              assetPath: _bearAsset,
               width: AppSizes.bookshelfBearIllustrationWidth,
-              height: AppSizes.bookshelfBearIllustrationHeight,
-              child: ClipRect(
-                child: AppAssetImage(
-                  assetPath: _bearAsset,
-                  width: AppSizes.bookshelfBearIllustrationWidth,
-                  height: AppSizes.bookshelfBearIllustrationWidth,
-                  fit: BoxFit.fitWidth,
+              height: AppSizes.bookshelfBearIllustrationPaintHeight,
+              fit: BoxFit.fitWidth,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(
+              left: AppSizes.bookshelfReadingBannerContentInsetLeft,
+              right: AppSpacing.sm,
+              top: AppSpacing.sm,
+              bottom: AppSpacing.sm,
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: _ReadingMinutesText(minutes: todayReadingMinutes),
                 ),
-              ),
+                _ClaimWelfareButton(onTap: onClaimWelfareTap),
+              ],
             ),
-            Padding(
-              padding: const EdgeInsets.only(
-                left: AppSizes.bookshelfReadingBannerContentInsetLeft,
-                right: AppSpacing.sm,
-                top: AppSpacing.sm,
-                bottom: AppSpacing.sm,
-              ),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Expanded(
-                    child: _ReadingMinutesText(minutes: todayReadingMinutes),
-                  ),
-                  _ClaimWelfareButton(onTap: onClaimWelfareTap),
-                ],
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -127,6 +122,7 @@ class _ClaimWelfareButton extends StatelessWidget {
         width: AppSizes.bookshelfClaimWelfareIconSize,
         height: AppSizes.bookshelfClaimWelfareIconSize,
       ),
+      iconLabelGap: AppSizes.buttonIconLabelGapTight,
     );
   }
 }

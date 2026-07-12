@@ -99,9 +99,22 @@ class _ComponentGallery extends StatelessWidget {
             AppButton(label: '禁用态', variant: AppButtonVariant.accent),
           ],
         ),
+        const SizedBox(height: AppSpacing.sm),
+        AppButton(
+          label: '带图标按钮',
+          variant: AppButtonVariant.accent,
+          size: AppButtonSize.small,
+          onPressed: onToast,
+          leadingIcon: const AppAssetImage(
+            assetPath: 'assets/icons/welfare/energy.svg',
+            width: AppSizes.bookshelfClaimWelfareIconSize,
+            height: AppSizes.bookshelfClaimWelfareIconSize,
+          ),
+          iconLabelGap: AppSizes.buttonIconLabelGapTight,
+        ),
         const SizedBox(height: AppSpacing.xs),
         const _CaptionNote(
-          text: '覆盖主按钮、次按钮、高亮态、不同尺寸、loading、disabled。',
+          text: '覆盖主按钮、次按钮、高亮态、不同尺寸、带图标、loading、disabled。',
         ),
       ],
     );
@@ -252,39 +265,6 @@ class _ComponentGallery extends StatelessWidget {
         const SizedBox(height: AppSpacing.md),
         const _AssetPreviewCard(),
       ],
-    );
-  }
-}
-
-class _AssetPreviewCard extends StatelessWidget {
-  const _AssetPreviewCard();
-
-  @override
-  Widget build(BuildContext context) {
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: AppColors.surfaceCard,
-        borderRadius: BorderRadius.circular(AppRadius.lg),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(AppSpacing.md),
-        child: Row(
-          children: [
-            const AppAssetImage(
-              assetPath: 'assets/icons/welfare/stardust.png',
-              width: AppSpacing.xl,
-              height: AppSpacing.xl,
-            ),
-            const SizedBox(width: AppSpacing.sm),
-            Expanded(
-              child: AppText(
-                '资源渲染样例：PNG / SVG 统一走 AppAssetImage。',
-                style: AppTextStyles.bodyMediumDarkMuted,
-              ),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }

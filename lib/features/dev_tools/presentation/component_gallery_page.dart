@@ -28,6 +28,7 @@ import '../../../shared/widgets/app_text.dart';
 part 'component_gallery_widgets.dart';
 part 'component_gallery_foundation.dart';
 part 'component_gallery_components.dart';
+part 'component_gallery_feature_blocks.dart';
 
 /// 开发期真实 Flutter 组件总览，用于从组件维度检查产品内最终渲染样式。
 class ComponentGalleryPage extends StatefulWidget {

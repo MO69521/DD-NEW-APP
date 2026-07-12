@@ -227,7 +227,7 @@ feature 专用圆角（在基阶之上按页面命名，如 `navOuter 47` / `sea
 | 跑马灯 `AppMarqueeText` | 溢出滚动速度 / 间距 / 循环间隔 | `marqueeSpeed` · `marqueeGap`（滚完停在起点静止 `AppDurations.marqueeInterval`≈6s 再滚）|
 | 头图视差 `OverscrollStretch` | 下拉拉伸最大放大比例 | `heroParallaxFactor` |
 | 顶栏 `AppTopBar` | 二级页顶栏高度 / 图标框 / 返回钮 | `topBar*` |
-| 按钮 `AppButton` | 各尺寸内边距 / loading / 图标间距 | `buttonPadding*` · `buttonLoadingIndicatorSize` |
+| 按钮 `AppButton` | 各尺寸内边距 / loading / 图标间距 | `buttonPadding*` · `buttonLoadingIndicatorSize` · `buttonIconLabelGap*` |
 | 搜索栏 / 玻璃模糊 | 搜索框高 / 各级磨砂半径 | `searchBarHeight` · `glassBlurSigma` · `strongBlurSigma` · `chromeBarBlurSigma` |
 | 书城首页 | 顶栏 / 加载 / 「继续阅读」浮层 / 「限时免费」倒计时块 | `bookstore*` · `continueReading*` · `limitedFreeCountdownBoxSize` |
 | 选择标记 `AppSelectionMark` | 多选勾选标记尺寸 / 描边 / 勾号 | `selectionMark*` · `bookshelfSelectionCheckIconSize` |
@@ -275,7 +275,7 @@ feature 专用圆角（在基阶之上按页面命名，如 `navOuter 47` / `sea
 | `small` | 16 × 8 | 14 · medium | 卡片内 / 行内小操作（领取、去书城） |
 | `compact` | 24 × 8 | 14 · medium | 紧凑行内操作（卡包页） |
 
-**状态：** default · `isLoading`（转圈，保留变体外观）· **disabled（不可点击：`onPressed==null` 且非 loading）→ 全局统一 4% 纯白填充（`buttonDisabledFill`）+ 30% 白字（`buttonDisabledText`），无渐变、无描边，覆盖所有变体** · `isExpanded`（撑满宽度）。**可选：** `leadingIcon` 前置图标。描边一律 0.5px hairline。
+**状态：** default · `isLoading`（转圈，保留变体外观）· **disabled（不可点击：`onPressed==null` 且非 loading）→ 全局统一 4% 纯白填充（`buttonDisabledFill`）+ 30% 白字（`buttonDisabledText`），无渐变、无描边，覆盖所有变体** · `isExpanded`（撑满宽度）。**可选：** `leadingIcon` 前置图标；`iconLabelGap` 可覆写图标与文字间距（默认 `buttonIconLabelGap`，紧凑场景用 `buttonIconLabelGapTight`）。描边一律 0.5px hairline。
 
 ### 7.2 Card · 卡片族
 

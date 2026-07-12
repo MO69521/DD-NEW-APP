@@ -52,6 +52,7 @@ abstract final class AppSizes {
   static const double buttonPaddingVSmall = 8;
   static const double buttonLoadingIndicatorSize = 16;
   static const double buttonIconLabelGap = 8;
+  static const double buttonIconLabelGapTight = 4;
 
   // ── 搜索栏 / 玻璃态胶囊 ──
   static const double searchBarHeight = 40;
@@ -242,10 +243,11 @@ abstract final class AppSizes {
   // ── 书架页 (Figma 220:9341 / 377:1909) ──
   static const double bookshelfHeaderHeight = 44;
   static const double bookshelfReadingBannerHeight = 54;
-  static const double bookshelfBearIllustrationWidth = 68;
-  static const double bookshelfBearIllustrationHeight = 52;
-  static const double bookshelfBearIllustrationInset = 4;
-  static const double bookshelfReadingBannerContentInsetLeft = 80;
+  static const double bookshelfBearIllustrationWidth = 60;
+  static const double bookshelfBearIllustrationHeight = 46;
+  static const double bookshelfBearIllustrationPaintHeight = 54;
+  static const double bookshelfBearIllustrationInset = 3;
+  static const double bookshelfReadingBannerContentInsetLeft = 72;
   static const double bookshelfHeaderToBannerGap = 18;
   static const double bookshelfBannerToGridGap = 24;
   static const double bookshelfClaimWelfareIconSize = 16;
