@@ -391,7 +391,7 @@ class _AddUploadTile extends StatelessWidget {
         height: size,
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: AppColors.white04,
+          color: AppColors.surfaceCard,
           borderRadius: BorderRadius.circular(AppRadius.md),
         ),
         child: Column(

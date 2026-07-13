@@ -35,7 +35,7 @@ class CheckInCumulativeBadge extends StatelessWidget {
             title,
             textAlign: TextAlign.center,
             style: AppTextStyles.welfareCheckInCumulativeLabel.copyWith(
-              color: AppColors.white60,
+              color: AppColors.textOnDarkPlaceholder,
             ),
           ),
           const SizedBox(height: AppSpacing.xs),

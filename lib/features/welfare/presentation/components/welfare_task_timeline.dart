@@ -25,7 +25,7 @@ _NodeStyle _nodeStyle(WelfareTaskTimelineNode node) {
   }
   // 已领取 / 还不能领取：统一纯白 4% 气泡；已领取整体降到 30% 由外层处理。
   return (
-    background: AppColors.white04,
+    background: AppColors.surfaceCard,
     border: null,
     text: AppColors.textOnDark,
   );
@@ -343,7 +343,7 @@ class _TimelineFooterCell extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: AppSpacing.xs),
       decoration: node.isActive
           ? BoxDecoration(
-              color: AppColors.white04,
+              color: AppColors.surfaceCard,
               borderRadius: BorderRadius.circular(AppRadius.full),
             )
           : null,

@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 
 import '../../../core/constants/app_constants.dart';
+import '../../../core/services/social_app_launch_service.dart';
 
 class LoginUiState extends Equatable {
   const LoginUiState({
@@ -17,6 +18,7 @@ class LoginUiState extends Equatable {
     this.isAgreementAccepted = false,
     this.actionMessage,
     this.loginSucceeded = false,
+    this.pendingSocialAppInstall,
   });
 
   final String phone;
@@ -32,6 +34,9 @@ class LoginUiState extends Equatable {
   final bool isAgreementAccepted;
   final String? actionMessage;
   final bool loginSucceeded;
+
+  /// 第三方登录检测到未安装对应 App 时，由 UI 弹出下载引导。
+  final SocialAppTarget? pendingSocialAppInstall;
 
   bool get showOneClickLogin => detectedPhone != null && !useManualPhoneLogin;
 
@@ -67,9 +72,11 @@ class LoginUiState extends Equatable {
     bool? isAgreementAccepted,
     String? actionMessage,
     bool? loginSucceeded,
+    SocialAppTarget? pendingSocialAppInstall,
     bool clearActionMessage = false,
     bool clearLoginSucceeded = false,
     bool clearDetectedPhone = false,
+    bool clearPendingSocialAppInstall = false,
   }) {
     return LoginUiState(
       phone: phone ?? this.phone,
@@ -92,6 +99,9 @@ class LoginUiState extends Equatable {
       loginSucceeded: clearLoginSucceeded
           ? false
           : loginSucceeded ?? this.loginSucceeded,
+      pendingSocialAppInstall: clearPendingSocialAppInstall
+          ? null
+          : pendingSocialAppInstall ?? this.pendingSocialAppInstall,
     );
   }
 
@@ -110,5 +120,6 @@ class LoginUiState extends Equatable {
     isAgreementAccepted,
     actionMessage,
     loginSucceeded,
+    pendingSocialAppInstall,
   ];
 }

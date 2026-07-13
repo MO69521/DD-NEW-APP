@@ -1,0 +1,25 @@
+{
+  // 开发期主题快捷切换：在「运行和调试」下拉里选对应项即可换主题包。
+  // 主题为编译期整包（--dart-define=THEME=<id>），默认（深色）不带参。
+  // 设备（Chrome / macOS / iOS 模拟器）在底部状态栏单独选择。
+  // 注意：iOS 模拟器直接从 iCloud 工作区构建可能因 com.apple.provenance 触发
+  //   codesign 失败，需走 /tmp 副本流程（见 .cursor/rules/icloud-ios-simulator-workflow.mdc）；
+  //   桌面快速预览优先用 Chrome / macOS，无此问题。
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "点点 · 深色（默认 dark）",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main.dart",
+      "args": ["--dart-define=THEME=dark"]
+    },
+    {
+      "name": "点点 · 粉色浅色（pink_light）",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main.dart",
+      "args": ["--dart-define=THEME=pink_light"]
+    }
+  ]
+}

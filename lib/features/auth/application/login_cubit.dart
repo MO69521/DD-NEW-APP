@@ -5,21 +5,27 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/constants/app_constants.dart';
 import '../../../core/services/auth_failure.dart';
 import '../../../core/services/service_locator.dart';
+import '../../../core/services/social_app_launch_service.dart';
 import '../data/repositories/auth_repository_impl.dart';
 import '../domain/repositories/auth_repository.dart';
 import 'login_state.dart';
 
 class LoginCubit extends Cubit<LoginState> {
-  LoginCubit({AuthRepository? repository})
-    : _repository =
-          repository ??
-          AuthRepositoryImpl(
-            authService: ServiceLocator.authService,
-            sessionService: ServiceLocator.authSession,
-          ),
-      super(const LoginState());
+  LoginCubit({
+    AuthRepository? repository,
+    SocialAppLaunchService? socialAppLaunchService,
+  }) : _repository =
+           repository ??
+           AuthRepositoryImpl(
+             authService: ServiceLocator.authService,
+             sessionService: ServiceLocator.authSession,
+           ),
+       _socialAppLaunch =
+           socialAppLaunchService ?? ServiceLocator.socialAppLaunch,
+       super(const LoginState());
 
   final AuthRepository _repository;
+  final SocialAppLaunchService _socialAppLaunch;
   Timer? _countdownTimer;
 
   Future<void> detectLocalPhone() async {
@@ -281,10 +287,57 @@ class LoginCubit extends Cubit<LoginState> {
     emit(state.copyWith(ui: state.ui.copyWith(clearLoginSucceeded: true)));
   }
 
-  void onSocialLoginTap(AuthSocialProvider provider) {
+  void consumePendingSocialAppInstall() {
+    if (state.ui.pendingSocialAppInstall == null) return;
     emit(
       state.copyWith(
-        ui: state.ui.copyWith(actionMessage: '${provider.label}功能即将上线'),
+        ui: state.ui.copyWith(clearPendingSocialAppInstall: true),
+      ),
+    );
+  }
+
+  Future<void> onSocialLoginTap(AuthSocialProvider provider) async {
+    emit(
+      state.copyWith(
+        ui: state.ui.copyWith(
+          clearActionMessage: true,
+          clearPendingSocialAppInstall: true,
+        ),
+      ),
+    );
+
+    final target = provider.target;
+    final outcome = await _socialAppLaunch.openForAuthorization(target);
+    if (isClosed) return;
+
+    switch (outcome) {
+      case SocialAppLaunchOutcome.launched:
+        return;
+      case SocialAppLaunchOutcome.notInstalled:
+        emit(
+          state.copyWith(
+            ui: state.ui.copyWith(pendingSocialAppInstall: target),
+          ),
+        );
+      case SocialAppLaunchOutcome.failed:
+        emit(
+          state.copyWith(
+            ui: state.ui.copyWith(
+              actionMessage: '打开${target.displayName}失败，请稍后重试',
+            ),
+          ),
+        );
+    }
+  }
+
+  Future<void> openSocialAppDownload(SocialAppTarget target) async {
+    final opened = await _socialAppLaunch.openDownloadStore(target);
+    if (isClosed || opened) return;
+    emit(
+      state.copyWith(
+        ui: state.ui.copyWith(
+          actionMessage: '无法打开下载页，请前往应用商店搜索${target.displayName}',
+        ),
       ),
     );
   }
@@ -320,11 +373,12 @@ class LoginCubit extends Cubit<LoginState> {
 }
 
 enum AuthSocialProvider {
-  wechat('微信登录'),
-  qq('QQ 登录'),
-  douyin('抖音登录');
+  wechat('微信登录', SocialAppTarget.wechat),
+  qq('QQ 登录', SocialAppTarget.qq),
+  douyin('抖音登录', SocialAppTarget.douyin);
 
-  const AuthSocialProvider(this.label);
+  const AuthSocialProvider(this.label, this.target);
 
   final String label;
+  final SocialAppTarget target;
 }

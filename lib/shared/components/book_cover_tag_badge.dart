@@ -26,7 +26,7 @@ class BookCoverTagBadge extends StatelessWidget {
       BookCoverTag.serializing => AppColors.bookCoverTagCompletedScrim,
     };
     final textColor = switch (tag) {
-      BookCoverTag.updated => AppColors.navActiveText,
+      BookCoverTag.updated => AppColors.onAccent,
       BookCoverTag.completed ||
       BookCoverTag.serializing => AppColors.textOnDark,
     };

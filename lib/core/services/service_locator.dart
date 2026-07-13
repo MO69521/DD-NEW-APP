@@ -9,6 +9,7 @@ import 'membership_status_service.dart';
 import 'mock_auth_service.dart';
 import 'onboarding_service.dart';
 import 'rest_auth_service.dart';
+import 'social_app_launch_service.dart';
 
 /// 全局服务注册入口，跨 feature 共享服务通过此处暴露。
 ///
@@ -27,6 +28,7 @@ abstract final class ServiceLocator {
   static AuthService? _authService;
   static OnboardingService? _onboarding;
   static ImagePickerService? _imagePicker;
+  static SocialAppLaunchService? _socialAppLaunch;
   static const AuthServiceConfig _authConfig = AuthServiceConfig();
 
   /// 会员状态共享服务（单例）。
@@ -44,6 +46,10 @@ abstract final class ServiceLocator {
   /// 系统相册图片选择服务（单例）。
   static ImagePickerService get imagePicker =>
       _imagePicker ??= ImagePickerService();
+
+  /// 第三方登录宿主 App 拉起 / 下载引导服务（单例）。
+  static SocialAppLaunchService get socialAppLaunch =>
+      _socialAppLaunch ??= const SocialAppLaunchService();
 
   /// 登录会话共享服务（单例）。
   static AuthSessionService get authSession =>

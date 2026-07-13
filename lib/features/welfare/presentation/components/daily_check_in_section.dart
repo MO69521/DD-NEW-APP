@@ -93,7 +93,7 @@ class _DailyCheckInSectionState extends State<DailyCheckInSection> {
                     assetPath: 'assets/icons/chevron_down.svg',
                     width: AppSizes.welfareCheckInChevronSize,
                     height: AppSizes.welfareCheckInChevronSize,
-                    color: AppColors.white60,
+                    color: AppColors.textOnDarkPlaceholder,
                   ),
                 ),
               ],

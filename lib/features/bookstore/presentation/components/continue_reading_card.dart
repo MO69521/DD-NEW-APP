@@ -70,7 +70,7 @@ class ContinueReadingCard extends StatelessWidget {
           color: AppColors.backgroundDark,
           borderRadius: BorderRadius.circular(AppRadius.lg),
           border: Border.all(
-            color: AppColors.white04,
+            color: AppColors.borderGlass,
             width: AppSizes.hairline,
           ),
         ),
@@ -94,7 +94,7 @@ class ContinueReadingCard extends StatelessWidget {
                         AppText(
                           '继续阅读',
                           style: AppTextStyles.captionSm.copyWith(
-                            color: AppColors.white60,
+                            color: AppColors.textOnDarkPlaceholder,
                           ),
                         ),
                         const SizedBox(height: AppSpacing.xxsHalf),

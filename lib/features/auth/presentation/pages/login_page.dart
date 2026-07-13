@@ -1,9 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/services.dart';
 
 import '../../../../core/constants/app_constants.dart';
+import '../../../../core/services/social_app_launch_service.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_durations.dart';
 import '../../../../core/theme/app_layout.dart';
@@ -25,6 +28,7 @@ import '../../application/login_cubit.dart';
 import '../../application/login_state.dart';
 import '../components/auth_agreement_confirm_dialog.dart';
 import '../components/login_text_field.dart';
+import '../components/social_app_not_installed_dialog.dart';
 
 abstract final class _LoginLayout {
   static const String topBackgroundAsset =
@@ -66,12 +70,21 @@ class LoginPage extends StatelessWidget {
       },
       listenWhen: (previous, current) =>
           previous.ui.actionMessage != current.ui.actionMessage ||
-          previous.ui.loginSucceeded != current.ui.loginSucceeded,
+          previous.ui.loginSucceeded != current.ui.loginSucceeded ||
+          previous.ui.pendingSocialAppInstall !=
+              current.ui.pendingSocialAppInstall,
       listener: (context, state) {
         final cubit = context.read<LoginCubit>();
         if (state.ui.loginSucceeded) {
           cubit.consumeLoginSucceeded();
           AppRouter.go(AppRoutes.home);
+          return;
+        }
+
+        final pendingInstall = state.ui.pendingSocialAppInstall;
+        if (pendingInstall != null) {
+          cubit.consumePendingSocialAppInstall();
+          unawaited(_handleSocialAppNotInstalled(context, cubit, pendingInstall));
           return;
         }
 
@@ -196,7 +209,13 @@ class _LoginView extends StatelessWidget {
                 ),
                 const SizedBox(height: AppSpacing.xl),
                 // 一键登录 / 手动登录两种入口都保留底部第三方登录区域。
-                _SocialLoginSection(onTap: cubit.onSocialLoginTap),
+                _SocialLoginSection(
+                  onTap: (provider) {
+                    unawaited(
+                      _handleSocialLogin(context, cubit, state, provider),
+                    );
+                  },
+                ),
                 const SizedBox(height: AppSpacing.xl),
               ],
             ),
@@ -240,9 +259,40 @@ class _LoginView extends StatelessWidget {
     await cubit.oneClickLogin();
   }
 
+  Future<void> _handleSocialLogin(
+    BuildContext context,
+    LoginCubit cubit,
+    LoginState state,
+    AuthSocialProvider provider,
+  ) async {
+    if (!state.ui.isAgreementAccepted) {
+      final confirmed = await showAppBlurredDialog<bool>(
+        context: context,
+        builder: (_) => const AuthAgreementConfirmDialog(),
+      );
+      if (!context.mounted || confirmed != true) return;
+      cubit.toggleAgreementAccepted();
+    }
+
+    await cubit.onSocialLoginTap(provider);
+  }
+
   void _handleManualLoginBack(BuildContext context, LoginCubit cubit) {
     cubit.switchToOneClickLogin();
   }
+}
+
+Future<void> _handleSocialAppNotInstalled(
+  BuildContext context,
+  LoginCubit cubit,
+  SocialAppTarget target,
+) async {
+  final goDownload = await showAppBlurredDialog<bool>(
+    context: context,
+    builder: (_) => SocialAppNotInstalledDialog(target: target),
+  );
+  if (!context.mounted || goDownload != true) return;
+  await cubit.openSocialAppDownload(target);
 }
 
 class _OneClickLoginForm extends StatelessWidget {
@@ -733,7 +783,7 @@ class _VerificationCodeBox extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: isActive ? Colors.transparent : AppColors.white04,
+        color: isActive ? Colors.transparent : AppColors.surfaceCard,
         borderRadius: BorderRadius.circular(AppRadius.md),
         border: isActive
             ? Border.all(
@@ -853,7 +903,7 @@ class _SocialLoginButton extends StatelessWidget {
                 width: AppSpacing.xxl,
                 height: AppSpacing.xxl,
                 decoration: BoxDecoration(
-                  color: AppColors.white04,
+                  color: AppColors.surfaceCard,
                   borderRadius: BorderRadius.circular(AppRadius.full),
                 ),
                 child: Center(

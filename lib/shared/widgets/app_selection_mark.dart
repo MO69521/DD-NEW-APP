@@ -61,7 +61,7 @@ class _SelectionCheckPainter extends CustomPainter {
       ..lineTo(size.width * 0.78, size.height * 0.30);
 
     final paint = Paint()
-      ..color = AppColors.navActiveText
+      ..color = AppColors.onAccent
       ..style = PaintingStyle.stroke
       ..strokeWidth = AppSizes.selectionMarkCheckStrokeWidth
       ..strokeCap = StrokeCap.round

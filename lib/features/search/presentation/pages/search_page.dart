@@ -222,7 +222,7 @@ class _SearchRankNumber extends StatelessWidget {
         1 => AppColors.error,
         2 => AppColors.searchHotAccent,
         3 => AppColors.accentYellow,
-        _ => AppColors.white60,
+        _ => AppColors.textOnDarkPlaceholder,
       };
 
   @override

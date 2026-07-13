@@ -124,6 +124,9 @@ class _IconAction extends StatelessWidget {
   final String? badge;
   final VoidCallback? onTap;
 
+  bool get _isPreservedColorAsset =>
+      iconAsset == inShelfIconAsset || iconAsset == sentHeartIconAsset;
+
   @override
   Widget build(BuildContext context) {
     return AppPressable(
@@ -142,6 +145,8 @@ class _IconAction extends StatelessWidget {
                   width: iconWidth,
                   height: iconHeight,
                   fit: BoxFit.contain,
+                  // 单色图标源文件为黑，运行时着色；彩色态图标保留原稿色。
+                  color: _isPreservedColorAsset ? null : AppColors.textOnDark,
                 ),
               ),
             ),

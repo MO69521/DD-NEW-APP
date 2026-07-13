@@ -43,7 +43,7 @@ const APP = {
 
 /* ───────────────── 筛选：分区注册表 ───────────────── */
 
-type PartId = "01" | "02" | "03";
+type PartId = "01" | "02" | "03" | "04";
 type PartFilter = PartId | "all";
 
 const PARTS: Record<PartId, { title: string; subtitle: string; label: string }> = {
@@ -61,6 +61,11 @@ const PARTS: Record<PartId, { title: string; subtitle: string; label: string }> 
     title: "动效与特殊设计",
     subtitle: "全局自定义动效 / 特殊视觉索引 · 约 50 项 · 点源码路径打开真源",
     label: "动效",
+  },
+  "04": {
+    title: "多风格 · 各色系 token 解析",
+    subtitle: "同一组件在 dark / pink_light 下引用的不同颜色对比（编译期整包换皮）",
+    label: "多风格",
   },
 };
 
@@ -112,6 +117,7 @@ export default function DesignSystemSpec() {
   const matchPart = (p: PartId) => activePart === "all" || activePart === p;
   const visibleEntries = entries.filter((e) => matchPart(e.part));
   const motionVisible = matchPart("03");
+  const multiStyleVisible = matchPart("04");
 
   return (
     <Stack gap={28} style={{ padding: 32, maxWidth: 1040 }}>
@@ -170,6 +176,19 @@ export default function DesignSystemSpec() {
         </div>
       ) : null}
 
+      {multiStyleVisible ? (
+        <div>
+          <Stack gap={28}>
+            <PartBanner
+              index="04"
+              title={PARTS["04"].title}
+              subtitle={PARTS["04"].subtitle}
+            />
+            <MultiStyleSection />
+          </Stack>
+        </div>
+      ) : null}
+
       {filtering ? null : (
         <>
           <Divider />
@@ -209,6 +228,7 @@ function FilterBar({
     { id: "01", label: PARTS["01"].label },
     { id: "02", label: PARTS["02"].label },
     { id: "03", label: PARTS["03"].label },
+    { id: "04", label: PARTS["04"].label },
   ];
   return (
     <div
@@ -1329,14 +1349,21 @@ function FontFamilySection() {
 function ColorSection() {
   return (
     <SpecSection
-        zh="颜色(单一真源)"
-        note="AppColors · AppBrandColors"
-        src="lib/core/theme/app_colors.dart"
+        zh="颜色(三层：原色 → 语义 → 主题)"
+        note="AppPalette(原色) · AppColors / AppBrandColors(语义)"
+        src="lib/core/theme/app_palette.dart"
         gap={14}
       >
 
+      <Row gap={8} align="center">
+        <Pill tone="accent">① 原色层</Pill>
+        <Text tone="secondary" size="small">
+          AppPalette · 原色真源，唯一 <Code>Color(0x…)</Code> 出处（无语义、不分主题）
+        </Text>
+      </Row>
+
       <Stack gap={8}>
-        <Text weight="semibold">中性阶 · 白色透明度叠加（深色态真源）</Text>
+        <Text weight="semibold">中性 · 白透明阶（whiteNN）</Text>
         <Table
           headers={["档位", "不透明度", "ARGB", "典型用途"]}
           columnAlign={["left", "center", "left", "left"]}
@@ -1357,7 +1384,7 @@ function ColorSection() {
       </Stack>
 
       <Stack gap={8}>
-        <Text weight="semibold">中性阶 · 黑色透明度（遮罩）</Text>
+        <Text weight="semibold">中性 · 黑透明阶（blackNN，遮罩）</Text>
         <Table
           headers={["档位", "不透明度", "用途"]}
           columnAlign={["left", "center", "left"]}
@@ -1372,29 +1399,38 @@ function ColorSection() {
           ].map((r) => r.map(cell))}
         />
       </Stack>
-      <Stack gap={8}>
-        <Text weight="semibold">背景 tint 阶（随主题换色）</Text>
-        <Text tone="secondary" size="small">
-          基于基础背景 <Code>#090E17</Code> 的不同透明度，用于渐隐 / 毛玻璃底 /
-          头图蒙版；换色系时整条随背景色相变化。
-        </Text>
-        <BgTintSwatches />
-      </Stack>
 
       <Stack gap={8}>
-        <Text weight="semibold">品牌 / 主题源色</Text>
+        <Text weight="semibold">实体 / 品牌原色</Text>
         <BrandSwatches />
         <Text tone="tertiary" size="small">
           福利金 <Code>#935C1A</Code>、伙伴粉 <Code>#FF4D88</Code>、VIP 粉{" "}
           <Code>#F393DC</Code>、签到高亮 <Code>#FFDD47</Code>、会员金渐变{" "}
           <Code>#FFE794→#FFCD5A</Code>、面板深字 <Code>#202020</Code>、中性图标灰{" "}
           <Code>#B2B3BA</Code>/<Code>#ABACB3</Code>、榜单头图标题{" "}
-          <Code>#FFFAD7</Code> 等 feature 色均定义于此，被各 feature 色板引用。
+          <Code>#FFFAD7</Code> 等 feature 原色均定义于色板层，被各 feature 语义引用。
         </Text>
       </Stack>
 
+      <Divider />
+      <Row gap={8} align="center">
+        <Pill tone="accent">② 语义层</Pill>
+        <Text tone="secondary" size="small">
+          AppColors / AppBrandColors · 给原色起语义名 + 按 <Code>themeId</Code> 选深/浅
+        </Text>
+      </Row>
+
       <Stack gap={8}>
-        <Text weight="semibold">feature 语义色 token（引用上述源色，值不变为主）</Text>
+        <Text weight="semibold">主题壳 tint 阶 & 毛玻璃 scrim（bgTintNN，随 THEME）</Text>
+        <Text tone="secondary" size="small">
+          壳基色（深 <Code>#090E17</Code> / 粉浅 <Code>#FFF5F9</Code>）的不同透明度，用于渐隐 /
+          毛玻璃底；换主题整条随壳基色替换。深浅取色对比见 §04「多风格」tab。
+        </Text>
+        <BgTintSwatches />
+      </Stack>
+
+      <Stack gap={8}>
+        <Text weight="semibold">feature 语义色 token（引用原色，值不变为主）</Text>
         <Text tone="tertiary" size="small">
           各 feature 色板（<Code>app_welfare_colors.dart</Code> /{" "}
           <Code>app_membership_colors.dart</Code> / <Code>app_colors.dart</Code>）在源色之上派生的语义 token；除少量透明度变体外均为对源色的别名（收敛去重）。
@@ -1429,6 +1465,14 @@ function ColorSection() {
           ].map((r) => r.map(cell))}
         />
       </Stack>
+
+      <Divider />
+      <Row gap={8} align="center">
+        <Pill tone="accent">③ 组件层</Pill>
+        <Text tone="secondary" size="small">
+          组件只引用 ② 语义名，不碰原色、不写死色值；同组件跨主题取色对比见 §04「多风格」tab，组件规范见 §02。
+        </Text>
+      </Row>
     </SpecSection>
   );
 }
@@ -1484,6 +1528,114 @@ function BrandSwatches() {
         role,
       ].map(cell))}
     />
+  );
+}
+
+/* ───────────────── 04 多风格 · 各色系 token 解析 ───────────────── */
+
+/// 主题值单元：实心 hex → 色卡 + Code，可附中文标签。
+function tv(hex: string, label?: string): ReactNode {
+  return (
+    <Row gap={6} align="center">
+      {swatch(hex)}
+      <Code>{hex}</Code>
+      {label ? <Caption>{label}</Caption> : null}
+    </Row>
+  );
+}
+
+/// token 名 / 透明度值（无实心色卡）。
+function tvCode(v: string): ReactNode {
+  return <Code>{v}</Code>;
+}
+
+/// 纯说明文字单元（非 token / 非色值，如状态栏图标明暗、构建参数）。
+function tvNote(text: string): ReactNode {
+  return <Caption>{text}</Caption>;
+}
+
+function MultiStyleSection() {
+  return (
+    <SpecSection
+      zh="多风格 · 同组件跨风格取色对比"
+      note="dark / pink_light（编译期 THEME 整包）"
+      src="lib/core/theme/app_brand_colors.dart"
+      gap={16}
+    >
+      <Callout tone="info" title="机制：编译期整包换皮，页面零改动">
+        <Stack gap={4}>
+          <Text>
+            主题是<Text weight="semibold">编译期整包</Text>：构建时{" "}
+            <Code>--dart-define=THEME=&lt;id&gt;</Code> 焊死一套；默认（不带参）永远是{" "}
+            <Code>dark</Code>，不提供 App 内运行时切换。
+          </Text>
+          <Text>
+            页面一律引用语义 token（<Code>textOnDark</Code> / <Code>surfaceCard</Code> /{" "}
+            <Code>accent</Code> 等），换包<Text weight="semibold">不改任何调用点</Text>——
+            token 在下表按主题各自解析。
+          </Text>
+        </Stack>
+      </Callout>
+
+      <Stack gap={8}>
+        <Text weight="semibold">主题包总览</Text>
+        <Table
+          headers={["主题包 (THEME)", "类型", "背景", "主强调 accent", "构建参数"]}
+          columnAlign={["left", "left", "left", "left", "left"]}
+          rows={[
+            ["dark（默认）", "深壳", tv("#090E17"), tv("#FFE847", "黄"), tvNote("不带参")],
+            ["pink_light", "浅壳", tv("#FFF5F9"), tv("#FF4D88", "粉"), tvCode("THEME=pink_light")],
+          ].map((r) => r.map(cell))}
+        />
+      </Stack>
+
+      <Stack gap={8}>
+        <Text weight="semibold">同一组件在两个风格下的取色对比</Text>
+        <Text tone="secondary" size="small">
+          同一组件、同一套语义 token，`themeId` 不同则解析出不同颜色；组件代码不变。
+          token 级明细见规范 §4.2 语义层。
+        </Text>
+        <Table
+          headers={["组件 / 场景", "取色 token", "dark", "pink_light"]}
+          columnAlign={["left", "left", "left", "left"]}
+          rows={[
+            ["页面背景", tvCode("backgroundDark"), tv("#090E17"), tv("#FFF5F9")],
+            ["标题 / 正文", tvCode("textOnDark"), tv("#FFFFFF", "白"), tv("#1A1A2E", "墨")],
+            ["次要文字", tvCode("textOnDarkMuted"), tvCode("white50"), tv("#6B7280")],
+            ["卡片面", tvCode("surfaceCard"), tvCode("white04"), tv("#FFFFFF")],
+            ["卡片描边", tvCode("borderGlass"), tvCode("white04"), tv("#F4D9E4", "浅粉")],
+            ["分割线", tvCode("dividerOnDark"), tvCode("white08"), tv("#F3F4F6")],
+            ["主按钮 · 底", tvCode("accent"), tv("#FFE847", "黄"), tv("#FF4D88", "粉")],
+            ["主按钮 · 字", tvCode("onAccent"), tv("#090E17", "深"), tv("#FFFFFF", "白")],
+            ["底部导航 · 底", tvCode("navBarBackground"), tvCode("white20"), tvCode("black04")],
+            ["底部导航 · 选中", tvCode("accent"), tv("#FFE847", "黄"), tv("#FF4D88", "粉")],
+            ["顶栏毛玻璃", tvCode("chromeBarScrim"), tvCode("bgTint60 · 深"), tvCode("bgTint60 · 粉")],
+            ["弹窗底", tvCode("dialogBackground"), tv("#131820"), tv("#FFFFFF", "白")],
+            ["分段选中 · 底/字", tvCode("segmentedSelectedFill / …Text"), tvCode("黄 8% / 黄字"), tvCode("粉 8% / 粉字")],
+            ["骨架屏", tvCode("shimmerBase / Highlight"), tvCode("white08 / white24"), tvCode("black04 / black08")],
+            ["头图 / 封面遮罩", tvCode("rankingHeroScrim / searchStatusBadge"), tvCode("bgTint · 暗"), tvCode("black · 暗（恒暗）")],
+            ["Toast / 作者徽 · 底", tvCode("accent"), tv("#FFE847", "黄"), tv("#FF4D88", "粉")],
+            ["状态栏图标", tvCode("systemUiOverlayStyle"), tvNote("白图标"), tvNote("深图标")],
+          ].map((r) => r.map(cell))}
+        />
+        <Text tone="tertiary" size="small">
+          「头图 / 封面遮罩」为图上遮罩，双职责已拆分：浅壳恒用黑色低透明，保证图上白字可读（不随浅背景变浅）。
+        </Text>
+      </Stack>
+
+      <Callout tone="warning" title="§B feature 品牌色跨主题恒定 + 迭代规矩">
+        <Stack gap={4}>
+          <Text>
+            VIP 粉紫 / 福利金橙 / 伙伴粉 / 语义状态色 / 促销条等{" "}
+            <Text weight="semibold">§B feature 色跨所有主题恒定</Text>，不随 THEME 变（设计上一致，非 bug）。
+          </Text>
+          <Text>
+            迭代时：<Text weight="semibold">用语义 token 搭 UI</Text> 两主题自动各取各值；写死{" "}
+            <Code>Color(0x…)</Code> 或裸 <Code>whiteNN</Code> 会让浅壳翻车——带色改动两主题都要走查。
+          </Text>
+        </Stack>
+      </Callout>
+    </SpecSection>
   );
 }
 

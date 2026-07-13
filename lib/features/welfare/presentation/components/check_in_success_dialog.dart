@@ -179,7 +179,7 @@ class _EnergyBadge extends StatelessWidget {
       height: AppSizes.welfareCheckInSuccessBadgeSize,
       alignment: Alignment.center,
       decoration: const BoxDecoration(
-        color: AppColors.white04,
+        color: AppColors.surfaceCard,
         shape: BoxShape.circle,
       ),
       child: AppAssetImage(

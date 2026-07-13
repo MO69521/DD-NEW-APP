@@ -30,7 +30,14 @@
 	<string>需要访问相册以上传问题截图，帮助我们更快解决你的反馈。</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
+		<string>weixin</string>
+		<string>weixinULAPI</string>
+		<string>wechat</string>
 		<string>mqqapi</string>
+		<string>mqq</string>
+		<string>mqqopensdkapiV2</string>
+		<string>snssdk1128</string>
+		<string>aweme</string>
 	</array>
 	<key>UIApplicationSceneManifest</key>
 	<dict>

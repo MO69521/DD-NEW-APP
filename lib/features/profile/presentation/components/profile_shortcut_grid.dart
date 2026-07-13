@@ -96,6 +96,7 @@ class _ShortcutItem extends StatelessWidget {
               assetPath: item.iconAsset,
               width: AppSizes.profileShortcutIconSize,
               height: AppSizes.profileShortcutIconSize,
+              color: colors.textPrimary,
             ),
             const SizedBox(height: AppSizes.profileShortcutIconToLabelGap),
             AppText(

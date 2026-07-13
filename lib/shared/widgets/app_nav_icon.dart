@@ -101,7 +101,7 @@ class _AppNavIconState extends State<AppNavIcon>
         width: widget.size,
         height: widget.size,
         fit: BoxFit.contain,
-        color: widget.isSelected ? null : AppColors.white60,
+        color: widget.isSelected ? null : AppColors.textOnDarkPlaceholder,
       ),
     );
   }

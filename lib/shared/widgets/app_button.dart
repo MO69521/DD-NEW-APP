@@ -74,7 +74,10 @@ class AppButton extends StatelessWidget {
   };
 
   Color get _foregroundColor => switch (variant) {
-    AppButtonVariant.accent => AppColors.rankingSegmentedSelectedText,
+    // 深色态：黄底深字（#202020，不变）；浅色实验态：粉底白字（保证对比）。
+    AppButtonVariant.accent => AppBrandColors.isLightExperiment
+        ? AppColors.white100
+        : AppColors.rankingSegmentedSelectedText,
     AppButtonVariant.secondary => AppColors.textOnDark,
     AppButtonVariant.outline => AppColors.textOnDark,
     AppButtonVariant.vip => AppBrandColors.vipOnGradientText,

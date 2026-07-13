@@ -430,7 +430,7 @@ abstract final class AppTextStyles {
   static TextStyle get bookshelfClaimWelfareCta => const TextStyle(
     fontSize: AppFontSizes.base,
     fontWeight: AppFontWeights.medium,
-    color: AppColors.navActiveText,
+    color: AppColors.onAccent,
     height: AppLineHeights.tight,
   );
 
@@ -708,7 +708,7 @@ abstract final class AppTextStyles {
   static const TextStyle bookDetailDiscussionFilterSelected = TextStyle(
     fontSize: AppFontSizes.base,
     fontWeight: AppFontWeights.medium,
-    color: AppColors.navActiveText,
+    color: AppColors.onAccent,
     height: AppLineHeights.none,
   );
 
@@ -853,7 +853,7 @@ abstract final class AppTextStyles {
   static const TextStyle toastMessage = TextStyle(
     fontSize: AppFontSizes.base,
     fontWeight: AppFontWeights.bold,
-    color: AppColors.navActiveText,
+    color: AppColors.onAccent,
     height: AppLineHeights.normal,
     decoration: TextDecoration.none,
   );
