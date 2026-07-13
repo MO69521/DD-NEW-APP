@@ -54,7 +54,7 @@ class AppNavigationListRow extends StatelessWidget {
                     AppText(
                       label,
                       style: AppTextStyles.bodyMedium.copyWith(
-                        color: AppColors.textOnDark,
+                        color: AppColors.textPrimary,
                       ),
                     ),
                     if (_hasSubtitle) ...[
@@ -76,7 +76,7 @@ class AppNavigationListRow extends StatelessWidget {
                 AppText(
                   trailingText!,
                   style: AppTextStyles.bodyMedium.copyWith(
-                    color: AppColors.textOnDarkMuted,
+                    color: AppColors.textSecondary,
                   ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
@@ -88,7 +88,7 @@ class AppNavigationListRow extends StatelessWidget {
                   assetPath: 'assets/icons/arrow_right.svg',
                   width: AppSpacing.sm,
                   height: AppSpacing.sm,
-                  color: AppColors.textOnDarkPlaceholder,
+                  color: AppColors.textTertiary,
                 ),
             ],
           ),

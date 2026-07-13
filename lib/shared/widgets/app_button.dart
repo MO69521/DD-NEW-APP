@@ -56,8 +56,8 @@ class AppButton extends StatelessWidget {
   final bool fitLabel;
 
   Color get _backgroundColor => switch (variant) {
-    AppButtonVariant.accent => AppColors.accentYellow,
-    AppButtonVariant.secondary => AppColors.surfaceCard,
+    AppButtonVariant.accent => AppColors.primary,
+    AppButtonVariant.secondary => AppColors.surface,
     AppButtonVariant.outline => Colors.transparent,
     AppButtonVariant.vip => Colors.transparent,
   };
@@ -74,12 +74,9 @@ class AppButton extends StatelessWidget {
   };
 
   Color get _foregroundColor => switch (variant) {
-    // 深色态：黄底深字（#202020，不变）；浅色实验态：粉底白字（保证对比）。
-    AppButtonVariant.accent => AppBrandColors.isLightExperiment
-        ? AppColors.white100
-        : AppColors.rankingSegmentedSelectedText,
-    AppButtonVariant.secondary => AppColors.textOnDark,
-    AppButtonVariant.outline => AppColors.textOnDark,
+    AppButtonVariant.accent => AppColors.onPrimary,
+    AppButtonVariant.secondary => AppColors.textPrimary,
+    AppButtonVariant.outline => AppColors.textPrimary,
     AppButtonVariant.vip => AppBrandColors.vipOnGradientText,
   };
 
@@ -186,7 +183,7 @@ class AppButton extends StatelessWidget {
           borderRadius: radius,
           border: showBorder
               ? Border.all(
-                  color: AppColors.borderGlass,
+                  color: AppColors.borderSubtle,
                   width: AppSizes.hairline,
                 )
               : null,

@@ -21,14 +21,14 @@ class BookCoverTagBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final backgroundColor = switch (tag) {
-      BookCoverTag.updated => AppColors.accentYellow,
+      BookCoverTag.updated => AppColors.primary,
       BookCoverTag.completed ||
       BookCoverTag.serializing => AppColors.bookCoverTagCompletedScrim,
     };
     final textColor = switch (tag) {
-      BookCoverTag.updated => AppColors.onAccent,
+      BookCoverTag.updated => AppColors.onPrimary,
       BookCoverTag.completed ||
-      BookCoverTag.serializing => AppColors.textOnDark,
+      BookCoverTag.serializing => AppColors.textPrimary,
     };
 
     return DecoratedBox(
@@ -36,7 +36,7 @@ class BookCoverTagBadge extends StatelessWidget {
         color: backgroundColor,
         borderRadius: BorderRadius.circular(AppRadius.xs),
         border: Border.all(
-          color: AppColors.borderGlass,
+          color: AppColors.borderSubtle,
           width: AppSizes.hairline,
         ),
       ),

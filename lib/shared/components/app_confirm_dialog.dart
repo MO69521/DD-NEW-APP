@@ -57,7 +57,7 @@ class AppConfirmDialog extends StatelessWidget {
             : AppText(
                 message!,
                 style: AppTextStyles.bodyMedium.copyWith(
-                  color: AppColors.textOnDarkMuted,
+                  color: AppColors.textSecondary,
                 ),
                 textAlign: TextAlign.center,
               ));
@@ -67,9 +67,9 @@ class AppConfirmDialog extends StatelessWidget {
       insetPadding: const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
       child: DecoratedBox(
         decoration: BoxDecoration(
-          color: AppColors.dialogBackground,
+          color: AppColors.surfaceElevated,
           borderRadius: BorderRadius.circular(AppRadius.xl),
-          border: Border.all(color: AppColors.borderGlass),
+          border: Border.all(color: AppColors.borderSubtle),
         ),
         child: Stack(
           children: [
@@ -86,7 +86,7 @@ class AppConfirmDialog extends StatelessWidget {
                   AppText(
                     title,
                     style: AppTextStyles.titleMedium.copyWith(
-                      color: AppColors.textOnDark,
+                      color: AppColors.textPrimary,
                     ),
                     textAlign: TextAlign.center,
                   ),

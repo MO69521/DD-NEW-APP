@@ -24,7 +24,7 @@ class AppGroupedListCard extends StatelessWidget {
     final card = Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: AppColors.surfaceCard,
+        color: AppColors.surface,
         borderRadius: BorderRadius.circular(AppRadius.lg),
       ),
       child: Column(children: _rowsWithDividers(children)),
@@ -45,7 +45,7 @@ class AppGroupedListCard extends StatelessWidget {
           child: AppText(
             title!,
             style: AppTextStyles.bodyMedium.copyWith(
-              color: AppColors.textOnDarkMuted,
+              color: AppColors.textSecondary,
             ),
           ),
         ),
@@ -65,7 +65,7 @@ class AppGroupedListCard extends StatelessWidget {
           const Divider(
             height: 1,
             thickness: 1,
-            color: AppColors.borderGlass,
+            color: AppColors.divider,
             indent: AppSpacing.md,
             endIndent: AppSpacing.md,
           ),

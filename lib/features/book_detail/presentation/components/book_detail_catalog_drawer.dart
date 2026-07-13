@@ -23,7 +23,7 @@ class BookDetailCatalogDrawer {
   }) {
     return showGeneralDialog<void>(
       context: context,
-      barrierDismissible: true,
+      barrierDismissible: false,
       barrierLabel: '目录',
       barrierColor: AppColors.overlayScrim,
       transitionDuration: AppDurations.normal,

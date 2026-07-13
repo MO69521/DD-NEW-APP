@@ -10,8 +10,8 @@ class AppSelectionMark extends StatelessWidget {
     this.unselectedBackgroundColor = AppColors.gradientFadeStart,
     this.unselectedBorderColor =
         AppColors.bookshelfSelectionMarkBorderUnselected,
-    this.selectedBackgroundColor = AppColors.accentYellow,
-    this.selectedBorderColor = AppColors.accentYellow,
+    this.selectedBackgroundColor = AppColors.primary,
+    this.selectedBorderColor = AppColors.primary,
     this.selectedBorderWidth = AppSizes.hairline,
     this.unselectedBorderWidth = AppSizes.hairline,
   });
@@ -61,7 +61,7 @@ class _SelectionCheckPainter extends CustomPainter {
       ..lineTo(size.width * 0.78, size.height * 0.30);
 
     final paint = Paint()
-      ..color = AppColors.onAccent
+      ..color = AppColors.onPrimary
       ..style = PaintingStyle.stroke
       ..strokeWidth = AppSizes.selectionMarkCheckStrokeWidth
       ..strokeCap = StrokeCap.round

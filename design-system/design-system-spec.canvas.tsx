@@ -27,18 +27,18 @@ import {
 // 应用真实品牌色值 / 关键尺寸（还原深色 UI 观感，数值对齐 lib/core/theme）。
 const APP = {
   bg: "#090E17",
-  surface: "rgba(255,255,255,0.04)", // white04
-  glass: "rgba(255,255,255,0.04)", // white04 · surfaceGlass
-  navBg: "rgba(255,255,255,0.20)", // white20 · navBarBackground
+  surface: "#151B24", // neutralCool900 · surface
+  glass: "#151B24", // neutralCool900 · surfaceGlass
+  navBg: "rgba(255,255,255,0.20)", // whiteAlpha20 · navBarBackground
   border: "rgba(255,255,255,0.08)",
   panelEdge: "rgba(255,255,255,0.10)",
   accent: "#FFE847",
-  onAccent: "#131820",
+  onPrimary: "#131820",
   dialogBg: "#131820",
   text: "#FFFFFF",
   textMuted: "rgba(255,255,255,0.60)",
   segFill: "rgba(255,232,71,0.10)",
-  hair: "0.5px", // AppSizes.hairline
+  hair: "0.5px", // AppSizes.neutralCool200
 };
 
 /* ───────────────── 筛选：分区注册表 ───────────────── */
@@ -49,7 +49,7 @@ type PartFilter = PartId | "all";
 const PARTS: Record<PartId, { title: string; subtitle: string; label: string }> = {
   "01": {
     title: "视觉基础规范",
-    subtitle: "字号 · 行高 · 字重 · 字体族 · 颜色 · 间距 · 圆角",
+    subtitle: "颜色 · 字号 · 行高 · 字重 · 字体族 · 间距 · 圆角",
     label: "视觉基础",
   },
   "02": {
@@ -83,11 +83,11 @@ export default function DesignSystemSpec() {
 
   // 01 / 02 分区条目（03 动效由结构化数据单独渲染）。
   const entries: SpecEntry[] = [
+    { part: "01", title: "颜色", keywords: "", render: <ColorSection /> },
     { part: "01", title: "字号", keywords: "", render: <TypeScaleSection /> },
     { part: "01", title: "行高", keywords: "", render: <LineHeightSection /> },
     { part: "01", title: "字重", keywords: "", render: <WeightSection /> },
     { part: "01", title: "字体族", keywords: "", render: <FontFamilySection /> },
-    { part: "01", title: "颜色", keywords: "", render: <ColorSection /> },
     { part: "01", title: "间距", keywords: "", render: <SpacingSection /> },
     { part: "01", title: "圆角", keywords: "", render: <RadiusSection /> },
     { part: "01", title: "组件尺寸 token", keywords: "", render: <SizeIndexSection /> },
@@ -250,7 +250,7 @@ function FilterBar({
               key={c.id}
               active={active}
               onClick={() => onPart(c.id)}
-              activeColor={APP.onAccent}
+              activeColor={APP.onPrimary}
               fontSize={13}
               style={{
                 padding: "7px 14px",
@@ -392,7 +392,7 @@ const MOTION_CATEGORIES: Array<{ title: string; items: MotionEffect[] }> = [
         name: "VIP 领取按钮",
         desc: "签到成功弹窗粉色 VIP 按钮呼吸 + 扫光 + 液态边缘形变",
         tech: "LiquidSweepCtaClip + SweepHighlightOverlay",
-        path: "lib/features/welfare/presentation/components/check_in_success_dialog.dart",
+        path: "lib/features/welfare/presentation/components/check_in_green500_dialog.dart",
       },
       {
         name: "书详情领取按钮",
@@ -731,7 +731,7 @@ function CoverHeader() {
             flexShrink: 0,
             borderRadius: 13,
             background: APP.accent,
-            color: APP.onAccent,
+            color: APP.onPrimary,
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -804,7 +804,7 @@ function PartBanner({
           style={{
             fontSize: 34,
             fontWeight: 700,
-            lineHeight: 1,
+            neutralCool100Height: 1,
             color: APP.accent,
             fontVariantNumeric: "tabular-nums",
             minWidth: 46,
@@ -845,8 +845,8 @@ function SourceLink({ path }: { path: string }) {
         fontSize: 12,
         color: APP.accent,
         fontFamily: "monospace",
-        textDecoration: "underline",
-        textUnderlineOffset: 2,
+        textDecoration: "underneutralCool100",
+        textUnderneutralCool100Offset: 2,
       }}
     >
       {path}
@@ -1035,6 +1035,30 @@ function swatch(color: string): ReactNode {
   );
 }
 
+/// 透明度色卡：alpha 色叠在代表性背景上（白阶叠深底 / 黑阶叠白底）以便看清。
+function alphaSwatch(color: string, backing: string): ReactNode {
+  return (
+    <div
+      style={{
+        width: 28,
+        height: 28,
+        borderRadius: 6,
+        background: backing,
+        border: `1px solid ${APP.panelEdge}`,
+      }}
+    >
+      <div
+        style={{
+          width: "100%",
+          height: "100%",
+          borderRadius: 6,
+          background: color,
+        }}
+      />
+    </div>
+  );
+}
+
 function Pressable({
   onClick,
   children,
@@ -1072,18 +1096,18 @@ function Pressable({
  * 按钮区、弹窗、Toast 触发钮等全部复用它——与真实代码「弹窗调用 AppButton」一致：
  * 改这里 = 预览里所有用到按钮的地方一起变。
  */
-type BtnVariant = "accent" | "secondary" | "outline" | "vip";
+type BtnVariant = "accent" | "secondary" | "outneutralCool100" | "vip";
 type BtnSize = "normal" | "compact" | "small";
 
 const BTN_VARIANTS: Record<
   BtnVariant,
   { bg: string; fg: string; radius: number; border: boolean }
 > = {
-  accent: { bg: APP.accent, fg: APP.onAccent, radius: 999, border: false },
+  accent: { bg: APP.accent, fg: APP.onPrimary, radius: 999, border: false },
   secondary: { bg: APP.surface, fg: "#FFFFFF", radius: 999, border: false },
-  outline: { bg: "transparent", fg: "#FFFFFF", radius: 999, border: true },
+  outneutralCool100: { bg: "transparent", fg: "#FFFFFF", radius: 999, border: true },
   vip: {
-    bg: "linear-gradient(90deg, #FFDDC1 0%, #F393DC 100%)",
+    bg: "neutralCool100ar-gradient(90deg, #FFDDC1 0%, #F393DC 100%)",
     fg: "#740551",
     radius: 999,
     border: false,
@@ -1122,7 +1146,7 @@ function DemoButton({
         padding: s.pad,
         fontSize: s.fs,
         fontWeight: s.fw,
-        lineHeight: 1,
+        neutralCool100Height: 1,
         textAlign: "center",
         ...(expand ? { flex: 1 } : {}),
       }}
@@ -1160,7 +1184,7 @@ function Glyph({
       return (
         <svg {...p}>
           <circle cx="11" cy="11" r="7" />
-          <line x1="20" y1="20" x2="16.5" y2="16.5" />
+          <neutralCool100 x1="20" y1="20" x2="16.5" y2="16.5" />
         </svg>
       );
     case "home":
@@ -1175,7 +1199,7 @@ function Glyph({
         <svg {...p}>
           <rect x="4" y="4" width="5" height="16" rx="1" />
           <rect x="11" y="4" width="5" height="16" rx="1" />
-          <line x1="18.5" y1="6" x2="20.5" y2="19" />
+          <neutralCool100 x1="18.5" y1="6" x2="20.5" y2="19" />
         </svg>
       );
     case "gift":
@@ -1251,7 +1275,7 @@ function TypeScaleSection() {
           <Code key={name}>{name}</Code>,
           `${px}`,
           use,
-          <span key={name} style={{ fontSize: px, lineHeight: 1.1 }}>
+          <span key={name} style={{ fontSize: px, neutralCool100Height: 1.1 }}>
             示例文字 换肤 123
           </span>,
         ].map(cell))}
@@ -1346,186 +1370,382 @@ function FontFamilySection() {
   );
 }
 
+type ColorTier = "raw" | "semantic" | "component";
+
 function ColorSection() {
+  const [tier, setTier] = useCanvasState<ColorTier>("colorTier", "raw");
   return (
     <SpecSection
-        zh="颜色(三层：原色 → 语义 → 主题)"
-        note="AppPalette(原色) · AppColors / AppBrandColors(语义)"
-        src="lib/core/theme/app_palette.dart"
-        gap={14}
-      >
-
-      <Row gap={8} align="center">
-        <Pill tone="accent">① 原色层</Pill>
-        <Text tone="secondary" size="small">
-          AppPalette · 原色真源，唯一 <Code>Color(0x…)</Code> 出处（无语义、不分主题）
-        </Text>
+      zh="颜色（三层，可切换）"
+      note="① 原色层 AppPalette · ② 语义层 AppColors/AppBrandColors · ③ 组件层（消费语义名）"
+      src="lib/core/theme/app_palette.dart"
+      gap={14}
+    >
+      <Row gap={8} wrap>
+        <ChipButton active={tier === "raw"} onClick={() => setTier("raw")}>
+          ① 原色层
+        </ChipButton>
+        <ChipButton active={tier === "semantic"} onClick={() => setTier("semantic")}>
+          ② 语义层
+        </ChipButton>
+        <ChipButton active={tier === "component"} onClick={() => setTier("component")}>
+          ③ 组件层（切主题）
+        </ChipButton>
       </Row>
 
-      <Stack gap={8}>
-        <Text weight="semibold">中性 · 白透明阶（whiteNN）</Text>
-        <Table
-          headers={["档位", "不透明度", "ARGB", "典型用途"]}
-          columnAlign={["left", "center", "left", "left"]}
-          rows={[
-            ["white100", "100%", "0xFFFFFFFF", "主文字"],
-            ["white85", "85%", "0xD9FFFFFF", "次强调文字"],
-            ["white60", "60%", "0x99FFFFFF", "弱化 / 占位 / 图标"],
-            ["white50", "50%", "0x80FFFFFF", "弱化文字 / 扫光"],
-            ["white24", "24%", "0x3DFFFFFF", "头图蒙版软档"],
-            ["white20", "20%", "0x33FFFFFF", "分隔线 / 导航底"],
-            ["white08", "8%", "0x14FFFFFF", "分隔"],
-            ["white06", "6%", "0x0FFFFFFF", "回复区底"],
-            ["white05", "5%", "0x0DFFFFFF", "卡片弱底"],
-            ["white04", "4%", "0x0AFFFFFF", "玻璃面 / 卡片面 / 描边 / 标签底"],
-            ["white00", "0%", "0x00FFFFFF", "渐变透明端"],
-          ].map((r) => r.map(cell))}
-        />
-      </Stack>
+      {tier === "raw" ? <RawTierView /> : null}
+      {tier === "semantic" ? <SemanticTierView /> : null}
+      {tier === "component" ? <ComponentTierView /> : null}
+    </SpecSection>
+  );
+}
+
+/** 通用胶囊切换按钮（tab / 主题切换共用，FilterBar 同款样式）。 */
+function ChipButton({
+  active,
+  onClick,
+  children,
+}: {
+  active: boolean;
+  onClick: () => void;
+  children: ReactNode;
+}) {
+  return (
+    <SelectableItem
+      active={active}
+      onClick={onClick}
+      activeColor={APP.onPrimary}
+      fontSize={13}
+      style={{
+        padding: "7px 14px",
+        borderRadius: 999,
+        background: active ? APP.accent : APP.surface,
+        border: `${APP.hair} solid ${active ? APP.accent : APP.border}`,
+        transition: "background 0.15s, color 0.15s, border-color 0.15s",
+      }}
+    >
+      {children}
+    </SelectableItem>
+  );
+}
+
+/** ① 原色层：纯色值，无语义、无用途（不分主题）。 */
+function RawTierView() {
+  return (
+    <Stack gap={14}>
+      <Callout tone="info" title="原色层 · AppPalette（唯一 Color(0x…) 出处）">
+        <Text tone="secondary" size="small">
+          只放原色，<Text weight="semibold">无语义、无用途、不分主题</Text>。
+          「某色用在哪」属语义/组件层，切到 ② / ③ 查看。
+        </Text>
+      </Callout>
 
       <Stack gap={8}>
-        <Text weight="semibold">中性 · 黑透明阶（blackNN，遮罩）</Text>
-        <Table
-          headers={["档位", "不透明度", "用途"]}
-          columnAlign={["left", "center", "left"]}
-          rows={[
-            ["black80", "80%", "居中弹窗遮罩（80% 纯黑，无模糊）"],
-            ["black60", "60%", "封面选择遮罩"],
-            ["black40", "40%", "选中态封面遮罩"],
-            ["black30", "30%", "顶栏图标框 / 通用遮罩"],
-            ["black08", "8%", "顶栏图标框底"],
-            ["black04", "4%", "封面描边 / 签到底"],
-            ["black00", "0%", "渐变透明端"],
-          ].map((r) => r.map(cell))}
-        />
-      </Stack>
-
-      <Stack gap={8}>
-        <Text weight="semibold">实体 / 品牌原色</Text>
-        <BrandSwatches />
+        <Text weight="semibold">中性 · 深色实体</Text>
         <Text tone="tertiary" size="small">
-          福利金 <Code>#935C1A</Code>、伙伴粉 <Code>#FF4D88</Code>、VIP 粉{" "}
-          <Code>#F393DC</Code>、签到高亮 <Code>#FFDD47</Code>、会员金渐变{" "}
-          <Code>#FFE794→#FFCD5A</Code>、面板深字 <Code>#202020</Code>、中性图标灰{" "}
-          <Code>#B2B3BA</Code>/<Code>#ABACB3</Code>、榜单头图标题{" "}
-          <Code>#FFFAD7</Code> 等 feature 原色均定义于色板层，被各 feature 语义引用。
+          原色层只展示色值，不表达用途；用途在 ② 语义层 / ③ 组件层查看。
         </Text>
+        <Table
+          headers={["色卡", "Token", "Hex"]}
+          columnAlign={["left", "left", "left"]}
+          rows={[
+            [swatch("#FFFFFF"), "neutralWhite", "#FFFFFF"],
+            [swatch("#9AA0AA"), "neutralCool400", "#9AA0AA"],
+            [swatch("#737B86"), "neutralCool500", "#737B86"],
+            [swatch("#252B34"), "neutralCool800", "#252B34"],
+            [swatch("#232A33"), "neutralCool820", "#232A33"],
+            [swatch("#151B24"), "neutralCool900", "#151B24"],
+            [swatch("#111722"), "neutralCool920", "#111722"],
+          ].map((r) => r.map(cell))}
+        />
       </Stack>
 
-      <Divider />
-      <Row gap={8} align="center">
-        <Pill tone="accent">② 语义层</Pill>
-        <Text tone="secondary" size="small">
-          AppColors / AppBrandColors · 给原色起语义名 + 按 <Code>themeId</Code> 选深/浅
-        </Text>
-      </Row>
+      <details>
+        <summary>透明效果原语 · 白阶 / 黑阶（默认折叠）</summary>
+        <Stack gap={12} style={{ marginTop: 12 }}>
+          <Stack gap={8}>
+            <Text weight="semibold">白阶（whiteAlphaNN）</Text>
+            <Table
+              headers={["色卡", "档位", "不透明度", "ARGB"]}
+              columnAlign={["left", "left", "center", "left"]}
+              rows={[
+                [alphaSwatch("rgba(255,255,255,1)", APP.bg), "whiteAlpha100", "100%", "0xFFFFFFFF"],
+                [alphaSwatch("rgba(255,255,255,0.85)", APP.bg), "whiteAlpha85", "85%", "0xD9FFFFFF"],
+                [alphaSwatch("rgba(255,255,255,0.6)", APP.bg), "whiteAlpha60", "60%", "0x99FFFFFF"],
+                [alphaSwatch("rgba(255,255,255,0.5)", APP.bg), "whiteAlpha50", "50%", "0x80FFFFFF"],
+                [alphaSwatch("rgba(255,255,255,0.24)", APP.bg), "whiteAlpha24", "24%", "0x3DFFFFFF"],
+                [alphaSwatch("rgba(255,255,255,0.2)", APP.bg), "whiteAlpha20", "20%", "0x33FFFFFF"],
+                [alphaSwatch("rgba(255,255,255,0.08)", APP.bg), "whiteAlpha08", "8%", "0x14FFFFFF"],
+                [alphaSwatch("rgba(255,255,255,0.06)", APP.bg), "whiteAlpha06", "6%", "0x0FFFFFFF"],
+                [alphaSwatch("rgba(255,255,255,0.05)", APP.bg), "whiteAlpha05", "5%", "0x0DFFFFFF"],
+                [alphaSwatch("rgba(255,255,255,0.04)", APP.bg), "whiteAlpha04", "4%", "0x0AFFFFFF"],
+                [alphaSwatch("rgba(255,255,255,0)", APP.bg), "whiteAlpha00", "0%", "0x00FFFFFF"],
+              ].map((r) => r.map(cell))}
+            />
+          </Stack>
+          <Stack gap={8}>
+            <Text weight="semibold">黑阶（blackAlphaNN）</Text>
+            <Table
+              headers={["色卡", "档位", "不透明度", "ARGB"]}
+              columnAlign={["left", "left", "center", "left"]}
+              rows={[
+                [alphaSwatch("rgba(0,0,0,0.8)", "#FFFFFF"), "blackAlpha80", "80%", "0xCC000000"],
+                [alphaSwatch("rgba(0,0,0,0.6)", "#FFFFFF"), "blackAlpha60", "60%", "0x99000000"],
+                [alphaSwatch("rgba(0,0,0,0.4)", "#FFFFFF"), "blackAlpha40", "40%", "0x66000000"],
+                [alphaSwatch("rgba(0,0,0,0.3)", "#FFFFFF"), "blackAlpha30", "30%", "0x4D000000"],
+                [alphaSwatch("rgba(0,0,0,0.08)", "#FFFFFF"), "blackAlpha08", "8%", "0x14000000"],
+                [alphaSwatch("rgba(0,0,0,0.04)", "#FFFFFF"), "blackAlpha04", "4%", "0x0A000000"],
+                [alphaSwatch("rgba(0,0,0,0)", "#FFFFFF"), "blackAlpha00", "0%", "0x00000000"],
+              ].map((r) => r.map(cell))}
+            />
+          </Stack>
+        </Stack>
+      </details>
 
       <Stack gap={8}>
-        <Text weight="semibold">主题壳 tint 阶 & 毛玻璃 scrim（bgTintNN，随 THEME）</Text>
-        <Text tone="secondary" size="small">
-          壳基色（深 <Code>#090E17</Code> / 粉浅 <Code>#FFF5F9</Code>）的不同透明度，用于渐隐 /
-          毛玻璃底；换主题整条随壳基色替换。深浅取色对比见 §04「多风格」tab。
+        <Text weight="semibold">壳 tint 原色（neutralCool950Alpha* / pink50Alpha*）</Text>
+        <Text tone="tertiary" size="small">
+          与 whiteAlphaNN / blackAlphaNN 的区别：白/黑阶是<Text weight="semibold">效果叠加原语</Text>（主题无关）；
+          壳 tint 是<Text weight="semibold">壳基色</Text>（深 <Code>#090E17</Code> / 粉浅 <Code>#FFF5F9</Code>）叠加，
+          <Text weight="semibold">随主题变</Text>，用于内容渐隐 / 毛玻璃底，让透出内容融入页面背景。
+          语义名 <Code>bgTintNN</Code> 按主题从下面两列中选（色卡叠在中灰底上以显色相）。
         </Text>
-        <BgTintSwatches />
+        <ShellTintTable />
+      </Stack>
+
+      <Stack gap={8}>
+        <Text weight="semibold">彩色原色</Text>
+        <BrandSwatches />
+      </Stack>
+    </Stack>
+  );
+}
+
+/** ② 语义层：给原色起语义名 + 按 themeId 选深/浅（值随主题、名不变）。 */
+function SemanticTierView() {
+  return (
+    <Stack gap={14}>
+      <Callout tone="info" title="语义层 · AppColors / AppBrandColors">
+        <Text tone="secondary" size="small">
+          给 ① 原色起<Text weight="semibold">语义名</Text>，并按{" "}
+          <Code>themeId</Code> 选深/浅：如 <Code>textPrimary = pink_light ? neutralBlue950 : neutralWhite</Code>、
+          <Code>surface = pink_light ? neutralWhite : neutralCool900</Code>。名不变、值随主题；
+          按主题的实际取色见 ③ 组件层。
+        </Text>
+      </Callout>
+
+      <Stack gap={8}>
+        <Text weight="semibold">核心语义 token（跨组件复用职责）</Text>
+        <Text tone="tertiary" size="small">
+          语义层给原色定义产品职责；组件层只引用这些语义 token。
+        </Text>
+        <Table
+          headers={["语义 token", "色卡", "dark 解析", "pink_light 解析", "职责"]}
+          columnAlign={["left", "left", "left", "left", "left"]}
+          rows={[
+            ["primary", swatch("#FFE847"), "#FFE847", "#FF4D88", "主强调"],
+            ["onPrimary", swatch("#090E17"), "#090E17", "#FFFFFF", "主强调色面上的文字 / 图标"],
+            ["background", swatch("#090E17"), "#090E17", "#FFF5F9", "页面背景"],
+            ["surface", swatch("#151B24"), "#151B24", "#FFFFFF", "普通容器面"],
+            ["surfaceSoft", swatch("#111722"), "#111722", "#F8F7FC", "弱容器面"],
+            ["surfaceElevated", swatch("#131820"), "#131820", "#FFFFFF", "浮层 / 弹窗面"],
+            ["textPrimary", swatch("#FFFFFF"), "#FFFFFF", "#1A1A2E", "一级文字"],
+            ["textSecondary", swatch("#9AA0AA"), "#9AA0AA", "#6B7280", "二级文字"],
+            ["textTertiary", swatch("#737B86"), "#737B86", "#9B9B9B", "三级文字 / 占位"],
+            ["borderSubtle", swatch("#252B34"), "#252B34", "#F4D9E4", "弱描边"],
+            ["divider", swatch("#232A33"), "#232A33", "#F3F4F6", "分割线"],
+            ["overlayScrim80", alphaSwatch("rgba(0,0,0,0.8)", "#FFFFFF"), "blackAlpha80", "blackAlpha80", "弹窗遮罩"],
+          ].map((r) => r.map(cell))}
+        />
       </Stack>
 
       <Stack gap={8}>
         <Text weight="semibold">feature 语义色 token（引用原色，值不变为主）</Text>
         <Text tone="tertiary" size="small">
-          各 feature 色板（<Code>app_welfare_colors.dart</Code> /{" "}
-          <Code>app_membership_colors.dart</Code> / <Code>app_colors.dart</Code>）在源色之上派生的语义 token；除少量透明度变体外均为对源色的别名（收敛去重）。
+          各 feature 色板在原色之上派生的语义 token；除少量透明度变体外均为对原色的别名（收敛去重）。
         </Text>
         <Table
-          headers={["Token", "值", "用途"]}
-          columnAlign={["left", "left", "left"]}
+          headers={["Token", "色卡", "值", "用途"]}
+          columnAlign={["left", "left", "left", "left"]}
           rows={[
-            ["checkInHighlightSurface / …Bg", "0x14FCE64D（8% checkInYellow）", "今日签到高亮卡底"],
-            ["checkInHighlightHeader", "#FCE64D（checkInYellow）", "今日签到高亮头"],
-            ["checkInHighlightBorder", "#FFDD47", "高亮卡描边"],
-            ["checkInRewardTodayText", "#FCE64D（checkInYellow）", "今日奖励文字"],
-            ["checkInDayBg", "white04", "普通签到日底"],
-            ["checkInCumulativeBg", "0x14FCE64D（8% checkInYellow）", "累计签到徽章底"],
-            ["checkInCumulativeBorder", "white00（透明）", "累计徽章描边"],
-            ["checkInMilestoneAmount", "white100", "里程碑数值"],
-            ["planSelectedBg", "0x14FFE794（8% 会员金）", "会员方案选中卡底"],
-            ["planSelectedBorder", "#FFE794（ctaGradientStart）", "会员方案选中描边"],
-            ["planSelectedGoldStart", "#FFE794（ctaGradientStart）", "选中金渐变起"],
-            ["planSelectedGoldEnd", "#FFCD5A（ctaGradientEnd）", "选中金渐变止"],
-            ["planSelectedSecondary", "white60", "选中卡次要文字"],
-            ["planSelectedFooterText", "#202020（textOnLightPanel）", "选中卡脚文字"],
-            ["searchHotAccent", "#FF7E32（accentOrange）", "搜索热词强调"],
-            ["bookDetailUpdateHighlight", "#F0B16A", "书详情「更新」高亮：日期 / 圆点边 / 文字"],
-            ["rankingSegmentedSelectedText", "#202020（textOnLightPanel）", "榜单分段控件选中字"],
-            ["segmentedSelectedBorder", "white00（透明）", "分段控件选中去描边（仅 fill + 黄字）"],
-            ["bookDetailPromoGradientStart/Mid/End", "#FF4E6C / #FF6F4B / #FF9359", "悬浮促销条底暖渐变（约 94°）"],
-            ["bookDetailPromoTitle", "white100", "促销条主标题"],
-            ["bookDetailPromoSubtitle", "#FFF9F2（promoSubtitle）", "促销条副标题"],
-            ["bookDetailPromoRewardText", "#E64D00（promoRewardText）", "+N 能量角标文字"],
-            ["bookDetailPromoCloseIcon", "white100", "促销条关闭 X"],
+            ["checkInHighlightSurface / …Bg", alphaSwatch("rgba(255,232,71,0.08)", APP.bg), "yellow500Alpha08（8% primary）", "今日签到高亮卡底"],
+            ["checkInHighlightHeader", swatch("#FFE847"), "primary #FFE847", "今日签到高亮头"],
+            ["checkInHighlightBorder", swatch("#FFE847"), "primary #FFE847", "高亮卡描边"],
+            ["checkInRewardTodayText", swatch("#FFE847"), "primary #FFE847", "今日奖励文字"],
+            ["checkInDayBg", alphaSwatch("rgba(255,255,255,0.04)", APP.bg), "whiteAlpha04", "普通签到日底"],
+            ["checkInCumulativeBg", alphaSwatch("rgba(255,232,71,0.08)", APP.bg), "yellow500Alpha08（8% primary）", "累计签到徽章底"],
+            ["checkInCumulativeBorder", alphaSwatch("rgba(255,255,255,0)", APP.bg), "whiteAlpha00（透明）", "累计徽章描边"],
+            ["checkInMilestoneAmount", swatch("#FFFFFF"), "whiteAlpha100", "里程碑数值"],
+            ["planSelectedBg", alphaSwatch("rgba(255,231,148,0.08)", APP.bg), "0x14FFE794（8% 会员金）", "会员方案选中卡底"],
+            ["planSelectedBorder", swatch("#FFE794"), "#FFE794（ctaGradientStart）", "会员方案选中描边"],
+            ["planSelectedGoldStart", swatch("#FFE794"), "#FFE794（ctaGradientStart）", "选中金渐变起"],
+            ["planSelectedGoldEnd", swatch("#FFCD5A"), "#FFCD5A（ctaGradientEnd）", "选中金渐变止"],
+            ["planSelectedSecondary", alphaSwatch("rgba(255,255,255,0.6)", APP.bg), "whiteAlpha60", "选中卡次要文字"],
+            ["planSelectedFooterText", swatch("#202020"), "#202020（textOnLightPanel）", "选中卡脚文字"],
+            ["searchHotAccent", swatch("#FF7E32"), "#FF7E32（accentOrange）", "搜索热词强调"],
+            ["bookDetailUpdateHighlight", swatch("#F0B16A"), "#F0B16A", "书详情「更新」高亮：日期 / 圆点边 / 文字"],
+            ["rankingSegmentedSelectedText", swatch("#202020"), "#202020（textOnLightPanel）", "榜单分段控件选中字"],
+            ["segmentedSelectedBorder", alphaSwatch("rgba(255,255,255,0)", APP.bg), "whiteAlpha00（透明）", "分段控件选中去描边（仅 fill + 黄字）"],
+            ["bookDetailPromoGradientStart/Mid/End", <Row gap={4}>{swatch("#FF4E6C")}{swatch("#FF6F4B")}{swatch("#FF9359")}</Row>, "#FF4E6C / #FF6F4B / #FF9359", "悬浮促销条底暖渐变（约 94°）"],
+            ["bookDetailPromoTitle", swatch("#FFFFFF"), "whiteAlpha100", "促销条主标题"],
+            ["bookDetailPromoSubtitle", swatch("#FFF9F2"), "#FFF9F2（cream50）", "促销条副标题"],
+            ["bookDetailPromoRewardText", swatch("#E64D00"), "#E64D00（orange700）", "+N 能量角标文字"],
+            ["bookDetailPromoCloseIcon", swatch("#FFFFFF"), "whiteAlpha100", "促销条关闭 X"],
           ].map((r) => r.map(cell))}
         />
       </Stack>
-
-      <Divider />
-      <Row gap={8} align="center">
-        <Pill tone="accent">③ 组件层</Pill>
-        <Text tone="secondary" size="small">
-          组件只引用 ② 语义名，不碰原色、不写死色值；同组件跨主题取色对比见 §04「多风格」tab，组件规范见 §02。
-        </Text>
-      </Row>
-    </SpecSection>
+    </Stack>
   );
 }
 
-function BgTintSwatches() {
-  const tints: Array<[string, string]> = [
-    ["bgTint00", "rgba(9,14,23,0)"],
-    ["bgTint35", "rgba(9,14,23,0.35)"],
-    ["bgTint45", "rgba(9,14,23,0.45)"],
-    ["bgTint55", "rgba(9,14,23,0.55)"],
-    ["bgTint60", "rgba(9,14,23,0.60)"],
-    ["bgTint80", "rgba(9,14,23,0.80)"],
-    ["bgTint90", "rgba(9,14,23,0.90)"],
+/** ③ 组件层：组件消费语义名；切主题看同一组件解析出的实际颜色。 */
+function ComponentTierView() {
+  const groups: Array<{
+    title: string;
+    rows: Array<[string, ReactNode, string, string]>;
+  }> = [
+    {
+      title: "按钮",
+      rows: [
+        ["AppButton.accent", <Row gap={4}>{swatch("#FFE847")}{swatch("#090E17")}</Row>, "primary / onPrimary", "主按钮底色与文字"],
+        ["AppButton.secondary", <Row gap={4}>{swatch("#151B24")}{swatch("#FFFFFF")}</Row>, "surface / textPrimary", "次按钮弱底与文字"],
+      ],
+    },
+    {
+      title: "弹窗 / 反馈",
+      rows: [
+        ["AppConfirmDialog", <Row gap={4}>{swatch("#131820")}{swatch("#FFFFFF")}{swatch("#9AA0AA")}</Row>, "surfaceElevated / textPrimary / textSecondary", "确认弹窗面、标题、正文"],
+        ["Shimmer", <Row gap={4}>{alphaSwatch("rgba(255,255,255,0.08)", APP.bg)}{alphaSwatch("rgba(255,255,255,0.24)", APP.bg)}</Row>, "shimmerBase / shimmerHighlight", "骨架屏扫光"],
+      ],
+    },
+    {
+      title: "列表 / 卡片",
+      rows: [
+        ["AppGroupedListCard", <Row gap={4}>{swatch("#151B24")}{swatch("#232A33")}</Row>, "surface / divider", "分组卡底与行间分割"],
+        ["AppNavigationListRow", <Row gap={4}>{swatch("#FFFFFF")}{swatch("#9AA0AA")}{swatch("#737B86")}</Row>, "textPrimary / textSecondary / textTertiary", "列表行标题、尾文、箭头"],
+        ["BookCard", <Row gap={4}>{swatch("#151B24")}{swatch("#252B34")}{swatch("#FFFFFF")}</Row>, "surface / borderSubtle / textPrimary", "书卡面、描边、标题"],
+      ],
+    },
+    {
+      title: "导航 / 切换",
+      rows: [
+        ["AppTopTabBar", <Row gap={4}>{swatch("#FFE847")}{swatch("#FFFFFF")}{swatch("#9AA0AA")}</Row>, "primary / textPrimary / textSecondary", "选中线、选中文字、未选中文字"],
+        ["AppBottomNav", <Row gap={4}>{swatch("#151B24")}{swatch("#FFE847")}{swatch("#ABACB3")}</Row>, "navBarBackground / primary / iconMutedSecondary", "底部导航底、选中态、未选态"],
+        ["SegmentedSwitch", <Row gap={4}>{alphaSwatch("rgba(255,232,71,0.08)", APP.bg)}{swatch("#FFE847")}{swatch("#737B86")}</Row>, "segmentedSelectedFill / primary / textTertiary", "分段选中底、选中字、未选字"],
+      ],
+    },
+    {
+      title: "图上效果",
+      rows: [
+        ["ImageScrim", <Row gap={4}>{alphaSwatch("rgba(9,14,23,0.35)", "#8A8A8A")}{alphaSwatch("rgba(0,0,0,0.6)", "#FFFFFF")}</Row>, "rankingHeroScrim / searchStatusBadgeBackground", "头图 / 封面图上遮罩"],
+      ],
+    },
   ];
   return (
+    <Stack gap={12}>
+      <Callout tone="info" title="组件层 · 只引用语义层 token">
+        <Text tone="secondary" size="small">
+          组件代码只使用「使用语义 token」这一列，不直接引用原色；
+          语义 token 在 ② 语义层中再解析到不同主题的实际颜色。
+        </Text>
+      </Callout>
+      {groups.map((group) => (
+        <Stack key={group.title} gap={8}>
+          <Text weight="semibold">{group.title}</Text>
+          <Table
+            headers={["组件 / 状态", "语义色卡（dark）", "使用语义 token", "说明"]}
+            columnAlign={["left", "left", "left", "left"]}
+            rows={group.rows
+              .map(([c, swatches, tok, desc]) => [c, swatches, tvCode(tok), desc])
+              .map((r) => r.map(cell))}
+          />
+        </Stack>
+      ))}
+    </Stack>
+  );
+}
+
+function ShellTintTable() {
+  const backing = "#8A8A8A"; // 中灰底：模拟被叠加的内容，便于看清壳基色色相
+  // [档位, dark rgba, dark ARGB, pink rgba, pink ARGB]
+  const rows: Array<[string, string, string, string, string]> = [
+    ["T00", "rgba(9,14,23,0)", "0x00090E17", "rgba(255,245,249,0)", "0x00FFF5F9"],
+    ["T35", "rgba(9,14,23,0.35)", "0x59090E17", "rgba(255,245,249,0.35)", "0x59FFF5F9"],
+    ["T45", "rgba(9,14,23,0.45)", "0x73090E17", "rgba(255,245,249,0.45)", "0x73FFF5F9"],
+    ["T55", "rgba(9,14,23,0.55)", "0x8C090E17", "rgba(255,245,249,0.55)", "0x8CFFF5F9"],
+    ["T60", "rgba(9,14,23,0.60)", "0x99090E17", "rgba(255,245,249,0.60)", "0x99FFF5F9"],
+    ["T80", "rgba(9,14,23,0.80)", "0xCC090E17", "rgba(255,245,249,0.80)", "0xCCFFF5F9"],
+    ["T90", "rgba(9,14,23,0.90)", "0xE6090E17", "rgba(255,245,249,0.90)", "0xE6FFF5F9"],
+  ];
+  const themedCell = (rgba: string, argb: string): ReactNode => (
+    <Row gap={8} align="center">
+      {alphaSwatch(rgba, backing)}
+      <Code>{argb}</Code>
+    </Row>
+  );
+  return (
     <Table
-      headers={["色卡", "Token", "值"]}
+      headers={["档位", "neutralCool950（深 #090E17）", "pink50（粉浅 #FFF5F9）"]}
       columnAlign={["left", "left", "left"]}
-      rows={tints.map(([name, c]) => [
-        swatch(c),
-        <Code key={name}>{name}</Code>,
-        c,
-      ].map(cell))}
+      rows={rows
+        .map(([lv, dRgba, dArgb, pRgba, pArgb]) => [
+          lv,
+          themedCell(dRgba, dArgb),
+          themedCell(pRgba, pArgb),
+        ])
+        .map((r) => r.map(cell))}
     />
   );
 }
 
 function BrandSwatches() {
-  const brand: Array<[string, string, string, string]> = [
-    ["backgroundDark", "#090E17", "全局背景", "#FFFFFF"],
-    ["accent", "#FFE847", "主强调（黄）· CTA · 点赞 / 选中", "#131820"],
-    ["auroraGlow", "#FFF2C6", "极光亮核（暖米金）", "#131820"],
-    ["auroraEdge", "#1D0B10", "极光暗边（暗红近黑）", "#FFFFFF"],
-    ["dialogBackground", "#131820", "弹窗底", "#FFFFFF"],
-    ["surfaceMuted", "#262B33", "深青灰实心浮层 / 卡片底", "#FFFFFF"],
-    ["success", "#39D98A", "成功", "#131820"],
-    ["warning", "#FFA940", "警告", "#131820"],
-    ["error", "#FF667F", "错误", "#131820"],
-    ["premiumGold", "#F9C74F", "VIP 会员金主题（v1.0）", "#131820"],
-    ["info", "#59AEFF", "信息 / 提示（v1.0）", "#131820"],
-    ["fantasyPurple", "#9C87FF", "奇幻紫（v1.0）", "#131820"],
-    ["energyCyan", "#42DDFF", "能量青（v1.0）", "#131820"],
-    ["growthBlue", "#7E95FF", "成长蓝（v1.0）", "#131820"],
+  const brand: Array<[string, string]> = [
+    ["cream10", "#FFFEF4"],
+    ["cream50", "#FFF9F2"],
+    ["cream100", "#FFF2C6"],
+    ["cream200", "#FFFAD7"],
+    ["yellow500", "#FFE847"],
+    ["peach50", "#FFEBD4"],
+    ["peach100", "#FFDDC1"],
+    ["orange300", "#FF9359"],
+    ["orange500", "#FF7E32"],
+    ["orange550", "#FF6F4B"],
+    ["orange700", "#E64D00"],
+    ["rose400", "#FF667F"],
+    ["rose500", "#FF4E6C"],
+    ["red400", "#FF6B6B"],
+    ["pink100", "#F4D9E4"],
+    ["pink100Soft", "#FFD5DB"],
+    ["pink200", "#FF9CC7"],
+    ["pink300", "#F393DC"],
+    ["pink400", "#FF7AA8"],
+    ["pink500", "#FF4D88"],
+    ["pink600", "#E03D74"],
+    ["magenta500", "#E541BC"],
+    ["magenta950", "#740551"],
+    ["magenta980", "#310F29"],
+    ["brown500", "#AA722E"],
+    ["brown600", "#935C1A"],
+    ["brown800", "#5D3A12"],
+    ["green500", "#39D98A"],
+    ["amber500", "#FFA940"],
+    ["tan400", "#F0B16A"],
+    ["blue500", "#4DA6FF"],
+    ["sky500", "#59AEFF"],
+    ["purple400", "#9C87FF"],
+    ["cyan400", "#42DDFF"],
+    ["indigo400", "#7E95FF"],
+    ["gold400", "#F9C74F"],
+    ["wine950", "#1D0B10"],
   ];
   return (
     <Table
-      headers={["色卡", "Token", "Hex", "角色"]}
-      columnAlign={["left", "left", "left", "left"]}
-      rows={brand.map(([name, hex, role]) => [
+      headers={["色卡", "Token", "Hex"]}
+      columnAlign={["left", "left", "left"]}
+      rows={brand.map(([name, hex]) => [
         swatch(hex),
         <Code key={name}>{name}</Code>,
         hex,
-        role,
       ].map(cell))}
     />
   );
@@ -1570,7 +1790,7 @@ function MultiStyleSection() {
             <Code>dark</Code>，不提供 App 内运行时切换。
           </Text>
           <Text>
-            页面一律引用语义 token（<Code>textOnDark</Code> / <Code>surfaceCard</Code> /{" "}
+            页面一律引用语义 token（<Code>textPrimary</Code> / <Code>surface</Code> /{" "}
             <Code>accent</Code> 等），换包<Text weight="semibold">不改任何调用点</Text>——
             token 在下表按主题各自解析。
           </Text>
@@ -1599,22 +1819,22 @@ function MultiStyleSection() {
           headers={["组件 / 场景", "取色 token", "dark", "pink_light"]}
           columnAlign={["left", "left", "left", "left"]}
           rows={[
-            ["页面背景", tvCode("backgroundDark"), tv("#090E17"), tv("#FFF5F9")],
-            ["标题 / 正文", tvCode("textOnDark"), tv("#FFFFFF", "白"), tv("#1A1A2E", "墨")],
-            ["次要文字", tvCode("textOnDarkMuted"), tvCode("white50"), tv("#6B7280")],
-            ["卡片面", tvCode("surfaceCard"), tvCode("white04"), tv("#FFFFFF")],
-            ["卡片描边", tvCode("borderGlass"), tvCode("white04"), tv("#F4D9E4", "浅粉")],
-            ["分割线", tvCode("dividerOnDark"), tvCode("white08"), tv("#F3F4F6")],
-            ["主按钮 · 底", tvCode("accent"), tv("#FFE847", "黄"), tv("#FF4D88", "粉")],
-            ["主按钮 · 字", tvCode("onAccent"), tv("#090E17", "深"), tv("#FFFFFF", "白")],
-            ["底部导航 · 底", tvCode("navBarBackground"), tvCode("white20"), tvCode("black04")],
+            ["页面背景", tvCode("background"), tv("#090E17"), tv("#FFF5F9")],
+            ["标题 / 正文", tvCode("textPrimary"), tv("#FFFFFF", "白"), tv("#1A1A2E", "墨")],
+            ["次要文字", tvCode("textSecondary"), tv("#9AA0AA"), tv("#6B7280")],
+            ["卡片面", tvCode("surface"), tv("#151B24"), tv("#FFFFFF")],
+            ["卡片描边", tvCode("borderSubtle"), tv("#252B34"), tv("#F4D9E4", "浅粉")],
+            ["分割线", tvCode("divider"), tv("#232A33"), tv("#F3F4F6")],
+            ["主按钮 · 底", tvCode("primary"), tv("#FFE847", "黄"), tv("#FF4D88", "粉")],
+            ["主按钮 · 字", tvCode("onPrimary"), tv("#090E17", "深"), tv("#FFFFFF", "白")],
+            ["底部导航 · 底", tvCode("navBarBackground"), tvCode("whiteAlpha20"), tvCode("blackAlpha04")],
             ["底部导航 · 选中", tvCode("accent"), tv("#FFE847", "黄"), tv("#FF4D88", "粉")],
             ["顶栏毛玻璃", tvCode("chromeBarScrim"), tvCode("bgTint60 · 深"), tvCode("bgTint60 · 粉")],
-            ["弹窗底", tvCode("dialogBackground"), tv("#131820"), tv("#FFFFFF", "白")],
+            ["弹窗底", tvCode("surfaceElevated"), tv("#131820"), tv("#FFFFFF", "白")],
             ["分段选中 · 底/字", tvCode("segmentedSelectedFill / …Text"), tvCode("黄 8% / 黄字"), tvCode("粉 8% / 粉字")],
-            ["骨架屏", tvCode("shimmerBase / Highlight"), tvCode("white08 / white24"), tvCode("black04 / black08")],
+            ["骨架屏", tvCode("shimmerBase / Highlight"), tvCode("whiteAlpha08 / whiteAlpha24"), tvCode("blackAlpha04 / blackAlpha08")],
             ["头图 / 封面遮罩", tvCode("rankingHeroScrim / searchStatusBadge"), tvCode("bgTint · 暗"), tvCode("black · 暗（恒暗）")],
-            ["Toast / 作者徽 · 底", tvCode("accent"), tv("#FFE847", "黄"), tv("#FF4D88", "粉")],
+            ["Toast / 作者徽 · 底", tvCode("primary"), tv("#FFE847", "黄"), tv("#FF4D88", "粉")],
             ["状态栏图标", tvCode("systemUiOverlayStyle"), tvNote("白图标"), tvNote("深图标")],
           ].map((r) => r.map(cell))}
         />
@@ -1631,7 +1851,7 @@ function MultiStyleSection() {
           </Text>
           <Text>
             迭代时：<Text weight="semibold">用语义 token 搭 UI</Text> 两主题自动各取各值；写死{" "}
-            <Code>Color(0x…)</Code> 或裸 <Code>whiteNN</Code> 会让浅壳翻车——带色改动两主题都要走查。
+            <Code>Color(0x…)</Code> 或裸 <Code>whiteAlphaNN</Code> 会让浅壳翻车——带色改动两主题都要走查。
           </Text>
         </Stack>
       </Callout>
@@ -1718,7 +1938,7 @@ function RadiusSection() {
 
 function SizeIndexSection() {
   const groups: Array<[string, string, string]> = [
-    ["通用基础", "描边 / 通用图标 / 启动图", "hairline · iconSm · splashLogoSize"],
+    ["通用基础", "描边 / 通用图标 / 启动图", "neutralCool200 · iconSm · splashLogoSize"],
     ["顶栏 AppTopBar", "顶栏高度 / 图标框 / 返回钮", "topBar*"],
     ["按钮 AppButton", "内边距 / loading / 图标间距", "buttonPadding*"],
     ["搜索栏 / 玻璃模糊", "搜索框高 / 各级磨砂半径", "searchBarHeight · glassBlurSigma · strongBlurSigma"],
@@ -1826,7 +2046,7 @@ function ButtonSection() {
   const variants: Array<{ zh: string; code: BtnVariant }> = [
     { zh: "主 CTA", code: "accent" },
     { zh: "次操作", code: "secondary" },
-    { zh: "描边", code: "outline" },
+    { zh: "描边", code: "outneutralCool100" },
     { zh: "VIP", code: "vip" },
   ];
   const sizes: BtnSize[] = ["normal", "compact", "small"];
@@ -1874,7 +2094,7 @@ function ButtonSection() {
         rows={[
           ["accent", "黄底深字 · 胶囊", "深色页主 CTA：阅读 / 确认 / 提交 / 领取 / 充值（最常用）"],
           ["secondary", "4% 白底 · 无描边 · 胶囊", "次操作 / 弱化 / 未激活态（重试默认、退出登录、验证码倒计时）· 默认变体"],
-          ["outline", "透明底 + 细边框", "对话框取消 · 轻量次要操作"],
+          ["outneutralCool100", "透明底 + 细边框", "对话框取消 · 轻量次要操作"],
           ["vip", "粉金渐变底 + 深粉字 · 胶囊", "VIP 领取 / 会员向操作（福利「VIP领取」等）"],
         ].map((r) => r.map(cell))}
       />
@@ -1890,7 +2110,7 @@ function ButtonSection() {
 
       <Text tone="tertiary" size="small">
         状态：默认 · 加载中 · 禁用（前景 40%）· 撑满宽度 <Code>isExpanded</Code>；
-        可选前置图标 <Code>leadingIcon</Code>。描边一律 0.5px hairline。
+        可选前置图标 <Code>leadingIcon</Code>。描边一律 0.5px neutralCool200。
       </Text>
     </SpecSection>
   );
@@ -1961,7 +2181,7 @@ function CornerBadgeSection() {
                     color: b.fg,
                     fontSize: 10,
                     fontWeight: 600,
-                    lineHeight: 1.2,
+                    neutralCool100Height: 1.2,
                     borderRadius: "0 12px 0 12px",
                     whiteSpace: "nowrap",
                   }}
@@ -1987,7 +2207,7 @@ function DialogSection() {
   return (
     <SpecSection
         zh="弹窗"
-        note="showAppBlurredDialog 遮罩入口 + AppConfirmDialog 确认壳 · 80% 纯黑遮罩 · 圆角 xl"
+        note="showAppBlurredDialog 遮罩入口 + AppConfirmDialog 确认壳 · 80% 纯黑遮罩 · 点遮罩不关闭 · 圆角 xl"
         src="lib/shared/components/app_confirm_dialog.dart"
       >
       <Stage style={{ padding: 0, overflow: "hidden" }}>
@@ -2003,7 +2223,7 @@ function DialogSection() {
         >
           <div style={{ width: 280, background: APP.dialogBg, borderRadius: 24, padding: 20, border: `1px solid ${APP.panelEdge}` }}>
             <div style={{ color: APP.text, fontSize: 16, fontWeight: 700, textAlign: "center" }}>删除提示</div>
-            <div style={{ color: APP.textMuted, fontSize: 13, lineHeight: 1.5, textAlign: "center", marginTop: 8 }}>
+            <div style={{ color: APP.textMuted, fontSize: 13, neutralCool100Height: 1.5, textAlign: "center", marginTop: 8 }}>
               确认删除全部搜索历史吗？
             </div>
             <div style={{ display: "flex", gap: 10, marginTop: 18 }}>
@@ -2021,7 +2241,7 @@ function DialogSection() {
         两层分工：遮罩入口{" "}
         <Code>lib/shared/components/app_blurred_dialog.dart</Code>
         （<Code>showAppBlurredDialog</Code>）+ 确认壳{" "}
-        <Code>AppConfirmDialog</Code>。自定义内容弹窗也走遮罩入口，只是不用确认壳。
+        <Code>AppConfirmDialog</Code>。自定义内容弹窗也走遮罩入口，只是不用确认壳；所有弹窗点遮罩不关闭，只能通过内部按钮或关闭图标关闭。
         按钮即 <Code>AppButton</Code>（取消 <Code>secondary</Code> / 确认 <Code>accent</Code>）。
       </Text>
     </SpecSection>
@@ -2106,7 +2326,7 @@ function BottomNavSection() {
   return (
     <SpecSection
         zh="底部导航"
-        note="AppBottomNav · 图标 26 · 选中弹跳（1.18→0.92→1）· hairline 描边"
+        note="AppBottomNav · 图标 26 · 选中弹跳（1.18→0.92→1）· neutralCool200 描边"
         src="lib/shared/layouts/app_bottom_nav.dart"
       >
       <Stage>
@@ -2202,7 +2422,7 @@ function SegmentedDemo() {
       style={{
         position: "relative",
         alignSelf: "flex-start",
-        display: "inline-flex",
+        display: "inneutralCool100-flex",
         background: APP.surface,
         border: `${APP.hair} solid ${APP.border}`,
         borderRadius: 46,
@@ -2327,7 +2547,7 @@ function SearchSection() {
   return (
     <SpecSection
         zh="搜索框"
-        note="GlassChipButton · 高 40 · 圆角 35 · 放大镜图标 · hairline 描边"
+        note="GlassChipButton · 高 40 · 圆角 35 · 放大镜图标 · neutralCool200 描边"
         src="lib/shared/components/glass_chip_button.dart"
       >
       <Stage>
@@ -2386,7 +2606,7 @@ function SwitchSection() {
 
 function InteractiveSwitch({ stateKey, initial }: { stateKey: string; initial: boolean }) {
   const [on, setOn] = useCanvasState<boolean>(stateKey, initial);
-  // 对齐 AppSwitch：50×30 · inset 3 · thumb 24 · 开 accentYellow04+黄钮 / 关 surfaceGlass+白钮
+  // 对齐 AppSwitch：50×30 · inset 3 · thumb 24 · 开 primarySoft+主强调钮 / 关 surface+白钮
   return (
     <div
       onClick={() => setOn((v) => !v)}
@@ -2446,7 +2666,7 @@ function OptionSelectSection() {
                     userSelect: "none",
                   }}
                 >
-                  {/* 对齐 GenderAvatarOption：80 圆 · surfaceCard · 选中 1.5 黄环+内间隙 · 未选 hairline；真机为彩色/灰色头像资源 */}
+                  {/* 对齐 GenderAvatarOption：80 圆 · surface · 选中 1.5 黄环+内间隙 · 未选 neutralCool200；真机为彩色/灰色头像资源 */}
                   <div
                     style={{
                       width: 80,
@@ -2467,8 +2687,8 @@ function OptionSelectSection() {
                         height: "100%",
                         borderRadius: "50%",
                         background: active
-                          ? "linear-gradient(160deg,#FFE8A3 0%,#F0B16A 55%,#C47A4A 100%)"
-                          : "linear-gradient(160deg,#6A6E76 0%,#3A3E46 100%)",
+                          ? "neutralCool100ar-gradient(160deg,#FFE8A3 0%,#F0B16A 55%,#C47A4A 100%)"
+                          : "neutralCool100ar-gradient(160deg,#6A6E76 0%,#3A3E46 100%)",
                       }}
                     />
                   </div>
@@ -2499,7 +2719,7 @@ function OptionSelectSection() {
                     cursor: "pointer",
                     userSelect: "none",
                     fontSize: 14,
-                    // 对齐 AgeRangeOption：选中 segFill+黄字加粗；未选 surfaceCard+白字+细描边
+                    // 对齐 AgeRangeOption：选中 segFill+黄字加粗；未选 surface+白字+细描边
                     background: active ? APP.segFill : APP.surface,
                     border: active
                       ? `${APP.hair} solid transparent`
@@ -2542,7 +2762,7 @@ function SweepHighlightSection() {
               height: 44,
               borderRadius: 999,
               overflow: "hidden",
-              background: "linear-gradient(90deg,#FFDDC1,#F393DC)",
+              background: "neutralCool100ar-gradient(90deg,#FFDDC1,#F393DC)",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -2556,7 +2776,7 @@ function SweepHighlightSection() {
                 width: "42%",
                 height: "100%",
                 background:
-                  "linear-gradient(90deg,rgba(255,255,255,0),rgba(255,255,255,0.5),rgba(255,255,255,0))",
+                  "neutralCool100ar-gradient(90deg,rgba(255,255,255,0),rgba(255,255,255,0.5),rgba(255,255,255,0))",
                 pointerEvents: "none",
               }}
             />
@@ -2565,7 +2785,7 @@ function SweepHighlightSection() {
             </span>
           </div>
           <Caption>
-            组件本身只有扫光带（默认 white50→透明，带宽约 42%，周期约 2200ms）；强 CTA 中使用柔边倾斜扫光，并由宿主按钮传入 progress 同步边缘微形变。
+            组件本身只有扫光带（默认 whiteAlpha50→透明，带宽约 42%，周期约 2200ms）；强 CTA 中使用柔边倾斜扫光，并由宿主按钮传入 progress 同步边缘微形变。
           </Caption>
         </div>
       </Stage>
@@ -2601,7 +2821,7 @@ function ToastDemo() {
       <div
         style={{
           background: APP.accent,
-          color: APP.onAccent,
+          color: APP.onPrimary,
           borderRadius: 12,
           padding: "9px 14px",
           fontSize: 13,
@@ -2648,7 +2868,7 @@ function AsyncPageBodySection() {
             <div style={{ marginTop: 12, color: APP.textMuted, fontSize: 12 }}>CircularProgress</div>
           </div>
           <div style={{ flex: 1, minWidth: 120, textAlign: "center", padding: 16, background: APP.surface, borderRadius: 12 }}>
-            <Caption>error</Caption>
+            <Caption>rose400</Caption>
             <div style={{ marginTop: 8, color: APP.text, fontSize: 14, fontWeight: 600 }}>加载失败</div>
             <div style={{ marginTop: 8 }}>
               <DemoButton variant="accent" size="small">重试</DemoButton>
@@ -2668,7 +2888,7 @@ function GroupedListCardSection() {
   return (
     <SpecSection
         zh="分组列表卡"
-        note="AppGroupedListCard（L2）· 可选标题 + surfaceCard + 行间分割线"
+        note="AppGroupedListCard（L2）· 可选标题 + surface + 行间分割线"
         src="lib/shared/components/app_grouped_list_card.dart"
       >
       <Stage>

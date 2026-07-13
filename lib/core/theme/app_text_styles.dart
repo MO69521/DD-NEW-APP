@@ -253,8 +253,10 @@ abstract final class AppTextStyles {
     fontWeight: AppFontWeights.medium,
   );
 
-  static TextStyle get searchPlaceholderDark =>
-      bodyMedium.copyWith(color: AppColors.textOnDarkPlaceholder, height: AppLineHeights.none);
+  static TextStyle get searchPlaceholderDark => bodyMedium.copyWith(
+    color: AppColors.textOnDarkPlaceholder,
+    height: AppLineHeights.none,
+  );
 
   static TextStyle get navLabelActiveDark => captionSm.copyWith(
     fontWeight: AppFontWeights.medium,
@@ -290,11 +292,17 @@ abstract final class AppTextStyles {
 
   static TextStyle get welfareCtaText => buttonLabel14;
 
-  static TextStyle get welfareTaskProgressLabel =>
-      const TextStyle(fontSize: AppFontSizes.base, fontWeight: AppFontWeights.regular, height: AppLineHeights.none);
+  static TextStyle get welfareTaskProgressLabel => const TextStyle(
+    fontSize: AppFontSizes.base,
+    fontWeight: AppFontWeights.regular,
+    height: AppLineHeights.none,
+  );
 
-  static TextStyle get welfareTaskRewardChipLabel =>
-      const TextStyle(fontSize: AppFontSizes.md, fontWeight: AppFontWeights.medium, height: AppLineHeights.none);
+  static TextStyle get welfareTaskRewardChipLabel => const TextStyle(
+    fontSize: AppFontSizes.md,
+    fontWeight: AppFontWeights.medium,
+    height: AppLineHeights.none,
+  );
 
   static TextStyle get welfareCheckInDayLabel =>
       captionMd.copyWith(color: AppColors.textOnDark);
@@ -382,8 +390,10 @@ abstract final class AppTextStyles {
   );
 
   /// 能量充值支付弹窗协议区文案。
-  static TextStyle get rechargePurchaseDialogAgreement =>
-      captionMd.copyWith(color: AppColors.textOnDarkMuted, height: AppLineHeights.normal);
+  static TextStyle get rechargePurchaseDialogAgreement => captionMd.copyWith(
+    color: AppColors.textOnDarkMuted,
+    height: AppLineHeights.normal,
+  );
 
   /// 能量充值支付弹窗协议链接。
   static TextStyle get rechargePurchaseDialogAgreementLink =>
@@ -440,18 +450,12 @@ abstract final class AppTextStyles {
     fontWeight: AppFontWeights.medium,
     color: AppColors.textOnDark,
     height: AppLineHeights.none,
-    shadows: [
-      Shadow(color: Color(0x59000000), offset: Offset(0, 1), blurRadius: 1.5),
-    ],
   );
 
   static TextStyle get profileUserId => bodyMedium.copyWith(
     color: AppColors.textOnDark,
     fontWeight: AppFontWeights.regular,
     height: AppLineHeights.none,
-    shadows: const [
-      Shadow(color: Color(0x59000000), offset: Offset(0, 1), blurRadius: 1.5),
-    ],
   );
 
   static TextStyle get welfareVipBannerLabel => bodyMedium.copyWith(

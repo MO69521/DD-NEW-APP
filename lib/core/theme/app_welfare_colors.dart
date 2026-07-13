@@ -19,12 +19,12 @@ abstract final class AppWelfareColors {
   static const Color goldText = AppBrandColors.goldText;
   static const Color accentOrange = AppBrandColors.accentOrange;
 
-  /// 签到高亮面（今日卡体 / 里程碑气泡 / 奖励 chip）：主黄 8% 叠深底。
-  static const Color checkInHighlightSurface = Color(0x14FCE64D);
+  /// 签到高亮面（今日卡体 / 里程碑气泡 / 奖励 chip）：主强调 8% 叠深底。
+  static const Color checkInHighlightSurface = AppColors.segmentedSelectedFill;
   static const Color checkInHighlightBg = checkInHighlightSurface;
   static const Color checkInHighlightHeader = AppBrandColors.checkInYellow;
 
-  /// 今日卡描边（暖黄）。
+  /// 今日卡描边（主强调黄）。
   static const Color checkInHighlightBorder = AppBrandColors.checkInHighlightHeader;
   static const Color checkInTodayHeaderText = AppBrandColors.textOnLightPanel;
 
@@ -73,7 +73,7 @@ abstract final class AppWelfareColors {
   static const Color taskTimelineDot = Color(0xFF1C2129);
   static const Color taskTimelineDotReached = Color(0xFFFD7E2F);
   static const Color taskTimelineDotBorder = Color(0xFF131720);
-  static const Color taskVipBadgeBg = Color(0x26FCE64D);
+  static const Color taskVipBadgeBg = AppColors.segmentedSelectedFill;
   static const Color taskVipBadgeText = AppBrandColors.checkInYellow;
   static const Color taskPopularIconBg = AppBrandColors.accentOrange;
   static const Color taskPopularGradientStart = Color(0xFFFF5065);

@@ -33,9 +33,9 @@ class AppTopTabBar extends StatelessWidget {
     required this.onSelected,
     this.swipeProgress,
     this.tabGap = AppSpacing.md,
-    this.indicatorColor = AppColors.accentYellow,
-    this.activeColor = AppColors.textOnDark,
-    this.inactiveColor = AppColors.textOnDarkMuted,
+    this.indicatorColor = AppColors.primary,
+    this.activeColor = AppColors.textPrimary,
+    this.inactiveColor = AppColors.textSecondary,
     this.badgeColor = AppColors.badgeCount,
   });
 

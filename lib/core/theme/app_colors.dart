@@ -7,49 +7,68 @@ import 'app_palette.dart';
 /// 原色真源在 [AppPalette]；本层给原色起全局语义名，并做深浅主题翻转。
 abstract final class AppColors {
   // ── 中性色阶：白色透明度（深色态叠加语义名，指向 AppPalette）──
-  static const Color white00 = AppPalette.white00;
-  static const Color white04 = AppPalette.white04;
-  static const Color white05 = AppPalette.white05;
-  static const Color white06 = AppPalette.white06;
-  static const Color white08 = AppPalette.white08;
-  static const Color white20 = AppPalette.white20;
-  static const Color white24 = AppPalette.white24;
-  static const Color white30 = AppPalette.white30;
-  static const Color white50 = AppPalette.white50;
-  static const Color white60 = AppPalette.white60;
-  static const Color white85 = AppPalette.white85;
-  static const Color white100 = AppPalette.white100;
+  static const Color white00 = AppPalette.whiteAlpha00;
+  static const Color white04 = AppPalette.whiteAlpha04;
+  static const Color white05 = AppPalette.whiteAlpha05;
+  static const Color white06 = AppPalette.whiteAlpha06;
+  static const Color white08 = AppPalette.whiteAlpha08;
+  static const Color white20 = AppPalette.whiteAlpha20;
+  static const Color white24 = AppPalette.whiteAlpha24;
+  static const Color white30 = AppPalette.whiteAlpha30;
+  static const Color white50 = AppPalette.whiteAlpha50;
+  static const Color white60 = AppPalette.whiteAlpha60;
+  static const Color white85 = AppPalette.whiteAlpha85;
+  static const Color white100 = AppPalette.whiteAlpha100;
 
   // ── 中性色阶：黑色透明度（遮罩 / 蒙版语义名，指向 AppPalette）──
-  static const Color black00 = AppPalette.black00;
-  static const Color black04 = AppPalette.black04;
-  static const Color black08 = AppPalette.black08;
-  static const Color black30 = AppPalette.black30;
-  static const Color black40 = AppPalette.black40;
-  static const Color black60 = AppPalette.black60;
-  static const Color black80 = AppPalette.black80;
+  static const Color black00 = AppPalette.blackAlpha00;
+  static const Color black04 = AppPalette.blackAlpha04;
+  static const Color black08 = AppPalette.blackAlpha08;
+  static const Color black30 = AppPalette.blackAlpha30;
+  static const Color black40 = AppPalette.blackAlpha40;
+  static const Color black60 = AppPalette.blackAlpha60;
+  static const Color black80 = AppPalette.blackAlpha80;
 
-  // ── 浅色实验包（THEME=pink_light）中性翻转开关与源值 ──
-  // 深色态用白色叠加（whiteNN）做卡片/玻璃/分割，浅底会失效；浅色实验时
-  // 这些语义 token 翻到浅底相应值（深墨 ink + 浅粉面 + 黑色低透明叠加）。
-  // 默认深色 [_isLight]=false，所有翻转项走 else 分支，取值与改动前逐字节一致。
+  // ── 核心语义 token（跨组件复用职责）──
+  // 组件底色 / 边线 / 文本优先走实体中性色；透明阶仅保留给遮罩、蒙版、扫光等 effect。
   static const bool _isLight = AppBrandColors.isLightExperiment;
   static const Color _inkPrimary = AppBrandColors.textPrimary; // #1A1A2E
   static const Color _inkMuted = AppBrandColors.textSecondary; // #6B7280
   static const Color _inkPlaceholder = AppBrandColors.originalPriceMuted; // #9B9B9B
-  static const Color _lightCard = surface; // #FFFFFF
-  static const Color _lightBorder = AppPalette.pinkBorder; // 浅粉卡片描边
-  static const Color _lightDivider = divider; // #F3F4F6
+  static const Color _lightCard = AppPalette.neutralWhite; // #FFFFFF
+  static const Color _lightBorder = AppPalette.pink100; // 浅粉卡片描边
+  static const Color _lightDivider = AppPalette.neutralCool100; // #F3F4F6
+  static const Color _darkTextPrimary = AppPalette.neutralWhite;
+  static const Color _darkTextSecondary = AppPalette.neutralCool400;
+  static const Color _darkTextTertiary = AppPalette.neutralCool500;
+  static const Color _darkSurface = AppPalette.neutralCool900;
+  static const Color _darkSurfaceSoft = AppPalette.neutralCool920;
+  static const Color _darkBorder = AppPalette.neutralCool800;
+  static const Color _darkDivider = AppPalette.neutralCool820;
 
-  static const Color background = AppPalette.paperCool;
-  static const Color surface = AppPalette.white100;
+  static const Color primary = AppBrandColors.accent;
+  static const Color onPrimary = _isLight
+      ? AppPalette.neutralWhite
+      : AppPalette.neutralCool950;
+  static const Color primarySoft =
+      _isLight ? AppPalette.pink500Alpha04 : AppPalette.yellow500Alpha04;
 
-  static const Color textPrimary = AppPalette.ink;
-  static const Color textSecondary = AppPalette.inkMuted;
-  static const Color textOnPrimary = AppPalette.white100;
+  static const Color background = AppBrandColors.backgroundDark;
+  static const Color surface = _isLight ? _lightCard : _darkSurface;
+  static const Color surfaceSoft =
+      _isLight ? AppPalette.neutralCool50 : _darkSurfaceSoft;
+  static const Color surfaceElevated = AppBrandColors.dialogBackground;
 
-  static const Color border = AppPalette.hairline;
-  static const Color divider = AppPalette.line;
+  static const Color textPrimary = _isLight ? _inkPrimary : _darkTextPrimary;
+  static const Color textSecondary =
+      _isLight ? _inkMuted : _darkTextSecondary;
+  static const Color textTertiary =
+      _isLight ? _inkPlaceholder : _darkTextTertiary;
+  static const Color textOnPrimary = onPrimary;
+
+  static const Color borderSubtle = _isLight ? _lightBorder : _darkBorder;
+  static const Color border = AppPalette.neutralCool200;
+  static const Color divider = _isLight ? _lightDivider : _darkDivider;
 
   static const Color success = AppBrandColors.success;
   static const Color warning = AppBrandColors.warning;
@@ -62,7 +81,7 @@ abstract final class AppColors {
   static const Color energyCyan = AppBrandColors.energyCyan;
   static const Color growthBlue = AppBrandColors.growthBlue;
 
-  // Bookstore dark theme tokens（主题源色由 AppBrandColors 提供，支持换色系）
+  // ── 旧语义兼容别名 / 主题源色 ──
   static const Color backgroundDark = AppBrandColors.backgroundDark;
 
   // ── 背景 tint 阶：随基础背景色相变化（唯一真源在 AppBrandColors）──
@@ -86,8 +105,9 @@ abstract final class AppColors {
   static const Color topBarHeroScrimStart = black30;
   static const Color topBarHeroScrimEnd = black00;
 
-  static const Color surfaceGlass = _isLight ? _lightCard : white04;
-  static const Color surfaceCard = _isLight ? _lightCard : white04;
+  // ── 旧语义兼容别名：逐步迁移到 primary / surface / text* / border* / divider ──
+  static const Color surfaceGlass = surface;
+  static const Color surfaceCard = surface;
 
   /// 骨架屏底色 / 扫光高光（深色复用中性白阶：底 8%、高光 24%；浅色用黑低透明）。
   static const Color shimmerBase = _isLight ? black04 : white08;
@@ -95,12 +115,11 @@ abstract final class AppColors {
   static const Color surfaceMuted = AppBrandColors.surfaceMuted;
   static const Color auroraGlow = AppBrandColors.auroraGlow;
   static const Color auroraEdge = AppBrandColors.auroraEdge;
-  static const Color dialogBackground = AppBrandColors.dialogBackground;
-  static const Color accentYellow = AppBrandColors.accent;
+  static const Color dialogBackground = surfaceElevated;
+  static const Color accentYellow = primary;
 
   /// 主强调 4% 不透明度填充（开启 / 选中态大色块底色）：深色黄 4%，浅色实验粉 4%。
-  static const Color accentYellow04 =
-      _isLight ? AppPalette.brandPink04 : AppPalette.brandYellow04;
+  static const Color accentYellow04 = primarySoft;
 
   /// 礼花 / 庆祝动效多彩粒子配色（节日色，取品牌多色）。
   static const List<Color> confettiPalette = [
@@ -112,40 +131,40 @@ abstract final class AppColors {
     AppBrandColors.success, // 绿
   ];
 
-  static const Color textOnDark = _isLight ? _inkPrimary : white100;
-  static const Color textOnDarkMuted = _isLight ? _inkMuted : white50;
-  static const Color textOnDarkPlaceholder = _isLight ? _inkPlaceholder : white60;
-  static const Color sectionActionIcon = _isLight ? _inkPlaceholder : white60;
+  static const Color textOnDark = textPrimary;
+  static const Color textOnDarkMuted = textSecondary;
+  static const Color textOnDarkPlaceholder = textTertiary;
+  static const Color sectionActionIcon = textTertiary;
 
   /// 热门搜索置顶热词强调色（复用品牌橙）。
   static const Color searchHotAccent = AppBrandColors.accentOrange;
   static const Color iconMuted = AppBrandColors.iconMuted;
   static const Color iconMutedSecondary = AppBrandColors.iconMutedSecondary;
-  static const Color navActiveBackground = AppPalette.white100;
-  static const Color navActiveText = AppPalette.shellDark;
+  static const Color navActiveBackground = AppPalette.neutralWhite;
+  static const Color navActiveText = AppPalette.neutralCool950;
 
   /// accent 色面上的文字 / 图标：深色态深墨（黄底上）；浅色实验态白（粉底上可读）。
-  static const Color onAccent = _isLight ? white100 : navActiveText;
-  static const Color navBarBackground = _isLight ? black04 : white20;
-  static const Color topBarIconFrameBackground = white08;
-  static const Color topBarIconFrameBorder = white04;
-  static const Color borderGlass = _isLight ? _lightBorder : white04;
-  static const Color dividerOnDark = _isLight ? _lightDivider : white08;
+  static const Color onAccent = onPrimary;
+  static const Color navBarBackground = _isLight ? black04 : surface;
+  static const Color topBarIconFrameBackground = _darkSurfaceSoft;
+  static const Color topBarIconFrameBorder = _darkBorder;
+  static const Color borderGlass = borderSubtle;
+  static const Color dividerOnDark = divider;
   static const Color discussionFilterSelectedBackground =
       _isLight ? accentYellow : white100;
-  static const Color discussionFilterUnselectedText = white60;
-  static const Color discussionItemReplyBackground = white06;
-  static const Color discussionLikeIcon = white60;
-  static const Color bookDetailUpdateDate = white50;
-  static const Color bookDetailUpdateHighlight = AppPalette.bookUpdateHighlight;
+  static const Color discussionFilterUnselectedText = textOnDarkPlaceholder;
+  static const Color discussionItemReplyBackground = _darkSurfaceSoft;
+  static const Color discussionLikeIcon = textOnDarkPlaceholder;
+  static const Color bookDetailUpdateDate = textOnDarkMuted;
+  static const Color bookDetailUpdateHighlight = AppPalette.tan400;
   static const Color bookDetailUpdateDateHighlighted = bookDetailUpdateHighlight;
-  static const Color bookDetailUpdateLine = white20;
-  static const Color bookDetailUpdateDotBorder = white50;
+  static const Color bookDetailUpdateLine = dividerOnDark;
+  static const Color bookDetailUpdateDotBorder = textOnDarkMuted;
   static const Color bookDetailUpdateDotBorderHighlighted = bookDetailUpdateHighlight;
-  static const Color bookDetailUpdateDotInner = white100;
-  static const Color bookDetailUpdateText = white85;
+  static const Color bookDetailUpdateDotInner = textOnDark;
+  static const Color bookDetailUpdateText = textOnDark;
   static const Color bookDetailUpdateTextHighlighted = bookDetailUpdateHighlight;
-  static const Color bookDetailUpdateSectionBackground = white05;
+  static const Color bookDetailUpdateSectionBackground = _darkSurfaceSoft;
 
   // 书籍详情悬浮促销条 (Figma 1598:4319)
   static const Color bookDetailPromoGradientStart =
@@ -159,9 +178,9 @@ abstract final class AppColors {
   static const Color bookDetailPromoRewardText = AppBrandColors.promoRewardText;
   static const Color bookDetailPromoCloseIcon = white100;
 
-  static const Color guessLikeCardBackground = white05;
-  static const Color guessLikeTagBackground = white04;
-  static const Color guessLikeTagBorder = white04;
+  static const Color guessLikeCardBackground = _darkSurfaceSoft;
+  static const Color guessLikeTagBackground = _darkSurface;
+  static const Color guessLikeTagBorder = _darkBorder;
   static const Color gradientFadeStart = bgTint00;
   static const Color gradientFadeMid = bgTint90;
   static const Color gradientFadeEnd = backgroundDark;
@@ -172,8 +191,8 @@ abstract final class AppColors {
   static const Color rankingMutedBadgeScrim = black60;
 
   /// 按钮不可点击（禁用）态：4% 纯白填充 + 30% 白字，全局统一（覆盖各变体）。
-  static const Color buttonDisabledFill = white04;
-  static const Color buttonDisabledText = white30;
+  static const Color buttonDisabledFill = _darkSurface;
+  static const Color buttonDisabledText = _darkTextTertiary;
 
   /// 弹窗遮罩（80% 不透明黑，无背景模糊）。
   static const Color overlayScrim80 = black80;
@@ -185,10 +204,10 @@ abstract final class AppColors {
   static const Color bookshelfManageCoverOverlaySelected = black40;
 
   /// 书架管理态未选中选择框描边（60% 白）。
-  static const Color bookshelfSelectionMarkBorderUnselected = white20;
+  static const Color bookshelfSelectionMarkBorderUnselected = _darkDivider;
 
   /// 书架空态文案（Figma 1319:9953）。
-  static const Color bookshelfEmptyText = AppPalette.emptyGray;
+  static const Color bookshelfEmptyText = AppPalette.neutralGray700;
 
   /// 封面右上角状态角标「完结」半透明深底（Figma 1335:12223）。
   static const Color bookCoverTagCompletedScrim = black60;
@@ -200,7 +219,7 @@ abstract final class AppColors {
 
   // 全局分段控件 (Figma 1297:827)：深色黄 8%，浅色实验粉 8%（随主强调）。
   static const Color segmentedSelectedFill =
-      _isLight ? AppPalette.brandPink14 : AppPalette.brandYellow14;
+      _isLight ? AppPalette.pink500Alpha08 : AppPalette.yellow500Alpha08;
   // 选中态去描边（全局统一）：仅靠 fill + 文字色区分选中
   static const Color segmentedSelectedBorder = white00;
   static const Color segmentedSelectedText = accentYellow;
@@ -208,7 +227,7 @@ abstract final class AppColors {
 
   // 榜单详情页 (Figma 220:8376)
   static const Color rankingHeroTitle = AppBrandColors.rankingHeroTitle;
-  static const Color rankingHeroSubtitle = AppPalette.rankingSubtitle;
+  static const Color rankingHeroSubtitle = AppPalette.cream200Alpha90;
   static const Color rankingSegmentedSelectedText = AppBrandColors.textOnLightPanel;
   static const Color rankingCircleButtonBackground = black30;
   static const Color rankingDimensionIndicator = accentYellow;
@@ -233,7 +252,7 @@ abstract final class AppColors {
   static const Color searchCursor = accentYellow;
 
   /// 分类页次级筛选选中文字：比主分类弱一档，避免多行筛选同时抢焦点。
-  static const Color categoryFilterSecondarySelectedText = white85;
+  static const Color categoryFilterSecondarySelectedText = textOnDark;
 
   // 我的消息（互动消息列表）——语义均复用既有色值，未引入新色。
   /// Tab 未读数字红点底（复用 error 红）。
@@ -246,10 +265,10 @@ abstract final class AppColors {
   static const Color authorBadgeText = onAccent;
 
   /// 消息条目内书籍引用块底。
-  static const Color myMessagesBookRefBackground = white05;
+  static const Color myMessagesBookRefBackground = _darkSurfaceSoft;
 
   /// 消息条目内引用书评左侧竖条。
-  static const Color myMessagesQuoteBar = white20;
+  static const Color myMessagesQuoteBar = _darkDivider;
 
   /// 通知「NEW / 未读」标识（复用品牌橙）。
   static const Color myMessagesNoticeBadge = searchHotAccent;

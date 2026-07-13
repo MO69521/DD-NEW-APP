@@ -11,7 +11,7 @@ Future<T?> showAppBlurredDialog<T>({
   required BuildContext context,
   required WidgetBuilder builder,
   Color? barrierColor,
-  bool barrierDismissible = true,
+  bool barrierDismissible = false,
 }) {
   final scrim = barrierColor ?? AppColors.overlayScrim80;
 
@@ -24,7 +24,6 @@ Future<T?> showAppBlurredDialog<T>({
     pageBuilder: (dialogContext, animation, secondaryAnimation) {
       return _AppDialogOverlay(
         scrimColor: scrim,
-        dismissible: barrierDismissible,
         child: builder(dialogContext),
       );
     },
@@ -36,7 +35,7 @@ Future<T?> showAppScrimDialog<T>({
   required BuildContext context,
   required WidgetBuilder builder,
   Color? barrierColor,
-  bool barrierDismissible = true,
+  bool barrierDismissible = false,
 }) {
   return showAppBlurredDialog<T>(
     context: context,
@@ -47,15 +46,10 @@ Future<T?> showAppScrimDialog<T>({
 }
 
 class _AppDialogOverlay extends StatelessWidget {
-  const _AppDialogOverlay({
-    required this.scrimColor,
-    required this.child,
-    this.dismissible = true,
-  });
+  const _AppDialogOverlay({required this.scrimColor, required this.child});
 
   final Color scrimColor;
   final Widget child;
-  final bool dismissible;
 
   @override
   Widget build(BuildContext context) {
@@ -65,10 +59,7 @@ class _AppDialogOverlay extends StatelessWidget {
         fit: StackFit.expand,
         children: [
           GestureDetector(
-            // 关闭弹窗：弹窗经 showGeneralDialog 压入 Navigator，
-            // 统一用 Navigator.pop 关闭（比 go_router pop 更稳，回到原页面）。
-            // 非可关闭弹窗（如新手必填信息）点遮罩不关闭。
-            onTap: dismissible ? () => Navigator.of(context).pop() : null,
+            onTap: null,
             behavior: HitTestBehavior.opaque,
             child: ColoredBox(color: scrimColor),
           ),
