@@ -30,7 +30,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     env:
-      PREVIEW_MAIN: lib/global_preview_main.dart
+      PREVIEW_MAIN: lib/previews/global_preview_main.dart
       PREVIEW_URL: https://diandian-preview.vercel.app
 
     steps:

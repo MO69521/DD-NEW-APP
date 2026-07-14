@@ -1,9 +1,11 @@
 import '../../../../core/domain/entities/commerce_entities.dart';
 import '../../domain/entities/currency_wallet_page_content.dart';
+import 'currency_wallet_data_source.dart';
 
-class CurrencyWalletMockDataSource {
+class CurrencyWalletMockDataSource implements CurrencyWalletDataSource {
   const CurrencyWalletMockDataSource();
 
+  @override
   Future<CurrencyWalletPageContent> fetchPageContent(CurrencyType type) async {
     return switch (type) {
       CurrencyType.energy => _energyContent,

@@ -1,10 +1,12 @@
 import '../../domain/entities/settings_menu_item.dart';
 import '../../domain/entities/settings_page_content.dart';
+import 'settings_data_source.dart';
 
 /// Mock 数据源：Phase 1 静态数据，Phase 2 替换为 API datasource。
-class SettingsMockDataSource {
+class SettingsMockDataSource implements SettingsDataSource {
   const SettingsMockDataSource();
 
+  @override
   Future<SettingsPageContent> fetchPageContent() async {
     return const SettingsPageContent(
       appVersion: '3.9.6.7',

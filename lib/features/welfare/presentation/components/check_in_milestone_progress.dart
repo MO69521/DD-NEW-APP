@@ -77,8 +77,8 @@ class CheckInMilestoneProgress extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final lineTop = AppSizes.welfareCheckInProgressLineTop;
-    final lineHeight = AppSizes.welfareCheckInProgressLineHeight;
+    const lineTop = AppSizes.welfareCheckInProgressLineTop;
+    const lineHeight = AppSizes.welfareCheckInProgressLineHeight;
 
     return SizedBox(
       height: AppSizes.welfareCheckInMilestoneHeight,
@@ -102,8 +102,8 @@ class CheckInMilestoneProgress extends StatelessWidget {
                   milestoneCount: milestones.length,
                   segmentWidth: segmentWidth,
                 );
-                final dotSize = AppSizes.welfareCheckInProgressDotSize;
-                final dotTop =
+                const dotSize = AppSizes.welfareCheckInProgressDotSize;
+                const dotTop =
                     AppSizes.welfareCheckInProgressLineCenterY - dotSize / 2;
 
                 return Stack(

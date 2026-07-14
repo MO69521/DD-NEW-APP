@@ -65,7 +65,7 @@ class BookDetailRecommendationSection extends StatelessWidget {
         LayoutBuilder(
           builder: (context, constraints) {
             const crossAxisCount = 3;
-            final totalSpacing = AppSpacing.md * (crossAxisCount - 1);
+            const totalSpacing = AppSpacing.md * (crossAxisCount - 1);
             final itemWidth =
                 (constraints.maxWidth - totalSpacing) / crossAxisCount;
 

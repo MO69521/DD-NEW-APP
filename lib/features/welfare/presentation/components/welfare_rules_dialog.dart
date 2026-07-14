@@ -60,7 +60,7 @@ class WelfareRulesDialog extends StatelessWidget {
                       const SizedBox(height: AppSpacing.md),
                   ],
                   const SizedBox(height: AppSpacing.xl),
-                  AppButton(
+                  const AppButton(
                     label: '知道了',
                     variant: AppButtonVariant.accent,
                     isExpanded: true,
@@ -70,7 +70,7 @@ class WelfareRulesDialog extends StatelessWidget {
               ),
             ),
           ),
-          Positioned(
+          const Positioned(
             top: AppSpacing.lg,
             right: AppSpacing.lg,
             child: DialogCloseButton(onTap: AppRouter.pop),

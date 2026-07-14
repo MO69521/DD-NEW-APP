@@ -92,7 +92,7 @@ class BookDetailCharacterHelpDialog extends StatelessWidget {
                   ],
                 ),
               ),
-            Positioned(
+            const Positioned(
               top: AppSpacing.lg,
               right: AppSpacing.lg,
               child: DialogCloseButton(onTap: AppRouter.pop),

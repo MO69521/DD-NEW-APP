@@ -111,7 +111,7 @@ class _PartnerCharacterCardState extends State<PartnerCharacterCard> {
               ),
             ),
             if (_pressed)
-              Positioned.fill(
+              const Positioned.fill(
                 child: DecoratedBox(
                   decoration: BoxDecoration(
                     color: AppPartnerColors.cardPressedOverlay,
@@ -187,7 +187,7 @@ class _CoverSection extends StatelessWidget {
           child: Stack(
             fit: StackFit.expand,
             children: [
-              ColoredBox(color: AppPartnerColors.surfaceCard),
+              const ColoredBox(color: AppPartnerColors.surfaceCard),
               AppAssetImage(
                 assetPath: portraitAsset,
                 fit: BoxFit.cover,

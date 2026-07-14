@@ -30,8 +30,8 @@ class BookCardLargeRowSkeleton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(
+    return const Padding(
+      padding: EdgeInsets.symmetric(
         vertical: AppSizes.bookCardLargeRowVerticalPadding,
       ),
       child: Row(
@@ -42,11 +42,11 @@ class BookCardLargeRowSkeleton extends StatelessWidget {
             height: AppSizes.bookCardLargeCoverHeight,
             radius: AppRadius.bookCover,
           ),
-          const SizedBox(width: AppSizes.bookCardLargeCoverToTextGap),
+          SizedBox(width: AppSizes.bookCardLargeCoverToTextGap),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
+              children: [
                 _Bar(widthFactor: 0.75, height: AppSpacing.sm),
                 SizedBox(height: AppSpacing.sm),
                 _Bar(widthFactor: 0.4, height: AppSpacing.xs),
@@ -69,9 +69,9 @@ class BookCardVerticalSkeleton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return const Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: const [
+      children: [
         AspectRatio(
           aspectRatio: AppSizes.bookCoverGridAspectRatio,
           child: AppShimmerBox(radius: AppRadius.bookCover),

@@ -133,7 +133,7 @@ class _CheckInDayCard extends StatelessWidget {
                     children: [
                       _RewardContent(day: day, isToday: false, isClaimed: true),
                       // 对勾与图标区域（顶部）居中对齐：与奖励图标同尺寸、贴顶。
-                      SizedBox(
+                      const SizedBox(
                         height: AppSizes.welfareCheckInRewardIconSize,
                         child: Center(
                           child: AppAssetImage(

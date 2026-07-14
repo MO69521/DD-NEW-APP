@@ -121,7 +121,7 @@ class _ReviewButton extends StatelessWidget {
           color: AppPartnerColors.interactionReviewButtonBg,
           borderRadius: BorderRadius.circular(AppRadius.full),
         ),
-        child: Row(
+        child: const Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             Icon(
@@ -129,7 +129,7 @@ class _ReviewButton extends StatelessWidget {
               size: AppSizes.partnerInteractionSideActionIconSize,
               color: AppPartnerColors.textPrimary,
             ),
-            const SizedBox(width: AppSpacing.xxs),
+            SizedBox(width: AppSpacing.xxs),
             AppText('回顾', style: AppTextStyles.partnerInteractionReviewLabel),
           ],
         ),

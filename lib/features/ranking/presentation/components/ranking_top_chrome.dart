@@ -61,10 +61,10 @@ class _RankingTopTabs extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return const Row(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.end,
-      children: const [
+      children: [
         _RankingTopTab(
           label: '推荐',
           style: AppTextStyles.tabInactiveDark,

@@ -3,14 +3,16 @@ import '../../domain/entities/book_serialization_status.dart';
 import '../../domain/entities/search_recommendation_item.dart';
 import '../../domain/entities/search_result_item.dart';
 import '../../domain/entities/search_suggestion.dart';
+import 'search_data_source.dart';
 
-/// Mock 数据源：Phase 1 静态数据，Phase 2 替换为 API datasource。
-class SearchMockDataSource {
+/// Mock 数据源：Phase 1 静态数据；真实接口见 [SearchRemoteDataSource]。
+class SearchMockDataSource implements SearchDataSource {
   const SearchMockDataSource();
 
   /// 模拟网络延迟（毫秒）。
   static const int _mockLatencyMs = 320;
 
+  @override
   Future<List<SearchRecommendationItem>> fetchRecommendations() async {
     return [
       for (var i = 0; i < _recommendationTemplates.length; i++)
@@ -30,6 +32,7 @@ class SearchMockDataSource {
   }
 
   /// 输入实时联想（Phase 1：把关键词嵌入模板模拟命中；Phase 2 由后端返回）。
+  @override
   Future<List<SearchSuggestion>> fetchSuggestions(String query) async {
     final q = query.trim();
     if (q.isEmpty) return const [];
@@ -56,12 +59,15 @@ class SearchMockDataSource {
   ];
 
   /// 热门搜索关键词（首项置顶热词）。
+  @override
   Future<List<String>> fetchHotKeywords() async => List.of(_hotKeywords);
 
   /// 搜索历史（最近在前）。
+  @override
   Future<List<String>> fetchSearchHistory() async => List.of(_history);
 
   /// 记录关键词：去重后置顶，最多保留 [_historyMax] 条。
+  @override
   Future<List<String>> addSearchHistory(String keyword) async {
     final trimmed = keyword.trim();
     if (trimmed.isEmpty) return List.of(_history);
@@ -75,6 +81,7 @@ class SearchMockDataSource {
   }
 
   /// 清空历史。
+  @override
   Future<List<String>> clearSearchHistory() async {
     _history.clear();
     return const [];
@@ -104,6 +111,7 @@ class SearchMockDataSource {
     '万人迷',
   ];
 
+  @override
   Future<List<SearchResultItem>> search(String query) async {
     await Future<void>.delayed(const Duration(milliseconds: _mockLatencyMs));
 

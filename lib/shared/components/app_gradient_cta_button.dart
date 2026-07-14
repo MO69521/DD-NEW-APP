@@ -101,7 +101,7 @@ class _AppGradientCtaButtonState extends State<AppGradientCtaButton>
 
   @override
   Widget build(BuildContext context) {
-    final maxScale = AppSizes.membershipCtaBreathScaleMax;
+    const maxScale = AppSizes.membershipCtaBreathScaleMax;
     final ctaHeight = widget.height;
 
     return LayoutBuilder(

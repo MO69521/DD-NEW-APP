@@ -47,7 +47,7 @@ class _FreeClaimCard extends StatelessWidget {
                   Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      AppText('可获得', style: AppTextStyles.captionSm),
+                      const AppText('可获得', style: AppTextStyles.captionSm),
                       const SizedBox(height: AppSpacing.xxs),
                       AppText(
                         '${option.energyAmount}',

@@ -52,7 +52,7 @@ class _RankingTabsState extends State<RankingTabs> {
 
   @override
   Widget build(BuildContext context) {
-    final tabs = RankingTab.values;
+    const tabs = RankingTab.values;
 
     // 横向滚动到右缘时渐隐（不硬切）：ShaderMask 在右侧做透明渐变。
     return ShaderMask(

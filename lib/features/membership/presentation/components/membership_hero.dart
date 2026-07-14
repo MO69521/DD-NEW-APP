@@ -88,8 +88,8 @@ class _MembershipHeroState extends State<MembershipHero>
     if (_isAnimating || _viewportWidth == null) return;
 
     final velocity = details.primaryVelocity ?? 0;
-    final distanceThreshold = AppSizes.membershipHeroSwipeDistanceThreshold;
-    final velocityThreshold = AppSizes.membershipHeroSwipeVelocityThreshold;
+    const distanceThreshold = AppSizes.membershipHeroSwipeDistanceThreshold;
+    const velocityThreshold = AppSizes.membershipHeroSwipeVelocityThreshold;
 
     int? target;
     if (_dragDelta <= -distanceThreshold || velocity <= -velocityThreshold) {

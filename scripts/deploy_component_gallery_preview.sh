@@ -14,7 +14,7 @@ set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 PROJECT="${PREVIEW_PROJECT:-diandian-component-gallery}"
-MAIN="lib/component_gallery_preview_main.dart"
+MAIN="lib/previews/component_gallery_preview_main.dart"
 
 cd "$ROOT"
 

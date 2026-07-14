@@ -27,7 +27,7 @@ class PartnerAffectionBadge extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(
+          const Icon(
             Icons.favorite,
             size: AppSizes.partnerMessageAffectionIconSize,
             color: AppPartnerColors.textOnPrimary,

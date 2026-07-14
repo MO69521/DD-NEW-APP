@@ -25,7 +25,7 @@ class PartnerTopTabs extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final tabs = PartnerTopTab.values;
+    const tabs = PartnerTopTab.values;
 
     return AppTopTabBar(
       items: [

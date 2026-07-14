@@ -25,7 +25,7 @@ class PartnerCharacterGrid extends StatelessWidget {
 
     return LayoutBuilder(
       builder: (context, constraints) {
-        final totalSpacing = AppSpacing.sm * (_crossAxisCount - 1);
+        const totalSpacing = AppSpacing.sm * (_crossAxisCount - 1);
         final itemWidth =
             (constraints.maxWidth - totalSpacing) / _crossAxisCount;
 

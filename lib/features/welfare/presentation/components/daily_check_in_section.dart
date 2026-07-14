@@ -89,7 +89,7 @@ class _DailyCheckInSectionState extends State<DailyCheckInSection> {
                 AnimatedRotation(
                   turns: _expanded ? 0 : 0.5,
                   duration: AppDurations.normal,
-                  child: AppIcon(
+                  child: const AppIcon(
                     assetPath: 'assets/icons/chevron_down.svg',
                     width: AppSizes.welfareCheckInChevronSize,
                     height: AppSizes.welfareCheckInChevronSize,

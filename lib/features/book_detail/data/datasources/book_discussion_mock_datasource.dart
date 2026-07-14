@@ -1,9 +1,11 @@
 import '../../domain/entities/book_discussion_post.dart';
+import 'book_discussion_data_source.dart';
 
 /// 书评详情交互 mock 数据源。
-class BookDiscussionMockDataSource {
+class BookDiscussionMockDataSource implements BookDiscussionDataSource {
   const BookDiscussionMockDataSource();
 
+  @override
   Future<void> togglePostLike({
     required String postId,
     required bool like,
@@ -14,6 +16,7 @@ class BookDiscussionMockDataSource {
     }
   }
 
+  @override
   Future<void> toggleReplyLike({
     required String postId,
     required String replyId,
@@ -25,6 +28,7 @@ class BookDiscussionMockDataSource {
     }
   }
 
+  @override
   Future<BookDiscussionReply> submitReply({
     required String postId,
     required String content,

@@ -24,7 +24,7 @@ class PartnerInteractionBottomActions extends StatelessWidget {
           label: '倾诉',
           onTap: () {},
         ),
-        SizedBox(height: AppSizes.partnerInteractionBottomActionGap),
+        const SizedBox(height: AppSizes.partnerInteractionBottomActionGap),
         Stack(
           clipBehavior: Clip.none,
           children: [
@@ -47,7 +47,7 @@ class PartnerInteractionBottomActions extends StatelessWidget {
                   color: AppPartnerColors.interactionAiPlotBadgeBg,
                   borderRadius: BorderRadius.circular(AppRadius.full),
                 ),
-                child: AppText(
+                child: const AppText(
                   'AI剧情',
                   style: AppTextStyles.partnerInteractionAiPlotBadge,
                 ),

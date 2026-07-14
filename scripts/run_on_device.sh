@@ -4,7 +4,7 @@
 # 用法：
 #   bash scripts/run_on_device.sh
 #   bash scripts/run_on_device.sh --wait          # 等待手机连接（最多 3 分钟）
-#   MAIN=lib/global_preview_main.dart bash scripts/run_on_device.sh
+#   MAIN=lib/previews/global_preview_main.dart bash scripts/run_on_device.sh
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"

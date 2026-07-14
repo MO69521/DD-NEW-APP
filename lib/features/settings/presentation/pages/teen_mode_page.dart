@@ -39,11 +39,11 @@ class TeenModePage extends StatelessWidget {
                 color: AppColors.surfaceCard,
                 borderRadius: BorderRadius.circular(AppRadius.lg),
               ),
-              child: Padding(
-                padding: const EdgeInsets.all(AppSpacing.lg),
+              child: const Padding(
+                padding: EdgeInsets.all(AppSpacing.lg),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
+                  children: [
                     _TeenModeParagraph(
                       index: '1.',
                       text: '亲爱的用户，如果你开启青少年模式，需先设置独立密码，若忘记密码，可以通过申诉重置密码。',

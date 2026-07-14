@@ -1,11 +1,13 @@
 import '../../../../core/domain/entities/book.dart';
 import '../../domain/entities/bookshelf_page_content.dart';
 import '../../domain/entities/bookshelf_tab.dart';
+import 'bookshelf_data_source.dart';
 
-/// Mock 数据源：Phase 1 静态数据，Phase 2 替换为 API datasource。
-class BookshelfMockDataSource {
+/// Mock 数据源：Phase 1 静态数据；真实接口实现请照 bookstore/search 范例补 remote datasource。
+class BookshelfMockDataSource implements BookshelfDataSource {
   const BookshelfMockDataSource();
 
+  @override
   Future<BookshelfPageContent> fetchPageContent() async {
     return const BookshelfPageContent(
       todayReadingMinutes: 23,

@@ -41,7 +41,7 @@ class MyMessageItem extends StatelessWidget {
                   timeLabel: message.timeLabel),
               const SizedBox(height: AppSpacing.xs),
               if (message.isDeleted)
-                AppText(
+                const AppText(
                   '该评论已被删除',
                   style: AppTextStyles.bookDetailDiscussionMeta,
                 )

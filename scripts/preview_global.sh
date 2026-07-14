@@ -3,7 +3,7 @@ set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 PORT="${PREVIEW_PORT:-8765}"
-MAIN="${PREVIEW_MAIN:-lib/global_preview_main.dart}"
+MAIN="${PREVIEW_MAIN:-lib/previews/global_preview_main.dart}"
 TUNNEL="${PREVIEW_TUNNEL:-localhost.run}"
 
 cd "$ROOT"

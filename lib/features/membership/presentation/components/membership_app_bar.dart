@@ -51,7 +51,7 @@ class MembershipAppBar extends StatelessWidget {
                   ),
                 ),
               ),
-              Expanded(
+              const Expanded(
                 child: Center(
                   child: AppText(
                     'VIP会员',
@@ -63,7 +63,7 @@ class MembershipAppBar extends StatelessWidget {
               ),
               AppPressable(
                 onTap: onRecordsTap,
-                child: AppText(
+                child: const AppText(
                   '充值记录',
                   style: AppTextStyles.membershipAppBarAction,
                 ),

@@ -1,12 +1,12 @@
 import '../../domain/entities/welfare_page_content.dart';
 import '../../domain/repositories/welfare_repository.dart';
-import '../datasources/welfare_mock_datasource.dart';
+import '../datasources/welfare_data_source.dart';
 
 /// data 层仓储实现，仅做数据获取与映射。
 class WelfareRepositoryImpl implements WelfareRepository {
   const WelfareRepositoryImpl(this._dataSource);
 
-  final WelfareMockDataSource _dataSource;
+  final WelfareDataSource _dataSource;
 
   @override
   Future<WelfarePageContent> fetchPageContent() =>

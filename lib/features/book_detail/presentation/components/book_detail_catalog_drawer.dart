@@ -151,9 +151,9 @@ class _CatalogHeader extends StatelessWidget {
               ),
             ),
             const SizedBox(width: AppSpacing.xs),
-            AppPressable(
+            const AppPressable(
               onTap: AppRouter.pop,
-              child: const AppIcon(
+              child: AppIcon(
                 assetPath: 'assets/icons/arrow_right.svg',
                 width: AppSizes.bookDetailCatalogArrowSize,
                 height: AppSizes.bookDetailCatalogArrowSize,
@@ -195,7 +195,7 @@ class _CatalogChapterRow extends StatelessWidget {
             ),
             if (chapter.isLocked) ...[
               const SizedBox(width: AppSpacing.sm),
-              Icon(
+              const Icon(
                 Icons.lock_outline,
                 size: AppSizes.bookDetailCatalogLockIconSize,
                 color: AppColors.iconMutedSecondary,

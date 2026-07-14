@@ -23,11 +23,11 @@ class CheckInMilestoneBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final lineCenterY = AppSizes.welfareCheckInProgressLineCenterY;
-    final dotSize = AppSizes.welfareCheckInProgressDotSize;
-    final iconContainerTop =
+    const lineCenterY = AppSizes.welfareCheckInProgressLineCenterY;
+    const dotSize = AppSizes.welfareCheckInProgressDotSize;
+    const iconContainerTop =
         lineCenterY - AppSizes.welfareCheckInMilestoneDotTop - dotSize / 2;
-    final labelTop =
+    const labelTop =
         iconContainerTop +
         AppSizes.welfareCheckInMilestoneBubbleAreaHeight +
         AppSpacing.xs;

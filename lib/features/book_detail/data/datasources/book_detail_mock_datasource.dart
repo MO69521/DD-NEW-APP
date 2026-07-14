@@ -5,12 +5,14 @@ import '../../domain/entities/book_detail.dart';
 import '../../domain/entities/book_discussion_filter.dart';
 import '../../domain/entities/book_discussion_post.dart';
 import '../../domain/entities/book_update_entry.dart';
+import 'book_detail_data_source.dart';
 
 /// Mock 数据源：Phase 1 静态数据，Phase 2 替换为 API datasource。
-class BookDetailMockDataSource {
+class BookDetailMockDataSource implements BookDetailDataSource {
   const BookDetailMockDataSource();
 
   /// TODO(real-data): 按 [bookId] 请求接口；当前返回设计稿示例数据。
+  @override
   Future<BookDetail> fetchDetail(String bookId) async {
     return BookDetail(
       id: bookId,

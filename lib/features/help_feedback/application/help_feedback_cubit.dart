@@ -3,17 +3,22 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/services/image_picker_service.dart';
 import '../../../core/services/service_locator.dart';
 import '../data/datasources/help_feedback_mock_datasource.dart';
+import '../data/repositories/help_feedback_repository_impl.dart';
 import '../domain/entities/help_feedback_tab.dart';
+import '../domain/repositories/help_feedback_repository.dart';
 import 'help_feedback_state.dart';
 
 class HelpFeedbackCubit extends Cubit<HelpFeedbackState> {
   HelpFeedbackCubit({
-    this.dataSource = const HelpFeedbackMockDataSource(),
+    HelpFeedbackRepository? repository,
     ImagePickerService? imagePicker,
-  }) : _imagePicker = imagePicker ?? ServiceLocator.imagePicker,
+  }) : _repository =
+           repository ??
+           const HelpFeedbackRepositoryImpl(HelpFeedbackMockDataSource()),
+       _imagePicker = imagePicker ?? ServiceLocator.imagePicker,
        super(const HelpFeedbackState());
 
-  final HelpFeedbackMockDataSource dataSource;
+  final HelpFeedbackRepository _repository;
   final ImagePickerService _imagePicker;
 
   Future<void> load() async {
@@ -26,7 +31,7 @@ class HelpFeedbackCubit extends Cubit<HelpFeedbackState> {
     );
 
     try {
-      final content = await dataSource.fetchPageContent();
+      final content = await _repository.fetchPageContent();
       emit(
         state.copyWith(
           phase: HelpFeedbackPhase.loaded,
@@ -111,14 +116,26 @@ class HelpFeedbackCubit extends Cubit<HelpFeedbackState> {
     );
   }
 
-  void submitFeedback() {
+  Future<void> submitFeedback() async {
     if (state.description.trim().isEmpty) {
       emit(state.copyWith(errorMessage: '请先填写问题描述'));
       return;
     }
 
-    emit(
-      state.copyWith(submitMessage: '反馈已记录，我们会尽快处理', clearErrorMessage: true),
-    );
+    try {
+      await _repository.submitFeedback(
+        issueTypeId: state.selectedIssueTypeId,
+        description: state.description,
+        bookName: state.bookName,
+        phone: state.phone,
+        qq: state.qq,
+        screenshotPaths: state.screenshotPaths,
+      );
+      emit(
+        state.copyWith(submitMessage: '反馈已记录，我们会尽快处理', clearErrorMessage: true),
+      );
+    } catch (error) {
+      emit(state.copyWith(errorMessage: '提交失败，请稍后重试'));
+    }
   }
 }

@@ -234,7 +234,7 @@ class _RankingBookSliverList extends StatelessWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(
+                const SizedBox(
                   width: AppSizes.rankingDimensionRailWidth + AppSpacing.md,
                 ),
                 Expanded(

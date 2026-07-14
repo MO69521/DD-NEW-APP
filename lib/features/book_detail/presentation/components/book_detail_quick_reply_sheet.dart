@@ -86,7 +86,7 @@ class _QuickReplySheetContentState extends State<_QuickReplySheetContent> {
               controller: _controller,
               autofocus: true,
               style: AppTextStyles.bookDetailDiscussionBody,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 border: InputBorder.none,
                 hintText: '说点什么...',
                 hintStyle: AppTextStyles.bookDetailDiscussionMeta,

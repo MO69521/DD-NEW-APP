@@ -29,7 +29,7 @@ class RankingSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final tabs = RankingTab.values;
+    const tabs = RankingTab.values;
 
     return Container(
       padding: const EdgeInsets.symmetric(

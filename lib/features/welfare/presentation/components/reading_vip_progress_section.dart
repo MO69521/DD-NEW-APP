@@ -123,7 +123,7 @@ class _ReadingProgressTrack extends StatelessWidget {
         final progress = task.timelineProgress.clamp(0.0, 1.0);
         const cellHeight = AppSizes.welfareTaskTimelineProgressHeight;
         const lineHeight = AppSizes.welfareTaskTimelineLineHeight;
-        final lineTop = _badgeAreaHeight + cellHeight / 2 - lineHeight / 2;
+        const lineTop = _badgeAreaHeight + cellHeight / 2 - lineHeight / 2;
 
         return Stack(
           clipBehavior: Clip.none,

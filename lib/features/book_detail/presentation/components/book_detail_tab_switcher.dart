@@ -22,7 +22,7 @@ class BookDetailTabSwitcher extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final tabs = BookDetailTab.values;
+    const tabs = BookDetailTab.values;
     final discussionIndex = tabs.indexOf(BookDetailTab.discussion);
 
     return LayoutBuilder(

@@ -1,9 +1,11 @@
 import '../../domain/entities/currency_wallet_page_content.dart';
 import '../../domain/entities/energy_records_page_content.dart';
+import 'energy_records_data_source.dart';
 
-class EnergyRecordsMockDataSource {
+class EnergyRecordsMockDataSource implements EnergyRecordsDataSource {
   const EnergyRecordsMockDataSource();
 
+  @override
   Future<EnergyRecordsPageContent> fetchPageContent() async {
     return const EnergyRecordsPageContent(
       otherRecords: [

@@ -6,39 +6,10 @@ import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/theme/app_welfare_colors.dart';
-import '../../../../shared/widgets/app_asset_image.dart';
 import '../../../../shared/widgets/app_text.dart';
 import '../../domain/entities/welfare_models.dart';
-import '../mappers/welfare_asset_mapper.dart';
-import 'welfare_reward_bubble.dart';
-
-/// 时间轴奖励节点三态视觉。
-typedef _NodeStyle = ({Color background, Color? border, Color text});
-
-_NodeStyle _nodeStyle(WelfareTaskTimelineNode node) {
-  if (node.isActive) {
-    return (
-      background: AppWelfareColors.taskTimelineBubbleActive,
-      border: AppWelfareColors.checkInCumulativeBorder,
-      text: AppWelfareColors.checkInCtaTextDark,
-    );
-  }
-  // 已领取 / 还不能领取：统一纯白 4% 气泡；已领取整体降到 30% 由外层处理。
-  return (
-    background: AppColors.surfaceCard,
-    border: null,
-    text: AppColors.textOnDark,
-  );
-}
-
-/// 时间轴底部文案颜色：可领取白色（按钮内）、已领取白色（外层 30% 变淡）、
-/// 未达成节点 60% 白。
-Color _footerColor(WelfareTaskTimelineNode node) {
-  if (node.isActive || node.isReached) {
-    return AppColors.textOnDark;
-  }
-  return AppWelfareColors.taskProgressLabel;
-}
+import 'welfare_task_timeline_reward_row.dart';
+import 'welfare_task_timeline_styles.dart';
 
 /// L3 组件 — 福利任务横向进度时间轴。
 class WelfareTaskTimeline extends StatelessWidget {
@@ -69,7 +40,7 @@ class WelfareTaskTimeline extends StatelessWidget {
         width: _totalWidth,
         child: Column(
           children: [
-            _TimelineRewardRow(nodes: nodes),
+            WelfareTimelineRewardRow(nodes: nodes),
             _TimelineProgressBar(
               nodes: nodes,
               progress: progress,
@@ -79,104 +50,6 @@ class WelfareTaskTimeline extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-}
-
-class _TimelineRewardRow extends StatelessWidget {
-  const _TimelineRewardRow({required this.nodes});
-
-  final List<WelfareTaskTimelineNode> nodes;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: [
-        for (var index = 0; index < nodes.length; index++) ...[
-          if (index > 0) const SizedBox(width: AppSpacing.xs),
-          SizedBox(
-            width: AppSizes.welfareTaskTimelineNodeWidth,
-            child: Align(
-              alignment: Alignment.bottomCenter,
-              child: _TimelineRewardPill(node: nodes[index]),
-            ),
-          ),
-        ],
-      ],
-    );
-  }
-}
-
-class _TimelineRewardPill extends StatelessWidget {
-  const _TimelineRewardPill({required this.node});
-
-  final WelfareTaskTimelineNode node;
-
-  @override
-  Widget build(BuildContext context) {
-    if (node.rewards.isEmpty) {
-      return const SizedBox.shrink();
-    }
-
-    final style = _nodeStyle(node);
-
-    final bubble = WelfareRewardBubble(
-      background: style.background,
-      border: style.border,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          for (var index = 0; index < node.rewards.length; index++) ...[
-            if (index > 0) const SizedBox(height: AppSpacing.xxs),
-            _TimelineRewardRowItem(
-              reward: node.rewards[index],
-              textColor: style.text,
-            ),
-          ],
-        ],
-      ),
-    );
-
-    // 已领取：整枚气泡降至 30% 不透明度。
-    if (node.isReached) {
-      return Opacity(
-        opacity: AppSizes.welfareCheckInClaimedRewardOpacity,
-        child: bubble,
-      );
-    }
-    return bubble;
-  }
-}
-
-class _TimelineRewardRowItem extends StatelessWidget {
-  const _TimelineRewardRowItem({required this.reward, required this.textColor});
-
-  final WelfareTaskReward reward;
-  final Color textColor;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        AppAssetImage(
-          assetPath: WelfareAssetMapper.taskRewardIconAsset(
-            reward.type,
-            isMuted: reward.isMuted,
-          ),
-          width: AppSizes.welfareTaskRewardIconSize,
-          height: AppSizes.welfareTaskRewardIconSize,
-        ),
-        const SizedBox(width: AppSpacing.xxsHalf),
-        AppText(
-          reward.label,
-          style: AppTextStyles.welfareTaskRewardChipLabel.copyWith(
-            color: textColor,
-          ),
-        ),
-      ],
     );
   }
 }
@@ -204,11 +77,11 @@ class _TimelineProgressBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final safeProgress = progress.clamp(0.0, 1.0);
-    final lineTop =
+    const lineTop =
         (AppSizes.welfareTaskTimelineProgressHeight -
             AppSizes.welfareTaskTimelineLineHeight) /
         2;
-    final dotTop =
+    const dotTop =
         (AppSizes.welfareTaskTimelineProgressHeight -
             AppSizes.welfareTaskTimelineDotSize) /
         2;
@@ -309,7 +182,7 @@ class _TimelineFooterCell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = _footerColor(node);
+    final color = welfareTimelineFooterColor(node);
 
     final content = Row(
       mainAxisAlignment: MainAxisAlignment.center,

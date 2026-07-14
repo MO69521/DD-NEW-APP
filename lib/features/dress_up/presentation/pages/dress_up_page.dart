@@ -74,7 +74,7 @@ class _DressUpViewState extends State<_DressUpView> {
     final state = widget.state;
     final cubit = context.read<DressUpCubit>();
     final statusBarHeight = AppLayout.statusBarHeight(context);
-    final tabs = DressUpTab.values;
+    const tabs = DressUpTab.values;
     final content = state.content!;
     final selectedTab = state.selectedTab;
 

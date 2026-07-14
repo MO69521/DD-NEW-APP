@@ -2,9 +2,10 @@ import '../../domain/entities/my_message.dart';
 import '../../domain/entities/my_message_tab.dart';
 import '../../domain/entities/my_messages_page_content.dart';
 import '../../domain/entities/my_notification.dart';
+import 'my_messages_data_source.dart';
 
 /// 我的消息 mock 数据源。
-class MyMessagesMockDataSource {
+class MyMessagesMockDataSource implements MyMessagesDataSource {
   const MyMessagesMockDataSource();
 
   static const String _quotedReview = '他们朝我扔泥巴，泥巴干了我咋他家玻璃…';
@@ -58,6 +59,7 @@ class MyMessagesMockDataSource {
     ),
   ];
 
+  @override
   Future<MyMessagesPageContent> fetchPageContent() async {
     await Future<void>.delayed(const Duration(milliseconds: 240));
 

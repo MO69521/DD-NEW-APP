@@ -27,7 +27,7 @@ class BookshelfPageTabs extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final tabs = BookshelfTab.values;
+    const tabs = BookshelfTab.values;
 
     return ElasticTabRow(
       selectedIndex: tabs.indexOf(selected),

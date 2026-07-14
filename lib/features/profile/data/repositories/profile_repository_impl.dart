@@ -1,11 +1,11 @@
 import '../../domain/entities/profile_page_content.dart';
 import '../../domain/repositories/profile_repository.dart';
-import '../datasources/profile_mock_datasource.dart';
+import '../datasources/profile_data_source.dart';
 
 class ProfileRepositoryImpl implements ProfileRepository {
   const ProfileRepositoryImpl(this._dataSource);
 
-  final ProfileMockDataSource _dataSource;
+  final ProfileDataSource _dataSource;
 
   @override
   Future<ProfilePageContent> fetchPageContent() => _dataSource.fetchPageContent();

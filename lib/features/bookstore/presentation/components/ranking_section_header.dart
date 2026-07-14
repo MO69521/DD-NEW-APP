@@ -57,7 +57,7 @@ class RankingSectionHeader extends StatelessWidget {
                     color: AppColors.textOnDark,
                   ),
                 ),
-                AppIcon(
+                const AppIcon(
                   assetPath: 'assets/icons/arrow_right.svg',
                   width: AppSizes.rankingFullListIconSize,
                   height: AppSizes.rankingFullListIconSize,

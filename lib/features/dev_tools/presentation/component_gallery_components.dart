@@ -88,8 +88,8 @@ class _ComponentGallery extends StatelessWidget {
           ],
         ),
         const SizedBox(height: AppSpacing.sm),
-        Row(
-          children: const [
+        const Row(
+          children: [
             AppButton(
               label: '加载中',
               variant: AppButtonVariant.accent,
@@ -121,7 +121,7 @@ class _ComponentGallery extends StatelessWidget {
   }
 
   Widget _buildNavigation() {
-    final tabs = const [
+    const tabs = [
       AppTopTabItem(label: '推荐'),
       AppTopTabItem(label: '消息', badgeCount: 3),
       AppTopTabItem(label: '关注'),
@@ -213,9 +213,9 @@ class _ComponentGallery extends StatelessWidget {
   }
 
   Widget _buildBookCards() {
-    return Row(
+    return const Row(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: const [
+      children: [
         Expanded(
           child: BookGridCard(
             title: '星河入梦时',

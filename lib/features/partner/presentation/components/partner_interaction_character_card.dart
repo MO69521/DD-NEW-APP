@@ -51,7 +51,7 @@ class PartnerInteractionCharacterCard extends StatelessWidget {
                 Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(
+                    const Icon(
                       Icons.favorite,
                       size: AppSizes.partnerMessageAffectionIconSize,
                       color: AppPartnerColors.primary,
@@ -66,12 +66,12 @@ class PartnerInteractionCharacterCard extends StatelessWidget {
               ],
             ),
             const SizedBox(width: AppSpacing.xs),
-            Icon(
+            const Icon(
               Icons.help_outline,
               size: AppSizes.partnerInteractionSideActionIconSize,
               color: AppPartnerColors.textSecondary,
             ),
-            AppIcon(
+            const AppIcon(
               assetPath: 'assets/icons/arrow_right.svg',
               width: AppSizes.partnerInteractionSideActionIconSize,
               height: AppSizes.partnerInteractionSideActionIconSize,

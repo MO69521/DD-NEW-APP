@@ -2,14 +2,16 @@ import '../../../../core/domain/entities/book.dart';
 import '../../domain/entities/ranking_channel.dart';
 import '../../domain/entities/ranking_dimension.dart';
 import '../../domain/entities/ranking_page_content.dart';
+import 'ranking_data_source.dart';
 
-/// Mock 数据源：Phase 1 静态数据，Phase 2 替换为 API datasource。
-class RankingMockDataSource {
+/// Mock 数据源：Phase 1 静态数据；真实接口实现请照 bookstore/search 范例补 remote datasource。
+class RankingMockDataSource implements RankingDataSource {
   const RankingMockDataSource();
 
   static const String _brandTitle = '点点穿书';
   static const int _pageSize = 10;
 
+  @override
   Future<RankingPageContent> fetchPageContent() async {
     return RankingPageContent(
       brandTitle: _brandTitle,
@@ -21,6 +23,7 @@ class RankingMockDataSource {
   }
 
   /// 加载更多书籍（分页）。
+  @override
   Future<List<Book>> fetchMoreBooks({
     required RankingDimension dimension,
     required RankingChannel channel,

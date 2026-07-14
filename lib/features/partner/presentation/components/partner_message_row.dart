@@ -57,7 +57,7 @@ class _PartnerMessageRowState extends State<PartnerMessageRow> {
                 avatarAsset: conversation.avatarAsset,
                 unreadCount: conversation.unreadCount,
               ),
-              SizedBox(width: AppSizes.partnerMessageAvatarToContentGap),
+              const SizedBox(width: AppSizes.partnerMessageAvatarToContentGap),
               Expanded(
                 child: SizedBox(
                   height: AppSizes.partnerMessageAvatarSize,
@@ -111,7 +111,7 @@ class _PartnerMessageRowState extends State<PartnerMessageRow> {
                                 ),
                               ],
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: AppSizes.partnerMessageNameToPreviewGap,
                             ),
                             AppText(

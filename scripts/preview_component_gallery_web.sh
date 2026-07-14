@@ -12,6 +12,6 @@ ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 
 cd "$ROOT"
 
-PREVIEW_MAIN="lib/component_gallery_preview_main.dart" \
+PREVIEW_MAIN="lib/previews/component_gallery_preview_main.dart" \
 PREVIEW_PORT="${PREVIEW_PORT:-8766}" \
 bash scripts/preview_global.sh

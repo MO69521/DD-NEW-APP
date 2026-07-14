@@ -28,7 +28,7 @@ class RankingBookGrid extends StatelessWidget {
   final String? heroNamespace;
 
   static double get contentHeight {
-    final coverHeight =
+    const coverHeight =
         AppSizes.rankingRowCoverWidth / AppSizes.bookCoverRankingAspectRatio;
     return coverHeight * 3 + AppSpacing.md * 2;
   }
@@ -40,16 +40,16 @@ class RankingBookGrid extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, constraints) {
         const columns = 2;
-        final coverWidth = AppSizes.rankingRowCoverWidth;
+        const coverWidth = AppSizes.rankingRowCoverWidth;
         // 保持封面纵横比，放大宽度时自动同步高度。
-        final coverHeight = coverWidth / AppSizes.bookCoverRankingAspectRatio;
-        final itemHeight = coverHeight;
+        const coverHeight = coverWidth / AppSizes.bookCoverRankingAspectRatio;
+        const itemHeight = coverHeight;
 
         return GridView.builder(
           padding: EdgeInsets.zero,
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: columns,
             mainAxisSpacing: AppSpacing.md,
             crossAxisSpacing: AppSpacing.md,

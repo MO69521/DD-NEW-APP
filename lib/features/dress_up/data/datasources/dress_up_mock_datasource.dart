@@ -1,15 +1,17 @@
 import '../../domain/entities/dress_up_item.dart';
 import '../../domain/entities/dress_up_page_content.dart';
 import '../../domain/entities/dress_up_tab.dart';
+import 'dress_up_data_source.dart';
 
 /// Mock 数据源：Phase 1 静态数据，Phase 2 替换为 API datasource。
-class DressUpMockDataSource {
+class DressUpMockDataSource implements DressUpDataSource {
   const DressUpMockDataSource();
 
   /// 头部背景素材图（与「我的」页 Hero 保持一致）。
   static const String _heroBackgroundAsset =
       'assets/images/profile/hero_background_default.png';
 
+  @override
   Future<DressUpPageContent> fetchPageContent() async {
     return const DressUpPageContent(
       userId: '1013971429',

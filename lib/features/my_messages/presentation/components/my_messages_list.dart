@@ -24,7 +24,7 @@ class MyMessagesList extends StatelessWidget {
         AppSpacing.xl + bottomInset,
       ),
       itemCount: messages.length,
-      separatorBuilder: (_, __) => const Padding(
+      separatorBuilder: (_, _) => const Padding(
         padding: EdgeInsets.symmetric(vertical: AppSpacing.md),
         child: Divider(
           height: AppSizes.hairline,

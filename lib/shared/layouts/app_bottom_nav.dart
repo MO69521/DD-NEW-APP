@@ -201,7 +201,7 @@ class _NavTabItemState extends State<_NavTabItem> {
                   isSelected: widget.isSelected,
                   tapEpoch: _tapEpoch,
                 ),
-                SizedBox(height: AppSizes.bottomNavIconLabelGap),
+                const SizedBox(height: AppSizes.bottomNavIconLabelGap),
                 AppText(
                   widget.item.label,
                   style: widget.isSelected

@@ -4,13 +4,15 @@ import '../../domain/entities/partner_conversation.dart';
 import '../../domain/entities/partner_interaction_scene.dart';
 import '../../domain/entities/partner_page_content.dart';
 import '../../domain/entities/partner_top_tab.dart';
+import 'partner_data_source.dart';
 
 /// Mock 数据源：Phase 1 静态数据，Phase 2 替换为 API datasource。
-class PartnerMockDataSource {
+class PartnerMockDataSource implements PartnerDataSource {
   const PartnerMockDataSource();
 
   static const int _mockLatencyMs = 200;
 
+  @override
   Future<PartnerPageContent> fetchPageContent() async {
     await Future<void>.delayed(const Duration(milliseconds: _mockLatencyMs));
 

@@ -22,7 +22,7 @@ class BookshelfBookGrid extends StatelessWidget {
   static const int crossAxisCount = 3;
 
   static double itemHeightForWidth(double maxWidth) {
-    final totalSpacing = AppSpacing.md * (crossAxisCount - 1);
+    const totalSpacing = AppSpacing.md * (crossAxisCount - 1);
     final itemWidth = (maxWidth - totalSpacing) / crossAxisCount;
     final coverHeight = itemWidth / AppSizes.bookCoverGridAspectRatio;
     return coverHeight +

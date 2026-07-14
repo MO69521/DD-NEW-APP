@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
@@ -67,7 +68,9 @@ class _AuroraBackgroundState extends State<AuroraBackground>
       _shader = program.fragmentShader();
       _ticker = createTicker((elapsed) {
         _time.value = elapsed.inMicroseconds / Duration.microsecondsPerSecond;
-      })..start();
+      });
+      // TickerFuture 仅在 ticker 被 dispose 时完成，属于「有意不 await」。
+      unawaited(_ticker!.start());
       if (mounted) setState(() => _ready = true);
     } catch (_) {
       if (mounted) setState(() => _ready = false);

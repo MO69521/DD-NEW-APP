@@ -4,6 +4,15 @@ import 'auth_user.dart';
 
 /// 登录会话，对齐后端登录响应中的 token 与用户资料。
 class AuthSession extends Equatable {
+
+  factory AuthSession.fromJson(Map<String, Object?> json) {
+    return AuthSession(
+      accessToken: json['accessToken'] as String,
+      refreshToken: json['refreshToken'] as String,
+      expiresAt: DateTime.parse(json['expiresAt'] as String),
+      user: AuthUser.fromJson(json['user'] as Map<String, Object?>),
+    );
+  }
   const AuthSession({
     required this.accessToken,
     required this.refreshToken,
@@ -17,15 +26,6 @@ class AuthSession extends Equatable {
   final AuthUser user;
 
   bool get isExpired => DateTime.now().isAfter(expiresAt);
-
-  factory AuthSession.fromJson(Map<String, Object?> json) {
-    return AuthSession(
-      accessToken: json['accessToken'] as String,
-      refreshToken: json['refreshToken'] as String,
-      expiresAt: DateTime.parse(json['expiresAt'] as String),
-      user: AuthUser.fromJson(json['user'] as Map<String, Object?>),
-    );
-  }
 
   Map<String, Object?> toJson() {
     return {

@@ -1,6 +1,8 @@
 # diandian_chuanshu
 
-A new Flutter project.
+「穿书 / 互动阅读」主题移动阅读社区 App（Flutter 跨端）。
+
+> 研发知识库 / 交接文档入口：[docs/README.md](docs/README.md)（含快速开始、目录导航、开发规范、API 接入等）。
 
 ## Getting Started
 

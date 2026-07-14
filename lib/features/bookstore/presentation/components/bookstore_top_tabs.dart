@@ -20,7 +20,7 @@ class BookstoreTopTabs extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final tabs = BookstoreTopTab.values;
+    const tabs = BookstoreTopTab.values;
     final colors = context.appColors;
 
     return AppTopTabBar(

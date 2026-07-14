@@ -5,9 +5,9 @@ class _FoundationGallery extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return const Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: const [
+      children: [
         _GallerySection(title: '颜色', child: _ColorSpecSection()),
         _GallerySection(title: '字号 / 行高 / 字重', child: _TypeSpecSection()),
         _GallerySection(title: '间距', child: _SpacingSpecSection()),
@@ -77,12 +77,12 @@ class _TypeSpecSection extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _TypeRow(
+          const _TypeRow(
             label: 'Display',
             value: '32 / tight / bold',
             style: AppTextStyles.displayLarge,
           ),
-          _TypeRow(
+          const _TypeRow(
             label: 'Headline',
             value: '24 / tight / semibold',
             style: AppTextStyles.headlineMedium,
@@ -102,7 +102,7 @@ class _TypeSpecSection extends StatelessWidget {
             value: '12 / normal / medium',
             style: AppTextStyles.labelMediumDark,
           ),
-          _CaptionNote(text: '≥18px 的文字样式自动使用 TCloudNumber 数字字体。'),
+          const _CaptionNote(text: '≥18px 的文字样式自动使用 TCloudNumber 数字字体。'),
         ],
       ),
     );

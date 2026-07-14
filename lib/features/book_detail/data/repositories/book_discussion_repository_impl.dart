@@ -1,12 +1,12 @@
 import '../../domain/entities/book_discussion_post.dart';
 import '../../domain/repositories/book_discussion_repository.dart';
-import '../datasources/book_discussion_mock_datasource.dart';
+import '../datasources/book_discussion_data_source.dart';
 
 /// 书评详情交互仓储实现，仅做数据请求桥接。
 class BookDiscussionRepositoryImpl implements BookDiscussionRepository {
   const BookDiscussionRepositoryImpl(this._dataSource);
 
-  final BookDiscussionMockDataSource _dataSource;
+  final BookDiscussionDataSource _dataSource;
 
   @override
   Future<void> togglePostLike({required String postId, required bool like}) =>

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../shared/widgets/app_text.dart';
@@ -25,7 +24,7 @@ class MyNotificationsList extends StatelessWidget {
         AppSpacing.xl + bottomInset,
       ),
       itemCount: notifications.length + 1,
-      separatorBuilder: (_, __) => const SizedBox(height: AppSpacing.sm),
+      separatorBuilder: (_, _) => const SizedBox(height: AppSpacing.sm),
       itemBuilder: (_, index) {
         if (index == notifications.length) {
           return const _ListFooter();
@@ -41,8 +40,8 @@ class _ListFooter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: AppSpacing.lg),
+    return const Padding(
+      padding: EdgeInsets.symmetric(vertical: AppSpacing.lg),
       child: Center(
         child: AppText(
           '没有更多数据了～',

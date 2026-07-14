@@ -135,7 +135,7 @@ class _CurrencyColumn extends StatelessWidget {
                       ),
                       maxLines: 1,
                     ),
-                    AppIcon(
+                    const AppIcon(
                       assetPath: 'assets/icons/arrow_right.svg',
                       width: AppSizes.welfareCurrencyArrowSize,
                       height: AppSizes.welfareCurrencyArrowSize,

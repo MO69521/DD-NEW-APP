@@ -46,7 +46,7 @@ class MembershipBenefitsSection extends StatelessWidget {
       ),
       child: LayoutBuilder(
         builder: (context, constraints) {
-          final maxGridWidth = AppSizes.membershipBenefitGridMaxWidth;
+          const maxGridWidth = AppSizes.membershipBenefitGridMaxWidth;
           final useSingleRow = constraints.maxWidth >= maxGridWidth;
           final columns =
               useSingleRow ? benefits.length : AppSizes.membershipBenefitColumns;
@@ -55,7 +55,7 @@ class MembershipBenefitsSection extends StatelessWidget {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              AppText('点点会员权益', style: AppTextStyles.membershipSectionTitle),
+              const AppText('点点会员权益', style: AppTextStyles.membershipSectionTitle),
               const SizedBox(height: AppSpacing.md),
               SizedBox(
                 width: constraints.maxWidth,

@@ -41,12 +41,12 @@ class MembershipPurchaseBar extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              AppText(
+              const AppText(
                 '确认协议并开通',
                 style: AppTextStyles.membershipCtaLabel,
               ),
               const SizedBox(width: AppSpacing.xs),
-              AppText('¥', style: AppTextStyles.membershipCtaPriceSymbol),
+              const AppText('¥', style: AppTextStyles.membershipCtaPriceSymbol),
               const SizedBox(width: AppSpacing.xxsHalf),
               AppText(priceText, style: AppTextStyles.membershipCtaPriceValue),
             ],

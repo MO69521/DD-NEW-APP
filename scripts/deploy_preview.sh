@@ -10,12 +10,12 @@
 #
 # 环境变量（可选）：
 #   PREVIEW_PROJECT=diandian-preview   固定项目名 → 固定 *.vercel.app 域名
-#   PREVIEW_MAIN=lib/global_preview_main.dart
+#   PREVIEW_MAIN=lib/previews/global_preview_main.dart
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 PROJECT="${PREVIEW_PROJECT:-diandian-preview}"
-MAIN="${PREVIEW_MAIN:-lib/global_preview_main.dart}"
+MAIN="${PREVIEW_MAIN:-lib/previews/global_preview_main.dart}"
 
 cd "$ROOT"
 

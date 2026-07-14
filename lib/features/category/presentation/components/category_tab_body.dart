@@ -135,7 +135,7 @@ class _CategoryRefreshIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox.square(
+    return const SizedBox.square(
       dimension: AppSizes.bookstoreLoadingIndicatorSize,
       child: CircularProgressIndicator(
         strokeWidth: AppSizes.bookstoreLoadingIndicatorStrokeWidth,

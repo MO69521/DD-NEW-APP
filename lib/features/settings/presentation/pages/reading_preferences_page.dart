@@ -50,7 +50,7 @@ class ReadingPreferencesPage extends StatelessWidget {
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: AppSpacing.xl),
-                _SectionLabel(label: '选择性别'),
+                const _SectionLabel(label: '选择性别'),
                 const SizedBox(height: AppSpacing.md),
                 Row(
                   children: [
@@ -75,7 +75,7 @@ class ReadingPreferencesPage extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: AppSpacing.xl),
-                _SectionLabel(label: '选择年龄'),
+                const _SectionLabel(label: '选择年龄'),
                 const SizedBox(height: AppSpacing.md),
                 for (final age in ReadingPreferenceAge.values) ...[
                   AgeRangeOption(
@@ -87,7 +87,7 @@ class ReadingPreferencesPage extends StatelessWidget {
                     const SizedBox(height: AppSpacing.sm),
                 ],
                 const SizedBox(height: AppSpacing.xxl),
-                AppButton(
+                const AppButton(
                   label: '保存',
                   variant: AppButtonVariant.accent,
                   isExpanded: true,

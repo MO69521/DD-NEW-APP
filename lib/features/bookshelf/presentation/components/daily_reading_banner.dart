@@ -35,7 +35,7 @@ class DailyReadingBanner extends StatelessWidget {
       child: Stack(
         clipBehavior: Clip.none,
         children: [
-          Positioned(
+          const Positioned(
             left: AppSizes.bookshelfBearIllustrationInset,
             top: AppSizes.bookshelfBearIllustrationInset,
             width: AppSizes.bookshelfBearIllustrationWidth,
@@ -117,7 +117,7 @@ class _ClaimWelfareButton extends StatelessWidget {
       variant: AppButtonVariant.accent,
       size: AppButtonSize.small,
       onPressed: onTap,
-      leadingIcon: AppAssetImage(
+      leadingIcon: const AppAssetImage(
         assetPath: DailyReadingBanner._energyIconAsset,
         width: AppSizes.bookshelfClaimWelfareIconSize,
         height: AppSizes.bookshelfClaimWelfareIconSize,

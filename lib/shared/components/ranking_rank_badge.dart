@@ -37,9 +37,9 @@ class RankingRankBadge extends StatelessWidget {
       width: AppSizes.rankingMutedBadgeSize,
       height: AppSizes.rankingMutedBadgeSize,
       alignment: Alignment.center,
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         color: AppColors.rankingMutedBadgeScrim,
-        borderRadius: const BorderRadius.only(
+        borderRadius: BorderRadius.only(
           bottomRight: Radius.circular(AppRadius.md),
         ),
       ),

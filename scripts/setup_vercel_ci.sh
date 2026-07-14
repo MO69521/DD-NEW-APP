@@ -10,7 +10,7 @@ set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 PROJECT="${PREVIEW_PROJECT:-diandian-preview}"
-MAIN="${PREVIEW_MAIN:-lib/global_preview_main.dart}"
+MAIN="${PREVIEW_MAIN:-lib/previews/global_preview_main.dart}"
 
 cd "$ROOT"
 

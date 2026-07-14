@@ -1,10 +1,14 @@
 import '../domain/entities/auth_session.dart';
+import '../network/api_client.dart';
+import '../network/api_exception.dart';
 import 'auth_failure.dart';
 import 'auth_service.dart';
 
-/// 真实接口占位实现。请求/响应结构保持接近后端 REST API，便于后续替换网络层。
+/// 真实接口实现：请求/响应结构对齐后端 REST API，网络细节委托给 [ApiClient]。
 class RestAuthService implements AuthService {
-  const RestAuthService();
+  const RestAuthService(this._client);
+
+  final ApiClient _client;
 
   @override
   Future<String?> detectLocalPhone() async {
@@ -41,8 +45,21 @@ class RestAuthService implements AuthService {
     String path,
     Map<String, Object?> body,
   ) async {
-    // Phase 2 接入 Dio/http 后在这里统一处理 headers、状态码与响应解析。
-    throw const AuthFailure(AuthFailureType.network, '真实接口暂未配置，请切换到 Mock 环境');
+    try {
+      return await _client.postJson(path, body: body);
+    } on ApiException catch (e) {
+      throw _mapToAuthFailure(e);
+    }
+  }
+
+  AuthFailure _mapToAuthFailure(ApiException e) {
+    final type = switch (e.type) {
+      ApiErrorType.timeout => AuthFailureType.timeout,
+      ApiErrorType.unauthorized => AuthFailureType.unauthorized,
+      ApiErrorType.notConfigured || ApiErrorType.network => AuthFailureType.network,
+      _ => AuthFailureType.unknown,
+    };
+    return AuthFailure(type, e.message);
   }
 }
 
@@ -64,15 +81,15 @@ class LoginRequest {
 }
 
 class LoginResponse {
-  const LoginResponse({required this.session});
-
-  final AuthSession session;
 
   factory LoginResponse.fromJson(Map<String, Object?> json) {
     return LoginResponse(
       session: AuthSession.fromJson(json['data'] as Map<String, Object?>),
     );
   }
+  const LoginResponse({required this.session});
+
+  final AuthSession session;
 }
 
 class OneClickLoginRequest {

@@ -1,10 +1,24 @@
 import '../../domain/entities/help_feedback_issue_type.dart';
 import '../../domain/entities/help_feedback_page_content.dart';
+import 'help_feedback_data_source.dart';
 
-/// 帮助与反馈 Mock 数据源，后续替换为 API datasource。
-class HelpFeedbackMockDataSource {
+/// 帮助与反馈 Mock 数据源；真实接口实现请照 bookstore/search 范例补 remote datasource。
+class HelpFeedbackMockDataSource implements HelpFeedbackDataSource {
   const HelpFeedbackMockDataSource();
 
+  @override
+  Future<void> submitFeedback({
+    required String? issueTypeId,
+    required String description,
+    String? bookName,
+    String? phone,
+    String? qq,
+    List<String> screenshotPaths = const [],
+  }) async {
+    // Mock：直接成功返回；Phase 2 由 remote datasource POST 到后端。
+  }
+
+  @override
   Future<HelpFeedbackPageContent> fetchPageContent() async {
     return const HelpFeedbackPageContent(
       issueTypes: [

@@ -148,8 +148,8 @@ class MembershipPlanCard extends StatelessWidget {
             Positioned.fill(
               child: IgnorePointer(
                 child: selected
-                    ? CustomPaint(
-                        painter: const _GradientBorderPainter(
+                    ? const CustomPaint(
+                        painter: _GradientBorderPainter(
                           radius: AppRadius.membershipPlanCard,
                           width: AppSizes.membershipPlanSelectedBorderWidth,
                           colors: [

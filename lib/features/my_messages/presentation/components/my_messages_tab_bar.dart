@@ -24,7 +24,7 @@ class MyMessagesTabBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final tabs = MyMessageTab.values;
+    const tabs = MyMessageTab.values;
 
     return AppTopTabBar(
       items: [

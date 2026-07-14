@@ -159,8 +159,8 @@ class _MembershipBenefitsDetailPageState
         AppPageDots(count: benefits.length, current: currentIndex),
         const SizedBox(height: AppSpacing.lg),
         // 底部开通按钮（复用会员开通 CTA：金色渐变 + 呼吸缩放 + 扫光）
-        Padding(
-          padding: const EdgeInsets.symmetric(
+        const Padding(
+          padding: EdgeInsets.symmetric(
             horizontal: AppSpacing.lg,
             vertical: AppSpacing.md,
           ),

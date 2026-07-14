@@ -2,13 +2,15 @@ import '../../../../core/domain/entities/book.dart';
 import '../../domain/entities/category_book_item.dart';
 import '../../domain/entities/category_filter.dart';
 import '../../domain/entities/category_page_content.dart';
+import 'category_data_source.dart';
 
-/// Mock 数据源：Phase 1 静态数据，Phase 2 替换为 API datasource。
-class CategoryMockDataSource {
+/// Mock 数据源：Phase 1 静态数据；真实接口实现请照 bookstore/search 范例补 remote datasource。
+class CategoryMockDataSource implements CategoryDataSource {
   const CategoryMockDataSource();
 
   static const int _mockLatencyMs = 200;
 
+  @override
   Future<CategoryPageContent> fetchPageContent() async {
     await Future<void>.delayed(const Duration(milliseconds: _mockLatencyMs));
 

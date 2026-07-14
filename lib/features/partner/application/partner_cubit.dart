@@ -1,18 +1,15 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/theme/app_durations.dart';
-import '../../../core/theme/app_sizes.dart';
 import '../data/datasources/partner_mock_datasource.dart';
 import '../data/repositories/partner_repository_impl.dart';
 import '../domain/entities/partner_character.dart';
-import '../domain/entities/partner_collection_status.dart';
-import '../domain/entities/partner_conversation.dart';
-import '../domain/entities/partner_interaction_scene.dart';
 import '../domain/entities/partner_sort_mode.dart';
 import '../domain/entities/partner_top_tab.dart';
 import '../domain/repositories/partner_repository.dart';
 import 'partner_domain_state.dart';
 import 'partner_interaction_state.dart';
+import 'partner_list_logic.dart';
 import 'partner_state.dart';
 
 /// application 层状态管理，state 仅在此层创建与修改。
@@ -29,12 +26,14 @@ class PartnerCubit extends Cubit<PartnerState> {
 
     try {
       final content = await _repository.fetchPageContent();
-      final interaction = const PartnerInteractionState();
-      final visibleCharacters = _filterCharacters(
+      const interaction = PartnerInteractionState();
+      final visibleCharacters = _applyFilter(
         characters: content.characters,
         interaction: interaction,
       );
-      final visibleConversations = _sortConversations(content.conversations);
+      final visibleConversations = sortPartnerConversations(
+        content.conversations,
+      );
 
       emit(
         state.copyWith(
@@ -79,8 +78,8 @@ class PartnerCubit extends Cubit<PartnerState> {
           interaction: interaction.copyWith(interactionSceneIndex: 0),
           ui: state.ui.copyWith(page: 0),
           domain: state.domain.copyWith(
-            seedConversations: List.unmodifiable(baseConversations),
-            visibleConversations: _sortConversations(baseConversations),
+          seedConversations: List.unmodifiable(baseConversations),
+              visibleConversations: sortPartnerConversations(baseConversations),
           ),
         ),
       );
@@ -107,7 +106,7 @@ class PartnerCubit extends Cubit<PartnerState> {
         interaction: interaction.copyWith(interactionSceneIndex: 0),
         ui: state.ui.copyWith(page: 0),
         domain: state.domain.copyWith(
-          visibleCharacters: _filterCharacters(
+          visibleCharacters: _applyFilter(
             characters: state.domain.seedCharacters,
             interaction: interaction,
           ),
@@ -178,19 +177,7 @@ class PartnerCubit extends Cubit<PartnerState> {
 
     final nextPage = state.ui.page + 1;
     final offset = nextPage * seed.length;
-    final moreScenes = List<PartnerInteractionScene>.generate(seed.length, (i) {
-      final source = seed[i];
-      return PartnerInteractionScene(
-        id: 'partner_scene_more_${offset + i + 1}',
-        characterId: source.characterId,
-        characterName: source.characterName,
-        backgroundAsset: source.backgroundAsset,
-        affectionLevel: source.affectionLevel,
-        upgradeHint: source.upgradeHint,
-        sceneIndex: source.sceneIndex,
-        totalScenes: source.totalScenes,
-      );
-    });
+    final moreScenes = generateMorePartnerInteractionScenes(seed, offset);
 
     emit(
       state.copyWith(
@@ -210,14 +197,7 @@ class PartnerCubit extends Cubit<PartnerState> {
   }
 
   void onScrollNearEnd(double pixels, double maxScrollExtent) {
-    if (maxScrollExtent <= 0) return;
-
-    // 内容高度不足一屏时 maxScrollExtent 很小，会导致 triggerOffset 为负并误触发 loadMore。
-    if (maxScrollExtent < AppSizes.partnerLoadMoreTriggerOffset) return;
-
-    final triggerOffset =
-        maxScrollExtent - AppSizes.partnerLoadMoreTriggerOffset;
-    if (pixels >= triggerOffset) {
+    if (partnerShouldLoadMore(pixels, maxScrollExtent)) {
       loadMore();
     }
   }
@@ -242,27 +222,12 @@ class PartnerCubit extends Cubit<PartnerState> {
 
     final nextPage = state.ui.page + 1;
     final offset = nextPage * seed.length;
-    final moreCharacters = List<PartnerCharacter>.generate(seed.length, (index) {
-      final source = seed[index];
-      return PartnerCharacter(
-        id: 'partner_more_${offset + index + 1}',
-        name: source.name,
-        eraTitle: source.eraTitle,
-        quote: source.quote,
-        sourceTitle: source.sourceTitle,
-        traitTags: source.traitTags,
-        followerCount: source.followerCount,
-        coverAsset: source.coverAsset,
-        collectionStatus: source.collectionStatus,
-        topTab: source.topTab,
-      );
-    });
+    final moreCharacters = generateMorePartnerCharacters(seed, offset);
 
     final merged = [...state.domain.visibleCharacters, ...moreCharacters];
-    final filtered = _filterCharacters(
+    final filtered = _applyFilter(
       characters: merged,
       interaction: state.interaction,
-      seedOnly: false,
     );
 
     emit(
@@ -285,20 +250,7 @@ class PartnerCubit extends Cubit<PartnerState> {
 
     final nextPage = state.ui.page + 1;
     final offset = nextPage * seed.length;
-    final moreConversations =
-        List<PartnerConversation>.generate(seed.length, (index) {
-      final source = seed[index];
-      return PartnerConversation(
-        id: 'partner_conv_more_${offset + index + 1}',
-        characterId: source.characterId,
-        characterName: source.characterName,
-        avatarAsset: source.avatarAsset,
-        affectionLevel: source.affectionLevel,
-        lastMessagePreview: source.lastMessagePreview,
-        lastMessageAt: source.lastMessageAt,
-        unreadCount: source.unreadCount,
-      );
-    });
+    final moreConversations = generateMorePartnerConversations(seed, offset);
 
     final merged = [
       ...state.domain.visibleConversations,
@@ -313,14 +265,14 @@ class PartnerCubit extends Cubit<PartnerState> {
             ...state.domain.seedConversations,
             ...moreConversations,
           ],
-          visibleConversations: _sortConversations(merged),
+          visibleConversations: sortPartnerConversations(merged),
         ),
       ),
     );
   }
 
   void _emitFiltered(PartnerInteractionState interaction) {
-    final filteredCharacters = _filterCharacters(
+    final filteredCharacters = _applyFilter(
       characters: state.domain.seedCharacters,
       interaction: interaction,
     );
@@ -332,52 +284,16 @@ class PartnerCubit extends Cubit<PartnerState> {
     );
   }
 
-  List<PartnerCharacter> _filterCharacters({
+  /// 用当前 domain 的分类标签 / 筛选项过滤角色（委托纯函数）。
+  List<PartnerCharacter> _applyFilter({
     required List<PartnerCharacter> characters,
     required PartnerInteractionState interaction,
-    bool seedOnly = true,
   }) {
-    var result = characters.where((c) => c.topTab == interaction.topTab);
-
-    final tags = state.domain.categoryTags;
-    if (tags.isNotEmpty && interaction.selectedCategoryIndex > 0) {
-      final tag = tags[interaction.selectedCategoryIndex];
-      result = result.where(
-        (c) => c.traitTags.contains(tag) || c.name.contains(tag),
-      );
-    }
-
-    final filterOptions = state.domain.content?.filterOptions ?? const [];
-    if (filterOptions.isNotEmpty && interaction.selectedFilterIndex > 0) {
-      final option = filterOptions[interaction.selectedFilterIndex];
-      result = switch (option) {
-        '仅看已收集' => result.where(
-            (c) => c.collectionStatus == PartnerCollectionStatus.collected,
-          ),
-        '仅看未收集' => result.where(
-            (c) => c.collectionStatus == PartnerCollectionStatus.uncollected,
-          ),
-        '按新作' => result,
-        _ => result,
-      };
-    }
-
-    final list = result.toList();
-    if (interaction.sortMode == PartnerSortMode.newest) {
-      list.sort((a, b) => b.id.compareTo(a.id));
-    }
-
-    if (seedOnly) {
-      return List.unmodifiable(list);
-    }
-    return List.unmodifiable(list);
-  }
-
-  List<PartnerConversation> _sortConversations(
-    List<PartnerConversation> conversations,
-  ) {
-    final sorted = [...conversations]
-      ..sort((a, b) => b.lastMessageAt.compareTo(a.lastMessageAt));
-    return List.unmodifiable(sorted);
+    return filterPartnerCharacters(
+      characters: characters,
+      interaction: interaction,
+      categoryTags: state.domain.categoryTags,
+      filterOptions: state.domain.content?.filterOptions ?? const [],
+    );
   }
 }

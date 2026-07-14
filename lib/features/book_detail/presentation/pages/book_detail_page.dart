@@ -5,13 +5,8 @@ import '../../../../core/theme/app_layout.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_sizes.dart';
 import '../../../../routes/app_router.dart';
-import '../../../../shared/components/app_blurred_chrome_bar.dart';
-import '../../../../shared/components/app_top_bar.dart';
 import '../../../../shared/components/app_toast.dart';
-import '../../../../shared/components/empty_state.dart';
-import '../../../../shared/components/share_bottom_sheet.dart';
 import '../../../../shared/layouts/app_scroll_blur_scope.dart';
-import '../../../../shared/widgets/app_button.dart';
 import '../../../../shared/widgets/overscroll_stretch.dart';
 import '../../application/book_detail_cubit.dart';
 import '../../application/book_detail_state.dart';
@@ -25,6 +20,8 @@ import '../components/book_detail_content.dart';
 import '../components/book_detail_hero_cover.dart';
 import '../components/book_detail_promo_bar.dart';
 import '../components/book_detail_quick_reply_sheet.dart';
+import '../components/book_detail_status_views.dart';
+import '../components/book_detail_top_bar.dart';
 
 /// 书籍详情页（Figma 183:1874）：仅渲染 state、触发 action。
 class BookDetailPage extends StatelessWidget {
@@ -58,43 +55,18 @@ class BookDetailPage extends StatelessWidget {
         builder: (context, state) {
           if (state.ui.isLoading) {
             final cubit = context.read<BookDetailCubit>();
-            final seed = cubit.seedBook;
-            if (seed == null) {
-              return const Scaffold(
-                backgroundColor: AppColors.backgroundDark,
-                body: Center(child: CircularProgressIndicator()),
-              );
-            }
             // 用入口书卡携带的封面即时渲染头图，让 Hero 飞行有落点；其余内容加载中。
-            return Scaffold(
-              backgroundColor: AppColors.backgroundDark,
-              body: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  BookDetailHeroCover(
-                    coverAsset: seed.coverAsset,
-                    heroTag: coverHeroTag ?? 'book-cover-${cubit.bookId}',
-                  ),
-                  const Expanded(
-                    child: Center(child: CircularProgressIndicator()),
-                  ),
-                ],
-              ),
+            return BookDetailLoadingView(
+              coverAsset: cubit.seedBook?.coverAsset,
+              heroTag: coverHeroTag ?? 'book-cover-${cubit.bookId}',
             );
           }
 
           final detail = state.domain.detail;
           if (state.ui.errorMessage != null || detail == null) {
-            return Scaffold(
-              backgroundColor: AppColors.backgroundDark,
-              body: EmptyState(
-                title: '加载失败',
-                description: state.ui.errorMessage,
-                action: AppButton(
-                  label: '重试',
-                  onPressed: () => context.read<BookDetailCubit>().load(),
-                ),
-              ),
+            return BookDetailErrorView(
+              errorMessage: state.ui.errorMessage,
+              onRetry: () => context.read<BookDetailCubit>().load(),
             );
           }
 
@@ -194,7 +166,7 @@ class _BookDetailViewState extends State<_BookDetailView> {
       authorName: post.authorName,
     );
     if (!context.mounted || text == null || text.trim().isEmpty) return;
-    context.read<BookDetailCubit>().submitQuickReply(
+    await context.read<BookDetailCubit>().submitQuickReply(
       postId: post.id,
       content: text,
     );
@@ -227,7 +199,7 @@ class _BookDetailViewState extends State<_BookDetailView> {
         children: [
           if (!widget.isPromoDismissed)
             BookDetailPromoBar(
-              title: '打开腾讯元宝生成专属${_promoCharacterName}',
+              title: '打开腾讯元宝生成专属$_promoCharacterName',
               onClaim: cubit.claimPromo,
               onClose: cubit.dismissPromo,
             ),
@@ -305,30 +277,10 @@ class _BookDetailViewState extends State<_BookDetailView> {
                 ),
               ],
             ),
-            Positioned(
-              top: 0,
-              left: 0,
-              right: 0,
-              child: AppBlurredChromeBar(
-                enabled: topBlurEnabled,
-                child: AppTopBar(
-                  statusBarHeight: statusBar,
-                  title: topBlurEnabled ? widget.detail.title : null,
-                  showScrim: true,
-                  chromeBlurEnabled: false,
-                  onBack: () => AppRouter.pop(),
-                  actions: [
-                    AppTopBarAction(
-                      iconAsset: 'assets/icons/ranking/share.svg',
-                      onTap: () => ShareBottomSheet.show(
-                        context,
-                        onChannelTap: (channel) =>
-                            AppToast.show(context, '分享到$channel'),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+            BookDetailTopBar(
+              statusBarHeight: statusBar,
+              blurEnabled: topBlurEnabled,
+              title: widget.detail.title,
             ),
           ],
         ),

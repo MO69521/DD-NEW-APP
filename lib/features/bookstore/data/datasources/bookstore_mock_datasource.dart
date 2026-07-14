@@ -1,13 +1,16 @@
 import '../../../../core/domain/entities/book.dart';
 import '../../../../core/domain/entities/book_cover_tag.dart';
 import '../../domain/entities/bookstore_page_content.dart';
+import 'bookstore_data_source.dart';
 
-/// Mock 数据源：Phase 1 静态数据，Phase 2 替换为 API datasource。
-class BookstoreMockDataSource {
+/// Mock 数据源：Phase 1 静态数据；真实接口见 [BookstoreRemoteDataSource]。
+class BookstoreMockDataSource implements BookstoreDataSource {
   const BookstoreMockDataSource();
 
+  @override
+
   Future<BookstorePageContent> fetchPageContent() async {
-    return BookstorePageContent(
+    return const BookstorePageContent(
       searchPlaceholder: _searchPlaceholder,
       rankingBooksByTab: _rankingBooksByTab,
       editorPicks: _editorPicks,

@@ -1,12 +1,14 @@
 import '../../domain/entities/account_security_binding.dart';
 import '../../domain/entities/account_settings_page_content.dart';
+import 'account_settings_data_source.dart';
 
 /// Mock 数据源：Phase 1 静态数据，Phase 2 替换为 API datasource。
-class AccountSettingsMockDataSource {
+class AccountSettingsMockDataSource implements AccountSettingsDataSource {
   const AccountSettingsMockDataSource();
 
+  @override
   Future<AccountSettingsPageContent> fetchPageContent() async {
-    return AccountSettingsPageContent(
+    return const AccountSettingsPageContent(
       avatarUrl: _mockAvatarUrl,
       nickname: '宇宙无敌美少女',
       userId: '1013971429',

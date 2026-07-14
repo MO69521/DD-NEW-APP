@@ -9,7 +9,7 @@ class CheckInProgressDot extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final dotSize = AppSizes.welfareCheckInProgressDotSize;
+    const dotSize = AppSizes.welfareCheckInProgressDotSize;
 
     return Container(
       width: dotSize,

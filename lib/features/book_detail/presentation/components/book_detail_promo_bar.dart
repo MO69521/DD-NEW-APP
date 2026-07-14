@@ -58,7 +58,7 @@ class BookDetailPromoBar extends StatelessWidget {
             right: AppSpacing.xs,
             child: AppPressable(
               onTap: onClose,
-              child: Icon(
+              child: const Icon(
                 Icons.close_rounded,
                 size: AppSizes.bookDetailPromoCloseSize,
                 color: AppColors.bookDetailPromoCloseIcon,
@@ -96,7 +96,7 @@ class BookDetailPromoBar extends StatelessWidget {
           Expanded(
             child: Row(
               children: [
-                AppAssetImage(
+                const AppAssetImage(
                   assetPath: _energyIconAsset,
                   width: AppSizes.bookDetailPromoIconSize,
                   height: AppSizes.bookDetailPromoIconSize,

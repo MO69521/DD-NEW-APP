@@ -1,13 +1,15 @@
 import '../../../../core/domain/entities/book.dart';
 import '../../domain/entities/editor_pick_book_item.dart';
 import '../../domain/entities/editor_pick_page_content.dart';
+import 'editor_pick_data_source.dart';
 
-/// Mock 数据源：Phase 1 静态数据，Phase 2 替换为 API datasource。
-class EditorPickMockDataSource {
+/// Mock 数据源：Phase 1 静态数据；真实接口实现请照 bookstore/search 范例补 remote datasource。
+class EditorPickMockDataSource implements EditorPickDataSource {
   const EditorPickMockDataSource();
 
   static const int _mockLatencyMs = 200;
 
+  @override
   Future<EditorPickPageContent> fetchPageContent() async {
     await Future<void>.delayed(const Duration(milliseconds: _mockLatencyMs));
 

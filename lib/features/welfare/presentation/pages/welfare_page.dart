@@ -7,13 +7,12 @@ import '../../../../core/theme/app_spacing.dart';
 import '../../../../routes/app_router.dart';
 import '../../../../routes/app_routes.dart';
 import '../../../../shared/components/app_async_page_body.dart';
+import '../../../../shared/components/blurred_pinned_header_delegate.dart';
 import '../../../../shared/components/currency_balance_bar.dart';
 import '../../../../shared/components/app_blurred_dialog.dart';
 import '../../../../shared/components/app_toast.dart';
 import '../../../../shared/components/recharge_packages_section.dart';
 import '../../../../shared/layouts/app_bottom_nav.dart';
-import '../../../../shared/components/app_blurred_chrome_bar.dart';
-import '../../../../shared/layouts/app_chrome_blur.dart';
 import '../../application/welfare_cubit.dart';
 import '../../application/welfare_state.dart';
 import '../../domain/entities/welfare_models.dart';
@@ -98,7 +97,7 @@ class _WelfareView extends StatelessWidget {
         slivers: [
           SliverPersistentHeader(
             pinned: true,
-            delegate: _WelfareHeaderDelegate(
+            delegate: BlurredPinnedHeaderDelegate(
               height: statusBarHeight + AppSizes.welfareHeaderHeight,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -170,38 +169,5 @@ class _WelfareView extends StatelessWidget {
 
   void _showWatchVideoToast(BuildContext context) {
     AppToast.show(context, '视频功能开发中');
-  }
-}
-
-class _WelfareHeaderDelegate extends SliverPersistentHeaderDelegate {
-  const _WelfareHeaderDelegate({required this.height, required this.child});
-
-  final double height;
-  final Widget child;
-
-  @override
-  double get minExtent => height;
-
-  @override
-  double get maxExtent => height;
-
-  @override
-  Widget build(
-    BuildContext context,
-    double shrinkOffset,
-    bool overlapsContent,
-  ) {
-    return AppBlurredChromeBar(
-      enabled: AppChromeBlur.shouldBlurForSliver(
-        shrinkOffset: shrinkOffset,
-        overlapsContent: overlapsContent,
-      ),
-      child: child,
-    );
-  }
-
-  @override
-  bool shouldRebuild(covariant _WelfareHeaderDelegate oldDelegate) {
-    return oldDelegate.height != height || oldDelegate.child != child;
   }
 }

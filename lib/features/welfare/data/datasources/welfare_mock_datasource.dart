@@ -1,6 +1,7 @@
 import '../../../../core/constants/currency_mock_data.dart';
 import '../../domain/entities/welfare_models.dart';
 import '../../domain/entities/welfare_page_content.dart';
+import 'welfare_data_source.dart';
 
 part 'welfare_mock_recharge.dart';
 part 'welfare_mock_check_in.dart';
@@ -12,9 +13,10 @@ part 'welfare_mock_tasks.dart';
 /// - 充值套餐 → `welfare_mock_recharge.dart`
 /// - 签到 / 阅读福利 / 吃饭签到 → `welfare_mock_check_in.dart`
 /// - 精选阅读奖励 / 任务列表 → `welfare_mock_tasks.dart`
-class WelfareMockDataSource {
+class WelfareMockDataSource implements WelfareDataSource {
   const WelfareMockDataSource();
 
+  @override
   Future<WelfarePageContent> fetchPageContent() async {
     return const WelfarePageContent(
       currencyBalances: CurrencyMockData.welfareBalances,

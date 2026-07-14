@@ -29,7 +29,7 @@ class DressUpTabBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final tabs = DressUpTab.values;
+    const tabs = DressUpTab.values;
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(

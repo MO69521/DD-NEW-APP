@@ -87,7 +87,7 @@ class _VipPromoBannerState extends State<VipPromoBanner>
           child: Stack(
             clipBehavior: Clip.hardEdge,
             children: [
-              Positioned.fill(
+              const Positioned.fill(
                 child: DecoratedBox(
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
@@ -99,7 +99,7 @@ class _VipPromoBannerState extends State<VipPromoBanner>
                       ],
                     ),
                   ),
-                  child: const SizedBox.expand(),
+                  child: SizedBox.expand(),
                 ),
               ),
               Positioned.fill(
@@ -115,7 +115,7 @@ class _VipPromoBannerState extends State<VipPromoBanner>
                           mainAxisSize: MainAxisSize.min,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            AppAssetImage(
+                            const AppAssetImage(
                               assetPath: _vipBadgeAsset,
                               width: AppSizes.welfareVipBadgeSize,
                               height: AppSizes.welfareVipBadgeSize,
