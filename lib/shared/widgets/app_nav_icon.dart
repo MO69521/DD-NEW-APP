@@ -101,7 +101,10 @@ class _AppNavIconState extends State<AppNavIcon>
         width: widget.size,
         height: widget.size,
         fit: BoxFit.contain,
-        color: widget.isSelected ? null : AppColors.textOnDarkPlaceholder,
+        // 单色图标运行时着色：选中随主强调色（深色黄 / 浅色粉），未选中性灰。
+        color: widget.isSelected
+            ? AppColors.primary
+            : AppColors.textOnDarkPlaceholder,
       ),
     );
   }

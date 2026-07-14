@@ -99,11 +99,13 @@ abstract final class AppColors {
   /// 顶/底 Chrome 毛玻璃半透明底色（约 80% 不透明，弱化内容透出）。
   static const Color chromeBarScrim = bgTint80;
 
-  /// 底部导航毛玻璃底色（约 90% 不透明，减少透出下方内容）。
-  static const Color bottomNavScrim = bgTint90;
+  /// 底部导航底色：深色态毛玻璃（约 90% tint）；浅色态纯白不透明（`white100`），
+  /// 全局底部导航统一实心白底。
+  static const Color bottomNavScrim = _isLight ? white100 : bgTint90;
 
-  /// 顶栏滚动后毛玻璃底色：更接近页面背景，避免头图文字透出干扰导航。
-  static const Color topChromeBarScrolledScrim = bgTint80;
+  /// 顶栏滚动后底色（仅 `AppPageChrome`，如书城等 Tab 页）：深色态毛玻璃（约 80% tint）；
+  /// 浅色态纯白不透明（`white100`）。书详情顶栏走 `chromeBarScrim`，不受此影响、保持磨砂。
+  static const Color topChromeBarScrolledScrim = _isLight ? white100 : bgTint80;
   static const Color topBarHeroScrimStart = black30;
   static const Color topBarHeroScrimEnd = black00;
 
@@ -151,13 +153,14 @@ abstract final class AppColors {
   // 顶栏圆形磨砂图标框底：深色态纯白 4%（whiteAlpha04）；浅色态头图偏亮，
   // 4% 几乎不可见，故提高到纯白 30%（white30）。配 BackdropFilter 呈磨砂玻璃。
   static const Color topBarIconFrameBackground = _isLight ? white30 : white04;
-  static const Color topBarIconFrameBorder = _darkBorder;
+  // 磨砂图标框压在头图上，恒暗弱描边（两态皆低透明白）。
+  static const Color topBarIconFrameBorder = _darkBorder; // light-audit: keep-dark
   static const Color borderGlass = borderSubtle;
   static const Color dividerOnDark = divider;
   static const Color discussionFilterSelectedBackground =
       _isLight ? accentYellow : white100;
   static const Color discussionFilterUnselectedText = textOnDarkPlaceholder;
-  static const Color discussionItemReplyBackground = _darkSurfaceSoft;
+  static const Color discussionItemReplyBackground = surfaceSoft;
   static const Color discussionLikeIcon = textOnDarkPlaceholder;
   static const Color bookDetailUpdateDate = textOnDarkMuted;
   static const Color bookDetailUpdateHighlight = AppPalette.tan400;
@@ -180,9 +183,10 @@ abstract final class AppColors {
   static const Color bookDetailPromoRewardText = AppBrandColors.promoRewardText;
   static const Color bookDetailPromoCloseIcon = white100;
 
-  static const Color guessLikeCardBackground = _darkSurfaceSoft;
-  static const Color guessLikeTagBackground = _darkSurface;
-  static const Color guessLikeTagBorder = _darkBorder;
+  // 猜你喜欢卡：底 / 标签底 / 标签描边走主题语义 token（深色值等于原 _dark*，浅色翻实体面）。
+  static const Color guessLikeCardBackground = surfaceSoft;
+  static const Color guessLikeTagBackground = surface;
+  static const Color guessLikeTagBorder = borderSubtle;
   static const Color gradientFadeStart = bgTint00;
   static const Color gradientFadeMid = bgTint90;
   static const Color gradientFadeEnd = backgroundDark;
@@ -192,9 +196,12 @@ abstract final class AppColors {
   /// 榜单名次角标（第 4 名起）深色底：60% 黑，保证白色名次数字清晰可读。
   static const Color rankingMutedBadgeScrim = black60;
 
-  /// 按钮不可点击（禁用）态：4% 纯白填充 + 30% 白字，全局统一（覆盖各变体）。
-  static const Color buttonDisabledFill = _darkSurface;
-  static const Color buttonDisabledText = _darkTextTertiary;
+  /// 按钮不可点击（禁用）态，全局统一（覆盖各变体）。主题感知：
+  /// 深色态沿用弱实体面 + 三级字；浅色态用半透明玫粉底 + 85% 白字，
+  /// 避免深色块落在浅底弹窗上显得错误。
+  static const Color buttonDisabledFill =
+      _isLight ? AppPalette.pink500Alpha40 : _darkSurface;
+  static const Color buttonDisabledText = _isLight ? white85 : _darkTextTertiary;
 
   /// 弹窗遮罩（80% 不透明黑，无背景模糊）。
   static const Color overlayScrim80 = black80;
@@ -205,8 +212,8 @@ abstract final class AppColors {
   /// 书架管理态封面遮罩（已选中，略浅以保留选中反馈）。
   static const Color bookshelfManageCoverOverlaySelected = black40;
 
-  /// 书架管理态未选中选择框描边（60% 白）。
-  static const Color bookshelfSelectionMarkBorderUnselected = _darkDivider;
+  /// 书架管理态未选中选择框描边（压在封面缩略图上，随封面恒暗，不随页面主题翻）。
+  static const Color bookshelfSelectionMarkBorderUnselected = _darkDivider; // light-audit: keep-dark
 
   /// 书架空态文案（Figma 1319:9953）。
   static const Color bookshelfEmptyText = AppPalette.neutralGray700;
@@ -267,10 +274,10 @@ abstract final class AppColors {
   static const Color authorBadgeText = onAccent;
 
   /// 消息条目内书籍引用块底。
-  static const Color myMessagesBookRefBackground = _darkSurfaceSoft;
+  static const Color myMessagesBookRefBackground = surfaceSoft;
 
   /// 消息条目内引用书评左侧竖条。
-  static const Color myMessagesQuoteBar = _darkDivider;
+  static const Color myMessagesQuoteBar = divider;
 
   /// 通知「NEW / 未读」标识（复用品牌橙）。
   static const Color myMessagesNoticeBadge = searchHotAccent;

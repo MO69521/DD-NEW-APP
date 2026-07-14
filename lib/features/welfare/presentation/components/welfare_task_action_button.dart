@@ -22,8 +22,10 @@ class WelfareTaskActionButton extends StatelessWidget {
     final variant = action.isPrimary
         ? AppButtonVariant.accent
         : AppButtonVariant.secondary;
+    // 前置图标色随按钮前景：accent 底走 onPrimary（深黄底深字 / 浅粉底白字），
+    // 与 AppButton 内部文字色一致；次操作用主文字色。
     final iconColor = action.isPrimary
-        ? AppColors.rankingSegmentedSelectedText
+        ? AppColors.onPrimary
         : AppColors.textOnDark;
 
     return AppButton(

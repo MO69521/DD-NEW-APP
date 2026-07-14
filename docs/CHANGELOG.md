@@ -2,6 +2,82 @@
 
 > 研发知识库与工程变更日志，**追加式**记录，勿覆盖历史。每次开发按「日期 / 新增 / 修改 / 删除 / 影响模块 / Breaking Changes」登记。
 
+## 2026-07-14（修复福利页浅色态 token 不翻转）
+
+### 修改
+- `lib/core/theme/app_welfare_colors.dart`：福利页签到 / 任务区多处把 `whiteNN`（白透明叠加）与个别深色 `Color(0x…)` 直接用作**面 / 描边 / 文字 / 里程碑圆点**，浅色实验包（`pink_light`）下不翻转导致「白底看不见、深色圆点变黑块、白字消失」。按 `_isLight`（`AppBrandColors.isLightExperiment`）加分支：**深色分支保持原值不变**，浅色分支翻到已有实体语义 token（`surfaceSoft` / `borderSubtle` / `divider` / `border` / `textPrimary` / `textSecondary`）。涉及 `checkInDayBg/…Header/…Border/…LabelMuted`、`checkInProgressTrack/…DotFill/…DotStroke`、`checkInMilestoneAmount/…Label`、`rechargePriceBg`、`taskDivider/taskActionBg/taskRewardChipBg/taskRewardChipText/taskRewardChipMutedText/taskTimelineTrack/taskTimelineBubbleReached/taskTimelineDot/taskTimelineDotBorder/taskProgressLabel`。**未引入新色值**（浅色分支全部复用既有语义 token）。
+- `design-system/README.md` §4.2.5：更新 `checkInDayBg` / `checkInMilestoneAmount` 行说明，补「福利页浅色翻转」说明段。
+- `design-system/design-system-spec.canvas.tsx` §4.2.5：上述两行改为深/浅双色卡展示（同步托管副本）。
+
+### 影响模块
+- 福利页（`features/welfare`）全部签到 / 任务区组件（经 `AppWelfareColors` 单一真源，自动生效）；深色默认态视觉不变。
+- 设计规范 `design-system/`（README + canvas 源 + 托管副本三处一致）。
+
+### Breaking Changes
+- 无（深色默认态 token 取值全部保持不变，仅新增浅色分支）。
+
+## 2026-07-14（清理 pubspec 失效资源目录条目）
+
+### 修改
+- `pubspec.yaml`：移除失效条目 `assets/icons/search/`（该目录已随 `add_to_shelf.svg` 删除而不存在，导致 `flutter run` 每次热重启刷「unable to find directory entry」警告）。`assets/icons/search.svg` 文件仍由 `assets/icons/` 条目覆盖，不受影响。
+
+### 影响模块
+- `pubspec.yaml` 资源清单；消除构建/热重启期的非致命警告。
+
+### Breaking Changes
+- 无。
+
+## 2026-07-14（浅色主题 token 专项排查与收敛 + 检测脚本）
+
+### 新增
+- `scripts/check-light-theme.sh`：浅色（pink_light）token 反模式检测。① 公开 token 直绑 `_dark*` 为硬门禁（退出码 2）；②③④（feature 色板硬编码 / UI 直用 `whiteNN` / UI 裸 `Color(0x…)`）为人工复核清单，豁免项加行内注释 `// light-audit: keep-dark|effect`。
+
+### 修改
+- `lib/core/theme/app_membership_colors.dart`：会员页浅色 bug 收敛——`planUnselectedBg→(_isLight?surfaceSoft:white04)`、`planUnselectedBorder→borderSubtle`、`planSelectedSecondary→(_isLight?textSecondary:white60)`、`benefitIconBg→(_isLight?surfaceSoft:white05)`、`agreementLink→(_isLight?textPrimary:white100)`（原白底/白字浅色下消失）。
+- `lib/core/theme/app_partner_colors.dart`：`messageRowDivider→(_isLight?divider:white08)`；沉浸式互动场景 / 品牌粉紫 tint / 装饰光晕 / 封面阴影加 `// light-audit: keep-dark|effect` 留档（按既定「沉浸场景恒暗」决定）。
+- `lib/core/theme/app_colors.dart`：`topBarIconFrameBorder`、`bookshelfSelectionMarkBorderUnselected` 两处图上恒暗 `_dark*` 直绑加 `// light-audit: keep-dark` 留档。
+- `lib/features/help_feedback/.../help_feedback_inputs.dart`：输入框填充 `white08/white04→surface/surfaceSoft`（浅色下白底叠白看不见）。
+- `lib/shared/*`、`lib/features/*`：`app_tab_count_badge`/`membership_hero`/`continue_reading_card`/`sweep_highlight_overlay`/`app_marquee_text`/`app_page_dots` 的 `whiteNN` 直用确认为特效/蒙版/阴影/恒白角标字，加 `// light-audit: effect` 留档。
+- `design-system/README.md`：新增 §4.2.6「浅色主题 token 审计与收敛约定（强制）」+ 反模式表 + 脚本登记；更新 `planSelectedSecondary` 行深/浅解析。
+
+### 排查结论（无需改）
+- `app_text_styles.dart` 65 个 `*Dark` 文字样式：color 均走 `textOnDark/…Muted/…Placeholder / accentYellow / onAccent` 等**可翻转别名**，命名 `Dark` 仅指「深色基线」，无烘焙固定色。
+- `app_color_scheme.dart`：`dark` 预设各字段引用会翻转的 `AppColors.*`，编译到 pink_light 自动变浅；硬编码 `Color(0x)` 仅属 `brandBlue` 实验预设。
+- features 层无裸 `Color(0x…)`；`whiteNN/blackNN` 直用仅 9 处且均为特效。
+
+### 影响模块
+- 会员页、伙伴消息面、帮助与反馈输入框（浅色态修复）；深色默认态取值全部不变。
+- 设计规范 `design-system/README.md`、`scripts/`。
+
+### Breaking Changes
+- 无（深色默认态取值全部保持不变，仅新增浅色分支 / 行内注释）。
+
+## 2026-07-14（修复浅色态：公开 token 绑死 _dark* 私有值不翻转）
+
+### 修改
+- `lib/core/theme/app_colors.dart`：多个公开语义 token 直接绑定私有 `_darkSurfaceSoft/_darkSurface/_darkBorder/_darkDivider`（恒深色），浅色实验包（`pink_light`）下不翻转，导致深色块 / 深字压深底看不见（书城「猜你喜欢」卡整块深色最明显）。改指向主题语义 token（其深色分支恰等于原 `_dark*` 值，故**深色像素级不变**、浅色自动翻转）：`guessLikeCardBackground`/`discussionItemReplyBackground`/`myMessagesBookRefBackground → surfaceSoft`、`guessLikeTagBackground → surface`、`guessLikeTagBorder → borderSubtle`、`myMessagesQuoteBar → divider`。
+  - 暂不动（压在封面/头图上、需另行目视判断）：`topBarIconFrameBorder`、`bookshelfSelectionMarkBorderUnselected`。
+- `design-system/README.md` §4.2.5：更新 `guessLikeCardBackground`/`guessLikeTagBackground`/`guessLikeTagBorder`/`discussionItemReplyBackground` 行，标注深/浅解析。
+
+### 影响模块
+- 书城「猜你喜欢」卡、书详情讨论回复块、我的消息书籍引用块 / 引用竖条（浅色态翻为浅实体面 + 深字可读，深色态不变）。
+
+### Breaking Changes
+- 无（深色默认态取值不变，仅浅色分支翻转）。
+
+## 2026-07-14（修复福利页「主色上文字/图标」浅色态未翻白）
+
+### 修改
+- `lib/core/theme/app_welfare_colors.dart`：坐在主强调色（`accent`，浅色翻粉）上的文字/spinner 原用 `textOnLightPanel`（`#202020` 深字，仅适配深色黄底），浅色粉底上应为白。改 `checkInTodayHeaderText`（今日签到卡头）、`checkInCtaTextDark`（签到 CTA 文字 + loading spinner）、`taskActionHighlightText`（任务高亮按钮文字）为 `_isLight ? AppColors.onPrimary : AppBrandColors.textOnLightPanel`（深色不变、浅色翻白）。
+- `lib/features/welfare/presentation/components/welfare_task_action_button.dart`：主操作（`AppButtonVariant.accent`）前置视频图标色由 `rankingSegmentedSelectedText`（=`textOnLightPanel` 深字）改为 `AppColors.onPrimary`，与 `AppButton` 内部文字前景一致（深黄底深字 / 浅粉底白字）。
+- `design-system/README.md` §4.2.5：新增「主色上的文字/图标必须走 `onPrimary`（强制）」条目，禁止在主强调面上误用 `textOnLightPanel`。
+
+### 影响模块
+- 福利页签到卡头 / 签到 CTA / 任务高亮按钮 / 任务主操作图标（浅色态文字与图标翻白，深色态不变）。
+
+### Breaking Changes
+- 无（深色默认态取值不变，仅浅色分支翻转）。
+
 ## 2026-07-14（新增 pre-commit 文档同步校验）
 
 ### 新增

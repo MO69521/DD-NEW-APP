@@ -44,7 +44,7 @@ class AppPageDots extends StatelessWidget {
       width: active ? AppSizes.pageDotActiveWidth : AppSizes.pageDotSize,
       height: AppSizes.pageDotSize,
       decoration: BoxDecoration(
-        color: active ? AppColors.textOnDark : AppColors.white20,
+        color: active ? AppColors.textOnDark : AppColors.white20, // light-audit: effect 分页点叠头图轮播
         borderRadius: BorderRadius.circular(AppRadius.full),
       ),
     );

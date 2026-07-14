@@ -142,7 +142,7 @@ class _CoverThumb extends StatelessWidget {
         borderRadius: BorderRadius.circular(AppRadius.bookCover),
         boxShadow: const [
           BoxShadow(
-            color: AppColors.black40,
+            color: AppColors.black40, // light-audit: effect 投影阴影
             blurRadius: AppSizes.continueReadingCoverShadowBlur,
             offset: Offset(0, AppSpacing.xxs),
           ),

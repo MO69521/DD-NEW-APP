@@ -191,7 +191,7 @@ class _MembershipHeroState extends State<MembershipHero>
               shaderCallback: (bounds) => const LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
-                colors: [AppColors.white100, AppColors.white00],
+                colors: [AppColors.white100, AppColors.white00], // light-audit: effect 头图 alpha 淡出蒙版
               ).createShader(bounds),
               blendMode: BlendMode.dstIn,
               child: const ClipRect(

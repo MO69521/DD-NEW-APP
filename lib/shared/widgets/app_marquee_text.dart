@@ -104,9 +104,9 @@ class _AppMarqueeTextState extends State<AppMarqueeText>
               begin: Alignment.centerLeft,
               end: Alignment.centerRight,
               colors: const [
-                AppColors.white100,
-                AppColors.white100,
-                AppColors.white00,
+                AppColors.white100, // light-audit: effect 跑马灯 alpha 淡出蒙版
+                AppColors.white100, // light-audit: effect
+                AppColors.white00, // light-audit: effect
               ],
               stops: [0.0, stop, 1.0],
             ).createShader(bounds);

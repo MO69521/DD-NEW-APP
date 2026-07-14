@@ -1443,7 +1443,7 @@ function RawTierView() {
       <Stack gap={8}>
         <Text weight="semibold">中性 · 深色实体</Text>
         <Text tone="tertiary" size="small">
-          原色层只展示色值，不表达用途；用途在 ② 语义层 / ③ 组件层查看。
+          原色层只展示色值，不表达用途；用途在 ② 语义层 / ③ 组件层查看。深色态壳基 / 卡片 / 分割等实体面。
         </Text>
         <Table
           headers={["色卡", "Token", "Hex"]}
@@ -1455,7 +1455,35 @@ function RawTierView() {
             [swatch("#252B34"), "neutralCool800", "#252B34"],
             [swatch("#232A33"), "neutralCool820", "#232A33"],
             [swatch("#151B24"), "neutralCool900", "#151B24"],
+            [swatch("#131820"), "neutralCool880", "#131820"],
             [swatch("#111722"), "neutralCool920", "#111722"],
+            [swatch("#0A1628"), "neutralCool960", "#0A1628"],
+            [swatch("#090E17"), "neutralCool950", "#090E17"],
+          ].map((r) => r.map(cell))}
+        />
+      </Stack>
+
+      <Stack gap={8}>
+        <Text weight="semibold">中性 · 浅色实体 / 面板灰</Text>
+        <Text tone="tertiary" size="small">
+          浅色实验壳（<Code>pink_light</Code>）的实体面 / 文字，以及浅色/金色面板上的深字与各级中性灰。
+        </Text>
+        <Table
+          headers={["色卡", "Token", "Hex"]}
+          columnAlign={["left", "left", "left"]}
+          rows={[
+            [swatch("#F8F7FC"), "neutralCool50", "#F8F7FC"],
+            [swatch("#F3F4F6"), "neutralCool100", "#F3F4F6"],
+            [swatch("#E5E7EB"), "neutralCool200", "#E5E7EB"],
+            [swatch("#B2B3BA"), "neutralCool300", "#B2B3BA"],
+            [swatch("#ABACB3"), "neutralCool350", "#ABACB3"],
+            [swatch("#9B9B9B"), "neutralGray400", "#9B9B9B"],
+            [swatch("#919191"), "neutralGray500", "#919191"],
+            [swatch("#8C8C8C"), "neutralGray600", "#8C8C8C"],
+            [swatch("#757575"), "neutralGray700", "#757575"],
+            [swatch("#6B7280"), "neutralCool600", "#6B7280"],
+            [swatch("#202020"), "neutralWarm900", "#202020"],
+            [swatch("#1A1A2E"), "neutralBlue950", "#1A1A2E"],
           ].map((r) => r.map(cell))}
         />
       </Stack>
@@ -1473,6 +1501,7 @@ function RawTierView() {
                 [alphaSwatch("rgba(255,255,255,0.85)", APP.bg), "whiteAlpha85", "85%", "0xD9FFFFFF"],
                 [alphaSwatch("rgba(255,255,255,0.6)", APP.bg), "whiteAlpha60", "60%", "0x99FFFFFF"],
                 [alphaSwatch("rgba(255,255,255,0.5)", APP.bg), "whiteAlpha50", "50%", "0x80FFFFFF"],
+                [alphaSwatch("rgba(255,255,255,0.3)", APP.bg), "whiteAlpha30", "30%", "0x4DFFFFFF"],
                 [alphaSwatch("rgba(255,255,255,0.24)", APP.bg), "whiteAlpha24", "24%", "0x3DFFFFFF"],
                 [alphaSwatch("rgba(255,255,255,0.2)", APP.bg), "whiteAlpha20", "20%", "0x33FFFFFF"],
                 [alphaSwatch("rgba(255,255,255,0.08)", APP.bg), "whiteAlpha08", "8%", "0x14FFFFFF"],
@@ -1506,7 +1535,7 @@ function RawTierView() {
         <Text weight="semibold">壳 tint 原色（neutralCool950Alpha* / pink50Alpha*）</Text>
         <Text tone="tertiary" size="small">
           与 whiteAlphaNN / blackAlphaNN 的区别：白/黑阶是<Text weight="semibold">效果叠加原语</Text>（主题无关）；
-          壳 tint 是<Text weight="semibold">壳基色</Text>（深 <Code>#090E17</Code> / 粉浅 <Code>#FFF5F9</Code>）叠加，
+          壳 tint 是<Text weight="semibold">壳基色</Text>（深 <Code>#090E17</Code> / 粉浅 <Code>#F4F2F4</Code>）叠加，
           <Text weight="semibold">随主题变</Text>，用于内容渐隐 / 毛玻璃底，让透出内容融入页面背景。
           语义名 <Code>bgTintNN</Code> 按主题从下面两列中选（色卡叠在中灰底上以显色相）。
         </Text>
@@ -1520,6 +1549,23 @@ function RawTierView() {
           原色层只展示色值，具体用途见 ② 语义层 / ③ 组件层。
         </Text>
         <BrandSwatches />
+        <Stack gap={6}>
+          <Text weight="semibold" size="small">彩色透明变体（alpha 派生）</Text>
+          <Text tone="tertiary" size="small">
+            主强调 / 头图米白的低透明派生原语（色卡叠在深底上显透明度）。
+          </Text>
+          <Table
+            headers={["色卡", "Token", "ARGB", "说明"]}
+            columnAlign={["left", "left", "left", "left"]}
+            rows={[
+              [alphaSwatch("rgba(255,232,71,0.04)", APP.bg), "yellow500Alpha04", "0x0AFFE847", "4% 主强调黄"],
+              [alphaSwatch("rgba(255,232,71,0.08)", APP.bg), "yellow500Alpha08", "0x14FFE847", "8% 主强调黄"],
+              [alphaSwatch("rgba(255,77,136,0.04)", APP.bg), "pink500Alpha04", "0x0AFF4D88", "4% 玫粉（浅色实验主强调）"],
+              [alphaSwatch("rgba(255,77,136,0.08)", APP.bg), "pink500Alpha08", "0x14FF4D88", "8% 玫粉"],
+              [alphaSwatch("rgba(255,250,215,0.9)", APP.bg), "cream200Alpha90", "0xE6FFFAD7", "90% 榜单头图米白"],
+            ].map((r) => r.map(cell))}
+          />
+        </Stack>
       </Stack>
     </Stack>
   );
@@ -1549,7 +1595,7 @@ function SemanticTierView() {
           rows={[
             ["primary", swatch("#FFE847"), "#FFE847", "#FF4D88", "主强调"],
             ["onPrimary", swatch("#090E17"), "#090E17", "#FFFFFF", "主强调色面上的文字 / 图标"],
-            ["background", swatch("#090E17"), "#090E17", "#FFF5F9", "页面背景"],
+            ["background", swatch("#090E17"), "#090E17", "#F4F2F4", "页面背景"],
             ["surface", swatch("#151B24"), "#151B24", "#FFFFFF", "普通容器面"],
             ["surfaceSoft", swatch("#111722"), "#111722", "#F8F7FC", "弱容器面"],
             ["surfaceElevated", swatch("#131820"), "#131820", "#FFFFFF", "浮层 / 弹窗面"],
@@ -1576,10 +1622,10 @@ function SemanticTierView() {
             ["checkInHighlightHeader", swatch("#FFE847"), "primary #FFE847", "今日签到高亮头"],
             ["checkInHighlightBorder", swatch("#FFE847"), "primary #FFE847", "高亮卡描边"],
             ["checkInRewardTodayText", swatch("#FFE847"), "primary #FFE847", "今日奖励文字"],
-            ["checkInDayBg", alphaSwatch("rgba(255,255,255,0.04)", APP.bg), "whiteAlpha04", "普通签到日底"],
+            ["checkInDayBg", <Row gap={4}>{alphaSwatch("rgba(255,255,255,0.04)", APP.bg)}{swatch("#F8F7FC")}</Row>, "深 whiteAlpha04 / 浅 surfaceSoft（_isLight 翻转）", "普通签到日底（浅色翻实体面）"],
             ["checkInCumulativeBg", alphaSwatch("rgba(255,232,71,0.08)", APP.bg), "yellow500Alpha08（8% primary）", "累计签到徽章底"],
             ["checkInCumulativeBorder", alphaSwatch("rgba(255,255,255,0)", APP.bg), "whiteAlpha00（透明）", "累计徽章描边"],
-            ["checkInMilestoneAmount", swatch("#FFFFFF"), "whiteAlpha100", "里程碑数值"],
+            ["checkInMilestoneAmount", <Row gap={4}>{swatch("#FFFFFF")}{swatch("#1A1A2E")}</Row>, "深 whiteAlpha100 / 浅 textPrimary（_isLight 翻转）", "里程碑数值（浅色翻墨字）"],
             ["planSelectedBg", alphaSwatch("rgba(255,231,148,0.08)", APP.bg), "0x14FFE794（8% 会员金）", "会员方案选中卡底"],
             ["planSelectedBorder", swatch("#FFE794"), "#FFE794（ctaGradientStart）", "会员方案选中描边"],
             ["planSelectedGoldStart", swatch("#FFE794"), "#FFE794（ctaGradientStart）", "选中金渐变起"],
@@ -1673,13 +1719,13 @@ function ShellTintTable() {
   const backing = "#8A8A8A"; // 中灰底：模拟被叠加的内容，便于看清壳基色色相
   // [档位, dark rgba, dark ARGB, pink rgba, pink ARGB]
   const rows: Array<[string, string, string, string, string]> = [
-    ["T00", "rgba(9,14,23,0)", "0x00090E17", "rgba(255,245,249,0)", "0x00FFF5F9"],
-    ["T35", "rgba(9,14,23,0.35)", "0x59090E17", "rgba(255,245,249,0.35)", "0x59FFF5F9"],
-    ["T45", "rgba(9,14,23,0.45)", "0x73090E17", "rgba(255,245,249,0.45)", "0x73FFF5F9"],
-    ["T55", "rgba(9,14,23,0.55)", "0x8C090E17", "rgba(255,245,249,0.55)", "0x8CFFF5F9"],
-    ["T60", "rgba(9,14,23,0.60)", "0x99090E17", "rgba(255,245,249,0.60)", "0x99FFF5F9"],
-    ["T80", "rgba(9,14,23,0.80)", "0xCC090E17", "rgba(255,245,249,0.80)", "0xCCFFF5F9"],
-    ["T90", "rgba(9,14,23,0.90)", "0xE6090E17", "rgba(255,245,249,0.90)", "0xE6FFF5F9"],
+    ["T00", "rgba(9,14,23,0)", "0x00090E17", "rgba(244,242,244,0)", "0x00F4F2F4"],
+    ["T35", "rgba(9,14,23,0.35)", "0x59090E17", "rgba(244,242,244,0.35)", "0x59F4F2F4"],
+    ["T45", "rgba(9,14,23,0.45)", "0x73090E17", "rgba(244,242,244,0.45)", "0x73F4F2F4"],
+    ["T55", "rgba(9,14,23,0.55)", "0x8C090E17", "rgba(244,242,244,0.55)", "0x8CF4F2F4"],
+    ["T60", "rgba(9,14,23,0.60)", "0x99090E17", "rgba(244,242,244,0.60)", "0x99F4F2F4"],
+    ["T80", "rgba(9,14,23,0.80)", "0xCC090E17", "rgba(244,242,244,0.80)", "0xCCF4F2F4"],
+    ["T90", "rgba(9,14,23,0.90)", "0xE6090E17", "rgba(244,242,244,0.90)", "0xE6F4F2F4"],
   ];
   const themedCell = (rgba: string, argb: string): ReactNode => (
     <Row gap={8} align="center">
@@ -1689,7 +1735,7 @@ function ShellTintTable() {
   );
   return (
     <Table
-      headers={["档位", "neutralCool950（深 #090E17）", "pink50（粉浅 #FFF5F9）"]}
+      headers={["档位", "neutralCool950（深 #090E17）", "pink50（粉浅 #F4F2F4）"]}
       columnAlign={["left", "left", "left"]}
       rows={rows
         .map(([lv, dRgba, dArgb, pRgba, pArgb]) => [
@@ -1861,7 +1907,7 @@ function MultiStyleSection() {
           columnAlign={["left", "left", "left", "left", "left"]}
           rows={[
             ["dark（默认）", "深壳", tv("#090E17"), tv("#FFE847", "黄"), tvNote("不带参")],
-            ["pink_light", "浅壳", tv("#FFF5F9"), tv("#FF4D88", "粉"), tvCode("THEME=pink_light")],
+            ["pink_light", "浅壳", tv("#F4F2F4"), tv("#FF4D88", "粉"), tvCode("THEME=pink_light")],
           ].map((r) => r.map(cell))}
         />
       </Stack>
@@ -1876,7 +1922,7 @@ function MultiStyleSection() {
           headers={["组件 / 场景", "取色 token", "dark", "pink_light"]}
           columnAlign={["left", "left", "left", "left"]}
           rows={[
-            ["页面背景", tvCode("background"), tv("#090E17"), tv("#FFF5F9")],
+            ["页面背景", tvCode("background"), tv("#090E17"), tv("#F4F2F4")],
             ["标题 / 正文", tvCode("textPrimary"), tv("#FFFFFF", "白"), tv("#1A1A2E", "墨")],
             ["次要文字", tvCode("textSecondary"), tv("#9AA0AA"), tv("#6B7280")],
             ["卡片面", tvCode("surface"), tv("#151B24"), tv("#FFFFFF")],
@@ -2166,7 +2212,7 @@ function ButtonSection() {
       />
 
       <Text tone="tertiary" size="small">
-        状态：默认 · 加载中 · 禁用（前景 40%）· 撑满宽度 <Code>isExpanded</Code>；
+        状态：默认 · 加载中 · 禁用（主题感知：深色弱实体面 + 三级字；浅色 pink500Alpha40 玫粉底 + 85% 白字）· 撑满宽度 <Code>isExpanded</Code>；
         可选前置图标 <Code>leadingIcon</Code>。描边一律 0.5px neutralCool200。
       </Text>
     </SpecSection>

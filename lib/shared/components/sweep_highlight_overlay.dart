@@ -13,8 +13,8 @@ import '../../core/theme/app_sizes.dart';
 class SweepHighlightOverlay extends StatefulWidget {
   const SweepHighlightOverlay({
     super.key,
-    this.highlightColor = AppColors.white50,
-    this.edgeColor = AppColors.white00,
+    this.highlightColor = AppColors.white50, // light-audit: effect 扫光高亮默认色
+    this.edgeColor = AppColors.white00, // light-audit: effect 扫光边缘默认色
     this.bandWidthRatio = AppSizes.membershipCtaSweepBandWidthRatio,
     this.duration = AppDurations.membershipCtaSweep,
     this.progress,

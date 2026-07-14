@@ -66,14 +66,15 @@ abstract final class AppPalette {
   static const Color neutralCool950Alpha60 = Color(0x99090E17);
   static const Color neutralCool950Alpha80 = Color(0xCC090E17);
   static const Color neutralCool950Alpha90 = Color(0xE6090E17);
-  static const Color pink50 = Color(0xFFFFF5F9);
-  static const Color pink50Alpha00 = Color(0x00FFF5F9);
-  static const Color pink50Alpha35 = Color(0x59FFF5F9);
-  static const Color pink50Alpha45 = Color(0x73FFF5F9);
-  static const Color pink50Alpha55 = Color(0x8CFFF5F9);
-  static const Color pink50Alpha60 = Color(0x99FFF5F9);
-  static const Color pink50Alpha80 = Color(0xCCFFF5F9);
-  static const Color pink50Alpha90 = Color(0xE6FFF5F9);
+  // 浅色实验包壳基色：浅灰粉（原暖粉白 #FFF5F9，调灰去粉以降低粉气）。
+  static const Color pink50 = Color(0xFFF4F2F4);
+  static const Color pink50Alpha00 = Color(0x00F4F2F4);
+  static const Color pink50Alpha35 = Color(0x59F4F2F4);
+  static const Color pink50Alpha45 = Color(0x73F4F2F4);
+  static const Color pink50Alpha55 = Color(0x8CF4F2F4);
+  static const Color pink50Alpha60 = Color(0x99F4F2F4);
+  static const Color pink50Alpha80 = Color(0xCCF4F2F4);
+  static const Color pink50Alpha90 = Color(0xE6F4F2F4);
 
   // ── 彩色原色 ──
   static const Color cream50 = Color(0xFFFFF9F2);
@@ -87,6 +88,7 @@ abstract final class AppPalette {
   static const Color yellow500Alpha08 = Color(0x14FFE847);
   static const Color pink500Alpha04 = Color(0x0AFF4D88);
   static const Color pink500Alpha08 = Color(0x14FF4D88);
+  static const Color pink500Alpha40 = Color(0x66FF4D88);
   static const Color pink100Soft = Color(0xFFFFD5DB);
   static const Color pink200 = Color(0xFFFF9CC7);
   static const Color pink300 = Color(0xFFF393DC);

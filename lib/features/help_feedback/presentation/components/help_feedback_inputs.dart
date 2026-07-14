@@ -112,11 +112,12 @@ InputDecoration helpFeedbackInputDecoration(String hintText) {
 
   return InputDecoration(
     filled: true,
-    // 聚焦态加深填充（4%→8%），不使用黄色描边，边框保持统一玻璃细线。
+    // 聚焦态填充更明显，不使用黄色描边，边框保持统一玻璃细线。
+    // 走主题语义面（深色弱实体面 / 浅色浅实体面），避免浅色下白底叠白看不见。
     fillColor: WidgetStateColor.resolveWith(
       (states) => states.contains(WidgetState.focused)
-          ? AppColors.white08
-          : AppColors.white04,
+          ? AppColors.surface
+          : AppColors.surfaceSoft,
     ),
     hintText: hintText,
     hintStyle: AppTextStyles.bodyMediumDarkMuted.copyWith(
