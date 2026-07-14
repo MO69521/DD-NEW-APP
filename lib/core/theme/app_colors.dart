@@ -43,7 +43,9 @@ abstract final class AppColors {
   static const Color _darkTextTertiary = AppPalette.neutralCool500;
   static const Color _darkSurface = AppPalette.neutralCool900;
   static const Color _darkSurfaceSoft = AppPalette.neutralCool920;
-  static const Color _darkBorder = AppPalette.neutralCool800;
+  // 深色态描边统一改用 4% 纯白（whiteAlpha04）：低透明叠加、随底自然融合，
+  // 替代原实体中性色 neutralCool800（全局边框同源，一处改全局生效）。
+  static const Color _darkBorder = AppPalette.whiteAlpha04;
   static const Color _darkDivider = AppPalette.neutralCool820;
 
   static const Color primary = AppBrandColors.accent;
@@ -94,8 +96,8 @@ abstract final class AppColors {
   static const Color bgTint80 = AppBrandColors.bgTint80;
   static const Color bgTint90 = AppBrandColors.bgTint90;
 
-  /// 顶/底 Chrome 毛玻璃半透明底色（约 60% 不透明，弱化内容透出）。
-  static const Color chromeBarScrim = bgTint60;
+  /// 顶/底 Chrome 毛玻璃半透明底色（约 80% 不透明，弱化内容透出）。
+  static const Color chromeBarScrim = bgTint80;
 
   /// 底部导航毛玻璃底色（约 90% 不透明，减少透出下方内容）。
   static const Color bottomNavScrim = bgTint90;
@@ -146,7 +148,9 @@ abstract final class AppColors {
   /// accent 色面上的文字 / 图标：深色态深墨（黄底上）；浅色实验态白（粉底上可读）。
   static const Color onAccent = onPrimary;
   static const Color navBarBackground = _isLight ? black04 : surface;
-  static const Color topBarIconFrameBackground = _darkSurfaceSoft;
+  // 顶栏圆形磨砂图标框底：深色态纯白 4%（whiteAlpha04）；浅色态头图偏亮，
+  // 4% 几乎不可见，故提高到纯白 30%（white30）。配 BackdropFilter 呈磨砂玻璃。
+  static const Color topBarIconFrameBackground = _isLight ? white30 : white04;
   static const Color topBarIconFrameBorder = _darkBorder;
   static const Color borderGlass = borderSubtle;
   static const Color dividerOnDark = divider;
@@ -164,8 +168,6 @@ abstract final class AppColors {
   static const Color bookDetailUpdateDotInner = textOnDark;
   static const Color bookDetailUpdateText = textOnDark;
   static const Color bookDetailUpdateTextHighlighted = bookDetailUpdateHighlight;
-  static const Color bookDetailUpdateSectionBackground = _darkSurfaceSoft;
-
   // 书籍详情悬浮促销条 (Figma 1598:4319)
   static const Color bookDetailPromoGradientStart =
       AppBrandColors.promoBarGradientStart;

@@ -348,7 +348,7 @@ const MOTION_CATEGORIES: Array<{ title: string; items: MotionEffect[] }> = [
     items: [
       {
         name: "AppTabCountBadge",
-        desc: "Tab 悬浮数字角标,>99 显示 99+",
+        desc: "Tab 悬浮数字角标（纯白字 white100）,>99 显示 99+",
         tech: "min tabBadgeMinSize + AppColors.badgeCount + full radius",
         path: "lib/shared/components/app_tab_count_badge.dart",
       },
@@ -520,7 +520,7 @@ const MOTION_CATEGORIES: Array<{ title: string; items: MotionEffect[] }> = [
       },
       {
         name: "圆形磨砂图标框",
-        desc: "顶栏圆形磨砂图标按钮",
+        desc: "顶栏圆形磨砂图标按钮（纯白半透明底：深色 4% whiteAlpha04 / 浅色 30% whiteAlpha30 + 4% 白描边）",
         tech: "ClipOval + BackdropFilter",
         path: "lib/shared/components/app_top_bar_icon_button.dart",
       },
@@ -1515,6 +1515,10 @@ function RawTierView() {
 
       <Stack gap={8}>
         <Text weight="semibold">彩色原色</Text>
+        <Text tone="tertiary" size="small">
+          按色相分组（暖白 / 黄金 / 橙棕 / 红玫 / 粉品红 / 绿 / 蓝青紫 / 深暗），组内从浅到深；
+          原色层只展示色值，具体用途见 ② 语义层 / ③ 组件层。
+        </Text>
         <BrandSwatches />
       </Stack>
     </Stack>
@@ -1552,7 +1556,7 @@ function SemanticTierView() {
             ["textPrimary", swatch("#FFFFFF"), "#FFFFFF", "#1A1A2E", "一级文字"],
             ["textSecondary", swatch("#9AA0AA"), "#9AA0AA", "#6B7280", "二级文字"],
             ["textTertiary", swatch("#737B86"), "#737B86", "#9B9B9B", "三级文字 / 占位"],
-            ["borderSubtle", swatch("#252B34"), "#252B34", "#F4D9E4", "弱描边"],
+            ["borderSubtle", alphaSwatch("rgba(255,255,255,0.04)", APP.bg), "whiteAlpha04", "#F4D9E4", "弱描边（深色态全局边框）"],
             ["divider", swatch("#232A33"), "#232A33", "#F3F4F6", "分割线"],
             ["overlayScrim80", alphaSwatch("rgba(0,0,0,0.8)", "#FFFFFF"), "blackAlpha80", "blackAlpha80", "弹窗遮罩"],
           ].map((r) => r.map(cell))}
@@ -1623,7 +1627,7 @@ function ComponentTierView() {
       rows: [
         ["AppGroupedListCard", <Row gap={4}>{swatch("#151B24")}{swatch("#232A33")}</Row>, "surface / divider", "分组卡底与行间分割"],
         ["AppNavigationListRow", <Row gap={4}>{swatch("#FFFFFF")}{swatch("#9AA0AA")}{swatch("#737B86")}</Row>, "textPrimary / textSecondary / textTertiary", "列表行标题、尾文、箭头"],
-        ["BookCard", <Row gap={4}>{swatch("#151B24")}{swatch("#252B34")}{swatch("#FFFFFF")}</Row>, "surface / borderSubtle / textPrimary", "书卡面、描边、标题"],
+        ["BookCard", <Row gap={4}>{swatch("#151B24")}{alphaSwatch("rgba(255,255,255,0.04)", APP.bg)}{swatch("#FFFFFF")}</Row>, "surface / borderSubtle / textPrimary", "书卡面、描边（4% 白）、标题"],
       ],
     },
     {
@@ -1699,55 +1703,108 @@ function ShellTintTable() {
 }
 
 function BrandSwatches() {
-  const brand: Array<[string, string]> = [
-    ["cream10", "#FFFEF4"],
-    ["cream50", "#FFF9F2"],
-    ["cream100", "#FFF2C6"],
-    ["cream200", "#FFFAD7"],
-    ["yellow500", "#FFE847"],
-    ["peach50", "#FFEBD4"],
-    ["peach100", "#FFDDC1"],
-    ["orange300", "#FF9359"],
-    ["orange500", "#FF7E32"],
-    ["orange550", "#FF6F4B"],
-    ["orange700", "#E64D00"],
-    ["rose400", "#FF667F"],
-    ["rose500", "#FF4E6C"],
-    ["red400", "#FF6B6B"],
-    ["pink100", "#F4D9E4"],
-    ["pink100Soft", "#FFD5DB"],
-    ["pink200", "#FF9CC7"],
-    ["pink300", "#F393DC"],
-    ["pink400", "#FF7AA8"],
-    ["pink500", "#FF4D88"],
-    ["pink600", "#E03D74"],
-    ["magenta500", "#E541BC"],
-    ["magenta950", "#740551"],
-    ["magenta980", "#310F29"],
-    ["brown500", "#AA722E"],
-    ["brown600", "#935C1A"],
-    ["brown800", "#5D3A12"],
-    ["green500", "#39D98A"],
-    ["amber500", "#FFA940"],
-    ["tan400", "#F0B16A"],
-    ["blue500", "#4DA6FF"],
-    ["sky500", "#59AEFF"],
-    ["purple400", "#9C87FF"],
-    ["cyan400", "#42DDFF"],
-    ["indigo400", "#7E95FF"],
-    ["gold400", "#F9C74F"],
-    ["wine950", "#1D0B10"],
+  // 按色相分组，组内从浅到深；便于在长列表里快速定位同一色系。
+  const groups: Array<{ title: string; note: string; colors: Array<[string, string]> }> = [
+    {
+      title: "暖白 / 米（cream）",
+      note: "近白暖底：页面/卡片浅底、促销条副标题、榜单头图标题",
+      colors: [
+        ["cream10", "#FFFEF4"],
+        ["cream50", "#FFF9F2"],
+        ["cream200", "#FFFAD7"],
+        ["cream100", "#FFF2C6"],
+      ],
+    },
+    {
+      title: "黄 / 金（yellow · gold · amber）",
+      note: "主强调黄、VIP 会员金、警告琥珀",
+      colors: [
+        ["yellow500", "#FFE847"],
+        ["gold400", "#F9C74F"],
+        ["amber500", "#FFA940"],
+      ],
+    },
+    {
+      title: "橙 / 棕（peach · orange · tan · brown）",
+      note: "搜索热词、促销条渐变、书详情更新高亮、福利金",
+      colors: [
+        ["peach50", "#FFEBD4"],
+        ["peach100", "#FFDDC1"],
+        ["tan400", "#F0B16A"],
+        ["orange300", "#FF9359"],
+        ["orange500", "#FF7E32"],
+        ["orange550", "#FF6F4B"],
+        ["orange700", "#E64D00"],
+        ["brown500", "#AA722E"],
+        ["brown600", "#935C1A"],
+        ["brown800", "#5D3A12"],
+      ],
+    },
+    {
+      title: "红 / 玫（red · rose）",
+      note: "错误态、未读红点、促销条起点",
+      colors: [
+        ["red400", "#FF6B6B"],
+        ["rose400", "#FF667F"],
+        ["rose500", "#FF4E6C"],
+      ],
+    },
+    {
+      title: "粉 / 品红（pink · magenta）",
+      note: "浅色实验主强调、伙伴粉、VIP 粉紫渐变",
+      colors: [
+        ["pink100", "#F4D9E4"],
+        ["pink100Soft", "#FFD5DB"],
+        ["pink200", "#FF9CC7"],
+        ["pink400", "#FF7AA8"],
+        ["pink500", "#FF4D88"],
+        ["pink600", "#E03D74"],
+        ["pink300", "#F393DC"],
+        ["magenta500", "#E541BC"],
+        ["magenta950", "#740551"],
+        ["magenta980", "#310F29"],
+      ],
+    },
+    {
+      title: "绿（green）",
+      note: "成功态",
+      colors: [["green500", "#39D98A"]],
+    },
+    {
+      title: "蓝 / 青 / 紫（blue · sky · cyan · indigo · purple）",
+      note: "礼花粒子、信息提示、v1.0 语义扩展（能量青 / 成长蓝 / 奇幻紫）",
+      colors: [
+        ["blue500", "#4DA6FF"],
+        ["sky500", "#59AEFF"],
+        ["cyan400", "#42DDFF"],
+        ["indigo400", "#7E95FF"],
+        ["purple400", "#9C87FF"],
+      ],
+    },
+    {
+      title: "深暗装饰（dark）",
+      note: "极光渐变暗边",
+      colors: [["wine950", "#1D0B10"]],
+    },
   ];
   return (
-    <Table
-      headers={["色卡", "Token", "Hex"]}
-      columnAlign={["left", "left", "left"]}
-      rows={brand.map(([name, hex]) => [
-        swatch(hex),
-        <Code key={name}>{name}</Code>,
-        hex,
-      ].map(cell))}
-    />
+    <Stack gap={12}>
+      {groups.map((group) => (
+        <Stack key={group.title} gap={6}>
+          <Text weight="semibold" size="small">{group.title}</Text>
+          <Text tone="tertiary" size="small">{group.note}</Text>
+          <Table
+            headers={["色卡", "Token", "Hex"]}
+            columnAlign={["left", "left", "left"]}
+            rows={group.colors.map(([name, hex]) => [
+              swatch(hex),
+              <Code key={name}>{name}</Code>,
+              hex,
+            ].map(cell))}
+          />
+        </Stack>
+      ))}
+    </Stack>
   );
 }
 
@@ -1823,13 +1880,13 @@ function MultiStyleSection() {
             ["标题 / 正文", tvCode("textPrimary"), tv("#FFFFFF", "白"), tv("#1A1A2E", "墨")],
             ["次要文字", tvCode("textSecondary"), tv("#9AA0AA"), tv("#6B7280")],
             ["卡片面", tvCode("surface"), tv("#151B24"), tv("#FFFFFF")],
-            ["卡片描边", tvCode("borderSubtle"), tv("#252B34"), tv("#F4D9E4", "浅粉")],
+            ["卡片描边", tvCode("borderSubtle"), tvCode("whiteAlpha04 · 4% 白"), tv("#F4D9E4", "浅粉")],
             ["分割线", tvCode("divider"), tv("#232A33"), tv("#F3F4F6")],
             ["主按钮 · 底", tvCode("primary"), tv("#FFE847", "黄"), tv("#FF4D88", "粉")],
             ["主按钮 · 字", tvCode("onPrimary"), tv("#090E17", "深"), tv("#FFFFFF", "白")],
             ["底部导航 · 底", tvCode("navBarBackground"), tvCode("whiteAlpha20"), tvCode("blackAlpha04")],
             ["底部导航 · 选中", tvCode("accent"), tv("#FFE847", "黄"), tv("#FF4D88", "粉")],
-            ["顶栏毛玻璃", tvCode("chromeBarScrim"), tvCode("bgTint60 · 深"), tvCode("bgTint60 · 粉")],
+            ["顶栏毛玻璃", tvCode("chromeBarScrim"), tvCode("bgTint80 · 深"), tvCode("bgTint80 · 粉")],
             ["弹窗底", tvCode("surfaceElevated"), tv("#131820"), tv("#FFFFFF", "白")],
             ["分段选中 · 底/字", tvCode("segmentedSelectedFill / …Text"), tvCode("黄 8% / 黄字"), tvCode("粉 8% / 粉字")],
             ["骨架屏", tvCode("shimmerBase / Highlight"), tvCode("whiteAlpha08 / whiteAlpha24"), tvCode("blackAlpha04 / blackAlpha08")],

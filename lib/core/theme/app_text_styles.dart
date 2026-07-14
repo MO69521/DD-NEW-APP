@@ -620,7 +620,7 @@ abstract final class AppTextStyles {
   static const TextStyle bookDetailIntroBody = TextStyle(
     fontSize: AppFontSizes.lg,
     fontWeight: AppFontWeights.regular,
-    color: AppColors.textOnDarkPlaceholder,
+    color: AppColors.textPrimary,
     height: AppLineHeights.loose,
   );
 

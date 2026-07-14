@@ -2,6 +2,34 @@
 
 > 研发知识库与工程变更日志，**追加式**记录，勿覆盖历史。每次开发按「日期 / 新增 / 修改 / 删除 / 影响模块 / Breaking Changes」登记。
 
+## 2026-07-14（新增 pre-commit 文档同步校验）
+
+### 新增
+- `scripts/check-docs-sync.sh`：提交前检查，暂存含 `lib/*.dart` 改动但无 `docs/` 改动时**打印提醒（警告式，不阻断提交）**。
+- `scripts/install-git-hooks.sh`：把 `pre-commit` 安装到 `.git/hooks/`（不改 git config，克隆后运行一次）。
+- 已安装 `.git/hooks/pre-commit`（委托上述脚本）。
+
+### 影响模块
+- `scripts/`、`.git/hooks/`（后者不纳入版本管理，克隆后需重新 `bash scripts/install-git-hooks.sh`）。
+- `docs/README.md` 快速开始已加入该安装步骤。
+
+### Breaking Changes
+- 无（警告式，永远放行提交；纯手工提交也会提醒）。
+
+## 2026-07-14（新增文档同步常驻规则）
+
+### 新增
+- `.cursor/rules/docs-sync.mdc`（`alwaysApply: true`）：固化「每次 `lib/` 改动后同步受影响编号文档 + 追加 CHANGELOG」的收尾流程与「改动→必更文档」映射，令后续所有 AI 会话自动遵守文档同步约定。
+
+### 修改
+- `docs/README.md`：文档维护约定注明现由常驻规则强制。
+
+### 影响模块
+- `.cursor/rules/`、`docs/`。
+
+### Breaking Changes
+- 无。
+
 ## 2026-07-14（删除过时的书城页实现文档）
 
 ### 删除

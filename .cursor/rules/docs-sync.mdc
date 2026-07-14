@@ -1,0 +1,50 @@
+---
+description: 代码与研发知识库（docs/）同步强制规范 — 每次改动后更新受影响编号文档 + 追加 CHANGELOG
+alwaysApply: true
+---
+
+# 文档同步强制规范（docs/ 单一研发知识库）
+
+`docs/` 是本项目**唯一研发知识库**，代码与文档必须同步维护。**每完成一项 `lib/` 改动，必须在同一任务内更新受影响的编号文档并追加 `CHANGELOG.md`，不得等提醒、不得跳过。** 只更新受影响章节，不重写全量文档。
+
+## 完成任意功能后的固定收尾流程
+
+开发 → Code Review（含 `flutter analyze`）→ **更新受影响 docs 编号文档** → **追加 `docs/CHANGELOG.md`** → 输出开发总结。
+
+## 改动 → 必更文档 映射
+
+| 改动内容 | 必须更新 |
+|---|---|
+| 新增/改页面 | `docs/06_Pages.md` |
+| 新增/改公共组件（`shared/*`） | `docs/05_Components.md` |
+| 新增/改 Theme / token 真源（`core/theme/*`） | `docs/03_Theme.md` + `docs/04_DesignToken.md`（+ 同步 `design-system/`） |
+| 新增/改接口、datasource、repository | `docs/07_DataFlow.md` + `docs/08_API.md` |
+| 新增/改资源（`assets/*`、`pubspec` 资源） | `docs/09_Assets.md` |
+| 新增/改动画 | `docs/10_Animation.md` |
+| 改目录结构 / 新增 feature | `docs/02_ProjectStructure.md` |
+| 改开发规范 / 扩展约定 | `docs/11_DevelopmentGuide.md` |
+| 版本 / 完成度 / 运行方式变化 | `docs/01_Project.md` |
+| 工程性风险 / 技术债变化 | `docs/12_TechLeadReview.md` |
+| 任意上述改动 | **`docs/CHANGELOG.md`（追加式，勿覆盖）** |
+
+## CHANGELOG 追加格式（强制）
+
+```markdown
+## <YYYY-MM-DD>（简述）
+
+### 新增 / 修改 / 删除
+- ...
+
+### 影响模块
+- ...
+
+### Breaking Changes
+- 无 / ...
+```
+
+## 约束
+
+- **禁止只改代码不改文档**：涉及上表任一维度的 `lib/` 改动，未同步文档视为任务未完成。
+- **单一真源**：不要新建与编号库重复的文档；新增说明并入对应编号文件。
+- **README 入口**：`docs/README.md` 为研发入口，新增文档需在其导航表登记。
+- 纯文档/注释级微调可只追加 CHANGELOG，无需更新章节。
