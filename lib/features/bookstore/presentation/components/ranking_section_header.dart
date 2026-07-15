@@ -44,7 +44,7 @@ class RankingSectionHeader extends StatelessWidget {
               bottom: AppSpacing.xs,
             ),
             decoration: BoxDecoration(
-              color: AppColors.surfaceCard,
+              color: AppColors.sectionMoreActionBackground,
               borderRadius: BorderRadius.circular(
                 AppRadius.rankingFullListAction,
               ),

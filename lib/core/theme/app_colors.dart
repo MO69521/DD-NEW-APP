@@ -99,13 +99,12 @@ abstract final class AppColors {
   /// 顶/底 Chrome 毛玻璃半透明底色（约 80% 不透明，弱化内容透出）。
   static const Color chromeBarScrim = bgTint80;
 
-  /// 底部导航底色：深色态毛玻璃（约 90% tint）；浅色态纯白不透明（`white100`），
-  /// 全局底部导航统一实心白底。
-  static const Color bottomNavScrim = _isLight ? white100 : bgTint90;
+  /// 底部导航底色：浅色态纯白不透明（`white100`）；深色态与页面壳同色不透明
+  /// （`backgroundDark`）。全主题底栏统一实心底，不磨砂透出背后内容。
+  static const Color bottomNavScrim = _isLight ? white100 : backgroundDark;
 
-  /// 底部导航「有背景纹理」时的半透明底色（约 60% 壳基色 tint，深浅主题各自随基色）：
-  /// 比 [bottomNavScrim] 更透，让主题纹理（`AppThemeAssets.bottomNavTexture`）在其下
-  /// 隐约透出，同时保持图标 / 标签可读。复用既有壳 tint 阶，未引入新色值。
+  /// 底部导航「纹理需透出」时的叠色 scrim（约 60% 壳基色 tint）。
+  /// 当前底栏默认用不透明 [bottomNavScrim] 盖住纹理；设计需透出时改接线此 token。
   static const Color bottomNavTextureScrim = bgTint60;
 
   /// 顶栏滚动后底色（仅 `AppPageChrome`，如书城等 Tab 页）：深色态毛玻璃（约 80% tint）；
@@ -188,8 +187,8 @@ abstract final class AppColors {
   static const Color bookDetailPromoRewardText = AppBrandColors.promoRewardText;
   static const Color bookDetailPromoCloseIcon = white100;
 
-  // 猜你喜欢卡：底 / 标签底 / 标签描边走主题语义 token（深色值等于原 _dark*，浅色翻实体面）。
-  static const Color guessLikeCardBackground = surfaceSoft;
+  // 猜你喜欢卡：浅色实验态卡片底为纯白实体面（surface）；深色态弱容器面（surfaceSoft）。
+  static const Color guessLikeCardBackground = _isLight ? surface : surfaceSoft;
   static const Color guessLikeTagBackground = surface;
   static const Color guessLikeTagBorder = borderSubtle;
   static const Color gradientFadeStart = bgTint00;
@@ -200,6 +199,8 @@ abstract final class AppColors {
 
   /// 榜单名次角标（第 4 名起）深色底：60% 黑，保证白色名次数字清晰可读。
   static const Color rankingMutedBadgeScrim = black60;
+  /// 榜单名次角标（第 4 名起）数字字色：全主题恒白（含浅粉/浅黄）。
+  static const Color rankingMutedBadgeText = white100; // light-audit: keep-dark
 
   /// 按钮不可点击（禁用）态，全局统一（覆盖各变体）。主题感知：
   /// 深色态沿用弱实体面 + 三级字；浅色态用半透明强调色底（pink_light 玫粉 /
@@ -223,8 +224,20 @@ abstract final class AppColors {
   /// 书架空态文案（Figma 1319:9953）。
   static const Color bookshelfEmptyText = AppPalette.neutralGray700;
 
-  /// 封面右上角状态角标「完结」半透明深底（Figma 1335:12223）。
-  static const Color bookCoverTagCompletedScrim = black60;
+  /// 封面右上角状态角标「完结 / 连载」半透明深底（Figma 1335:12223；压在封面上，浅色实验态恒暗）。
+  static const Color bookCoverTagCompletedScrim = black60; // light-audit: keep-dark
+
+  /// 封面角标「完结 / 连载」字色：纯白实体（压在封面上，浅色实验态恒白）。
+  static const Color bookCoverTagCompletedText = white100; // light-audit: keep-dark
+
+  /// 封面角标「完结 / 连载」描边：纯黑 4%（`hairline` 0.5px 由组件指定宽度）。
+  static const Color bookCoverTagCompletedBorder = black04; // light-audit: keep-dark
+
+  /// 卡片彩色角标字色（充值「热」/ 免费领取「0/300每日」/ 会员标等）：全主题恒白。
+  static const Color cornerBadgeText = white100; // light-audit: keep-dark
+
+  /// 区块右侧胶囊操作入口底（「更多福利」「完整榜单」等）：纯黑 4%，全主题统一。
+  static const Color sectionMoreActionBackground = black04;
 
   // 我的页头图 alpha 蒙版（Figma 400:2302 / 205:5742）
   static const Color profileHeroImageMaskOpaque = white100;
@@ -285,5 +298,17 @@ abstract final class AppColors {
 
   /// 通知「NEW / 未读」标识（复用品牌橙）。
   static const Color myMessagesNoticeBadge = searchHotAccent;
+
+  // 书城「继续阅读」浮层：全主题保持深色壳样式（不随浅色包翻转）。
+  static const Color continueReadingCardBackground =
+      AppPalette.neutralCool800; // light-audit: keep-dark
+  static const Color continueReadingCardBorder =
+      AppPalette.whiteAlpha04; // light-audit: keep-dark
+  static const Color continueReadingCaptionText =
+      AppPalette.neutralCool500; // light-audit: keep-dark
+  static const Color continueReadingTitleText =
+      AppPalette.neutralWhite; // light-audit: keep-dark
+  static const Color continueReadingCloseIcon =
+      AppPalette.neutralCool400; // light-audit: keep-dark
 
 }

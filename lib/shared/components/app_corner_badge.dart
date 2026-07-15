@@ -10,13 +10,14 @@ import '../widgets/app_text.dart';
 /// 充值 / 兑换档位「热」「新手福利」「会员免费领」等共用。
 ///
 /// 必须作为 [Stack] 的直接子节点使用（内部返回 [Positioned]，贴合卡片右上角）。
-/// 仅底色 / 文字色 / 水平内边距按调用方语义传入。
+/// 仅底色 / 水平内边距 / 字色按调用方语义传入；饱和色底（橙/红）默认
+/// [AppColors.cornerBadgeText]（恒白），浅粉 VIP 角标传 [AppWelfareColors.vipFreeClaimBadgeText]。
 class AppCornerBadge extends StatelessWidget {
   const AppCornerBadge({
     super.key,
     required this.label,
     required this.color,
-    this.textColor = AppColors.textOnDark,
+    this.textColor = AppColors.cornerBadgeText,
     this.horizontalPadding = AppSpacing.xs,
   });
 

@@ -72,6 +72,7 @@ class _Header extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         AppText(
           '我的成就',
@@ -81,30 +82,28 @@ class _Header extends StatelessWidget {
           ),
         ),
         const SizedBox(width: AppSpacing.xs),
-        Padding(
-          padding: const EdgeInsets.only(bottom: AppSpacing.xxsHalf),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.baseline,
-            textBaseline: TextBaseline.alphabetic,
-            children: [
-              AppText('共获得', style: AppTextStyles.welfareSubtitle),
-              const SizedBox(width: AppSpacing.xxsHalf),
-              AppText(
-                '$earnedCount',
-                style: AppTextStyles.labelMediumDark.copyWith(
-                  color: AppWelfareColors.accentOrange,
-                ),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            AppText('共获得', style: AppTextStyles.welfareSubtitle),
+            const SizedBox(width: AppSpacing.xxsHalf),
+            AppText(
+              '$earnedCount',
+              style: AppTextStyles.labelMediumDark.copyWith(
+                color: AppWelfareColors.accentOrange,
               ),
-              const SizedBox(width: AppSpacing.xxsHalf),
-              AppText('枚勋章', style: AppTextStyles.welfareSubtitle),
-            ],
-          ),
+            ),
+            const SizedBox(width: AppSpacing.xxsHalf),
+            AppText('枚勋章', style: AppTextStyles.welfareSubtitle),
+          ],
         ),
         const Spacer(),
         AppPressable(
           onTap: onViewDetail,
           child: Row(
             mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               AppText('查看详情', style: AppTextStyles.welfareSubtitle),
               const SizedBox(width: AppSpacing.xxs),

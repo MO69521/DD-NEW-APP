@@ -19,9 +19,9 @@ flowchart LR
 ## 1. 发现 / 内容域
 
 ### bookstore · [bookstore_page.dart](../lib/features/bookstore/presentation/pages/bookstore_page.dart)
-- **职责**：书城主 Tab 容器（推荐/分类/排行），顶栏切换 + 底部「继续阅读」浮层。
+- **职责**：书城主 Tab 容器（推荐/分类/排行），顶栏切换 + 底部「继续阅读」浮层（全主题锁定深色壳 `continueReadingCard*`，不随浅色包翻转）。
 - **模块**：`bookstore_page_header`、`bookstore_recommend_body`、`continue_reading_card`、`ranking_section`、`limited_free_section`、`editor_pick_section`、`guess_like_section`（分类/排行 Tab 由 `CategoryTabBody`、`RankingTabBody` 注入）。
-- **公共组件**：`AppPageChrome`、`MainTabController`、`AppAsyncPageBody`、`AppTopBar`、`AppTopBarIconButton`、`AppTopTabBar`、`AppSwipeTabSwitcher`、`BookGridCard`、`SectionHeader`、`BookCoverTagBadge`、`RankingRankBadge`、`BookCover`、`AppMarqueeText`。
+- **公共组件**：`AppPageChrome`、`AppTabTopTexture`、`MainTabController`、`AppAsyncPageBody`、`AppTopBar`、`AppTopBarIconButton`、`AppTopTabBar`、`AppSwipeTabSwitcher`、`BookGridCard`、`SectionHeader`、`BookCoverTagBadge`、`RankingRankBadge`、`BookCover`、`AppMarqueeText`。
 - **Model**：`BookstorePageContent`、`BookstoreTopTab`、`Book`、`RankingTab`。
 - **Repository**：`BookstoreRepository`。
 - **接入点**：`bookstore_cubit.dart` → `BookstoreRepositoryImpl` → `bookstore_data_source.dart`；**Remote 已有** `bookstore_remote_datasource.dart`（`GET /bookstore/home`），默认仍注 Mock，切换注入即可。`loadMoreGuessLike()` 目前本地生成，待补分页接口。
@@ -79,7 +79,7 @@ flowchart LR
 ### bookshelf · [bookshelf_page.dart](../lib/features/bookshelf/presentation/pages/bookshelf_page.dart)
 - **职责**：一级 Tab「书架」：书架/阅读历史双 Tab、书单管理、今日阅读横幅、推荐加载更多。
 - **模块**：`bookshelf_page_header`、`bookshelf_page_tabs`、`bookshelf_tab_scroll_view`、`daily_reading_banner`、`bookshelf_book_grid`、`bookshelf_selectable_book_card`、`bookshelf_empty_view`、`bookshelf_recommendation_section`、`bookshelf_manage_action_overlay`/`action_bar`、`bookshelf_delete_confirm_dialog`。
-- **公共组件**：`AppAsyncPageBody`、`AppSwipeTabSwitcher`、`AppBlurredChromeBar`、`AppTopBar`、`AppTopBarTextButton`、`ElasticTabRow`、`BookGridSkeleton`、`BookGridCard`、`SectionHeader`、`AppListLoadMoreFooter`、`AppConfirmDialog`、`AppSelectionMark`、`AnimatedCountText`、`EmptyState`、`AppBottomNav`、`MainTabController`。
+- **公共组件**：`AppAsyncPageBody`、`AppSwipeTabSwitcher`、`AppBlurredChromeBar`、`AppTabTopTexture`、`AppTopBar`、`AppTopBarTextButton`、`ElasticTabRow`、`BookGridSkeleton`、`BookGridCard`、`SectionHeader`、`AppListLoadMoreFooter`、`AppConfirmDialog`、`AppSelectionMark`、`AnimatedCountText`、`EmptyState`、`AppBottomNav`、`MainTabController`。
 - **Model**：`BookshelfPageContent`、`BookshelfTab`、`Book`。
 - **Repository**：`BookshelfRepository`（+`BookshelfMembershipService`）。
 - **接入点**：`bookshelf_cubit.dart` → `BookshelfRepositoryImpl` → `bookshelf_data_source.dart`（仅 Mock）。`loadMoreRecommendations()` 本地生成，待接接口。用户态强，需登录后返回个人数据。
@@ -105,7 +105,7 @@ flowchart LR
 ### welfare · [welfare_page.dart](../lib/features/welfare/presentation/pages/welfare_page.dart)
 - **职责**：福利中心 Tab：货币余额、充值套餐、签到、任务。
 - **模块**：`welfare_page_header`、`daily_check_in_section`、`meal_check_in_section`、`reading_vip_progress_section`、`welfare_task_list_section`、`check_in_calendar`、`check_in_success_dialog`、`welfare_rules_dialog`。
-- **公共组件**：`BlurredPinnedHeaderDelegate`、`AppAsyncPageBody`、`CurrencyBalanceBar`、`RechargePackagesSection`、`AppGradientCtaButton`、`AppConfetti`、`showAppBlurredDialog`、`DialogCloseButton`、`LiquidSweepCtaClip`、`SweepHighlightOverlay`、`AppTopBar`、`AppTopBarIconButton`、`AppToast`、`AppBottomNav`。
+- **公共组件**：`BlurredPinnedHeaderDelegate`、`AppTabTopTexture`、`AppAsyncPageBody`、`CurrencyBalanceBar`、`RechargePackagesSection`、`AppGradientCtaButton`、`AppConfetti`、`showAppBlurredDialog`、`DialogCloseButton`、`LiquidSweepCtaClip`、`SweepHighlightOverlay`、`AppTopBar`、`AppTopBarIconButton`、`AppToast`、`AppBottomNav`。
 - **Model**：`WelfarePageContent`、`CheckInSummary`、`MealCheckInSummary`、`WelfareTaskListSummary`、`WelfareTaskItem`、`CurrencyBalance`、`RechargePackage`。
 - **Repository**：`WelfareRepository`。
 - **接入点**：`welfare_cubit.dart` → `WelfareRepositoryImpl` → `welfare_data_source.dart`（仅 Mock）。`checkIn()` 当前仅本地标记，待接签到写接口（返回奖励与当天状态）。

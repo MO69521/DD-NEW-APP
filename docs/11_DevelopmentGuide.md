@@ -22,7 +22,7 @@
 
 | 禁改 / 谨慎 | 原因 |
 |---|---|
-| `AppPalette` 深色（dark）原色 | 主题实验默认基线，规则明令不得改动（§0.1 / brand colors §A） |
+| `AppPalette` 深色（yellow_dark）原色 | 主题实验默认基线，规则明令不得改动（§0.1 / brand colors §A） |
 | 页面内**写死样式** | 禁止 `Color(0x…)`、`fontSize:数字`、`EdgeInsets.all(数字)`、`BorderRadius.circular(数字)`、`BoxShadow(...)`；必须回 token 真源改 |
 | `domain/` 引入 Flutter/http/json | domain 必须纯 Dart（entity/value object/interface） |
 | 反向依赖 | 禁止 `domain→application`、`data→presentation`、`core→features` |
@@ -161,12 +161,14 @@ flowchart TD
 | 想加什么 | 放哪里 | 注意 |
 |---|---|---|
 | 新原色 | `core/theme/app_palette.dart`（唯一 `Color(0x…)`） | 登记 design-system §4 |
-| 品牌/主题壳色、新主题包 | `core/theme/app_brand_colors.dart` | 默认恒 `dark`，dark 分支不得改；`--dart-define=THEME=xxx` |
+| 品牌/主题壳色、新主题包 | `core/theme/app_brand_colors.dart` | 默认恒 `yellow_dark`，yellow_dark 分支不得改；`--dart-define=THEME=xxx` |
 | 全局语义色 | `core/theme/app_colors.dart` | 页面只用语义名 |
 | 字号/行高/字重/样式 | `app_text_styles.dart` | |
 | 圆角/间距/尺寸 | `app_radius.dart` / `app_spacing.dart` / `app_sizes.dart` | |
 
 **强制**：新增 token / 新档位 / 新色系须**先停下征询**，落地后同步 `design-system/`（三处一致，跑 `scripts/sync-canvas.sh`）。详见 [03_Theme.md](./03_Theme.md) / [04_DesignToken.md](./04_DesignToken.md)。
+
+**三主题默认同步**：用户未特别声明时，UI / token / 组件外观改动须同时覆盖 `yellow_dark`、`pink_light`、`yellow_light`。详见 `.cursor/skills/flutter-post-edit-audit/references/design-system.md`。
 
 ## B9. 放置速查表
 

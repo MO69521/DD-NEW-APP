@@ -45,13 +45,13 @@ flowchart TD
 | 圆角语义别名 | [app_radius.dart](../lib/core/theme/app_radius.dart) | `bookCover = xs`、`welfareCheckInSection = lg`、`membershipCta = xl` |
 | 语义时长 | [app_durations.dart](../lib/core/theme/app_durations.dart) | `containerTransform`、`shimmerSweep`、`numberRoll`、`tapPressDown/Rebound` |
 
-深浅翻转：`AppColors` 内 `_isLight` 三元根据主题实验包切换中性语义色取值，语义名恒定、调用点零改动。**强调身份色**（`primary`/`onPrimary`/`primarySoft`/`segmentedSelectedFill`/`buttonDisabledFill`）不看 `_isLight`，改为引用 `AppBrandColors` 的强调身份源色跟随强调色（粉 vs 黄）——避免 `yellow_light` 亮黄底上白字不可读。当前三个编译期实验包：`dark`（默认深色）、`pink_light`（粉色浅色系）、`yellow_light`（黄色浅色系：复用 pink_light 中性外壳，主色换黄、卡片细描边改中性浅灰）。
+深浅翻转：`AppColors` 内 `_isLight` 三元根据主题实验包切换中性语义色取值，语义名恒定、调用点零改动。**强调身份色**（`primary`/`onPrimary`/`primarySoft`/`segmentedSelectedFill`/`buttonDisabledFill`）不看 `_isLight`，改为引用 `AppBrandColors` 的强调身份源色跟随强调色（粉 vs 黄）——避免 `yellow_light` 亮黄底上白字不可读。当前三个编译期实验包：`yellow_dark`（默认深色）、`pink_light`（粉色浅色系：壳背景 `pink50`）、`yellow_light`（黄色浅色系：壳背景 `neutralCool50` #F8F7FC 中性浅灰、主色换黄、卡片细描边中性浅灰）。
 
 ## 3. Component Token（组件层）
 
 具体组件的 Figma 精确尺寸 / 内边距 / 模糊半径 / 比例，集中在 [app_sizes.dart](../lib/core/theme/app_sizes.dart)（约 760 行，按 feature 分组），以及部分圆角 Figma 精确值。
 
-示例：`topBarHeight44`、`bottomNavCapsuleWidth327`、`bookCoverGridAspectRatio`、`glassBlurSigma4`、`chromeBarBlurSigma40`、`strongBlurSigma90`、`welfareCheckInMilestoneHeight70`、`membershipHeroHeight300`、`tapPressScale0.94` 等；部分由其它 token 推导（如 `rankingSegmentedHeight = outerPadding*2 + itemPaddingV*2 + 14`）。
+示例：`topBarHeight44`、`tabTopTextureHeight120`、`bottomNavCapsuleWidth327`、`bookCoverGridAspectRatio`、`glassBlurSigma4`、`bookCoverTagBlurSigma8`、`chromeBarBlurSigma40`、`strongBlurSigma90`、`welfareCheckInMilestoneHeight70`、`membershipHeroHeight300`、`tapPressScale0.94` 等；部分由其它 token 推导（如 `rankingSegmentedHeight = outerPadding*2 + itemPaddingV*2 + 14`）。
 
 `app_sizes.dart` / `app_text_styles.dart` 作为 token registry，经架构规则 §11 明确豁免「>300 行拆分」。
 

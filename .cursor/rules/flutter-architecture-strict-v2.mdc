@@ -31,6 +31,7 @@ alwaysApply: true
 3. **新增即询问**：任何超出规范的新 token / 新值 / 新档位 / 新色系 / 新组件变体，**必须停止**，先向用户说明用途与建议值并取得确认，落地后**同步更新 `design-system/README.md`**。收敛去重（把重复字面量指向已有 token、值不变）不算新增，可直接做。
 4. **三处一致（强制）**：`design-system/README.md`（文本）、`design-system/design-system-spec.canvas.tsx`（源）、Cursor 托管渲染副本 `~/.cursor/projects/<workspace>/canvases/design-system-spec.canvas.tsx` 三者内容必须一致。**每次修改可视化文档后，必须把源文件同步到托管副本**（见 `.cursor/skills/flutter-post-edit-audit`：`scripts/sync-canvas.sh`），否则预览不会更新。
 5. 若同时改了 `lib/`（组件 / token）与 `design-system/`，两侧描述必须对齐。
+6. **三主题默认同步（强制）**：用户未特别声明时，凡涉及 UI 视觉 / token / 组件外观的修改，**必须同时覆盖三个编译期主题包** `yellow_dark`（黄黑 · 默认）、`pink_light`（浅粉）、`yellow_light`（黄浅）。不得只修一个浅色包或只验当前预览主题。实现方式：改 `lib/core/theme/*` 语义 token 或 `lib/shared/*` 组件真源，让三主题经既有分支（`_isLight` / `themeId` / keep-dark）正确解析；若某主题需刻意例外（如 keep-dark 浮层），须在代码注释与 `design-system/README.md` 登记，并在交付说明中写明。
 
 ## 1. 架构强制（Feature First）
 

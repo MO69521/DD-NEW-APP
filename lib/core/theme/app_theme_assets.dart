@@ -8,16 +8,16 @@ import '../config/app_theme_id.dart';
 ///
 /// 资源目录约定（主题分包）：
 /// ```text
-/// assets/icons/<feature>/{dark|pink_light|yellow_light}/…  # 随主题
+/// assets/icons/<feature>/{yellow_dark|pink_light|yellow_light}/…  # 随主题
 /// assets/icons/<feature>/shared/…                          # 跨主题共用
-/// assets/images/<feature>/{dark|pink_light|yellow_light}/… # 随主题位图
+/// assets/images/<feature>/{yellow_dark|pink_light|yellow_light}/… # 随主题位图
 /// ```
-/// 未知 THEME 回退 `dark`；缺主题切图时可用 dark 拷贝占位，设计交付后只替换
+/// 未知 THEME 回退 `yellow_dark`；缺主题切图时可用 yellow_dark 拷贝占位，设计交付后只替换
 /// 对应主题目录。主题色稿加载时**不再** `ColorFilter` 染色。
 ///
 /// 新增主题包时：扩展 [AppThemeId] 合法集，为该包补资源目录，并登记
 /// `pubspec.yaml` 与 `docs/09_Assets.md`。返回 `null` 表示该主题不配置该资源
-/// （调用方回退默认表现，目前仅 [bottomNavTexture] 允许 null）。
+/// （调用方回退默认表现，目前 [tabTopTexture] 允许 null；[bottomNavTexture] 每主题必有路径）。
 abstract final class AppThemeAssets {
   static const String _pack = AppThemeId.assetPack;
 
@@ -25,10 +25,18 @@ abstract final class AppThemeAssets {
   // 底部导航栏
   // ══════════════════════════════════════════════════════════════
 
-  /// 底部导航栏背景纹理（每主题一张，铺满底栏、在半透明 scrim 下隐约透出）。
-  /// 为 `null` 时底栏回退纯色填充（`AppColors.bottomNavScrim`）。
-  static const String? bottomNavTexture =
+  /// 底部导航栏背景纹理（每主题一张，铺满底栏实色 [AppColors.bottomNavScrim] 之下）。
+  static const String bottomNavTexture =
       'assets/images/bottom_nav/$_pack/nav_texture.png';
+
+  // ══════════════════════════════════════════════════════════════
+  // 一级 Tab · 顶部纹理（书城 / 福利 / 书架）
+  // ══════════════════════════════════════════════════════════════
+
+  /// 一级 Tab 顶部装饰纹理（全宽 × [AppSizes.tabTopTextureHeight]）。
+  /// 切图未到位时为 `null`，[AppTabTopTexture] 只保留透明槽位、不绘制贴图。
+  /// 切图到位后改为：`'assets/images/tab_top/$_pack/top_texture.png'`。
+  static const String? tabTopTexture = null;
 
   static const String navBookstoreInactive =
       'assets/icons/nav/$_pack/bookstore_inactive.svg';

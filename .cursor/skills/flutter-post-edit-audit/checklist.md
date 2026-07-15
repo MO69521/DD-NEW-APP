@@ -29,13 +29,19 @@
 - [ ] 若改了 `design-system/`：README / canvas 源 / 托管渲染副本**三处一致**，且已运行 `scripts/sync-canvas.sh`
 - [ ] canvas 中登记的组件源码路径（`src="lib/..."`）真实存在
 
+## 0.2 三主题默认同步（强制 · 用户未特别声明时）
+
+- [ ] UI 视觉 / token / 组件外观改动已同时覆盖 **`yellow_dark`（黄黑）**、**`pink_light`（浅粉）**、**`yellow_light`（黄浅）** 三包
+- [ ] 未只修/只验当前预览主题；浅色两包经 `_isLight` / `themeId` 分支、深色包经默认分支均可正确解析
+- [ ] keep-dark 或用户指定的单主题例外已在代码注释 + `design-system/README.md` 登记，并在交付说明中列出
+
 ## 3. UI / Design Token
 
 - [ ] 使用 `AppColors`、`AppSpacing`、`AppRadius`、`AppTextStyles`、`AppDurations`
 - [ ] 无写死 `Color(...)`、`fontSize:` 数值、`EdgeInsets` 数值、`BorderRadius.circular` 数值（`core/theme` 除外）
 - [ ] UI 仅渲染 state、触发 action，无业务判断下沉不当
 - [ ] 已对照 [design-system/README.md](../../../design-system/README.md)；字号/行高/字重/颜色/间距/圆角均在规范档位内
-- [ ] 无规范外新增 token/值/色系；如需超出，已停下并向用户确认、并同步更新规范文档（见 SKILL「设计规范治理」）
+- [ ] 无规范外新增 token/值/色系；如需超出，已停下并向用户确认、并同步更新规范文档（见 [references/design-system.md](references/design-system.md)）
 
 ### 3.1 状态栏留白
 

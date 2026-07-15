@@ -63,7 +63,7 @@ const PARTS: Record<PartId, { title: string; subtitle: string; label: string }> 
   },
   "04": {
     title: "多风格 · 各色系 token 解析",
-    subtitle: "同一组件在 dark / pink_light / yellow_light 下引用的不同颜色对比（编译期整包换皮）",
+    subtitle: "同一组件在 yellow_dark / pink_light / yellow_light 下引用的不同颜色对比（编译期整包换皮）",
     label: "多风格",
   },
 };
@@ -99,6 +99,7 @@ export default function DesignSystemSpec() {
     { part: "02", title: "底部弹层", keywords: "", render: <SheetSection /> },
     { part: "02", title: "顶栏", keywords: "", render: <TopBarSection /> },
     { part: "02", title: "底部导航", keywords: "", render: <BottomNavSection /> },
+    { part: "02", title: "一级顶纹理", keywords: "tabTopTexture", render: <TabTopTextureSection /> },
     { part: "02", title: "分段切换", keywords: "", render: <SegmentedSection /> },
     { part: "02", title: "选中指示线", keywords: "", render: <TabIndicatorSection /> },
     { part: "02", title: "搜索框", keywords: "", render: <SearchSection /> },
@@ -357,7 +358,7 @@ const MOTION_CATEGORIES: Array<{ title: string; items: MotionEffect[] }> = [
       {
         name: "RankingRankBadge",
         desc: "榜单封面左上角名次角标,书城与榜单详情共用",
-        tech: "Top 1–3 image assets, muted badge bottomRight md radius",
+        tech: "Top 1–3 rank_1/2/3.svg; rank≥4 rankingMutedBadgeScrim + rankingMutedBadgeText (white keep-dark), topLeft bookCover + bottomRight md radius",
         path: "lib/shared/components/ranking_rank_badge.dart",
       },
       {
@@ -486,8 +487,8 @@ const MOTION_CATEGORIES: Array<{ title: string; items: MotionEffect[] }> = [
       },
       {
         name: "AppBlurredChromeBar",
-        desc: "顶 / 底 chrome 磨砂玻璃",
-        tech: "ClipRect + BackdropFilter",
+        desc: "顶 / 底 chrome 背景；可选 blur / textureAsset 铺底",
+        tech: "ClipRect + BackdropFilter? + DecorationImage?",
         path: "lib/shared/components/app_blurred_chrome_bar.dart",
       },
       {
@@ -516,7 +517,7 @@ const MOTION_CATEGORIES: Array<{ title: string; items: MotionEffect[] }> = [
       },
       {
         name: "继续阅读封面底纹",
-        desc: "页面背景色 + 放大封面背景层（撑满宽度、居中、半透明 + 模糊 continueReadingBgBlurSigma），随书籍变化；左侧封面缩略图放大溢出卡片顶部 + 投影，悬浮抬起",
+        desc: "全主题保持深色壳（continueReadingCard* keep-dark）；页面背景色 + 放大封面背景层（撑满宽度、居中、半透明 + 模糊 continueReadingBgBlurSigma），随书籍变化；左侧封面缩略图放大溢出卡片顶部 + 投影，悬浮抬起",
         tech: "Opacity + ImageFiltered(continueReadingBgBlurSigma)",
         path: "lib/features/bookstore/presentation/components/continue_reading_card.dart",
       },
@@ -1672,7 +1673,7 @@ function SemanticTierView() {
           语义层给原色定义产品职责；组件层只引用这些语义 token。
         </Text>
         <Table
-          headers={["语义 token", "色卡", "dark 解析", "pink_light 解析", "职责"]}
+          headers={["语义 token", "色卡", "yellow_dark 解析", "pink_light 解析", "职责"]}
           columnAlign={["left", "left", "left", "left", "left"]}
           rows={[
             ["primary", swatch("#FFE847"), "#FFE847", "#FF4D88", "主强调"],
@@ -1968,7 +1969,7 @@ function MultiStyleSection() {
   return (
     <SpecSection
       zh="多风格 · 同组件跨风格取色对比"
-      note="dark / pink_light / yellow_light（编译期 THEME 整包）"
+      note="yellow_dark / pink_light / yellow_light（编译期 THEME 整包）"
       src="lib/core/theme/app_brand_colors.dart"
       gap={16}
     >
@@ -1977,7 +1978,7 @@ function MultiStyleSection() {
           <Text>
             主题是<Text weight="semibold">编译期整包</Text>：构建时{" "}
             <Code>--dart-define=THEME=&lt;id&gt;</Code> 焊死一套；默认（不带参）永远是{" "}
-            <Code>dark</Code>，不提供 App 内运行时切换。
+            <Code>yellow_dark</Code>，不提供 App 内运行时切换。
           </Text>
           <Text>
             页面一律引用语义 token（<Code>textPrimary</Code> / <Code>surface</Code> /{" "}
@@ -1993,9 +1994,9 @@ function MultiStyleSection() {
           headers={["主题包 (THEME)", "类型", "背景", "主强调 accent", "构建参数"]}
           columnAlign={["left", "left", "left", "left", "left"]}
           rows={[
-            ["dark（默认）", "深壳", tv("#090E17"), tv("#FFE847", "黄"), tvNote("不带参")],
+            ["yellow_dark（默认）", "深壳", tv("#090E17"), tv("#FFE847", "黄"), tvNote("不带参")],
             ["pink_light", "浅壳", tv("#F4F2F4"), tv("#FF4D88", "粉"), tvCode("THEME=pink_light")],
-            ["yellow_light", "浅壳", tv("#F4F2F4"), tv("#FFE847", "黄"), tvCode("THEME=yellow_light")],
+            ["yellow_light", "浅壳", tv("#F8F7FC"), tv("#FFE847", "黄"), tvCode("THEME=yellow_light")],
           ].map((r) => r.map(cell))}
         />
       </Stack>
@@ -2007,7 +2008,7 @@ function MultiStyleSection() {
           token 级明细见规范 §4.2 语义层。
         </Text>
         <Table
-          headers={["组件 / 场景", "取色 token", "dark", "pink_light"]}
+          headers={["组件 / 场景", "取色 token", "yellow_dark", "pink_light"]}
           columnAlign={["left", "left", "left", "left"]}
           rows={[
             ["页面背景", tvCode("background"), tv("#090E17"), tv("#F4F2F4")],
@@ -2344,12 +2345,12 @@ function CornerBadgeSection() {
   const badges: Array<{ label: string; bg: string; fg: string }> = [
     { label: "热", bg: "#FF7E32", fg: "#FFFFFF" },
     { label: "新手福利", bg: "#FF7E32", fg: "#FFFFFF" },
-    { label: "会员免费领", bg: "#FFCD50", fg: "#131820" },
+    { label: "会员免费领", bg: "#FFD5DB", fg: "#740551" },
   ];
   return (
     <SpecSection
         zh="角标"
-        note="AppCornerBadge（L2）· 卡片右上角斜切胶囊（topRight + bottomLeft 圆角 md，另两角直角）· 底色/文字色/水平内边距按语义传入 · 充值/兑换档位「热」「新手福利」「会员免费领」等共用"
+        note="AppCornerBadge（L2）· 卡片右上角斜切胶囊 · 饱和色底字恒白 · VIP「会员免费领」底恒浅粉 pink100Soft #FFD5DB + 字 magenta950 #740551"
         src="lib/shared/components/app_corner_badge.dart"
       >
       <Stage>
@@ -2524,6 +2525,49 @@ function BottomNavSection() {
         <BottomNavDemo />
         <div style={{ marginTop: 8 }}>
           <Caption>点击切换 Tab，选中图标会弹跳（放大 → 回缩 → 复位）</Caption>
+        </div>
+      </Stage>
+    </SpecSection>
+  );
+}
+
+function TabTopTextureSection() {
+  return (
+    <SpecSection
+      zh="一级 Tab 顶纹理"
+      note="AppTabTopTexture · 全宽 × tabTopTextureHeight(120) · 书城/福利/书架 · 切图未到位时透明槽位"
+      src="lib/shared/components/app_tab_top_texture.dart"
+    >
+      <Stage>
+        <div
+          style={{
+            position: "relative",
+            width: 280,
+            height: 160,
+            background: APP.bg,
+            borderRadius: 8,
+            overflow: "hidden",
+            border: `1px solid ${APP.border}`,
+          }}
+        >
+          <div
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              right: 0,
+              height: 120,
+              borderBottom: `1px dashed ${APP.border}`,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <Caption>槽位 100% × 120（暂无贴图）</Caption>
+          </div>
+          <div style={{ position: "absolute", bottom: 12, left: 12, right: 12 }}>
+            <Caption>贴图路径：AppThemeAssets.tabTopTexture</Caption>
+          </div>
         </div>
       </Stage>
     </SpecSection>

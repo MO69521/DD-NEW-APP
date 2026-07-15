@@ -1,4 +1,3 @@
-import '../../core/theme/app_icon_assets.dart';
 part of 'recharge_packages_section.dart';
 
 class _RechargeSectionHeader extends StatelessWidget {
@@ -35,7 +34,7 @@ class _RechargeSectionHeader extends StatelessWidget {
                 bottom: AppSpacing.xs,
               ),
               decoration: BoxDecoration(
-                color: AppColors.surfaceCard,
+                color: AppColors.sectionMoreActionBackground,
                 borderRadius: BorderRadius.circular(
                   AppRadius.welfareRechargeMoreAction,
                 ),
@@ -162,8 +161,7 @@ class _RechargePackageCard extends StatelessWidget {
   }
 }
 
-/// 充值区统一胶囊按钮：暗色 `surfaceCard` 底 + 固定高度/圆角，居中承载内容。
-/// 价格按钮与免费领取 CTA 共用，保持样式一致。
+/// 充值区统一胶囊按钮：价格 / 免费领取 CTA 默认 `rechargePriceBg`（黑 4%）；VIP 用渐变。
 class _RechargePillButton extends StatelessWidget {
   const _RechargePillButton({required this.child, this.onTap, this.gradient});
 
@@ -182,7 +180,7 @@ class _RechargePillButton extends StatelessWidget {
         height: AppSizes.welfareRechargePriceButtonHeight,
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: gradient == null ? AppColors.surfaceCard : null,
+          color: gradient == null ? AppWelfareColors.rechargePriceBg : null,
           gradient: gradient,
           borderRadius: BorderRadius.circular(AppRadius.welfareRechargePrice),
         ),

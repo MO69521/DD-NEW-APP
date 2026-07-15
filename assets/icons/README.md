@@ -21,7 +21,7 @@
 
 | 子目录 | 中文 |
 |--------|------|
-| `dark` | 深色主题 |
+| `yellow_dark` | 黄色深色主题 |
 | `pink_light` | 粉色浅色主题 |
 | `yellow_light` | 黄色浅色主题 |
 | `shared`（仅 book_detail） | 该业务内跨主题共用 |

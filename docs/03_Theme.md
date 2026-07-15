@@ -24,10 +24,10 @@ flowchart TD
 | feature 色板 | `app_welfare_colors.dart`、`app_partner_colors.dart`、`app_membership_colors.dart` | 业务专用色 |
 | 主题装配 | [app_theme.dart](../lib/core/theme/app_theme.dart)、`app_color_scheme.dart` | `ThemeData` / `ColorScheme` 组装 |
 
-- **主题切换**：编译期实验包机制，`--dart-define=THEME=<id>`（默认 `dark`）。语义名不变，仅换源色，调用点零改动。当前三包：`dark`（默认深色）、`pink_light`（粉色浅色系）、`yellow_light`（黄色浅色系：复用 pink_light 中性外壳，主强调色换深色主题黄 `#FFE847`、卡片细描边改中性浅灰）。
-- **两类分支**：§A 拆为「中性外壳」（背景/浮层/壳文字/tint，按 `isLightExperiment` 翻转，两浅色包共用）与「强调身份」（`accent`/`onAccent`/`accentSoft*`/`accentDisabledFill`，按 `themeId==pink_light` 判定粉 vs 黄，`dark` 与 `yellow_light` 同走黄）。主色上文字/图标一律走 `onPrimary`（`onAccent`）：黄底深墨、粉底白字。
-- **主题资源**：[`AppThemeAssets`](../lib/core/theme/app_theme_assets.dart) 与颜色层平行，按 `THEME` 解析底栏图标 / 书详加入书架·送心 / 底栏纹理等完整色稿路径；详见 [09_Assets.md](./09_Assets.md)。
-- **约束**：默认恒为 `dark`，§A 的 dark 分支（`AppPalette` 深色原色）不得改动。
+- **主题切换**：编译期实验包机制，`--dart-define=THEME=<id>`（默认 `yellow_dark`）。当前三包：`yellow_dark`（默认深色）、`pink_light`（粉色浅色系）、`yellow_light`（黄色浅色系：壳背景 `neutralCool50` #F8F7FC 中性浅灰，主强调色换黄 `#FFE847`）。
+- **两类分支**：§A 拆为「中性外壳」（`backgroundDark`/`bgTint*`：`pink_light`→`pink50`、`yellow_light`→`neutralCool50`；浮层/壳文字两浅色包仍共用）与「强调身份」（`accent`/`onAccent`/`accentSoft*`/`accentDisabledFill`，按 `themeId==pink_light` 判定粉 vs 黄，`yellow_dark` 与 `yellow_light` 同走黄）。主色上文字/图标一律走 `onPrimary`（`onAccent`）：黄底深墨、粉底白字。
+- **主题资源**：[`AppThemeAssets`](../lib/core/theme/app_theme_assets.dart) 与颜色层平行，按 `THEME` 解析底栏图标 / 书详加入书架·送心 / 底栏纹理 / 一级 Tab 顶纹理（`tabTopTexture`，切图未到位时 null）等路径；详见 [09_Assets.md](./09_Assets.md)。
+- **约束**：默认恒为 `yellow_dark`，§A 的 yellow_dark 分支（`AppPalette` 深色原色）不得改动。
 
 ## 2. 字体系统
 
@@ -78,7 +78,7 @@ flowchart TD
 
 ## 8. 哪些地方不能直接修改
 
-- `AppPalette` 的**深色（dark）原色**：主题实验默认基线，规则明令不得改动。
+- `AppPalette` 的**深色（yellow_dark）原色**：主题实验默认基线，规则明令不得改动。
 - **不得在页面/组件内写死字面量**（`Color(0x…)`、`fontSize:`、`EdgeInsets.all(数字)`、`BorderRadius.circular(数字)`）——必须回 token 真源改。
 - **不得绕过语义层直接引用 `AppPalette`**（页面只用 `AppColors` / `AppBrandColors` 语义名）。
 - **三处一致**：改任何 token/组件外观，需同步 `design-system/README.md` + `design-system-spec.canvas.tsx` + Cursor 托管副本（规则 §0.1）。

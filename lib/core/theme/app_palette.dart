@@ -36,6 +36,13 @@ abstract final class AppPalette {
   // ── 中性原色 ──
   static const Color neutralWhite = Color(0xFFFFFFFF);
   static const Color neutralCool50 = Color(0xFFF8F7FC);
+  static const Color neutralCool50Alpha00 = Color(0x00F8F7FC);
+  static const Color neutralCool50Alpha35 = Color(0x59F8F7FC);
+  static const Color neutralCool50Alpha45 = Color(0x73F8F7FC);
+  static const Color neutralCool50Alpha55 = Color(0x8CF8F7FC);
+  static const Color neutralCool50Alpha60 = Color(0x99F8F7FC);
+  static const Color neutralCool50Alpha80 = Color(0xCCF8F7FC);
+  static const Color neutralCool50Alpha90 = Color(0xE6F8F7FC);
   static const Color neutralCool100 = Color(0xFFF3F4F6);
   static const Color neutralCool200 = Color(0xFFE5E7EB);
   static const Color neutralCool300 = Color(0xFFB2B3BA);

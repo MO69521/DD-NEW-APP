@@ -7,6 +7,7 @@ import '../../../../core/theme/app_spacing.dart';
 import '../../../../routes/app_router.dart';
 import '../../../../routes/app_routes.dart';
 import '../../../../shared/components/app_async_page_body.dart';
+import '../../../../shared/components/app_tab_top_texture.dart';
 import '../../../../shared/components/blurred_pinned_header_delegate.dart';
 import '../../../../shared/components/currency_balance_bar.dart';
 import '../../../../shared/components/app_blurred_dialog.dart';
@@ -93,74 +94,80 @@ class _WelfareView extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: AppColors.backgroundDark,
-      body: CustomScrollView(
-        slivers: [
-          SliverPersistentHeader(
-            pinned: true,
-            delegate: BlurredPinnedHeaderDelegate(
-              height: statusBarHeight + AppSizes.welfareHeaderHeight,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  SizedBox(height: statusBarHeight),
-                  WelfarePageHeader(
-                    onRechargeInfoTap: () => showAppBlurredDialog<void>(
-                      context: context,
-                      builder: (_) => const WelfareRulesDialog(),
-                    ),
+      body: Stack(
+        children: [
+          const AppTabTopTexture(),
+          CustomScrollView(
+            slivers: [
+              SliverPersistentHeader(
+                pinned: true,
+                delegate: BlurredPinnedHeaderDelegate(
+                  height: statusBarHeight + AppSizes.welfareHeaderHeight,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      SizedBox(height: statusBarHeight),
+                      WelfarePageHeader(
+                        onRechargeInfoTap: () => showAppBlurredDialog<void>(
+                          context: context,
+                          builder: (_) => const WelfareRulesDialog(),
+                        ),
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
-            ),
-          ),
-          SliverPadding(
-            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm),
-            sliver: SliverList(
-              delegate: SliverChildListDelegate([
-                const SizedBox(height: AppSpacing.md),
-                CurrencyBalanceBar(
-                  balances: content.currencyBalances,
-                  onCurrencyTap: cubit.onCurrencyTap,
-                ),
-                const SizedBox(height: AppSpacing.sm),
-                RechargePackagesSection(
-                  packages: content.rechargePackages,
-                  onPackageTap: onRechargePackageTap,
-                  onMoreTap: onRechargeMoreTap,
-                  collapsible: true,
-                ),
-                const SizedBox(height: AppSpacing.sm),
-                DailyCheckInSection(
-                  summary: content.checkInSummary,
-                  checkedIn: hasCheckedInToday,
-                  onCheckInTap: () {
-                    cubit.checkIn();
-                    CheckInSuccessDialog.show(
-                      context,
+              SliverPadding(
+                padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm),
+                sliver: SliverList(
+                  delegate: SliverChildListDelegate([
+                    const SizedBox(height: AppSpacing.md),
+                    CurrencyBalanceBar(
+                      balances: content.currencyBalances,
+                      onCurrencyTap: cubit.onCurrencyTap,
+                    ),
+                    const SizedBox(height: AppSpacing.sm),
+                    RechargePackagesSection(
+                      packages: content.rechargePackages,
+                      onPackageTap: onRechargePackageTap,
+                      onMoreTap: onRechargeMoreTap,
+                      collapsible: true,
+                    ),
+                    const SizedBox(height: AppSpacing.sm),
+                    DailyCheckInSection(
                       summary: content.checkInSummary,
-                      onVipClaim: () =>
+                      checkedIn: hasCheckedInToday,
+                      onCheckInTap: () {
+                        cubit.checkIn();
+                        CheckInSuccessDialog.show(
+                          context,
+                          summary: content.checkInSummary,
+                          onVipClaim: () =>
+                              AppRouter.pushNamed(AppRoutes.membershipName),
+                          onWatchVideo: () => _showWatchVideoToast(context),
+                        );
+                      },
+                      onWatchVideoTap: () => _showWatchVideoToast(context),
+                    ),
+                    const SizedBox(height: AppSpacing.sm),
+                    MealCheckInSection(
+                      summary: content.mealCheckInSummary,
+                      onVipClaimTap: () =>
                           AppRouter.pushNamed(AppRoutes.membershipName),
-                      onWatchVideo: () => _showWatchVideoToast(context),
-                    );
-                  },
-                  onWatchVideoTap: () => _showWatchVideoToast(context),
+                    ),
+                    const SizedBox(height: AppSpacing.sm),
+                    ReadingVipProgressSection(task: content.featuredReadingReward),
+                    const SizedBox(height: AppSpacing.sm),
+                    WelfareTaskListSection(
+                      summary: content.taskListSummary,
+                      onVipTap: () =>
+                          AppRouter.pushNamed(AppRoutes.membershipName),
+                    ),
+                    const SizedBox(height: WelfarePage._bottomNavReserve),
+                  ]),
                 ),
-                const SizedBox(height: AppSpacing.sm),
-                MealCheckInSection(
-                  summary: content.mealCheckInSummary,
-                  onVipClaimTap: () =>
-                      AppRouter.pushNamed(AppRoutes.membershipName),
-                ),
-                const SizedBox(height: AppSpacing.sm),
-                ReadingVipProgressSection(task: content.featuredReadingReward),
-                const SizedBox(height: AppSpacing.sm),
-                WelfareTaskListSection(
-                  summary: content.taskListSummary,
-                  onVipTap: () => AppRouter.pushNamed(AppRoutes.membershipName),
-                ),
-                const SizedBox(height: WelfarePage._bottomNavReserve),
-              ]),
-            ),
+              ),
+            ],
           ),
         ],
       ),

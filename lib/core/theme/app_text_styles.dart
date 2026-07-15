@@ -501,7 +501,7 @@ abstract final class AppTextStyles {
   static const TextStyle rankingDimensionInactive = TextStyle(
     fontSize: AppFontSizes.base,
     fontWeight: AppFontWeights.regular,
-    color: AppColors.textOnDarkPlaceholder,
+    color: AppColors.textOnDarkMuted,
     height: AppLineHeights.none,
   );
 

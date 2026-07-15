@@ -66,11 +66,11 @@ class _FreeClaimCard extends StatelessWidget {
             AppCornerBadge(
               label: option.badgeLabel,
               color: _isVip
-                  ? AppWelfareColors.vipCtaGradientEnd
+                  ? AppWelfareColors.vipFreeClaimBadgeBackground
                   : AppWelfareColors.accentOrange,
               textColor: _isVip
-                  ? AppWelfareColors.vipCtaText
-                  : AppColors.textOnDark,
+                  ? AppWelfareColors.vipFreeClaimBadgeText
+                  : AppColors.cornerBadgeText,
             ),
           ],
         ),

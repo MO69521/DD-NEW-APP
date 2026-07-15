@@ -12,12 +12,12 @@ import 'app_palette.dart';
 ///
 /// ── 编译期主题包（小流量实验用）───────────────────────────────
 /// 一个实验包 = §A 整组的一套取值；`AppColors` / 页面经语义名取色，换包不改调用点。
-/// 当前实验包：`dark`（默认深色）、`pink_light`（粉色浅色系）、
-/// `yellow_light`（黄色浅色系：复用 pink_light 中性浅色外壳，主强调色换黄）。
+/// 当前实验包：`yellow_dark`（默认深色）、`pink_light`（粉色浅色系）、
+/// `yellow_light`（黄色浅色系：中性浅灰壳 `neutralCool50`，主强调色换黄）。
 ///
 /// §A 分两类分支：**中性外壳**（背景/浮层/壳文字/tint）按 `isLightExperiment` 翻转，
 /// 两个浅色包共用；**强调身份**（`accent` / `onAccent` / `accentSoft*` /
-/// `accentDisabledFill`）按 `themeId == _pinkLight` 判定（粉 vs 黄），`dark` 与
+/// `accentDisabledFill`）按 `themeId == _pinkLight` 判定（粉 vs 黄），`yellow_dark` 与
 /// `yellow_light` 同走黄。
 ///
 /// 新增一个实验包（示例 id `xxx`）：
@@ -25,8 +25,8 @@ import 'app_palette.dart';
 ///   2. 在 §A 每个字段三元里前插 `themeId == 'xxx' ? AppPalette.xxx : …`。
 ///   3. 构建时 `--dart-define=THEME=xxx`；新增原色登记 `design-system/README.md` §4。
 ///
-/// 约束（强制）：默认（不带 `--dart-define`）永远解析为 `dark`，
-/// §A 的 dark 分支（[AppPalette] 深色原色）不得改动。
+/// 约束（强制）：默认（不带 `--dart-define`）永远解析为 `yellow_dark`，
+/// §A 的 yellow_dark 分支（[AppPalette] 深色原色）不得改动。
 abstract final class AppBrandColors {
   static const String themeId = AppThemeId.value;
 
@@ -34,7 +34,7 @@ abstract final class AppBrandColors {
   static const String _yellowLight = AppThemeId.yellowLight;
 
   /// 浅色实验包判定（供中性外壳翻转 / [AppColors] 翻转中性叠色 / ink 文字）。
-  /// `pink_light` 与 `yellow_light` 共用同一套中性浅色外壳；未知 THEME 回退 dark 外壳。
+  /// `pink_light` 与 `yellow_light` 共用同一套中性浅色外壳；未知 THEME 回退 yellow_dark 外壳。
   static const bool isLightExperiment =
       themeId == _pinkLight || themeId == _yellowLight;
 
@@ -43,19 +43,23 @@ abstract final class AppBrandColors {
   // ══════════════════════════════════════════════════════════════
   //
   // 两类分支：
-  // - 中性外壳（背景/浮层/壳文字/tint）→ 按 [isLightExperiment] 翻转，两浅色包共用。
+  // - 中性外壳（背景/浮层/壳文字/tint）→ 浅色包翻转；`pink_light` 用 `pink50`，
+  //   `yellow_light` 用中性浅灰 `neutralCool50`；其余浮层/文字两浅色包仍共用。
   // - 强调身份（accent / onAccent / accentSoft* / accentDisabledFill）→ 按
-  //   `themeId == _pinkLight` 判定（粉 vs 黄）；`dark` 与 `yellow_light` 同走黄。
+  //   `themeId == _pinkLight` 判定（粉 vs 黄）；`yellow_dark` 与 `yellow_light` 同走黄。
 
   /// 全局背景（主题壳基色）。
-  static const Color backgroundDark =
-      isLightExperiment ? AppPalette.pink50 : AppPalette.neutralCool950;
+  static const Color backgroundDark = themeId == _yellowLight
+      ? AppPalette.neutralCool50
+      : isLightExperiment
+      ? AppPalette.pink50
+      : AppPalette.neutralCool950;
 
   /// 主强调色（主 CTA / 点赞 / 互动选中）。
   static const Color accent =
       themeId == _pinkLight ? AppPalette.pink500 : AppPalette.yellow500;
 
-  /// 主强调色上的文字 / 图标：粉底翻白、黄底（dark / yellow_light）用深墨。
+  /// 主强调色上的文字 / 图标：粉底翻白、黄底（yellow_dark / yellow_light）用深墨。
   static const Color onAccent = themeId == _pinkLight
       ? AppPalette.neutralWhite
       : AppPalette.neutralCool950;
@@ -73,14 +77,14 @@ abstract final class AppBrandColors {
       ? AppPalette.pink500Alpha40
       : AppPalette.yellow500Alpha40;
 
-  /// 浅色外壳卡片细描边：pink_light 用浅粉，yellow_light 用中性浅灰（dark 不使用）。
+  /// 浅色外壳卡片细描边：pink_light 用浅粉，yellow_light 用中性浅灰（yellow_dark 不使用）。
   static const Color lightCardBorder =
       themeId == _pinkLight ? AppPalette.pink100 : AppPalette.neutralCool200;
 
-  /// 极光渐变亮核（暖米金）。pink_light 暂复用 dark（v1 已知项）。
+  /// 极光渐变亮核（暖米金）。pink_light 暂复用 yellow_dark（v1 已知项）。
   static const Color auroraGlow = AppPalette.cream100;
 
-  /// 极光渐变暗边（暗红近黑）。pink_light 暂复用 dark。
+  /// 极光渐变暗边（暗红近黑）。pink_light 暂复用 yellow_dark。
   static const Color auroraEdge = AppPalette.wine950;
 
   /// 弹窗底。浅色包用白底。
@@ -98,20 +102,41 @@ abstract final class AppBrandColors {
 
   // 背景 tint 阶：主题壳基色的不同透明度（渐隐 / 毛玻璃底）。
   // 头图/封面「图上遮罩」不用这里（浅色下需恒暗），由 AppColors 单独按主题处理。
-  static const Color bgTint00 =
-      isLightExperiment ? AppPalette.pink50Alpha00 : AppPalette.neutralCool950Alpha00;
-  static const Color bgTint35 =
-      isLightExperiment ? AppPalette.pink50Alpha35 : AppPalette.neutralCool950Alpha35;
-  static const Color bgTint45 =
-      isLightExperiment ? AppPalette.pink50Alpha45 : AppPalette.neutralCool950Alpha45;
-  static const Color bgTint55 =
-      isLightExperiment ? AppPalette.pink50Alpha55 : AppPalette.neutralCool950Alpha55;
-  static const Color bgTint60 =
-      isLightExperiment ? AppPalette.pink50Alpha60 : AppPalette.neutralCool950Alpha60;
-  static const Color bgTint80 =
-      isLightExperiment ? AppPalette.pink50Alpha80 : AppPalette.neutralCool950Alpha80;
-  static const Color bgTint90 =
-      isLightExperiment ? AppPalette.pink50Alpha90 : AppPalette.neutralCool950Alpha90;
+  static const Color bgTint00 = themeId == _yellowLight
+      ? AppPalette.neutralCool50Alpha00
+      : isLightExperiment
+      ? AppPalette.pink50Alpha00
+      : AppPalette.neutralCool950Alpha00;
+  static const Color bgTint35 = themeId == _yellowLight
+      ? AppPalette.neutralCool50Alpha35
+      : isLightExperiment
+      ? AppPalette.pink50Alpha35
+      : AppPalette.neutralCool950Alpha35;
+  static const Color bgTint45 = themeId == _yellowLight
+      ? AppPalette.neutralCool50Alpha45
+      : isLightExperiment
+      ? AppPalette.pink50Alpha45
+      : AppPalette.neutralCool950Alpha45;
+  static const Color bgTint55 = themeId == _yellowLight
+      ? AppPalette.neutralCool50Alpha55
+      : isLightExperiment
+      ? AppPalette.pink50Alpha55
+      : AppPalette.neutralCool950Alpha55;
+  static const Color bgTint60 = themeId == _yellowLight
+      ? AppPalette.neutralCool50Alpha60
+      : isLightExperiment
+      ? AppPalette.pink50Alpha60
+      : AppPalette.neutralCool950Alpha60;
+  static const Color bgTint80 = themeId == _yellowLight
+      ? AppPalette.neutralCool50Alpha80
+      : isLightExperiment
+      ? AppPalette.pink50Alpha80
+      : AppPalette.neutralCool950Alpha80;
+  static const Color bgTint90 = themeId == _yellowLight
+      ? AppPalette.neutralCool50Alpha90
+      : isLightExperiment
+      ? AppPalette.pink50Alpha90
+      : AppPalette.neutralCool950Alpha90;
 
   // ══════════════════════════════════════════════════════════════
   // §B feature 品牌语义（跨主题恒定，引用 AppPalette 原色）

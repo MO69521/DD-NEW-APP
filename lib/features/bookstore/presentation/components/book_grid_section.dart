@@ -16,6 +16,7 @@ class BookGridSection extends StatelessWidget {
     this.onActionTap,
     this.onBookTap,
     this.heroNamespace,
+    this.titleContentGap = AppSpacing.lg,
   });
 
   final String title;
@@ -23,6 +24,9 @@ class BookGridSection extends StatelessWidget {
   final int crossAxisCount;
   final String? actionLabel;
   final VoidCallback? onActionTap;
+
+  /// 标题行与网格间距；卡内区块（如编辑推荐）传 `AppSpacing.md` 与榜单一致。
+  final double titleContentGap;
 
   /// 回调携带该卡封面的屏内唯一 Hero 标签，供详情页同 tag 飞行。
   final void Function(Book book, Object coverHeroTag)? onBookTap;
@@ -40,7 +44,7 @@ class BookGridSection extends StatelessWidget {
           actionLabel: actionLabel,
           onActionTap: onActionTap,
         ),
-        const SizedBox(height: AppSpacing.lg),
+        SizedBox(height: titleContentGap),
         LayoutBuilder(
           builder: (context, constraints) {
             final totalSpacing = AppSpacing.md * (crossAxisCount - 1);

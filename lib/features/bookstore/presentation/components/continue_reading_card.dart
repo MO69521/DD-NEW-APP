@@ -67,10 +67,10 @@ class ContinueReadingCard extends StatelessWidget {
       borderRadius: BorderRadius.circular(AppRadius.lg),
       child: DecoratedBox(
         decoration: BoxDecoration(
-          color: AppColors.backgroundDark,
+          color: AppColors.continueReadingCardBackground,
           borderRadius: BorderRadius.circular(AppRadius.lg),
           border: Border.all(
-            color: AppColors.borderGlass,
+            color: AppColors.continueReadingCardBorder,
             width: AppSizes.hairline,
           ),
         ),
@@ -94,13 +94,15 @@ class ContinueReadingCard extends StatelessWidget {
                         AppText(
                           '继续阅读',
                           style: AppTextStyles.captionSm.copyWith(
-                            color: AppColors.textOnDarkPlaceholder,
+                            color: AppColors.continueReadingCaptionText,
                           ),
                         ),
                         const SizedBox(height: AppSpacing.xxsHalf),
                         AppMarqueeText(
                           text: book.title,
-                          style: AppTextStyles.bodyMediumDark,
+                          style: AppTextStyles.bodyMediumDark.copyWith(
+                            color: AppColors.continueReadingTitleText,
+                          ),
                         ),
                       ],
                     ),
@@ -115,7 +117,7 @@ class ContinueReadingCard extends StatelessWidget {
                       child: Icon(
                         Icons.close,
                         size: AppSizes.continueReadingCloseIconSize,
-                        color: AppColors.textOnDarkMuted,
+                        color: AppColors.continueReadingCloseIcon,
                       ),
                     ),
                   ),

@@ -41,7 +41,7 @@
 | `AppTopBarIconButton` · [app_top_bar_icon_button.dart](../lib/shared/components/app_top_bar_icon_button.dart) | 顶栏图标按钮（模糊圆底） | `iconAsset` req · `iconColor` · `onTap` | bookstore、partner、welfare、profile、ranking | 建议 | 已足够 |
 | `AppTopBarTextButton` · [app_top_bar_text_button.dart](../lib/shared/components/app_top_bar_text_button.dart) | 顶栏文字动作 | `label` req · `style` · `onTap` | bookshelf；`AppTopBar` 内部 | 建议 | 已足够 |
 | `AppAsyncPageBody` · [app_async_page_body.dart](../lib/shared/components/app_async_page_body.dart) | 加载/错误/空/内容门闸 | `isLoading` req · `errorMessage` · `onRetry` · `isEmpty` · `child` req | 全站 Tab/二级页通用 | 强烈建议 | 已足够 |
-| `AppBlurredChromeBar` · [app_blurred_chrome_bar.dart](../lib/shared/components/app_blurred_chrome_bar.dart) | Chrome 毛玻璃背景 | `child` req · `enabled` · `blurSigma` · `scrimColor` | 全站通用 | 强烈建议 | 已足够 |
+| `AppBlurredChromeBar` · [app_blurred_chrome_bar.dart](../lib/shared/components/app_blurred_chrome_bar.dart) | Chrome 背景（可选 blur / 纹理） | `child` req · `enabled` · `blurEnabled` · `blurSigma` · `scrimColor` · `textureAsset?` | 全站通用 | 强烈建议 | 已足够 |
 | `BlurredPinnedHeaderDelegate` · [blurred_pinned_header_delegate.dart](../lib/shared/components/blurred_pinned_header_delegate.dart) | 吸顶 Sliver 头部（毛玻璃） | `height` req · `child` req | welfare | 建议 | 使用面小，可推广 |
 
 ### 2.2 Tab / 分段 / 指示器（Tab 系统）
@@ -54,7 +54,7 @@
 | `ElasticTabIndicator` · [elastic_tab_indicator.dart](../lib/shared/components/elastic_tab_indicator.dart) | 弹性指示条（平移+拉伸回弹） | `selectedIndex` req · `slotWidth/slotPitch` · `axis` · `swipeProgress` | currency_wallet；shared（tab 系列） | 强烈建议 | 已足够（底层件） |
 | `ElasticTabRow` · [elastic_tab_row.dart](../lib/shared/components/elastic_tab_row.dart) | 变宽 Tab 行 + 内置指示条 | `selectedIndex` req · `children` req · `swipeProgress` | bookshelf、dress_up | 建议 | 已足够 |
 | `AppSegmentedSwitch` (+`AppSegmentedItemBuilder`) · [app_segmented_switch.dart](../lib/shared/components/app_segmented_switch.dart) | 毛玻璃横向分段开关 | `itemCount`/`selectedIndex`/`onChanged`/`itemBuilder` req | book_detail、ranking | 建议 | 已足够 |
-| `AppVerticalRailSwitch` · [app_vertical_rail_switch.dart](../lib/shared/components/app_vertical_rail_switch.dart) | 竖向选项轨（弹性指示） | `itemCount`/`selectedIndex`/`onChanged`/`itemBuilder`/`itemSlotHeight` req | ranking | 建议 | 已足够 |
+| `AppVerticalRailSwitch` · [app_vertical_rail_switch.dart](../lib/shared/components/app_vertical_rail_switch.dart) | 竖向选项轨（弹性指示）；榜单维度栏未选字 `rankingDimensionInactive`（`textSecondary`） | `itemCount`/`selectedIndex`/`onChanged`/`itemBuilder`/`itemSlotHeight` req | ranking | 建议 | 已足够 |
 | `AppTabCountBadge` · [app_tab_count_badge.dart](../lib/shared/components/app_tab_count_badge.dart) | Tab 悬浮数字角标 | `count` req · `color` | book_detail；经 `AppTopTabBar` | 建议 | 已足够 |
 | `AppPageDots` · [app_page_dots.dart](../lib/shared/components/app_page_dots.dart) | 分页指示点 | `count` req · `current` req · `onDotTap` | membership、onboarding | 建议 | 已足够 |
 
@@ -67,6 +67,7 @@
 | `DialogCloseButton` · [dialog_close_button.dart](../lib/shared/components/dialog_close_button.dart) | 弹窗右上角关闭按钮 | `onTap` req | 全站通用 | 强烈建议 | 已足够 |
 | `AppToast` · [app_toast.dart](../lib/shared/components/app_toast.dart) | 全局轻提示（静态 API） | `AppToast.show(context, message)` | 全站通用 | 强烈建议 | 已足够 |
 | `EmptyState` · [empty_state.dart](../lib/shared/components/empty_state.dart) | 空状态组合 | `title` req · `description` · `action` · `illustration` | 全站通用 | 强烈建议 | 已足够 |
+| `AppTabTopTexture` · [app_tab_top_texture.dart](../lib/shared/components/app_tab_top_texture.dart) | 一级 Tab 顶部装饰纹理（全宽 × 120） | 无必填 | 书城 / 福利 / 书架 | 建议 | 切图未到位时透明槽位 |
 | `AppListLoadMoreFooter` · [app_list_load_more_footer.dart](../lib/shared/components/app_list_load_more_footer.dart) | 上拉加载指示（可 Sliver） | `isLoading` req · `asSliver` · `padding` | bookshelf、category、editor_pick | 建议 | 已足够 |
 | `AppConfetti` · [app_confetti.dart](../lib/shared/components/app_confetti.dart) | 礼花庆祝层 | `duration` | welfare | 建议 | 已足够 |
 | `ShareBottomSheet` · [share_bottom_sheet.dart](../lib/shared/components/share_bottom_sheet.dart) | 分享底部弹层（静态 show） | `onChannelTap` | book_detail | 建议 | 使用面小，可推广 |
@@ -82,8 +83,8 @@
 | `BookGridCard` · [book_grid_card.dart](../lib/shared/components/book_grid_card.dart) | 网格竖向书卡（薄封装） | `title`/`category`/`coverAsset` req · `coverTag` · `heroTag` | book_detail、bookshelf、bookstore | 强烈建议 | 与 `BookCardVertical` 可评估合并 |
 | `book_card_variants.dart`（`BookCardVertical` / `BookCardRankingCompact` / `BookCardHorizontal`） | 书卡变体集合 | 各 `title/category/coverAsset` req | Vertical 经 `BookGridCard`；其余遗留 | 部分（Vertical 是） | **收敛**：`RankingCompact`/`Horizontal` 遗留，建议合并或删 |
 | `BookListTile` · [book_list_tile.dart](../lib/shared/components/book_list_tile.dart) | 榜单紧凑横向书项（遗留） | `title/category/coverAsset` req | 未被引用 | 否 | **建议删除**（死代码） |
-| `BookCoverTagBadge` · [book_cover_tag_badge.dart](../lib/shared/components/book_cover_tag_badge.dart) | 封面状态角标 | `tag` req | bookstore；书卡内部 | 建议 | 已足够 |
-| `RankingRankBadge` · [ranking_rank_badge.dart](../lib/shared/components/ranking_rank_badge.dart) | 榜单名次角标 | `rank` req | bookstore、ranking | 建议 | 已足够 |
+| `BookCoverTagBadge` · [book_cover_tag_badge.dart](../lib/shared/components/book_cover_tag_badge.dart) | 封面状态角标（磨砂底） | `tag` req · `bookCoverTagBlurSigma` | bookstore；书卡内部 | 建议 | 已足够 |
+| `RankingRankBadge` · [ranking_rank_badge.dart](../lib/shared/components/ranking_rank_badge.dart) | 榜单名次角标（Top3 SVG；4 名起恒白字） | `rank` req | bookstore、ranking | 建议 | 已足够 |
 | 书卡骨架族 · [book_card_skeletons.dart](../lib/shared/components/book_card_skeletons.dart)（`BookLargeRowListSkeleton` / `BookGridSkeleton` 等） | 书卡加载骨架 | `count` · `columns` · `padding` | category、ranking、search、bookshelf | 强烈建议 | 已足够 |
 
 ### 2.5 表单选项 / 徽章 / 装饰
@@ -92,7 +93,7 @@
 |---|---|---|---|---|---|
 | `AgeRangeOption` · [age_range_option.dart](../lib/shared/components/age_range_option.dart) | 年龄段单选胶囊 | `label`/`selected`/`onTap` req | settings、onboarding | 建议 | 与 `GenderAvatarOption` 可归一为通用选项 |
 | `GenderAvatarOption` · [gender_avatar_option.dart](../lib/shared/components/gender_avatar_option.dart) | 性别头像选项 | `label`/`activeAsset`/`inactiveAsset`/`selected`/`onTap` req | onboarding、settings | 建议 | 同上 |
-| `AppCornerBadge` · [app_corner_badge.dart](../lib/shared/components/app_corner_badge.dart) | 卡片斜切角标 | `label`/`color` req · `textColor` | currency_wallet；充值卡 | 建议 | 已足够 |
+| `AppCornerBadge` · [app_corner_badge.dart](../lib/shared/components/app_corner_badge.dart) | 卡片斜切角标（饱和色底恒白字；VIP 浅粉底用 `vipFreeClaimBadgeText`） | `label`/`color` req · `textColor` 默认 `cornerBadgeText` | currency_wallet；充值卡 | 建议 | 已足够 |
 | `GlassChipButton` · [glass_chip_button.dart](../lib/shared/components/glass_chip_button.dart) | 玻璃态胶囊按钮/容器 | `child` req · `onTap` · `expanded` · `height` | 未被引用 | 否 | **建议接用或删除** |
 | `AppFocalCoverImage` · [app_focal_cover_image.dart](../lib/shared/components/app_focal_cover_image.dart) | 焦点智能裁切封面 | `image` req · `focalPoint` · `minRevealHeightRatio` | 未被引用 | 否 | **建议接用**（榜单/详情头图可用） |
 | `AppLottie` · [app_lottie.dart](../lib/shared/components/app_lottie.dart) | Lottie 动画封装 | `asset` req · `repeat` · `fit` | 未被引用 | 否 | **建议接用或删除** |

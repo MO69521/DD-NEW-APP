@@ -12,6 +12,7 @@ export 'components/book_card_variants.dart';
 export 'components/elastic_tab_indicator.dart';
 export 'components/elastic_tab_row.dart';
 export 'components/empty_state.dart';
+export 'components/app_tab_top_texture.dart';
 export 'components/gender_avatar_option.dart';
 export 'components/age_range_option.dart';
 export 'components/glass_chip_button.dart';

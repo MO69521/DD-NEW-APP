@@ -2,6 +2,289 @@
 
 > 研发知识库与工程变更日志，**追加式**记录，勿覆盖历史。每次开发按「日期 / 新增 / 修改 / 删除 / 影响模块 / Breaking Changes」登记。
 
+# CHANGELOG
+
+> 研发知识库与工程变更日志，**追加式**记录，勿覆盖历史。每次开发按「日期 / 新增 / 修改 / 删除 / 影响模块 / Breaking Changes」登记。
+
+# CHANGELOG
+
+> 研发知识库与工程变更日志，**追加式**记录，勿覆盖历史。每次开发按「日期 / 新增 / 修改 / 删除 / 影响模块 / Breaking Changes」登记。
+
+# CHANGELOG
+
+> 研发知识库与工程变更日志，**追加式**记录，勿覆盖历史。每次开发按「日期 / 新增 / 修改 / 删除 / 影响模块 / Breaking Changes」登记。
+
+# CHANGELOG
+
+> 研发知识库与工程变更日志，**追加式**记录，勿覆盖历史。每次开发按「日期 / 新增 / 修改 / 删除 / 影响模块 / Breaking Changes」登记。
+
+## 2026-07-15（flutter-post-edit-audit skill 瘦身：references 下沉）
+
+### 修改
+- `SKILL.md` 瘦身为编排层（~90 行），细则迁至 `references/design-system.md`、`references/token-rules.md`、`references/report-template.md`；触发时机与 Step 1–5 不变。
+
+### 影响模块
+- `.cursor/skills/flutter-post-edit-audit/`
+
+### Breaking Changes
+- 无（审计流程与脚本路径不变）
+
+## 2026-07-15（规范：三主题默认同步修改）
+
+### 修改
+- `.cursor/rules/flutter-architecture-strict-v2.mdc` §0.1：新增「三主题默认同步」强制规则。
+- `.cursor/skills/flutter-post-edit-audit/SKILL.md` + `checklist.md`：审计清单与报告模板增加「三主题覆盖」项；用户未特别声明时，`yellow_dark` / `pink_light` / `yellow_light` 须一并生效。
+- `docs/11_DevelopmentGuide.md` §B8 补充三主题默认同步说明。
+
+### 影响模块
+- `.cursor/rules/`、`.cursor/skills/flutter-post-edit-audit/`、`docs/11_DevelopmentGuide.md`
+
+### Breaking Changes
+- 无
+
+## 2026-07-15（榜单 4 名起角标左上角贴合封面圆角）
+
+### 修改
+- `RankingRankBadge` 第 4 名起数字角标补 `topLeft: AppRadius.bookCover`（4px），与封面左上角圆角裁切一致；`pink_light` / `yellow_light` / `yellow_dark` 统一。
+
+### 影响模块
+- `lib/shared/components/ranking_rank_badge.dart`、`design-system/`、`docs/CHANGELOG.md`
+
+### Breaking Changes
+- 无
+
+## 2026-07-15（榜单 Top3 名次 SVG 角标修复）
+
+### 修改
+- `RankingRankBadge` Top 1–3 改用 `AppIcon` 加载 `rank_1/2/3.svg`（与项目 SVG 图标规范一致）；清理 SVG 内 Figma `display-p3` style 属性，避免部分运行时解析失败导致角标空白。
+
+### 影响模块
+- `lib/shared/components/ranking_rank_badge.dart`、`assets/icons/ranking/rank_*.svg`、`docs/CHANGELOG.md`
+
+### Breaking Changes
+- 无
+
+## 2026-07-15（榜单名次角标 4 名起恒白字 + Top3 SVG）
+
+### 修改
+- `rankingMutedBadgeText`（`white100` keep-dark）：第 4 名起名次数字全主题恒白，`pink_light` / `yellow_light` 不再误用翻转的 `textOnDark`。
+- `RankingRankBadge` Top 1–3 切图路径改为 `rank_1/2/3.svg`（对接更新后的 SVG 资源）。
+
+### 影响模块
+- `lib/core/theme/app_colors.dart`、`ranking_rank_badge.dart`、`design-system/`、`docs/05_Components.md`
+
+### Breaking Changes
+- 无
+
+## 2026-07-15（继续阅读浮层锁定深色样式）
+
+### 修改
+- 书城「继续阅读」浮层新增 `continueReadingCard*` keep-dark token；`pink_light` / `yellow_light` 下不再误用浅色页面背景与翻转文字色，视觉与 `yellow_dark` 统一。
+
+### 影响模块
+- `lib/core/theme/app_colors.dart`、`continue_reading_card.dart`、`design-system/`、`docs/06_Pages.md`
+
+### Breaking Changes
+- 无
+
+## 2026-07-15（充值「会员免费领」角标字色修复）
+
+### 修改
+- `AppWelfareColors.vipFreeClaimBadgeText`（`magenta950` / `vipOnGradientText`）：浅粉角标底 `#FFD5DB` 上改深玫红字，不再误用恒白 `cornerBadgeText`；`pink_light` / `yellow_light` / `yellow_dark` 统一。
+
+### 影响模块
+- `lib/core/theme/app_welfare_colors.dart`、`recharge_packages_section_free_claim.dart`、`app_corner_badge.dart`、`design-system/`、`docs/05_Components.md`
+
+### Breaking Changes
+- 无
+
+## 2026-07-15（榜单侧导航未选中字色提升可读性）
+
+### 修改
+- `AppTextStyles.rankingDimensionInactive` 字色由 `textOnDarkPlaceholder`（`textTertiary` `#9B9B9B`）改为 `textOnDarkMuted`（`textSecondary` `#6B7280`），与书卡简介 `bookCardLargeDescription` 同级；`pink_light` / `yellow_light` / `yellow_dark` 同步生效。
+
+### 影响模块
+- `lib/core/theme/app_text_styles.dart`、`design-system/README.md`、`docs/05_Components.md`
+
+### Breaking Changes
+- 无
+
+## 2026-07-15（yellow_light 大背景改中性浅灰 neutralCool50）
+
+### 修改
+- `yellow_light` 页面壳背景 / `bgTint*` 由 `cream50`（偏黄）改为 `neutralCool50`（`#F8F7FC` 中性浅灰）；比 `pink50` 更淡、不偏黄。
+- 移除未使用的 `cream50Alpha*` 原色阶（`cream50` 实体仍保留给促销条副标题）。
+
+### 影响模块
+- `lib/core/theme/app_palette.dart`、`app_brand_colors.dart`、`design-system/`、`docs/03_Theme.md`、`docs/04_DesignToken.md`
+
+### Breaking Changes
+- 无
+
+## 2026-07-15（yellow_light 大背景改淡 cream50）
+
+### 修改
+- `yellow_light` 页面壳背景 / `bgTint*` 由共用 `pink50`（`#F4F2F4`）改为更淡暖白 `cream50`（`#FFF9F2`）及 `cream50Alpha*`；`pink_light` 不变。
+
+### 影响模块
+- `lib/core/theme/app_palette.dart`、`app_brand_colors.dart`、`design-system/`
+
+### Breaking Changes
+- 无（仅 `THEME=yellow_light` 视觉变浅）
+
+## 2026-07-15（编辑推荐外层卡片与榜单一致）
+
+### 修改
+- `EditorPickSection`：外层 `surfaceCard` + `AppRadius.lg` 内边距，与 `RankingSection` / `LimitedFreeSection` 一致；标题与网格间距 `md`。
+
+### 影响模块
+- `lib/features/bookstore/presentation/components/editor_pick_section.dart`、`book_grid_section.dart`
+
+### Breaking Changes
+- 无
+
+## 2026-07-15（充值价格/免费领胶囊底 黑 4%）
+
+### 修改
+- `rechargePriceBg` → `sectionMoreActionBackground`（`blackAlpha04`）；`_RechargePillButton` 价格区与「免费领」与「更多福利」同底，浅粉/浅黄/深色统一。VIP「VIP领取」仍用粉紫渐变。
+
+### 影响模块
+- `lib/core/theme/app_welfare_colors.dart`、`recharge_packages_section_cards.dart`
+
+### Breaking Changes
+- 无
+
+## 2026-07-15（会员免费领角标浅粉锁定）
+
+### 修改
+- `AppWelfareColors.vipFreeClaimBadgeBackground`（`pink100Soft` #FFD5DB）：充值 VIP 角标底显式锁定，全主题含 `pink_light` 不变；仅统一字色为白，不改浅粉底色。
+- design-system 画廊修正「会员免费领」预览色（原误为黄底深字）。
+
+### 影响模块
+- `lib/core/theme/app_welfare_colors.dart`、`recharge_packages_section_free_claim.dart`、`design-system/`
+
+### Breaking Changes
+- 无
+
+## 2026-07-15（区块胶囊操作入口底 黑 4%）
+
+### 修改
+- `AppColors.sectionMoreActionBackground`（`blackAlpha04`）：福利「更多福利」、书城榜单「完整榜单」胶囊底由 `surfaceCard` 改为纯黑 4%；`yellow_light` / `pink_light` / `yellow_dark` 统一。
+
+### 影响模块
+- `lib/core/theme/app_colors.dart`、`recharge_packages_section_cards.dart`、`ranking_section_header.dart`
+
+### Breaking Changes
+- 无
+
+## 2026-07-15（我的成就标题行上下居中对齐）
+
+### 修改
+- `ProfileAchievementSection` 标题行：`我的成就` 与 `共获得 N 枚勋章` 改 `CrossAxisAlignment.center`，移除 `bottom` 内边距与 baseline 手工偏移；三主题统一。
+
+### 影响模块
+- `lib/features/profile/presentation/components/profile_achievement_section.dart`
+
+### Breaking Changes
+- 无
+
+## 2026-07-15（卡片彩色角标字色统一恒白）
+
+### 修改
+- `AppColors.cornerBadgeText`（`white100`）；`AppCornerBadge` / `hotSaleBadgeText` 默认改恒白，不再误用随浅色翻转的 `textOnDark`。
+- 福利充值「热」「0/300每日」、星尘兑换角标等 `yellow_light` / `pink_light` 下字色恢复纯白。
+
+### 影响模块
+- `lib/core/theme/app_colors.dart`、`app_welfare_colors.dart`、`lib/shared/components/app_corner_badge.dart`、`recharge_packages_section_free_claim.dart`
+
+### Breaking Changes
+- 无
+
+## 2026-07-15（修复 recharge part 文件 analyze error）
+
+### 修改
+- `recharge_packages_section_cards.dart`：`part of` 须为唯一指令，将 `app_icon_assets` import 上移至主库 `recharge_packages_section.dart`。
+
+### 影响模块
+- `lib/shared/components/recharge_packages_section.dart`、`recharge_packages_section_cards.dart`
+
+### Breaking Changes
+- 无
+
+## 2026-07-15（底栏纯色不透明 + 纹理铺底层）
+
+### 修改
+- `AppBottomNav`（`fullWidthSolid`）：关闭 backdrop blur，始终用不透明 `bottomNavScrim`（浅 `white100` / 深 `backgroundDark`）铺底；纹理仍经 `AppThemeAssets.bottomNavTexture` 铺在底层，后续设计交付切图后只需调整叠色策略。
+- `AppBlurredChromeBar` 拆分 `blurEnabled` 与 `enabled`：可仅铺实心底/纹理、不磨砂。
+- `bottomNavScrim` 深色分支由 `bgTint90` 改为不透明 `backgroundDark`，修复浅色主题底栏发灰半透明。
+
+### 影响模块
+- `lib/shared/layouts/app_bottom_nav.dart`、`lib/shared/components/app_blurred_chrome_bar.dart`、`lib/core/theme/app_colors.dart`
+
+### Breaking Changes
+- 无
+
+## 2026-07-15（封面角标统一背景模糊）
+
+### 修改
+- `BookCoverTagBadge`：全主题统一 `ClipRRect` + `BackdropFilter`（`bookCoverTagBlurSigma = 8`），压在封面上磨砂可读；完结/连载/更新三种变体共用。
+- `AppSizes.bookCoverTagBlurSigma` 登记；design-system / CHANGELOG 同步。
+
+### 影响模块
+- `lib/shared/components/book_cover_tag_badge.dart`、`lib/core/theme/app_sizes.dart`
+
+### Breaking Changes
+- 无
+
+## 2026-07-15（封面角标「完结/连载」浅色恒白字 + 黑 4% 描边）
+
+### 修改
+- `BookCoverTagBadge`：「完结/连载」字色改 `bookCoverTagCompletedText`（`white100` 恒白），描边改 `bookCoverTagCompletedBorder`（`blackAlpha04` + `hairline` 0.5px）；不再误用随浅色翻转的 `textPrimary` / `borderSubtle`。`yellow_light` / `pink_light` 编辑推荐等封面角标恢复设计稿。
+- `app_colors.dart` 登记 `bookCoverTagCompletedText` / `bookCoverTagCompletedBorder`（`light-audit: keep-dark`）。
+
+### 影响模块
+- `lib/shared/components/book_cover_tag_badge.dart`、`lib/core/theme/app_colors.dart`
+- 书城编辑推荐、猜你喜欢、分类/榜单/搜索等共用 `BookCoverTagBadge` 的封面
+
+### Breaking Changes
+- 无
+
+## 2026-07-15（猜你喜欢卡浅色纯白 + 底栏纹理接线）
+
+### 修改
+- `AppColors.guessLikeCardBackground`：浅色实验态改为 `surface`（`neutralWhite` #FFFFFF 实体白），深色态仍 `surfaceSoft`；书城 / 书架「猜你喜欢」卡文字区不再透出页面浅粉底。
+- `AppBlurredChromeBar` 新增可选 `textureAsset`：纹理铺满 + `scrimColor` 前景叠色；`AppBottomNav` 接入 `AppThemeAssets.bottomNavTexture`，有纹理时用 `bottomNavTextureScrim`（`bgTint60`），无纹理回退 `bottomNavScrim`。
+- design-system / docs（05/CHANGELOG）同步。
+
+### 影响模块
+- `lib/core/theme/app_colors.dart`、`lib/shared/components/app_blurred_chrome_bar.dart`、`lib/shared/layouts/app_bottom_nav.dart`
+- `lib/features/bookstore/.../guess_like_section.dart`、`lib/features/bookshelf/.../bookshelf_recommendation_section.dart`（仅引用 token，无结构改动）
+
+### Breaking Changes
+- 无
+
+## 2026-07-15（主题包 id：dark → yellow_dark）
+
+### 修改
+- 深色主题编译包 id 由 `dark` 统一更名为 `yellow_dark`：`AppThemeId` 默认值 / `assetPack`、资源目录、`pubspec`、launch / `run-sim`、docs、design-system。
+- 资源路径：`assets/{icons,images}/**/dark/` → `**/yellow_dark/`。
+
+### Breaking Changes
+- 构建参数 `--dart-define=THEME=dark` 不再识别为合法包（未知 id 回退 `yellow_dark`）；请改用 `THEME=yellow_dark` 或不带参。
+
+## 2026-07-15（一级 Tab 顶部纹理槽位 AppTabTopTexture）
+
+### 新增
+- `AppSizes.tabTopTextureHeight = 120`；`AppThemeAssets.tabTopTexture`（暂 `null`）。
+- `assets/images/tab_top/{yellow_dark,pink_light,yellow_light}/` 资源目录（切图未到位）。
+- `AppTabTopTexture`：全宽装饰层，接入书城 / 福利 / 书架 Stack 底层。
+
+### 修改
+- docs / design-system 登记组件与资源约定。
+
+### Breaking Changes
+- 无（槽位透明，视觉零变化；切图后改 `tabTopTexture` 路径即可）。
+
 ## 2026-07-15（清理未引用 SVG/位图）
 
 ### 删除
@@ -62,7 +345,7 @@
 ## 2026-07-15（主题资源目录统一：feature / themeId / shared）
 
 ### 修改
-- 底栏纹理改为 `assets/images/bottom_nav/<themeId>/nav_texture.png`（含 `yellow_light` 占位，复用 dark）。
+- 底栏纹理改为 `assets/images/bottom_nav/<themeId>/nav_texture.png`（含 `yellow_light` 占位，复用 yellow_dark）。
 - 书详跨主题图标迁入 `assets/icons/book_detail/shared/`（`promo_reward_tag` / `refresh`），经 `AppThemeAssets` 暴露。
 - `AppThemeAssets.bottomNavTexture` 统一按 `_assetThemeId` 解析；`docs/09_Assets.md` 写明主题分包约定。
 
@@ -76,7 +359,7 @@
 
 ### 新增
 - `AppThemeAssets` 扩展底栏 10 图标 + 书详/搜索 4 图标语义路径（按 `THEME` → `assets/icons/<feature>/<themeId>/`）。
-- 资源目录：`assets/icons/nav/{dark,pink_light,yellow_light}/`、`assets/icons/book_detail/{dark,pink_light,yellow_light}/`（当前为烘焙色占位，设计交付后整文件替换即可）。
+- 资源目录：`assets/icons/nav/{yellow_dark,pink_light,yellow_light}/`、`assets/icons/book_detail/{yellow_dark,pink_light,yellow_light}/`（当前为烘焙色占位，设计交付后整文件替换即可）。
 
 ### 修改
 - `MainTabConfig` / `AppNavIcon`：图标走 `AppThemeAssets`，去掉运行时 `ColorFilter` 染色。
@@ -105,10 +388,10 @@
 
 ### 影响模块
 - 全局主题层（`core/theme`）；`app_welfare/membership/partner_colors.dart` 因复用 `isLightExperiment` 与 `onPrimary`，自动惠及新包。
-- `dark` 与 `pink_light` 解析值零回归（强调身份色与中性外壳在两包下取值不变）。
+- `yellow_dark` 与 `pink_light` 解析值零回归（强调身份色与中性外壳在两包下取值不变）。
 
 ### Breaking Changes
-- 无（默认 `dark` 及既有 `pink_light` 取值不变；仅新增 `yellow_light` 分支与强调身份源色重构，语义名 / 调用点零改动）。
+- 无（默认 `yellow_dark` 及既有 `pink_light` 取值不变；仅新增 `yellow_light` 分支与强调身份源色重构，语义名 / 调用点零改动）。
 
 ## 2026-07-15（数据源环境开关脚手架）
 

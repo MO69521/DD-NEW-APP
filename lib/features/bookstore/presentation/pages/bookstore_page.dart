@@ -10,6 +10,7 @@ import '../../../../core/theme/app_spacing.dart';
 import '../../../../routes/app_router.dart';
 import '../../../../routes/app_routes.dart';
 import '../../../../shared/components/app_async_page_body.dart';
+import '../../../../shared/components/app_tab_top_texture.dart';
 import '../../../../shared/layouts/app_page_chrome.dart';
 import '../../../../shared/layouts/main_tab_controller.dart';
 import '../../application/bookstore_cubit.dart';
@@ -162,6 +163,7 @@ class _BookstoreViewState extends State<_BookstoreView> {
         backgroundColor: AppColors.backgroundDark,
         body: Stack(
           children: [
+            const AppTabTopTexture(),
             BlocSelector<BookstoreCubit, BookstoreState, BookstoreTopTab>(
               selector: (state) => state.interaction.selectedTopTab,
               builder: (context, selectedTopTab) {

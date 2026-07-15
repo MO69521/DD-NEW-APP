@@ -9,6 +9,7 @@ import '../../../../core/theme/app_spacing.dart';
 import '../../../../shared/components/app_async_page_body.dart';
 import '../../../../shared/components/app_swipe_tab_switcher.dart';
 import '../../../../shared/components/app_blurred_chrome_bar.dart';
+import '../../../../shared/components/app_tab_top_texture.dart';
 import '../../../../shared/components/book_card_skeletons.dart';
 import '../../../../shared/layouts/app_bottom_nav.dart';
 import '../../../../shared/layouts/main_tab_controller.dart';
@@ -190,6 +191,7 @@ class _BookshelfViewState extends State<_BookshelfView> {
         backgroundColor: AppColors.backgroundDark,
         body: Stack(
           children: [
+            const AppTabTopTexture(),
             BlocSelector<
               BookshelfCubit,
               BookshelfState,

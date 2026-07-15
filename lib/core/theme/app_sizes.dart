@@ -61,6 +61,10 @@ abstract final class AppSizes {
   /// 通用强玻璃模糊半径（重度磨砂，如任务卡 / 浮层）。
   static const double strongBlurSigma = 90;
   static const double statusBarPlaceholderHeight = 44;
+
+  /// 一级 Tab（书城 / 福利 / 书架）顶部纹理层高度（全宽装饰，不占滚动布局）。
+  static const double tabTopTextureHeight = 120;
+
   static const double bookstoreHeaderVerticalInset = 2;
   static const double chromeBarBlurSigma = 40;
   static const double bookstoreTopHeaderHeight = 44;
@@ -269,6 +273,9 @@ abstract final class AppSizes {
   // ── 封面右上角状态角标（Figma 1335:12223） ──
   static const double bookCoverTagInsetTop = 8;
   static const double bookCoverTagInsetRight = 8.5;
+
+  /// 封面右上角状态角标背景模糊半径（全主题统一，压在封面上磨砂可读）。
+  static const double bookCoverTagBlurSigma = 8;
 
   // ── 轻提示 Toast ──
   static const double toastPaddingHorizontal = 20;

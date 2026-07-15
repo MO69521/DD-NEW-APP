@@ -8,6 +8,7 @@ import '../../core/theme/app_radius.dart';
 import '../../core/theme/app_sizes.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text_styles.dart';
+import '../../core/theme/app_theme_assets.dart';
 import '../components/app_blurred_chrome_bar.dart';
 import '../widgets/app_nav_icon.dart';
 import '../widgets/app_text.dart';
@@ -93,9 +94,11 @@ class AppBottomNav extends StatelessWidget {
   }
 
   Widget _buildSolidBottomBar(Widget navCapsule) {
+    const texture = AppThemeAssets.bottomNavTexture;
     return AppBlurredChromeBar(
-      enabled: blurEnabled,
+      blurEnabled: false,
       blurSigma: AppSizes.bottomNavBlurSigma,
+      textureAsset: texture,
       scrimColor: AppColors.bottomNavScrim,
       child: SafeArea(
         top: false,

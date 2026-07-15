@@ -14,6 +14,10 @@ abstract final class AppWelfareColors {
   static const Color vipBannerText = AppBrandColors.vipBannerText;
   static const Color vipCtaGradientStart = AppBrandColors.vipCtaGradientStart;
   static const Color vipCtaGradientEnd = AppBrandColors.vipCtaGradientEnd;
+  /// 充值「会员免费领」角标底：`pink100Soft` 浅粉，全主题恒定（含 `pink_light`），不随浅色包翻转。
+  static const Color vipFreeClaimBadgeBackground = vipCtaGradientEnd; // light-audit: keep-dark
+  /// 充值「会员免费领」角标字：浅粉底上用深玫红（`magenta950`），全主题恒定。
+  static const Color vipFreeClaimBadgeText = AppBrandColors.vipOnGradientText;
   static const Color vipCtaBorder = AppBrandColors.vipCtaBorder;
   static const Color vipCtaText = AppBrandColors.vipOnGradientText;
 
@@ -74,9 +78,9 @@ abstract final class AppWelfareColors {
 
   static const Color subtitleMuted = AppBrandColors.subtitleMuted;
   static const Color hotSaleBadge = AppBrandColors.hotSaleBadge;
-  static const Color hotSaleBadgeText = AppBrandColors.hotSaleBadgeText;
-  static const Color rechargePriceBg =
-      _isLight ? AppColors.surfaceSoft : AppColors.white04;
+  static const Color hotSaleBadgeText = AppColors.cornerBadgeText;
+  /// 充值卡价格胶囊 / 非 VIP「免费领」按钮底：与「更多福利」一致，纯黑 4%，全主题统一。
+  static const Color rechargePriceBg = AppColors.sectionMoreActionBackground;
   static const Color originalPriceMuted = AppBrandColors.originalPriceMuted;
   static const Color moreBenefitsAction = AppBrandColors.accent;
 

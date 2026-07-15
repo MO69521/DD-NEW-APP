@@ -69,13 +69,13 @@ flutter:
     - assets/icons/shared/
     - assets/icons/search/
     - assets/icons/nav/
-    - assets/icons/nav/dark/
+    - assets/icons/nav/yellow_dark/
     - assets/icons/nav/pink_light/
     - assets/icons/nav/yellow_light/
     - assets/icons/welfare/
     - assets/icons/ranking/
     - assets/icons/book_detail/
-    - assets/icons/book_detail/dark/
+    - assets/icons/book_detail/yellow_dark/
     - assets/icons/book_detail/pink_light/
     - assets/icons/book_detail/yellow_light/
     - assets/icons/book_detail/shared/
@@ -87,14 +87,18 @@ flutter:
     - assets/images/onboarding/
     - assets/icons/profile/
     - assets/images/profile/
-    - assets/images/profile/dark/
+    - assets/images/profile/yellow_dark/
     - assets/images/profile/pink_light/
     - assets/images/profile/yellow_light/
     - assets/images/ranking/
     - assets/images/bottom_nav/
-    - assets/images/bottom_nav/dark/
+    - assets/images/bottom_nav/yellow_dark/
     - assets/images/bottom_nav/pink_light/
     - assets/images/bottom_nav/yellow_light/
+    - assets/images/tab_top/
+    - assets/images/tab_top/yellow_dark/
+    - assets/images/tab_top/pink_light/
+    - assets/images/tab_top/yellow_light/
     - assets/icons/membership/
     - assets/icons/account_settings/
     - assets/icons/payment/
@@ -102,7 +106,7 @@ flutter:
     - assets/images/partner/
     - assets/images/splash/
     - assets/images/auth/
-    - assets/images/auth/dark/
+    - assets/images/auth/yellow_dark/
     - assets/images/auth/pink_light/
     - assets/images/auth/yellow_light/
     - assets/lottie/

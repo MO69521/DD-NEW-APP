@@ -29,9 +29,9 @@
   - 其余按业务 feature 分子目录。
 - **主题分包约定**（仅「随主题变」的资源）：
   ```text
-  assets/icons/<feature>/{dark|pink_light|yellow_light}/…  # 主题色稿
+  assets/icons/<feature>/{yellow_dark|pink_light|yellow_light}/…  # 主题色稿
   assets/icons/<feature>/shared/…                          # 同 feature 跨主题共用
-  assets/images/<feature>/{dark|pink_light|yellow_light}/… # 主题位图
+  assets/images/<feature>/{yellow_dark|pink_light|yellow_light}/… # 主题位图
   ```
   未建主题子目录的 feature（如 `payment`、`profile`）视为跨主题共用，**不复制三份**。
 - 当前主题包：`nav/<themeId>/`（10 Tab）、`book_detail/<themeId>/`（加入书架/送心）、`book_detail/shared/`（促销标/刷新）、`images/bottom_nav/<themeId>/nav_texture.png`。路径经 [`AppThemeAssets`](../lib/core/theme/app_theme_assets.dart)；完整色稿 **不再** `ColorFilter` 染色。
@@ -56,6 +56,7 @@
 | 语义 | 资源目录 / 文件 |
 |---|---|
 | 底栏纹理 | `assets/images/bottom_nav/<themeId>/nav_texture.png` |
+| 一级 Tab 顶纹理 | `assets/images/tab_top/<themeId>/top_texture.png`（`AppThemeAssets.tabTopTexture`；切图未到位时为 `null`） |
 | 登录页头图 | `assets/images/auth/<themeId>/login_top_bg.png` |
 | 我的页默认头图 | `assets/images/profile/<themeId>/hero_background_default.png` |
 | 底栏 Tab（10） | `assets/icons/nav/<themeId>/{bookstore,welfare,partner,bookshelf,profile}_{active,inactive}.svg` |
