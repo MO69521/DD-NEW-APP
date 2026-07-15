@@ -10,14 +10,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   AppRouter.setInitialLocation(AppRoutes.editorPick);
   await SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
-  SystemChrome.setSystemUIOverlayStyle(
-    const SystemUiOverlayStyle(
-      statusBarColor: Colors.transparent,
-      statusBarIconBrightness: Brightness.light,
-      systemNavigationBarColor: Colors.transparent,
-      systemNavigationBarIconBrightness: Brightness.light,
-    ),
-  );
+  SystemChrome.setSystemUIOverlayStyle(AppTheme.systemUiOverlayStyle);
   runApp(const EditorPickPreviewApp());
 }
 
@@ -26,11 +19,14 @@ class EditorPickPreviewApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      title: '编辑推荐详情页预览',
-      theme: AppTheme.dark,
-      debugShowCheckedModeBanner: false,
-      routerConfig: AppRouter.router,
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: AppTheme.systemUiOverlayStyle,
+      child: MaterialApp.router(
+        title: '编辑推荐详情页预览',
+        theme: AppTheme.dark,
+        debugShowCheckedModeBanner: false,
+        routerConfig: AppRouter.router,
+      ),
     );
   }
 }

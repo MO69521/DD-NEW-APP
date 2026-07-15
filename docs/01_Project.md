@@ -56,7 +56,7 @@ Dart 3.12.1（`pubspec.yaml` 约束 `sdk: ^3.12.1`）。
 flutter pub get                 # 安装依赖
 flutter run                     # 本地运行（Mock，默认设备）
 flutter run -d chrome           # Web 预览
-flutter run --dart-define=API_BASE_URL=https://api.example.com  # 接真实后端
+flutter run --dart-define=API_ENV=rest --dart-define=API_BASE_URL=https://api.example.com  # 接真实后端（bookstore/search/auth 已接环境开关）
 flutter test && flutter analyze # 测试 + 静态检查
 flutter build web -t lib/previews/global_preview_main.dart --release  # Web 构建（CI 同款入口）
 ```

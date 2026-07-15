@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/domain/entities/book.dart';
 import '../../../../core/domain/entities/book_cover_tag.dart';
-import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_sizes.dart';
+import '../../../../core/theme/app_theme_assets.dart';
 import '../../../../shared/components/book_card_large_row.dart';
 import '../../../../shared/widgets/app_icon.dart';
 import '../../../../shared/widgets/app_pressable.dart';
@@ -55,22 +55,17 @@ class _AddToShelfButton extends StatelessWidget {
   final bool isInShelf;
   final VoidCallback? onTap;
 
-  static const String _addIconAsset =
-      'assets/icons/book_detail/add_to_shelf.svg';
-  static const String _inShelfIconAsset =
-      'assets/icons/book_detail/in_shelf.svg';
-
   @override
   Widget build(BuildContext context) {
     return AppPressable(
       onTap: onTap,
       child: AppIcon(
-        assetPath: isInShelf ? _inShelfIconAsset : _addIconAsset,
+        // 主题完整色稿（AppThemeAssets），不再运行时染色。
+        assetPath: isInShelf
+            ? AppThemeAssets.bookDetailInShelf
+            : AppThemeAssets.bookDetailAddToShelf,
         width: AppSizes.bookCardLargeTrailingIconSize,
         height: AppSizes.bookCardLargeTrailingIconSize,
-        color: isInShelf
-            ? AppColors.accentYellow
-            : AppColors.textOnDarkPlaceholder,
       ),
     );
   }

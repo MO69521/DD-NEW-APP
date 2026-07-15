@@ -66,26 +66,45 @@ flutter:
   assets:
     - assets/covers/
     - assets/icons/
+    - assets/icons/shared/
+    - assets/icons/search/
     - assets/icons/nav/
+    - assets/icons/nav/dark/
+    - assets/icons/nav/pink_light/
+    - assets/icons/nav/yellow_light/
     - assets/icons/welfare/
     - assets/icons/ranking/
     - assets/icons/book_detail/
+    - assets/icons/book_detail/dark/
+    - assets/icons/book_detail/pink_light/
+    - assets/icons/book_detail/yellow_light/
+    - assets/icons/book_detail/shared/
     - assets/images/book_detail/
     - assets/images/welfare/
     - assets/images/welfare/slices/
     - assets/images/bookshelf/
+    - assets/images/empty_states/
     - assets/images/onboarding/
     - assets/icons/profile/
     - assets/images/profile/
+    - assets/images/profile/dark/
+    - assets/images/profile/pink_light/
+    - assets/images/profile/yellow_light/
     - assets/images/ranking/
+    - assets/images/bottom_nav/
+    - assets/images/bottom_nav/dark/
+    - assets/images/bottom_nav/pink_light/
+    - assets/images/bottom_nav/yellow_light/
     - assets/icons/membership/
     - assets/icons/account_settings/
     - assets/icons/payment/
     - assets/images/membership/
     - assets/images/partner/
     - assets/images/splash/
-    - assets/images/my_messages/
     - assets/images/auth/
+    - assets/images/auth/dark/
+    - assets/images/auth/pink_light/
+    - assets/images/auth/yellow_light/
     - assets/lottie/
 
   # An image asset can refer to one or more resolution-specific "variants", see

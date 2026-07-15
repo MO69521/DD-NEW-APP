@@ -20,6 +20,13 @@
       "type": "dart",
       "program": "lib/main.dart",
       "args": ["--dart-define=THEME=pink_light"]
+    },
+    {
+      "name": "点点 · 黄色浅色（yellow_light）",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main.dart",
+      "args": ["--dart-define=THEME=yellow_light"]
     }
   ]
 }

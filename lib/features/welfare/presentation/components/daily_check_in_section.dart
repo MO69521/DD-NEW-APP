@@ -15,6 +15,7 @@ import 'check_in_cta_button.dart';
 import 'check_in_milestone_progress.dart';
 import 'check_in_subtitle.dart';
 import '../../../../core/theme/app_theme_context.dart';
+import '../../../../core/theme/app_icon_assets.dart';
 
 /// L3 组件 — 每日签到整块（Figma 1492:3474）。
 ///
@@ -90,7 +91,7 @@ class _DailyCheckInSectionState extends State<DailyCheckInSection> {
                   turns: _expanded ? 0 : 0.5,
                   duration: AppDurations.normal,
                   child: const AppIcon(
-                    assetPath: 'assets/icons/chevron_down.svg',
+                    assetPath: AppIconAssets.chevronDown,
                     width: AppSizes.welfareCheckInChevronSize,
                     height: AppSizes.welfareCheckInChevronSize,
                     color: AppColors.textOnDarkPlaceholder,

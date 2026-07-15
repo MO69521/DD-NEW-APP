@@ -8,6 +8,7 @@ import '../../../../shared/widgets/app_icon.dart';
 import '../../../../shared/widgets/app_pressable.dart';
 import '../../../../shared/widgets/app_text.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_icon_assets.dart';
 import '../../../../core/domain/entities/book.dart';
 import 'ranking_tabs.dart';
 
@@ -58,7 +59,7 @@ class RankingSectionHeader extends StatelessWidget {
                   ),
                 ),
                 const AppIcon(
-                  assetPath: 'assets/icons/arrow_right.svg',
+                  assetPath: AppIconAssets.arrowRight,
                   width: AppSizes.rankingFullListIconSize,
                   height: AppSizes.rankingFullListIconSize,
                   color: AppColors.textOnDark,

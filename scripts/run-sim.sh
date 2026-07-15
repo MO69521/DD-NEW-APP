@@ -5,11 +5,12 @@
 #
 # 用法：
 #   scripts/run-sim.sh [theme] [device-id]
-#     theme     : dark(默认) | pink_light
+#     theme     : dark(默认) | pink_light | yellow_light
 #     device-id : 可选；缺省自动选已启动的 iOS 模拟器，没有则由 flutter 选择
 #
 # 示例：
 #   scripts/run-sim.sh pink_light
+#   scripts/run-sim.sh yellow_light
 #   scripts/run-sim.sh dark 08021E39-F157-426E-B3DC-2BB800DA287F
 set -euo pipefail
 
@@ -17,9 +18,9 @@ THEME="${1:-dark}"
 DEVICE="${2:-}"
 
 case "$THEME" in
-  dark | pink_light) ;;
+  dark | pink_light | yellow_light) ;;
   *)
-    echo "未知主题：${THEME}（可选：dark | pink_light）" >&2
+    echo "未知主题：${THEME}（可选：dark | pink_light | yellow_light）" >&2
     exit 1
     ;;
 esac

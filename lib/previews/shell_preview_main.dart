@@ -13,14 +13,7 @@ Future<void> main() async {
     '${AppRoutes.home}?tab=${MainTabConfig.bookshelfIndex}',
   );
   await SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
-  SystemChrome.setSystemUIOverlayStyle(
-    const SystemUiOverlayStyle(
-      statusBarColor: Colors.transparent,
-      statusBarIconBrightness: Brightness.light,
-      systemNavigationBarColor: Colors.transparent,
-      systemNavigationBarIconBrightness: Brightness.light,
-    ),
-  );
+  SystemChrome.setSystemUIOverlayStyle(AppTheme.systemUiOverlayStyle);
   runApp(const ShellPreviewApp());
 }
 
@@ -29,11 +22,14 @@ class ShellPreviewApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      title: '主 Tab 预览',
-      theme: AppTheme.dark,
-      debugShowCheckedModeBanner: false,
-      routerConfig: AppRouter.router,
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: AppTheme.systemUiOverlayStyle,
+      child: MaterialApp.router(
+        title: '主 Tab 预览',
+        theme: AppTheme.dark,
+        debugShowCheckedModeBanner: false,
+        routerConfig: AppRouter.router,
+      ),
     );
   }
 }

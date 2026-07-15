@@ -1,5 +1,7 @@
 import 'package:equatable/equatable.dart';
 
+import '../../../../core/config/app_theme_id.dart';
+
 /// 用户资料（头像 URL 由后端返回，非本地 asset）。
 class UserProfile extends Equatable {
   const UserProfile({
@@ -11,9 +13,9 @@ class UserProfile extends Equatable {
     this.heroBackgroundAsset = defaultHeroBackgroundAsset,
   });
 
-  /// 我的页 Hero 头部背景素材图（独立于头像，后续可换不同素材）。
+  /// 我的页 Hero 头部背景素材图（独立于头像，后续可换不同素材；按主题分包）。
   static const String defaultHeroBackgroundAsset =
-      'assets/images/profile/hero_background_default.png';
+      'assets/images/profile/${AppThemeId.assetPack}/hero_background_default.png';
 
   final String userId;
   final String nickname;

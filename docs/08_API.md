@@ -25,7 +25,15 @@
 
 1. **建 DTO + 映射**：`features/<name>/data/models/<name>_dto.dart`（`fromJson` + `toEntity`）。
 2. **写 Remote DataSource**：`features/<name>/data/datasources/<name>_remote_datasource.dart implements <Name>DataSource`，经 `ServiceLocator.apiClient` 调接口、读 `json['data']`。
-3. **切换注入点**：Cubit 默认或路由构造把 Mock 换 Remote；`RepositoryImpl`/domain/UI 均不改。
+3. **接环境开关**：cubit 默认注入用 [`ApiEnvConfig.isRest`](../lib/core/config/api_env.dart) 在 Remote / Mock 间选择（照 `bookstore`/`search` 已实现的 `_defaultRepository()`）；`RepositoryImpl`/domain/UI 均不改。
+
+**环境切换（统一开关）**：缺省 `mock`（无后端不受影响）；启用真实接口：
+
+```bash
+flutter run --dart-define=API_ENV=rest --dart-define=API_BASE_URL=https://api.example.com
+```
+
+`bookstore` / `search` / `auth` 已接入该开关，切 `API_ENV=rest` 即走真实通路。
 
 约定：错误映射只在 data 层；信封统一 `{ code, message, data }`；domain 纯净（json 只在 DTO）。
 
@@ -35,7 +43,7 @@
 
 | 页面/模块 | 假数据 | Repository | Service | API 建议 | Loading | Error | Empty | 预留 |
 |---|---|---|---|---|---|---|---|---|
-| 登录 login | 是（Mock 可切 Rest） | `AuthRepository` | `AuthService`(Rest/Mock)、`AuthSessionService`、`SocialAppLaunchService` | `POST /auth/sms/send`、`/auth/sms/login`、`/auth/carrier/login`、`/auth/logout` | 按钮 loading | Toast/表单错误 | — | **Rest已就绪**（切 `AuthServiceConfig=rest`） |
+| 登录 login | 是（Mock，`API_ENV=rest` 切 Rest） | `AuthRepository` | `AuthService`(Rest/Mock)、`AuthSessionService`、`SocialAppLaunchService` | `POST /auth/sms/send`、`/auth/sms/login`、`/auth/carrier/login`、`/auth/logout` | 按钮 loading | Toast/表单错误 | — | **已接环境开关**（`--dart-define=API_ENV=rest`） |
 | 启动 splash | 是 | 无 | `AuthSessionService` | `GET /me`（校验会话） | 原生闪屏 | 回退登录 | — | Service（待换持久化） |
 | 新手信息 onboarding | 是（内存） | 无 | `OnboardingService` | `POST /me/basic-info` | 按钮 loading | Toast | — | Service |
 
@@ -43,7 +51,7 @@
 
 | 页面/模块 | 假数据 | Repository | Service | API 建议 | Loading | Error | Empty | 预留 |
 |---|---|---|---|---|---|---|---|---|
-| 书城 bookstore | 是（默认 Mock） | `BookstoreRepository` | `ApiClient` | `GET /bookstore/home`；`GET /bookstore/guess-like`(分页) | ✓统一 | ✓统一 | ✓统一 | **Remote已就绪** |
+| 书城 bookstore | 是（默认 Mock，`API_ENV=rest` 切 Remote） | `BookstoreRepository` | `ApiClient` | `GET /bookstore/home`；`GET /bookstore/guess-like`(分页) | ✓统一 | ✓统一 | ✓统一 | **已接环境开关** |
 | 分类 category | 是 | `CategoryRepository` | `ApiClient` | `GET /categories`、`GET /categories/books`(筛选+分页) | 骨架 | ~待补 | 空态 | ✓抽象 |
 | 榜单 ranking | 是 | `RankingRepository` | `ApiClient` | `GET /rankings`(channel/dimension/分页) | 骨架 | ~待补 | 空态 | ✓抽象 |
 | 编辑推荐 editor_pick | 是 | `EditorPickRepository` | `ApiClient` | `GET /editor-picks`(分页) | 骨架 | ~待补 | 空态 | ✓抽象 |
@@ -53,7 +61,7 @@
 
 | 页面/模块 | 假数据 | Repository | Service | API 建议 | Loading | Error | Empty | 预留 |
 |---|---|---|---|---|---|---|---|---|
-| 搜索 search | 是（默认 Mock） | `SearchRepository` | `ApiClient`、`BookshelfMembershipService`(加书架) | `GET /search`、`/search/suggestions`、`/search/hot-keywords`、`/search/recommendations`；`GET/POST/DELETE /me/search-history` | 骨架 | ~待补 | 空态（无结果/初始推荐） | **Remote已就绪** |
+| 搜索 search | 是（默认 Mock，`API_ENV=rest` 切 Remote） | `SearchRepository` | `ApiClient`、`BookshelfMembershipService`(加书架) | `GET /search`、`/search/suggestions`、`/search/hot-keywords`、`/search/recommendations`；`GET/POST/DELETE /me/search-history` | 骨架 | ~待补 | 空态（无结果/初始推荐） | **已接环境开关** |
 
 ### 4. 书籍详情 / 社区
 

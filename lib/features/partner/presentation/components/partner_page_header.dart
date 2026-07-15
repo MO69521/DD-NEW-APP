@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import '../../../../core/theme/app_partner_colors.dart';
 import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
+import '../../../../core/theme/app_icon_assets.dart';
 import '../../../../shared/components/app_top_bar.dart';
 import '../../../../shared/components/app_top_bar_icon_button.dart';
 import '../../domain/entities/partner_top_tab.dart';
@@ -69,7 +70,7 @@ class _SearchButtonState extends State<_SearchButton> {
       onTap: widget.onTap,
       behavior: HitTestBehavior.opaque,
       child: AppTopBarIconButton(
-        iconAsset: 'assets/icons/search.svg',
+        iconAsset: AppIconAssets.search,
         iconWidth: AppSizes.partnerSearchIconSize,
         iconHeight: AppSizes.partnerSearchIconSize,
         iconColor: _pressed

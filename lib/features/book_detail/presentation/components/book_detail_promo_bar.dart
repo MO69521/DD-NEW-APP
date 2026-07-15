@@ -6,6 +6,7 @@ import '../../../../core/theme/app_radius.dart';
 import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
+import '../../../../core/theme/app_theme_assets.dart';
 import '../../../../shared/components/sweep_highlight_overlay.dart';
 import '../../../../shared/components/liquid_sweep_cta_clip.dart';
 import '../../../../shared/widgets/app_asset_image.dart';
@@ -26,8 +27,7 @@ class BookDetailPromoBar extends StatelessWidget {
   });
 
   static const String _energyIconAsset = 'assets/icons/welfare/energy.svg';
-  static const String _rewardTagAsset =
-      'assets/icons/book_detail/promo_reward_tag.svg';
+  static const String _rewardTagAsset = AppThemeAssets.bookDetailPromoRewardTag;
 
   final String title;
   final String subtitle;

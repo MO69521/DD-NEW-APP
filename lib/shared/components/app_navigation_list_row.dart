@@ -4,6 +4,7 @@ import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_sizes.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text_styles.dart';
+import '../../core/theme/app_icon_assets.dart';
 import '../widgets/app_icon.dart';
 import '../widgets/app_pressable.dart';
 import '../widgets/app_text.dart';
@@ -85,7 +86,7 @@ class AppNavigationListRow extends StatelessWidget {
               ],
               if (showArrow)
                 const AppIcon(
-                  assetPath: 'assets/icons/arrow_right.svg',
+                  assetPath: AppIconAssets.arrowRight,
                   width: AppSpacing.sm,
                   height: AppSpacing.sm,
                   color: AppColors.textTertiary,

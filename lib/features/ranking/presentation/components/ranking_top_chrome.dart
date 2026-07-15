@@ -4,6 +4,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
+import '../../../../core/theme/app_icon_assets.dart';
 import '../../../../routes/app_router.dart';
 import '../../../../routes/app_routes.dart';
 import '../../../../shared/components/app_blurred_chrome_bar.dart';
@@ -21,7 +22,7 @@ class RankingTopChrome extends StatelessWidget {
   final double statusBarHeight;
   final bool blurEnabled;
 
-  static const String _searchIconAsset = 'assets/icons/search.svg';
+  static const String _searchIconAsset = AppIconAssets.search;
 
   @override
   Widget build(BuildContext context) {

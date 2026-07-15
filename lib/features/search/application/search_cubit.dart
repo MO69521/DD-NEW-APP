@@ -1,6 +1,9 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../core/config/api_env.dart';
+import '../../../core/services/service_locator.dart';
 import '../data/datasources/search_mock_datasource.dart';
+import '../data/datasources/search_remote_datasource.dart';
 import '../data/repositories/search_repository_impl.dart';
 import '../domain/repositories/search_repository.dart';
 import 'search_domain_state.dart';
@@ -10,14 +13,22 @@ import 'search_ui_state.dart';
 /// application 层状态管理，state 仅在此层创建与修改。
 class SearchCubit extends Cubit<SearchState> {
   SearchCubit({SearchRepository? repository})
-      : _repository =
-            repository ?? const SearchRepositoryImpl(SearchMockDataSource()),
+      : _repository = repository ?? _defaultRepository(),
         super(const SearchState()) {
     loadRecommendations();
     loadKeywords();
   }
 
   final SearchRepository _repository;
+
+  /// 默认仓储：`API_ENV=rest` 时用真实接口，否则用 Mock（无后端时默认）。
+  static SearchRepository _defaultRepository() {
+    return SearchRepositoryImpl(
+      ApiEnvConfig.isRest
+          ? SearchRemoteDataSource(ServiceLocator.apiClient)
+          : const SearchMockDataSource(),
+    );
+  }
 
   /// 加载热门搜索 + 搜索历史。
   Future<void> loadKeywords() async {

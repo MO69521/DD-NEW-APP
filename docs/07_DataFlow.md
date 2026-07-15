@@ -98,24 +98,32 @@ sequenceDiagram
 
 1. **建 DTO + 映射**：`features/<name>/data/models/<name>_dto.dart`，`fromJson` 解析后端字段、`toEntity()` 映射到 domain entity（domain 保持无 json）。参考 [bookstore_page_dto.dart](../lib/features/bookstore/data/models/bookstore_page_dto.dart)、[search_dtos.dart](../lib/features/search/data/models/search_dtos.dart)。
 2. **写 Remote DataSource**：`features/<name>/data/datasources/<name>_remote_datasource.dart`，`implements <Name>DataSource`，经 `ServiceLocator.apiClient` 调接口、读 `json['data']` 信封。参考 [bookstore_remote_datasource.dart](../lib/features/bookstore/data/datasources/bookstore_remote_datasource.dart)、[search_remote_datasource.dart](../lib/features/search/data/datasources/search_remote_datasource.dart)。
-3. **切换注入点**：把 Cubit 默认或路由构造里的 Mock 换成 Remote，例如：
+3. **切换注入点**：cubit 默认注入据统一环境开关 [`ApiEnvConfig`](../lib/core/config/api_env.dart) 选择数据源——`API_ENV=rest` 用 Remote，缺省 `mock`（无后端不受影响）。例如 `bookstore_cubit.dart`：
 
 ```dart
-BookstoreCubit({BookstoreRepository? repository})
-  : _repository = repository ??
-      BookstoreRepositoryImpl(
-        BookstoreRemoteDataSource(ServiceLocator.apiClient), // ← 由 Mock 改为 Remote
-      );
+static BookstoreRepository _defaultRepository() {
+  return BookstoreRepositoryImpl(
+    ApiEnvConfig.isRest
+        ? BookstoreRemoteDataSource(ServiceLocator.apiClient) // API_ENV=rest
+        : const BookstoreMockDataSource(),                    // 缺省
+  );
+}
+```
+
+启用真实接口（默认 mock，不传即预览）：
+
+```bash
+flutter run --dart-define=API_ENV=rest --dart-define=API_BASE_URL=https://api.example.com
 ```
 
 **各替换点速查**（Cubit 注入位置见 [06_Pages.md](./06_Pages.md)）：
 
-| Feature | DataSource 抽象 | 现状 | 替换动作 |
+| Feature | DataSource 抽象 | 现状 | 切换方式 |
 |---|---|---|---|
-| bookstore | `bookstore_data_source.dart` | Remote 已写，默认注 Mock | 注入点换 Remote |
-| search | `search_data_source.dart` | Remote 已写，默认注 Mock | 注入点换 Remote |
-| auth | 无（走 `AuthService`） | `RestAuthService` 已写 | `AuthServiceConfig.environment = rest` |
-| home / category / ranking / editor_pick / book_detail / book_discussion / bookshelf / partner / welfare / currency_wallet / energy_records / dress_up / profile / account_settings / my_messages / settings / help_feedback | 各自 `*_data_source.dart` | 仅 Mock | 新增 Remote（3 步） |
+| bookstore | `bookstore_data_source.dart` | Remote 已写 + **已接环境开关** | `--dart-define=API_ENV=rest` 自动用 Remote |
+| search | `search_data_source.dart` | Remote 已写 + **已接环境开关** | `--dart-define=API_ENV=rest` 自动用 Remote |
+| auth | 无（走 `AuthService`） | `RestAuthService` 已写 + **已接环境开关** | `--dart-define=API_ENV=rest`（`AuthServiceConfig` 默认跟随） |
+| home / category / ranking / editor_pick / book_detail / book_discussion / bookshelf / partner / welfare / currency_wallet / energy_records / dress_up / profile / account_settings / my_messages / settings / help_feedback | 各自 `*_data_source.dart` | 仅 Mock | 新增 Remote（3 步）后照 bookstore 接入环境开关 |
 | membership | 无抽象（静态 getter）+ `MembershipStatusService` | Mock | 补 `*_data_source.dart` 抽象或实现真实 `MembershipStatusService` |
 | card_pack / recharge_records | 无 | 占位页 | 从零补 domain/data/application |
 

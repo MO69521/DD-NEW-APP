@@ -1,4 +1,8 @@
+import '../theme/app_theme_assets.dart';
+
 /// 主 Tab 导航静态配置（App Shell 层）。
+///
+/// 图标路径经 [AppThemeAssets] 按编译期主题包解析；图标为完整色稿，UI 不再染色。
 class MainTabItem {
   const MainTabItem({
     required this.label,
@@ -21,28 +25,28 @@ abstract final class MainTabConfig {
   static const List<MainTabItem> items = [
     MainTabItem(
       label: '书城',
-      iconAsset: 'assets/icons/nav/bookstore_inactive.svg',
-      selectedIconAsset: 'assets/icons/nav/bookstore_active.svg',
+      iconAsset: AppThemeAssets.navBookstoreInactive,
+      selectedIconAsset: AppThemeAssets.navBookstoreActive,
     ),
     MainTabItem(
       label: '福利',
-      iconAsset: 'assets/icons/nav/welfare_inactive.svg',
-      selectedIconAsset: 'assets/icons/nav/welfare_active.svg',
+      iconAsset: AppThemeAssets.navWelfareInactive,
+      selectedIconAsset: AppThemeAssets.navWelfareActive,
     ),
     MainTabItem(
       label: '伙伴',
-      iconAsset: 'assets/icons/nav/partner_inactive.svg',
-      selectedIconAsset: 'assets/icons/nav/partner_active.svg',
+      iconAsset: AppThemeAssets.navPartnerInactive,
+      selectedIconAsset: AppThemeAssets.navPartnerActive,
     ),
     MainTabItem(
       label: '书架',
-      iconAsset: 'assets/icons/nav/bookshelf_inactive.svg',
-      selectedIconAsset: 'assets/icons/nav/bookshelf_active.svg',
+      iconAsset: AppThemeAssets.navBookshelfInactive,
+      selectedIconAsset: AppThemeAssets.navBookshelfActive,
     ),
     MainTabItem(
       label: '我的',
-      iconAsset: 'assets/icons/nav/profile_inactive.svg',
-      selectedIconAsset: 'assets/icons/nav/profile_active.svg',
+      iconAsset: AppThemeAssets.navProfileInactive,
+      selectedIconAsset: AppThemeAssets.navProfileActive,
     ),
   ];
 }

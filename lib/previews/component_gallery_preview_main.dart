@@ -20,11 +20,14 @@ class ComponentGalleryPreviewApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: '点点穿书 · 组件总览',
-      theme: AppTheme.dark,
-      debugShowCheckedModeBanner: false,
-      home: const ComponentGalleryPage(),
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: AppTheme.systemUiOverlayStyle,
+      child: MaterialApp(
+        title: '点点穿书 · 组件总览',
+        theme: AppTheme.dark,
+        debugShowCheckedModeBanner: false,
+        home: const ComponentGalleryPage(),
+      ),
     );
   }
 }

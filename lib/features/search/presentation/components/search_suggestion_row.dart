@@ -5,6 +5,7 @@ import '../../../../core/theme/app_radius.dart';
 import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
+import '../../../../core/theme/app_icon_assets.dart';
 import '../../../../shared/widgets/app_icon.dart';
 import '../../../../shared/widgets/app_pressable.dart';
 import '../../../../shared/widgets/app_text.dart';
@@ -23,7 +24,7 @@ class SearchSuggestionRow extends StatelessWidget {
   final String query;
   final VoidCallback? onTap;
 
-  static const String _iconAsset = 'assets/icons/search.svg';
+  static const String _iconAsset = AppIconAssets.search;
 
   @override
   Widget build(BuildContext context) {

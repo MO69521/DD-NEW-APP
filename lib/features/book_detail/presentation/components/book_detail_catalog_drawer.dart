@@ -6,6 +6,7 @@ import '../../../../core/theme/app_radius.dart';
 import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
+import '../../../../core/theme/app_icon_assets.dart';
 import '../../../../routes/app_router.dart';
 import '../../../../shared/widgets/app_asset_image.dart';
 import '../../../../shared/widgets/app_icon.dart';
@@ -154,7 +155,7 @@ class _CatalogHeader extends StatelessWidget {
             const AppPressable(
               onTap: AppRouter.pop,
               child: AppIcon(
-                assetPath: 'assets/icons/arrow_right.svg',
+                assetPath: AppIconAssets.arrowRight,
                 width: AppSizes.bookDetailCatalogArrowSize,
                 height: AppSizes.bookDetailCatalogArrowSize,
                 color: AppColors.textOnDarkPlaceholder,

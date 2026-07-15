@@ -45,8 +45,10 @@ flowchart LR
 
 ## 4. 整改优先级
 
-1. **P0 打通用户态**：`auth` 切 `RestAuthService`（切配置即可）+ 登录态持久化。
-2. **P0 接入范例落地**：`bookstore`/`search` 注入点切 Remote，作为其余 feature 模板。
+> 进度：**环境开关脚手架已完成（2026-07-15）** —— 新增 [`ApiEnvConfig`](../lib/core/config/api_env.dart)，`bookstore`/`search`/`auth` 默认注入已按 `--dart-define=API_ENV=rest` 在 Mock/Remote 间切换，缺省仍 Mock（不破坏无后端预览）。待真实后端就绪只需配 `API_BASE_URL`。
+
+1. **P0 打通用户态**：`auth` 切 `RestAuthService`（已接 `API_ENV` 开关，待真实后端联调）+ 登录态持久化（未做）。
+2. **P0 接入范例落地**：`bookstore`/`search` 已接环境开关（默认 Mock），作为其余 feature 模板。
 3. **P1 用户态页面接入**：`bookshelf`/`profile`/`account_settings`/`my_messages`/`currency_wallet`/`membership`（含真实 `MembershipStatusService`）。
 4. **P1 补测试**：核心 cubit + repository 契约测试。
 5. **P2 写操作接口**：加书架/签到/送心点赞评论/会员支付/装扮穿戴。

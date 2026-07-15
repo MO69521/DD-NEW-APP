@@ -6,6 +6,7 @@ import '../../../../core/theme/app_durations.dart';
 import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
+import '../../../../core/theme/app_icon_assets.dart';
 import '../../../../shared/components/book_grid_card.dart';
 import '../../../../shared/components/section_header.dart';
 import '../../../../shared/widgets/app_icon.dart';
@@ -51,14 +52,14 @@ class BookDetailRecommendationSection extends StatelessWidget {
           _RotatingRecommendationHeader(
             title: title,
             actionLabel: actionLabel,
-            actionIconAsset: actionIconAsset ?? 'assets/icons/arrow_right.svg',
+            actionIconAsset: actionIconAsset ?? AppIconAssets.arrowRight,
             onActionTap: onActionTap,
           )
         else
           SectionHeader(
             title: title,
             actionLabel: actionLabel,
-            actionIconAsset: actionIconAsset ?? 'assets/icons/arrow_right.svg',
+            actionIconAsset: actionIconAsset ?? AppIconAssets.arrowRight,
             onActionTap: onActionTap,
           ),
         const SizedBox(height: AppSpacing.md),

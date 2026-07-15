@@ -86,6 +86,7 @@ abstract final class AppPalette {
   static const Color yellow500 = Color(0xFFFFE847);
   static const Color yellow500Alpha04 = Color(0x0AFFE847);
   static const Color yellow500Alpha08 = Color(0x14FFE847);
+  static const Color yellow500Alpha40 = Color(0x66FFE847);
   static const Color pink500Alpha04 = Color(0x0AFF4D88);
   static const Color pink500Alpha08 = Color(0x14FF4D88);
   static const Color pink500Alpha40 = Color(0x66FF4D88);

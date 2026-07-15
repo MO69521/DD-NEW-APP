@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 
 import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
+import '../../../../core/theme/app_icon_assets.dart';
 import '../../../../shared/components/app_top_bar.dart';
 import '../../../../shared/components/app_top_bar_icon_button.dart';
 import '../../domain/entities/bookstore_top_tab.dart';
@@ -25,7 +26,7 @@ class BookstorePageHeader extends StatelessWidget {
   final VoidCallback? onSearchTap;
   final ValueListenable<double>? swipeProgress;
 
-  static const String searchIconAsset = 'assets/icons/search.svg';
+  static const String searchIconAsset = AppIconAssets.search;
 
   @override
   Widget build(BuildContext context) {

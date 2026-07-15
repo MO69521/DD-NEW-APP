@@ -36,7 +36,8 @@ abstract final class AppColors {
   static const Color _inkMuted = AppBrandColors.textSecondary; // #6B7280
   static const Color _inkPlaceholder = AppBrandColors.originalPriceMuted; // #9B9B9B
   static const Color _lightCard = AppPalette.neutralWhite; // #FFFFFF
-  static const Color _lightBorder = AppPalette.pink100; // 浅粉卡片描边
+  // 浅色卡片描边：pink_light 浅粉 / yellow_light 中性浅灰（真源在 AppBrandColors）。
+  static const Color _lightBorder = AppBrandColors.lightCardBorder;
   static const Color _lightDivider = AppPalette.neutralCool100; // #F3F4F6
   static const Color _darkTextPrimary = AppPalette.neutralWhite;
   static const Color _darkTextSecondary = AppPalette.neutralCool400;
@@ -49,11 +50,10 @@ abstract final class AppColors {
   static const Color _darkDivider = AppPalette.neutralCool820;
 
   static const Color primary = AppBrandColors.accent;
-  static const Color onPrimary = _isLight
-      ? AppPalette.neutralWhite
-      : AppPalette.neutralCool950;
-  static const Color primarySoft =
-      _isLight ? AppPalette.pink500Alpha04 : AppPalette.yellow500Alpha04;
+  // 主色上的文字/图标跟随强调色身份（粉底翻白、黄底深墨），而非浅色标志：
+  // 避免 yellow_light 亮黄底上出现不可读的白字。
+  static const Color onPrimary = AppBrandColors.onAccent;
+  static const Color primarySoft = AppBrandColors.accentSoft04;
 
   static const Color background = AppBrandColors.backgroundDark;
   static const Color surface = _isLight ? _lightCard : _darkSurface;
@@ -102,6 +102,11 @@ abstract final class AppColors {
   /// 底部导航底色：深色态毛玻璃（约 90% tint）；浅色态纯白不透明（`white100`），
   /// 全局底部导航统一实心白底。
   static const Color bottomNavScrim = _isLight ? white100 : bgTint90;
+
+  /// 底部导航「有背景纹理」时的半透明底色（约 60% 壳基色 tint，深浅主题各自随基色）：
+  /// 比 [bottomNavScrim] 更透，让主题纹理（`AppThemeAssets.bottomNavTexture`）在其下
+  /// 隐约透出，同时保持图标 / 标签可读。复用既有壳 tint 阶，未引入新色值。
+  static const Color bottomNavTextureScrim = bgTint60;
 
   /// 顶栏滚动后底色（仅 `AppPageChrome`，如书城等 Tab 页）：深色态毛玻璃（约 80% tint）；
   /// 浅色态纯白不透明（`white100`）。书详情顶栏走 `chromeBarScrim`，不受此影响、保持磨砂。
@@ -197,10 +202,10 @@ abstract final class AppColors {
   static const Color rankingMutedBadgeScrim = black60;
 
   /// 按钮不可点击（禁用）态，全局统一（覆盖各变体）。主题感知：
-  /// 深色态沿用弱实体面 + 三级字；浅色态用半透明玫粉底 + 85% 白字，
-  /// 避免深色块落在浅底弹窗上显得错误。
+  /// 深色态沿用弱实体面 + 三级字；浅色态用半透明强调色底（pink_light 玫粉 /
+  /// yellow_light 黄）+ 85% 白字，避免深色块落在浅底弹窗上显得错误。
   static const Color buttonDisabledFill =
-      _isLight ? AppPalette.pink500Alpha40 : _darkSurface;
+      _isLight ? AppBrandColors.accentDisabledFill : _darkSurface;
   static const Color buttonDisabledText = _isLight ? white85 : _darkTextTertiary;
 
   /// 弹窗遮罩（80% 不透明黑，无背景模糊）。
@@ -226,9 +231,8 @@ abstract final class AppColors {
   static const Color profileHeroImageMaskSoft = white24;
   static const Color profileHeroImageMaskTransparent = white00;
 
-  // 全局分段控件 (Figma 1297:827)：深色黄 8%，浅色实验粉 8%（随主强调）。
-  static const Color segmentedSelectedFill =
-      _isLight ? AppPalette.pink500Alpha08 : AppPalette.yellow500Alpha08;
+  // 全局分段控件 (Figma 1297:827)：随主强调 8%（dark/yellow_light 黄 8%、pink_light 粉 8%）。
+  static const Color segmentedSelectedFill = AppBrandColors.accentSoft08;
   // 选中态去描边（全局统一）：仅靠 fill + 文字色区分选中
   static const Color segmentedSelectedBorder = white00;
   static const Color segmentedSelectedText = accentYellow;

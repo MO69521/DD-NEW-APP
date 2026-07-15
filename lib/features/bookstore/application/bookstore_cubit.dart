@@ -1,8 +1,11 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../core/config/api_env.dart';
+import '../../../core/services/service_locator.dart';
 import '../../../core/theme/app_durations.dart';
 import '../../../core/theme/app_sizes.dart';
 import '../data/datasources/bookstore_mock_datasource.dart';
+import '../data/datasources/bookstore_remote_datasource.dart';
 import '../data/repositories/bookstore_repository_impl.dart';
 import '../../../../core/domain/entities/book.dart';
 import '../domain/entities/bookstore_top_tab.dart';
@@ -13,12 +16,19 @@ import 'bookstore_state.dart';
 /// application 层状态管理，state 仅在此层创建与修改。
 class BookstoreCubit extends Cubit<BookstoreState> {
   BookstoreCubit({BookstoreRepository? repository})
-    : _repository =
-          repository ??
-          const BookstoreRepositoryImpl(BookstoreMockDataSource()),
+    : _repository = repository ?? _defaultRepository(),
       super(const BookstoreState());
 
   final BookstoreRepository _repository;
+
+  /// 默认仓储：`API_ENV=rest` 时用真实接口，否则用 Mock（无后端时默认）。
+  static BookstoreRepository _defaultRepository() {
+    return BookstoreRepositoryImpl(
+      ApiEnvConfig.isRest
+          ? BookstoreRemoteDataSource(ServiceLocator.apiClient)
+          : const BookstoreMockDataSource(),
+    );
+  }
 
   Future<void> load() async {
     emit(

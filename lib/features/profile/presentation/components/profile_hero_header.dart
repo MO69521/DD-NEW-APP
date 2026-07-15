@@ -11,6 +11,7 @@ import '../../../../shared/widgets/app_pressable.dart';
 import '../../../../shared/widgets/app_text.dart';
 import '../../domain/entities/user_profile.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_icon_assets.dart';
 
 /// L3 组件 — 我的页 Hero 背景：独立素材图（非头像）+ 向下渐隐，可撑满父级高度。
 ///
@@ -171,7 +172,7 @@ class _UserInfoBlock extends StatelessWidget {
           ),
           const SizedBox(width: AppSpacing.xs),
           const AppIcon(
-            assetPath: 'assets/icons/arrow_right.svg',
+            assetPath: AppIconAssets.arrowRight,
             width: AppSpacing.sm,
             height: AppSpacing.sm,
             color: AppColors.textOnDark,

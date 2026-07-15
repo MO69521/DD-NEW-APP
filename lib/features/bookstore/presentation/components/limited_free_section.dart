@@ -9,6 +9,7 @@ import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/theme/app_welfare_colors.dart';
+import '../../../../core/theme/app_icon_assets.dart';
 import '../../../../shared/components/book_grid_card.dart';
 import '../../../../shared/widgets/app_icon.dart';
 import '../../../../shared/widgets/app_pressable.dart';
@@ -163,7 +164,7 @@ class _LimitedFreeHeader extends StatelessWidget {
               ),
               const SizedBox(width: AppSpacing.xxs),
               const AppIcon(
-                assetPath: 'assets/icons/arrow_right.svg',
+                assetPath: AppIconAssets.arrowRight,
                 width: AppSpacing.sm,
                 height: AppSpacing.sm,
                 color: AppColors.sectionActionIcon,

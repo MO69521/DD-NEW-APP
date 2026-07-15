@@ -1,3 +1,4 @@
+import '../../core/theme/app_icon_assets.dart';
 part of 'recharge_packages_section.dart';
 
 class _RechargeSectionHeader extends StatelessWidget {
@@ -50,7 +51,7 @@ class _RechargeSectionHeader extends StatelessWidget {
                   ),
                   const SizedBox(width: AppSpacing.xxs),
                   const AppIcon(
-                    assetPath: 'assets/icons/arrow_right.svg',
+                    assetPath: AppIconAssets.arrowRight,
                     width: AppSizes.welfareCurrencyArrowSize,
                     height: AppSizes.welfareCurrencyArrowSize,
                     color: AppColors.textOnDark,
@@ -65,7 +66,7 @@ class _RechargeSectionHeader extends StatelessWidget {
             turns: expanded ? 0 : 0.5,
             duration: AppDurations.normal,
             child: const AppIcon(
-              assetPath: 'assets/icons/chevron_down.svg',
+              assetPath: AppIconAssets.chevronDown,
               width: AppSizes.welfareCheckInChevronSize,
               height: AppSizes.welfareCheckInChevronSize,
               color: AppColors.textOnDarkPlaceholder,

@@ -4,6 +4,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
+import '../../../../core/theme/app_icon_assets.dart';
 import '../../../../shared/components/app_blurred_dialog.dart';
 import '../../../../shared/widgets/app_icon.dart';
 import '../../../../shared/widgets/app_pressable.dart';
@@ -79,7 +80,7 @@ class _Header extends StatelessWidget {
         const AppText('滑动查看更多', style: AppTextStyles.bookDetailSectionHint),
         const SizedBox(width: AppSpacing.xxs),
         const AppIcon(
-          assetPath: 'assets/icons/arrow_right.svg',
+          assetPath: AppIconAssets.arrowRight,
           width: AppSizes.bookDetailSectionHintIconSize,
           height: AppSizes.bookDetailSectionHintIconSize,
           color: AppColors.textOnDarkMuted,

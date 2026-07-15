@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
-# 浅色主题（pink_light）token 反模式检测。
+# 浅色主题（pink_light / yellow_light）token 反模式检测。
 #
-# 背景：pink_light 实验包靠 AppColors._isLight（编译期 THEME=pink_light）翻转中性面/文字/描边。
+# 背景：浅色实验包靠 AppColors._isLight（编译期 THEME=pink_light / yellow_light）翻转中性面/文字/描边
+# （yellow_light 复用同一套中性外壳，仅强调色换黄；门禁逻辑与具体主题无关）。
 # 凡「公开语义 token 绑死深色值」或「UI 直接把 whiteNN/blackNN/深色 Color(0x) 当面/描边/文字」，
 # 浅色态都不翻转 → 白底看不见、深块压浅底、白字消失、主色上黑字。
 #

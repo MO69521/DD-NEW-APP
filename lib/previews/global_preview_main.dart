@@ -16,14 +16,8 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   AppRouter.setInitialLocation(_resolveInitialLocation());
   await SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
-  SystemChrome.setSystemUIOverlayStyle(
-    const SystemUiOverlayStyle(
-      statusBarColor: Colors.transparent,
-      statusBarIconBrightness: Brightness.light,
-      systemNavigationBarColor: Colors.transparent,
-      systemNavigationBarIconBrightness: Brightness.light,
-    ),
-  );
+  // 随主题翻转：深色壳白图标 / 浅色实验包深图标（保证浅底上时间/信号/电量可读）。
+  SystemChrome.setSystemUIOverlayStyle(AppTheme.systemUiOverlayStyle);
   runApp(const GlobalPreviewApp());
 }
 
@@ -51,11 +45,16 @@ class GlobalPreviewApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      title: '点点穿书 · 全局预览',
-      theme: AppTheme.dark,
-      debugShowCheckedModeBanner: false,
-      routerConfig: AppRouter.router,
+    // 与正式 app.dart 一致：用 AnnotatedRegion 持续施加状态栏样式（随主题翻转），
+    // 避免 iOS 首帧后一次性 setSystemUIOverlayStyle 失效导致浅色下状态栏仍白图标。
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: AppTheme.systemUiOverlayStyle,
+      child: MaterialApp.router(
+        title: '点点穿书 · 全局预览',
+        theme: AppTheme.dark,
+        debugShowCheckedModeBanner: false,
+        routerConfig: AppRouter.router,
+      ),
     );
   }
 }

@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 
+import '../../core/theme/app_colors.dart';
+import '../../core/theme/app_icon_assets.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../widgets/app_icon.dart';
 import '../widgets/app_pressable.dart';
 import '../widgets/app_text.dart';
-import '../../core/theme/app_colors.dart';
 
 /// Level 2 — 区块标题 + 可选右侧操作链接。
 class SectionHeader extends StatelessWidget {
@@ -14,7 +15,7 @@ class SectionHeader extends StatelessWidget {
     required this.title,
     this.titleStyle,
     this.actionLabel,
-    this.actionIconAsset = 'assets/icons/arrow_right.svg',
+    this.actionIconAsset = AppIconAssets.arrowRight,
     this.onActionTap,
   });
 

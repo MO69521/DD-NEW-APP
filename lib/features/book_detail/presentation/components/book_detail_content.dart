@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
+import '../../../../core/theme/app_theme_assets.dart';
 import '../../../../routes/app_router.dart';
 import '../../../../shared/components/app_swipe_tab_switcher.dart';
 import '../../../../shared/widgets/app_text.dart';
@@ -139,7 +140,7 @@ class _DetailTabBody extends StatelessWidget {
           books: detail.recommendedBooks,
           heroNamespace: 'detail-recommend',
           actionLabel: '换一换',
-          actionIconAsset: 'assets/icons/book_detail/refresh.svg',
+          actionIconAsset: AppThemeAssets.bookDetailRefresh,
           rotateActionIconOnTap: true,
           onActionTap: onRecommendationRefreshTap,
           onBookTap: (book, heroTag) =>

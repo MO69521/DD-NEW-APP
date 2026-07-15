@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_layout.dart';
+import '../../../../core/theme/app_shared_assets.dart';
 import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
@@ -16,8 +17,7 @@ import '../../../../shared/widgets/app_text.dart';
 class CardPackPage extends StatelessWidget {
   const CardPackPage({super.key});
 
-  static const String _emptyIllustration =
-      'assets/images/profile/empty_card_pack.png';
+  static const String _emptyIllustration = AppSharedAssets.emptyCardPack;
 
   @override
   Widget build(BuildContext context) {

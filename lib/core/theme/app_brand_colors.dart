@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../config/app_theme_id.dart';
 import 'app_palette.dart';
 
 /// 品牌 / 主题语义层（Tier 2）。
@@ -11,7 +12,13 @@ import 'app_palette.dart';
 ///
 /// ── 编译期主题包（小流量实验用）───────────────────────────────
 /// 一个实验包 = §A 整组的一套取值；`AppColors` / 页面经语义名取色，换包不改调用点。
-/// 当前实验包：`dark`（默认深色）、`pink_light`（粉色浅色系）。
+/// 当前实验包：`dark`（默认深色）、`pink_light`（粉色浅色系）、
+/// `yellow_light`（黄色浅色系：复用 pink_light 中性浅色外壳，主强调色换黄）。
+///
+/// §A 分两类分支：**中性外壳**（背景/浮层/壳文字/tint）按 `isLightExperiment` 翻转，
+/// 两个浅色包共用；**强调身份**（`accent` / `onAccent` / `accentSoft*` /
+/// `accentDisabledFill`）按 `themeId == _pinkLight` 判定（粉 vs 黄），`dark` 与
+/// `yellow_light` 同走黄。
 ///
 /// 新增一个实验包（示例 id `xxx`）：
 ///   1. 在 [AppPalette] 补该包所需原色（如新壳基色 `shellXxx` + 透明度阶）。
@@ -21,22 +28,54 @@ import 'app_palette.dart';
 /// 约束（强制）：默认（不带 `--dart-define`）永远解析为 `dark`，
 /// §A 的 dark 分支（[AppPalette] 深色原色）不得改动。
 abstract final class AppBrandColors {
-  static const String themeId = String.fromEnvironment(
-    'THEME',
-    defaultValue: 'dark',
-  );
+  static const String themeId = AppThemeId.value;
+
+  static const String _pinkLight = AppThemeId.pinkLight;
+  static const String _yellowLight = AppThemeId.yellowLight;
+
+  /// 浅色实验包判定（供中性外壳翻转 / [AppColors] 翻转中性叠色 / ink 文字）。
+  /// `pink_light` 与 `yellow_light` 共用同一套中性浅色外壳；未知 THEME 回退 dark 外壳。
+  static const bool isLightExperiment =
+      themeId == _pinkLight || themeId == _yellowLight;
 
   // ══════════════════════════════════════════════════════════════
   // §A 主题壳源色（随 --dart-define=THEME 从 AppPalette 选）
   // ══════════════════════════════════════════════════════════════
+  //
+  // 两类分支：
+  // - 中性外壳（背景/浮层/壳文字/tint）→ 按 [isLightExperiment] 翻转，两浅色包共用。
+  // - 强调身份（accent / onAccent / accentSoft* / accentDisabledFill）→ 按
+  //   `themeId == _pinkLight` 判定（粉 vs 黄）；`dark` 与 `yellow_light` 同走黄。
 
   /// 全局背景（主题壳基色）。
   static const Color backgroundDark =
-      themeId == _pinkLight ? AppPalette.pink50 : AppPalette.neutralCool950;
+      isLightExperiment ? AppPalette.pink50 : AppPalette.neutralCool950;
 
   /// 主强调色（主 CTA / 点赞 / 互动选中）。
   static const Color accent =
       themeId == _pinkLight ? AppPalette.pink500 : AppPalette.yellow500;
+
+  /// 主强调色上的文字 / 图标：粉底翻白、黄底（dark / yellow_light）用深墨。
+  static const Color onAccent = themeId == _pinkLight
+      ? AppPalette.neutralWhite
+      : AppPalette.neutralCool950;
+
+  /// 主强调 4% / 8% 柔化底（开启 / 选中态大色块底色），跟随强调色。
+  static const Color accentSoft04 = themeId == _pinkLight
+      ? AppPalette.pink500Alpha04
+      : AppPalette.yellow500Alpha04;
+  static const Color accentSoft08 = themeId == _pinkLight
+      ? AppPalette.pink500Alpha08
+      : AppPalette.yellow500Alpha08;
+
+  /// 浅色态按钮禁用底（半透明强调色），跟随强调色。
+  static const Color accentDisabledFill = themeId == _pinkLight
+      ? AppPalette.pink500Alpha40
+      : AppPalette.yellow500Alpha40;
+
+  /// 浅色外壳卡片细描边：pink_light 用浅粉，yellow_light 用中性浅灰（dark 不使用）。
+  static const Color lightCardBorder =
+      themeId == _pinkLight ? AppPalette.pink100 : AppPalette.neutralCool200;
 
   /// 极光渐变亮核（暖米金）。pink_light 暂复用 dark（v1 已知项）。
   static const Color auroraGlow = AppPalette.cream100;
@@ -44,40 +83,35 @@ abstract final class AppBrandColors {
   /// 极光渐变暗边（暗红近黑）。pink_light 暂复用 dark。
   static const Color auroraEdge = AppPalette.wine950;
 
-  /// 弹窗底。pink_light 用白底。
+  /// 弹窗底。浅色包用白底。
   static const Color dialogBackground =
-      themeId == _pinkLight ? AppPalette.neutralWhite : AppPalette.neutralCool880;
+      isLightExperiment ? AppPalette.neutralWhite : AppPalette.neutralCool880;
 
-  /// 主题壳主文字（深壳纯白；pink_light 深墨）。
+  /// 主题壳主文字（深壳纯白；浅色包深墨）。
   static const Color textOnDark =
-      themeId == _pinkLight ? AppPalette.neutralBlue950 : AppPalette.neutralWhite;
+      isLightExperiment ? AppPalette.neutralBlue950 : AppPalette.neutralWhite;
 
-  /// 实心浮层/卡片底（如「继续阅读」浮层）。pink_light 用白面板。
-  static const Color surfaceMuted = themeId == _pinkLight
+  /// 实心浮层/卡片底（如「继续阅读」浮层）。浅色包用白面板。
+  static const Color surfaceMuted = isLightExperiment
       ? AppPalette.neutralWhite
       : AppPalette.neutralCool800;
 
   // 背景 tint 阶：主题壳基色的不同透明度（渐隐 / 毛玻璃底）。
   // 头图/封面「图上遮罩」不用这里（浅色下需恒暗），由 AppColors 单独按主题处理。
   static const Color bgTint00 =
-      themeId == _pinkLight ? AppPalette.pink50Alpha00 : AppPalette.neutralCool950Alpha00;
+      isLightExperiment ? AppPalette.pink50Alpha00 : AppPalette.neutralCool950Alpha00;
   static const Color bgTint35 =
-      themeId == _pinkLight ? AppPalette.pink50Alpha35 : AppPalette.neutralCool950Alpha35;
+      isLightExperiment ? AppPalette.pink50Alpha35 : AppPalette.neutralCool950Alpha35;
   static const Color bgTint45 =
-      themeId == _pinkLight ? AppPalette.pink50Alpha45 : AppPalette.neutralCool950Alpha45;
+      isLightExperiment ? AppPalette.pink50Alpha45 : AppPalette.neutralCool950Alpha45;
   static const Color bgTint55 =
-      themeId == _pinkLight ? AppPalette.pink50Alpha55 : AppPalette.neutralCool950Alpha55;
+      isLightExperiment ? AppPalette.pink50Alpha55 : AppPalette.neutralCool950Alpha55;
   static const Color bgTint60 =
-      themeId == _pinkLight ? AppPalette.pink50Alpha60 : AppPalette.neutralCool950Alpha60;
+      isLightExperiment ? AppPalette.pink50Alpha60 : AppPalette.neutralCool950Alpha60;
   static const Color bgTint80 =
-      themeId == _pinkLight ? AppPalette.pink50Alpha80 : AppPalette.neutralCool950Alpha80;
+      isLightExperiment ? AppPalette.pink50Alpha80 : AppPalette.neutralCool950Alpha80;
   static const Color bgTint90 =
-      themeId == _pinkLight ? AppPalette.pink50Alpha90 : AppPalette.neutralCool950Alpha90;
-
-  static const String _pinkLight = 'pink_light';
-
-  /// 浅色实验包判定（供 [AppColors] 翻转中性叠色 / ink 文字）。
-  static const bool isLightExperiment = themeId == _pinkLight;
+      isLightExperiment ? AppPalette.pink50Alpha90 : AppPalette.neutralCool950Alpha90;
 
   // ══════════════════════════════════════════════════════════════
   // §B feature 品牌语义（跨主题恒定，引用 AppPalette 原色）

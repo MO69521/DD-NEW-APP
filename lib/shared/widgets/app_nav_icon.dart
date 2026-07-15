@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../../core/constants/main_tab_config.dart';
-import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_durations.dart';
 import '../../core/theme/app_sizes.dart';
 import 'app_asset_image.dart';
@@ -101,10 +100,7 @@ class _AppNavIconState extends State<AppNavIcon>
         width: widget.size,
         height: widget.size,
         fit: BoxFit.contain,
-        // 单色图标运行时着色：选中随主强调色（深色黄 / 浅色粉），未选中性灰。
-        color: widget.isSelected
-            ? AppColors.primary
-            : AppColors.textOnDarkPlaceholder,
+        // 主题完整色稿（AppThemeAssets 按 THEME 选路径），不再运行时染色。
       ),
     );
   }

@@ -9,6 +9,7 @@ import '../../core/theme/app_radius.dart';
 import '../../core/theme/app_sizes.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text_styles.dart';
+import '../../core/theme/app_icon_assets.dart';
 import '../widgets/animated_count_text.dart';
 import '../widgets/app_asset_image.dart';
 import '../widgets/app_icon.dart';
@@ -136,7 +137,7 @@ class _CurrencyColumn extends StatelessWidget {
                       maxLines: 1,
                     ),
                     const AppIcon(
-                      assetPath: 'assets/icons/arrow_right.svg',
+                      assetPath: AppIconAssets.arrowRight,
                       width: AppSizes.welfareCurrencyArrowSize,
                       height: AppSizes.welfareCurrencyArrowSize,
                       color: AppColors.sectionActionIcon,

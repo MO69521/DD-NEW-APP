@@ -5,6 +5,7 @@ import '../../../../core/theme/app_radius.dart';
 import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
+import '../../../../core/theme/app_icon_assets.dart';
 import '../../../../shared/widgets/app_icon.dart';
 import '../../../../shared/widgets/app_pressable.dart';
 import '../../../../shared/widgets/app_text.dart';
@@ -155,7 +156,7 @@ class _SearchInputField extends StatelessWidget {
   final ValueChanged<String> onSubmitted;
   final ValueChanged<String> onChanged;
 
-  static const String _searchIconAsset = 'assets/icons/search.svg';
+  static const String _searchIconAsset = AppIconAssets.search;
 
   @override
   Widget build(BuildContext context) {

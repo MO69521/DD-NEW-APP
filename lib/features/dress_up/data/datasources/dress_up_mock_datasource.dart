@@ -1,3 +1,4 @@
+import '../../../../core/config/app_theme_id.dart';
 import '../../domain/entities/dress_up_item.dart';
 import '../../domain/entities/dress_up_page_content.dart';
 import '../../domain/entities/dress_up_tab.dart';
@@ -7,9 +8,9 @@ import 'dress_up_data_source.dart';
 class DressUpMockDataSource implements DressUpDataSource {
   const DressUpMockDataSource();
 
-  /// 头部背景素材图（与「我的」页 Hero 保持一致）。
+  /// 头部背景素材图（与「我的」页 Hero 保持一致；按主题分包）。
   static const String _heroBackgroundAsset =
-      'assets/images/profile/hero_background_default.png';
+      'assets/images/profile/${AppThemeId.assetPack}/hero_background_default.png';
 
   @override
   Future<DressUpPageContent> fetchPageContent() async {

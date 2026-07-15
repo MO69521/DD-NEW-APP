@@ -14,14 +14,7 @@ Future<void> main() async {
     '&bookstoreTopTab=ranking',
   );
   await SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
-  SystemChrome.setSystemUIOverlayStyle(
-    const SystemUiOverlayStyle(
-      statusBarColor: Colors.transparent,
-      statusBarIconBrightness: Brightness.light,
-      systemNavigationBarColor: Colors.transparent,
-      systemNavigationBarIconBrightness: Brightness.light,
-    ),
-  );
+  SystemChrome.setSystemUIOverlayStyle(AppTheme.systemUiOverlayStyle);
   runApp(const BookstorePreviewApp());
 }
 
@@ -30,11 +23,14 @@ class BookstorePreviewApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      title: '书城推荐页预览',
-      theme: AppTheme.dark,
-      debugShowCheckedModeBanner: false,
-      routerConfig: AppRouter.router,
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: AppTheme.systemUiOverlayStyle,
+      child: MaterialApp.router(
+        title: '书城推荐页预览',
+        theme: AppTheme.dark,
+        debugShowCheckedModeBanner: false,
+        routerConfig: AppRouter.router,
+      ),
     );
   }
 }

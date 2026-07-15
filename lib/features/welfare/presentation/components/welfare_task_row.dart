@@ -7,6 +7,7 @@ import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/theme/app_welfare_colors.dart';
+import '../../../../core/theme/app_icon_assets.dart';
 import '../../../../shared/widgets/app_asset_image.dart';
 import '../../../../shared/widgets/app_text.dart';
 import '../../domain/entities/welfare_models.dart';
@@ -169,7 +170,7 @@ class _PopularIcon extends StatelessWidget {
       ),
       child: const Center(
         child: AppAssetImage(
-          assetPath: 'assets/icons/hot_flame.png',
+          assetPath: AppIconAssets.hotFlame,
           width: AppSizes.welfareTaskRewardIconSize,
           height: AppSizes.welfareTaskRewardIconSize,
           color: AppColors.textOnDark,

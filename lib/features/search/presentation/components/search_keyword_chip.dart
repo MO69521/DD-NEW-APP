@@ -5,6 +5,7 @@ import '../../../../core/theme/app_radius.dart';
 import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
+import '../../../../core/theme/app_icon_assets.dart';
 import '../../../../shared/widgets/app_asset_image.dart';
 import '../../../../shared/widgets/app_pressable.dart';
 import '../../../../shared/widgets/app_text.dart';
@@ -54,7 +55,7 @@ class SearchKeywordChip extends StatelessWidget {
           children: [
             if (isHot) ...[
               const AppAssetImage(
-                assetPath: 'assets/icons/hot_flame.png',
+                assetPath: AppIconAssets.hotFlame,
                 width: AppFontSizes.base,
                 height: AppFontSizes.base,
                 color: AppColors.searchHotAccent,

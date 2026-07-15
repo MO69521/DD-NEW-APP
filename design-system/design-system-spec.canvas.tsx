@@ -11,7 +11,6 @@ import {
   Callout,
   Divider,
   Pill,
-  Stat,
   useHostTheme,
   useCanvasState,
   useCanvasAction,
@@ -19,12 +18,12 @@ import {
 } from "cursor/canvas";
 
 /**
- * 点点穿书 · 深色 UI 设计规范
+ * 点点穿书 · 设计系统（Design System）
  * 来源：lib/core/theme/*.dart（token）与 lib/shared/*（组件）。
  * 本文件是「可视化目录」：真源仍是 Dart 代码，每个条目附源码路径（可点击打开）。
  */
 
-// 应用真实品牌色值 / 关键尺寸（还原深色 UI 观感，数值对齐 lib/core/theme）。
+// 应用真实品牌色值 / 关键尺寸（还原真实品牌观感·深色默认，数值对齐 lib/core/theme）。
 const APP = {
   bg: "#090E17",
   surface: "#151B24", // neutralCool900 · surface
@@ -64,7 +63,7 @@ const PARTS: Record<PartId, { title: string; subtitle: string; label: string }> 
   },
   "04": {
     title: "多风格 · 各色系 token 解析",
-    subtitle: "同一组件在 dark / pink_light 下引用的不同颜色对比（编译期整包换皮）",
+    subtitle: "同一组件在 dark / pink_light / yellow_light 下引用的不同颜色对比（编译期整包换皮）",
     label: "多风格",
   },
 };
@@ -88,6 +87,7 @@ export default function DesignSystemSpec() {
     { part: "01", title: "行高", keywords: "", render: <LineHeightSection /> },
     { part: "01", title: "字重", keywords: "", render: <WeightSection /> },
     { part: "01", title: "字体族", keywords: "", render: <FontFamilySection /> },
+    { part: "01", title: "文字样式层级", keywords: "", render: <TextStyleHierarchySection /> },
     { part: "01", title: "间距", keywords: "", render: <SpacingSection /> },
     { part: "01", title: "圆角", keywords: "", render: <RadiusSection /> },
     { part: "01", title: "组件尺寸 token", keywords: "", render: <SizeIndexSection /> },
@@ -251,12 +251,14 @@ function FilterBar({
               active={active}
               onClick={() => onPart(c.id)}
               activeColor={APP.onPrimary}
+              inactiveColor={theme.text.secondary}
               fontSize={13}
               style={{
                 padding: "7px 14px",
                 borderRadius: 999,
-                background: active ? APP.accent : APP.surface,
-                border: `${APP.hair} solid ${active ? APP.accent : APP.border}`,
+                // 选中：品牌黄；未选中：宿主半透明填充 + 宿主描边（随浏览器深/浅自适应，不用实心深色）。
+                background: active ? APP.accent : theme.fill.tertiary,
+                border: `${APP.hair} solid ${active ? APP.accent : theme.stroke.secondary}`,
                 transition: "background 0.15s, color 0.15s, border-color 0.15s",
               }}
             >
@@ -720,7 +722,7 @@ function MotionGallerySection({
 /* ───────────────── 封面 / 通用排版 ───────────────── */
 
 function CoverHeader() {
-  const meta: string[] = ["版本 v1.0", "更新 2026-07-08", "深色优先", "唯一权威"];
+  const meta: string[] = ["版本 v1.0", "更新 2026-07-08", "多主题（深色 / 浅粉）", "唯一权威"];
   return (
     <Stack gap={18}>
       <Row gap={14} align="center">
@@ -742,7 +744,7 @@ function CoverHeader() {
           点
         </div>
         <Stack gap={2}>
-          <H1>深色 UI 设计规范</H1>
+          <H1>设计系统（Design System）</H1>
           <Text tone="secondary">
             点点穿书 · 设计 token 与组件的唯一权威基线（Single Source of Truth）
           </Text>
@@ -776,14 +778,38 @@ function SummaryStats() {
     [`${MOTION_CATEGORIES.length}`, "动效类"],
     [`${motionItems}`, "动效项"],
   ];
+  // 统计卡随宿主主题：半透明填充 + 描边 + 宿主文字色，避免浅色底上出现突兀深块。
+  const theme = useHostTheme();
   return (
-    <Stage>
+    <div
+      style={{
+        background: theme.fill.tertiary,
+        border: `1px solid ${theme.stroke.secondary}`,
+        borderRadius: 16,
+        padding: 20,
+      }}
+    >
       <Grid columns={4} gap={12}>
         {stats.map(([value, label]) => (
-          <Stat key={label} value={value} label={label} />
+          <div key={label} style={{ textAlign: "center", padding: "10px 0" }}>
+            <div
+              style={{
+                fontSize: 26,
+                fontWeight: 700,
+                color: theme.text.primary,
+                fontVariantNumeric: "tabular-nums",
+                lineHeight: 1.1,
+              }}
+            >
+              {value}
+            </div>
+            <div style={{ fontSize: 12, color: theme.text.tertiary, marginTop: 6 }}>
+              {label}
+            </div>
+          </div>
         ))}
       </Grid>
-    </Stage>
+    </div>
   );
 }
 
@@ -915,6 +941,9 @@ function SelectableItem({
   fontSize = 14,
   style,
 }: {
+  // key：本 canvas tsconfig types:[] 未引入 React JSX 的 key 增强，
+  // 本地组件在 .map() 中传 key 会被当普通 prop，故显式声明为可选。
+  key?: string | number;
   active: boolean;
   onClick?: () => void;
   children: ReactNode;
@@ -1370,6 +1399,56 @@ function FontFamilySection() {
   );
 }
 
+function TextStyleHierarchySection() {
+  // [角色, 样式 token, 规格(px·字重·行高), 默认色 token, 使用场景, 预览字号, 预览字重]
+  const rows: Array<[string, string, string, string, string, number, number]> = [
+    ["展示级 / Hero", "displayLarge", "32 · bold · tight", "textPrimary", "展示级超大数值 / Hero 主视觉", 30, 700],
+    ["展示级（单行）", "displaySm", "24 · bold · none", "textPrimary", "单行大数值（余额 / 计数）", 24, 700],
+    ["大标题", "headlineMedium", "24 · semibold · tight", "textPrimary", "页面大标题 / 关键数值", 24, 600],
+    ["一级标题（页面 / 区块）", "titleMedium", "18 · semibold · normal", "textPrimary", "页面标题、section 标题、弹窗标题", 18, 600],
+    ["二级标题 / 卡片小标题", "bodyLarge", "16 · regular · normal", "textPrimary", "卡片标题、强调正文（一级文字色）", 16, 400],
+    ["正文（主力）", "bodyMedium", "14 · regular · normal", "textSecondary", "正文段落、说明、次级文案", 14, 400],
+    ["标签", "labelMedium", "12 · medium · normal", "textSecondary", "标签、选中态 tab、列表次要信息", 12, 500],
+    ["说明", "captionMd", "12 · medium · none", "textSecondary", "次要说明 / 元信息（单行）", 12, 500],
+    ["小角标", "captionSm", "10 · medium · none", "textSecondary", "小标签 / 角标", 10, 500],
+    ["极小角标", "captionMicro", "9 · medium · none", "textSecondary", "极小角标", 9, 500],
+    ["按钮文案", "buttonLabel14 / 16", "14 / 16 · bold · none", "随按钮变体前景", "按钮标签（AppButton，尺寸决定 14/16）", 16, 700],
+  ];
+  return (
+    <SpecSection
+        zh="文字样式层级（何时用一级 / 二级标题）"
+        note="AppTextStyles · 按角色对号入座，勿手拼 fontSize/fontWeight"
+        src="lib/core/theme/app_text_styles.dart"
+      >
+      <Table
+        headers={["角色", "样式", "规格", "默认色", "使用场景", "预览"]}
+        columnAlign={["left", "left", "left", "left", "left", "left"]}
+        rows={rows.map(([role, token, spec, colorToken, usage, px, w]) => [
+          role,
+          <Code key={token}>{token}</Code>,
+          spec,
+          <Code key={`${token}-c`}>{colorToken}</Code>,
+          usage,
+          <span key={`${token}-p`} style={{ fontSize: px, fontWeight: w, whiteSpace: "nowrap" }}>
+            标题 Aa 12
+          </span>,
+        ].map(cell))}
+      />
+      <Callout tone="info">
+        <Stack gap={4}>
+          <Text weight="semibold">选样式速查</Text>
+          <Text tone="secondary" size="small">
+            页面 / 区块 / 弹窗标题 → <Code>titleMedium</Code>（一级）；卡片小标题或需强调的正文 → <Code>bodyLarge</Code>（二级）；正文默认 → <Code>bodyMedium</Code>（次级色）。
+          </Text>
+          <Text tone="secondary" size="small">
+            <Code>*Dark</Code> 派生（<Code>titleMediumDark</Code> / <Code>bodyMediumDark</Code> / <Code>sectionTitleDark</Code> 等）是同级样式经 <Code>copyWith</Code> 换深色页文字色，不新增层级；颜色随主题（<Code>AppColors</Code>）自动翻转。
+          </Text>
+        </Stack>
+      </Callout>
+    </SpecSection>
+  );
+}
+
 type ColorTier = "raw" | "semantic" | "component";
 
 function ColorSection() {
@@ -1410,17 +1489,20 @@ function ChipButton({
   onClick: () => void;
   children: ReactNode;
 }) {
+  const theme = useHostTheme();
   return (
     <SelectableItem
       active={active}
       onClick={onClick}
       activeColor={APP.onPrimary}
+      inactiveColor={theme.text.secondary}
       fontSize={13}
       style={{
         padding: "7px 14px",
         borderRadius: 999,
-        background: active ? APP.accent : APP.surface,
-        border: `${APP.hair} solid ${active ? APP.accent : APP.border}`,
+        // 选中：品牌黄；未选中：宿主半透明填充 + 描边（随浏览器深/浅自适应）。
+        background: active ? APP.accent : theme.fill.tertiary,
+        border: `${APP.hair} solid ${active ? APP.accent : theme.stroke.secondary}`,
         transition: "background 0.15s, color 0.15s, border-color 0.15s",
       }}
     >
@@ -1862,7 +1944,11 @@ function tv(hex: string, label?: string): ReactNode {
     <Row gap={6} align="center">
       {swatch(hex)}
       <Code>{hex}</Code>
-      {label ? <Caption>{label}</Caption> : null}
+      {label ? (
+        // 多风格表在宿主主题背景上（非深色 Stage），标签用宿主弱化色，
+        // 勿用 Caption（其 APP.textMuted 为白色，浏览器浅色下不可见）。
+        <Text tone="tertiary" size="small">{label}</Text>
+      ) : null}
     </Row>
   );
 }
@@ -1873,15 +1959,16 @@ function tvCode(v: string): ReactNode {
 }
 
 /// 纯说明文字单元（非 token / 非色值，如状态栏图标明暗、构建参数）。
+/// 用于宿主主题背景的多风格表格：取宿主弱化色，浏览器深/浅均可读。
 function tvNote(text: string): ReactNode {
-  return <Caption>{text}</Caption>;
+  return <Text tone="tertiary" size="small">{text}</Text>;
 }
 
 function MultiStyleSection() {
   return (
     <SpecSection
       zh="多风格 · 同组件跨风格取色对比"
-      note="dark / pink_light（编译期 THEME 整包）"
+      note="dark / pink_light / yellow_light（编译期 THEME 整包）"
       src="lib/core/theme/app_brand_colors.dart"
       gap={16}
     >
@@ -1908,6 +1995,7 @@ function MultiStyleSection() {
           rows={[
             ["dark（默认）", "深壳", tv("#090E17"), tv("#FFE847", "黄"), tvNote("不带参")],
             ["pink_light", "浅壳", tv("#F4F2F4"), tv("#FF4D88", "粉"), tvCode("THEME=pink_light")],
+            ["yellow_light", "浅壳", tv("#F4F2F4"), tv("#FFE847", "黄"), tvCode("THEME=yellow_light")],
           ].map((r) => r.map(cell))}
         />
       </Stack>
