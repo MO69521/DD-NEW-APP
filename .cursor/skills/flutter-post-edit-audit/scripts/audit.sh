@@ -17,6 +17,7 @@ collect_changed_files() {
   {
     git diff --name-only --diff-filter=ACMR 2>/dev/null || true
     git diff --cached --name-only --diff-filter=ACMR 2>/dev/null || true
+    git ls-files --others --exclude-standard 2>/dev/null || true
   } | rg '\.dart$' 2>/dev/null | sort -u || true
 }
 
@@ -24,6 +25,7 @@ collect_changed_all_files() {
   {
     git diff --name-only --diff-filter=ACMR 2>/dev/null || true
     git diff --cached --name-only --diff-filter=ACMR 2>/dev/null || true
+    git ls-files --others --exclude-standard 2>/dev/null || true
   } | sort -u || true
 }
 

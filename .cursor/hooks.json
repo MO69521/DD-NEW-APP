@@ -3,6 +3,10 @@
   "hooks": {
     "stop": [
       {
+        "command": ".cursor/hooks/run-post-edit-audit.sh",
+        "timeout": 120
+      },
+      {
         "command": ".cursor/hooks/refresh-preview.sh",
         "timeout": 120
       }
