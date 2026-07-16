@@ -28,6 +28,9 @@ concurrency:
 
 jobs:
   deploy:
+    # 仅在真正的 GitHub 上运行（GitHub→Vercel 预览部署）。
+    # 自建服务（Gitea/GitLab，github.server_url 非 github.com）自动跳过，避免红叉。
+    if: ${{ github.server_url == 'https://github.com' }}
     runs-on: ubuntu-latest
     env:
       PREVIEW_MAIN: lib/previews/global_preview_main.dart
