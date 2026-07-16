@@ -6,11 +6,7 @@ import 'app_chrome_blur.dart';
 
 /// L2 — 页面 Chrome 叠层：内容全屏可滚入顶栏下方，滚动遮挡时顶栏毛玻璃。
 class AppPageChrome extends StatefulWidget {
-  const AppPageChrome({
-    super.key,
-    required this.topBar,
-    required this.body,
-  });
+  const AppPageChrome({super.key, required this.topBar, required this.body});
 
   final Widget topBar;
   final Widget body;

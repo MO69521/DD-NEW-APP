@@ -48,14 +48,18 @@ class MembershipBenefitsSection extends StatelessWidget {
         builder: (context, constraints) {
           const maxGridWidth = AppSizes.membershipBenefitGridMaxWidth;
           final useSingleRow = constraints.maxWidth >= maxGridWidth;
-          final columns =
-              useSingleRow ? benefits.length : AppSizes.membershipBenefitColumns;
+          final columns = useSingleRow
+              ? benefits.length
+              : AppSizes.membershipBenefitColumns;
           final rows = _rowsForColumns(columns);
 
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const AppText('点点会员权益', style: AppTextStyles.membershipSectionTitle),
+              const AppText(
+                '点点会员权益',
+                style: AppTextStyles.membershipSectionTitle,
+              ),
               const SizedBox(height: AppSpacing.md),
               SizedBox(
                 width: constraints.maxWidth,
@@ -109,8 +113,7 @@ class _BenefitRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isPartialRow =
-        alignPartialRowLeft && items.length < columns;
+    final isPartialRow = alignPartialRowLeft && items.length < columns;
 
     if (isPartialRow) {
       return LayoutBuilder(

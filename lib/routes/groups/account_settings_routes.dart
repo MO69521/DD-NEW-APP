@@ -112,9 +112,7 @@ List<RouteBase> accountSettingsRoutes() => [
     path: AppRoutes.settingsDocument,
     name: AppRoutes.settingsDocumentName,
     builder: (context, state) {
-      final type = SettingsDocumentType.fromSlug(
-        state.pathParameters['type'],
-      );
+      final type = SettingsDocumentType.fromSlug(state.pathParameters['type']);
       final document = const SettingsDocumentMockDataSource().fetchDocument(
         type,
       );

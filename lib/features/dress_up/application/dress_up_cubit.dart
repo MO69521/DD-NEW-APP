@@ -9,8 +9,7 @@ import 'dress_up_state.dart';
 class DressUpCubit extends Cubit<DressUpState> {
   DressUpCubit({DressUpRepository? repository})
     : _repository =
-          repository ??
-          const DressUpRepositoryImpl(DressUpMockDataSource()),
+          repository ?? const DressUpRepositoryImpl(DressUpMockDataSource()),
       super(const DressUpState());
 
   final DressUpRepository _repository;

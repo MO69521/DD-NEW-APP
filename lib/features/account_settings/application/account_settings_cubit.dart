@@ -17,9 +17,7 @@ class AccountSettingsCubit extends Cubit<AccountSettingsState> {
     MembershipStatusService? membership,
   }) : _repository =
            repository ??
-           const AccountSettingsRepositoryImpl(
-             AccountSettingsMockDataSource(),
-           ),
+           const AccountSettingsRepositoryImpl(AccountSettingsMockDataSource()),
        _membership = membership ?? ServiceLocator.membershipStatus,
        super(const AccountSettingsState()) {
     _membership.account.addListener(_onAccountChanged);
@@ -30,9 +28,7 @@ class AccountSettingsCubit extends Cubit<AccountSettingsState> {
 
   Future<void> load() async {
     emit(
-      state.copyWith(
-        ui: state.ui.copyWith(isLoading: true, clearError: true),
-      ),
+      state.copyWith(ui: state.ui.copyWith(isLoading: true, clearError: true)),
     );
 
     try {

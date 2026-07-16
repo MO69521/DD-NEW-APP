@@ -13,11 +13,7 @@ import 'partner_message_avatar.dart';
 
 /// L3 — 消息 Tab 单行会话。
 class PartnerMessageRow extends StatefulWidget {
-  const PartnerMessageRow({
-    super.key,
-    required this.conversation,
-    this.onTap,
-  });
+  const PartnerMessageRow({super.key, required this.conversation, this.onTap});
 
   final PartnerConversation conversation;
   final VoidCallback? onTap;
@@ -37,9 +33,15 @@ class _PartnerMessageRowState extends State<PartnerMessageRow> {
     );
 
     return GestureDetector(
-      onTapDown: widget.onTap == null ? null : (_) => setState(() => _pressed = true),
-      onTapUp: widget.onTap == null ? null : (_) => setState(() => _pressed = false),
-      onTapCancel: widget.onTap == null ? null : () => setState(() => _pressed = false),
+      onTapDown: widget.onTap == null
+          ? null
+          : (_) => setState(() => _pressed = true),
+      onTapUp: widget.onTap == null
+          ? null
+          : (_) => setState(() => _pressed = false),
+      onTapCancel: widget.onTap == null
+          ? null
+          : () => setState(() => _pressed = false),
       onTap: widget.onTap,
       behavior: HitTestBehavior.opaque,
       child: AnimatedContainer(

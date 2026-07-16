@@ -31,15 +31,15 @@ class PartnerCharacter extends Equatable {
 
   @override
   List<Object?> get props => [
-        id,
-        name,
-        eraTitle,
-        quote,
-        sourceTitle,
-        traitTags,
-        followerCount,
-        coverAsset,
-        collectionStatus,
-        topTab,
-      ];
+    id,
+    name,
+    eraTitle,
+    quote,
+    sourceTitle,
+    traitTags,
+    followerCount,
+    coverAsset,
+    collectionStatus,
+    topTab,
+  ];
 }

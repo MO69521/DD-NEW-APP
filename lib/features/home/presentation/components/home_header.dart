@@ -6,11 +6,7 @@ import '../../../../shared/widgets/app_text.dart';
 
 /// Level 3 — home feature 专属组件，禁止放入 shared。
 class HomeHeader extends StatelessWidget {
-  const HomeHeader({
-    super.key,
-    required this.appName,
-    required this.tagline,
-  });
+  const HomeHeader({super.key, required this.appName, required this.tagline});
 
   final String appName;
   final String tagline;

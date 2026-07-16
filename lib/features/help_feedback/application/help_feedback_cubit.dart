@@ -100,9 +100,10 @@ class HelpFeedbackCubit extends Cubit<HelpFeedbackState> {
     final picked = await _imagePicker.pickImages(limit: remaining);
     if (picked.isEmpty) return;
 
-    final combined = [...state.screenshotPaths, ...picked]
-        .take(HelpFeedbackState.maxScreenshots)
-        .toList();
+    final combined = [
+      ...state.screenshotPaths,
+      ...picked,
+    ].take(HelpFeedbackState.maxScreenshots).toList();
     emit(state.copyWith(screenshotPaths: combined, clearSubmitMessage: true));
   }
 

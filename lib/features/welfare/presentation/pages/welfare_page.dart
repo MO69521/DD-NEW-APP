@@ -156,7 +156,9 @@ class _WelfareView extends StatelessWidget {
                           AppRouter.pushNamed(AppRoutes.membershipName),
                     ),
                     const SizedBox(height: AppSpacing.sm),
-                    ReadingVipProgressSection(task: content.featuredReadingReward),
+                    ReadingVipProgressSection(
+                      task: content.featuredReadingReward,
+                    ),
                     const SizedBox(height: AppSpacing.sm),
                     WelfareTaskListSection(
                       summary: content.taskListSummary,

@@ -65,7 +65,7 @@ class CheckInMilestoneBubble extends StatelessWidget {
   }
 }
 
-/// 里程碑能量气泡：奶油底 + 金描边，内容为能量图标 + 数值。
+/// 里程碑能量气泡：黄色渐变底 + 金描边，内容为能量图标 + 数值。
 class _MilestoneBubble extends StatelessWidget {
   const _MilestoneBubble({required this.amount});
 
@@ -74,7 +74,8 @@ class _MilestoneBubble extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return WelfareRewardBubble(
-      background: AppWelfareColors.checkInDayBg,
+      gradientStart: AppWelfareColors.checkInMilestoneBubbleStart,
+      gradientEnd: AppWelfareColors.checkInMilestoneBubbleEnd,
       border: AppWelfareColors.checkInCumulativeBorder,
       child: Row(
         mainAxisSize: MainAxisSize.min,

@@ -18,11 +18,8 @@ class PartnerInteractionPagePhysics extends PageScrollPhysics {
   }
 
   @override
-  SpringDescription get spring => const SpringDescription(
-        mass: 1,
-        stiffness: 650,
-        damping: 42,
-      );
+  SpringDescription get spring =>
+      const SpringDescription(mass: 1, stiffness: 650, damping: 42);
 
   int _maxPageIndex(ScrollMetrics position) {
     final pageSize = position.viewportDimension;
@@ -63,8 +60,10 @@ class PartnerInteractionPagePhysics extends PageScrollPhysics {
 
     final page = position.pixels / pageSize;
     final maxPage = _maxPageIndex(position);
-    final anchorPage =
-        (getGestureAnchorPage?.call() ?? page.round()).clamp(0, maxPage);
+    final anchorPage = (getGestureAnchorPage?.call() ?? page.round()).clamp(
+      0,
+      maxPage,
+    );
     final tol = toleranceFor(position);
 
     int targetPage;
@@ -83,8 +82,7 @@ class PartnerInteractionPagePhysics extends PageScrollPhysics {
       return null;
     }
 
-    final cappedVelocity =
-        velocity.sign * velocity.abs().clamp(0.0, pageSize);
+    final cappedVelocity = velocity.sign * velocity.abs().clamp(0.0, pageSize);
 
     return ScrollSpringSimulation(
       spring,

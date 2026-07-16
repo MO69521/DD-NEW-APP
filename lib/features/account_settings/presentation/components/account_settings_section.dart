@@ -15,9 +15,6 @@ class AccountSettingsSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppGroupedListCard(
-      title: title,
-      children: children,
-    );
+    return AppGroupedListCard(title: title, children: children);
   }
 }

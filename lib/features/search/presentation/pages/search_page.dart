@@ -206,4 +206,3 @@ class _SuggestionList extends StatelessWidget {
     );
   }
 }
-

@@ -37,10 +37,7 @@ class GlassChipButton extends StatelessWidget {
       decoration: BoxDecoration(
         color: colors.surfaceGlass,
         borderRadius: borderRadius,
-        border: Border.all(
-          color: colors.borderGlass,
-          width: AppSizes.hairline,
-        ),
+        border: Border.all(color: colors.borderGlass, width: AppSizes.hairline),
       ),
       child: child,
     );
@@ -59,10 +56,7 @@ class GlassChipButton extends StatelessWidget {
     }
 
     final chip = onTap != null
-        ? AppPressable(
-            onTap: onTap,
-            child: container,
-          )
+        ? AppPressable(onTap: onTap, child: container)
         : container;
 
     return expanded ? Expanded(child: chip) : chip;

@@ -15,14 +15,16 @@ import 'partner_state.dart';
 /// application 层状态管理，state 仅在此层创建与修改。
 class PartnerCubit extends Cubit<PartnerState> {
   PartnerCubit({PartnerRepository? repository})
-      : _repository = repository ??
-            const PartnerRepositoryImpl(PartnerMockDataSource()),
-        super(const PartnerState());
+    : _repository =
+          repository ?? const PartnerRepositoryImpl(PartnerMockDataSource()),
+      super(const PartnerState());
 
   final PartnerRepository _repository;
 
   Future<void> load() async {
-    emit(state.copyWith(ui: state.ui.copyWith(isLoading: true, clearError: true)));
+    emit(
+      state.copyWith(ui: state.ui.copyWith(isLoading: true, clearError: true)),
+    );
 
     try {
       final content = await _repository.fetchPageContent();
@@ -44,10 +46,10 @@ class PartnerCubit extends Cubit<PartnerState> {
             visibleCharacters: visibleCharacters,
             seedConversations: List.unmodifiable(content.conversations),
             visibleConversations: visibleConversations,
-            seedInteractionScenes:
-                List.unmodifiable(content.interactionScenes),
-            visibleInteractionScenes:
-                List.unmodifiable(content.interactionScenes),
+            seedInteractionScenes: List.unmodifiable(content.interactionScenes),
+            visibleInteractionScenes: List.unmodifiable(
+              content.interactionScenes,
+            ),
             messageUnreadCount: content.messageUnreadCount,
             interactionUnreadCount: content.interactionUnreadCount,
           ),
@@ -71,15 +73,14 @@ class PartnerCubit extends Cubit<PartnerState> {
     final interaction = state.interaction.copyWith(topTab: tab);
 
     if (tab == PartnerTopTab.message) {
-      final baseConversations =
-          state.domain.content?.conversations ?? const [];
+      final baseConversations = state.domain.content?.conversations ?? const [];
       emit(
         state.copyWith(
           interaction: interaction.copyWith(interactionSceneIndex: 0),
           ui: state.ui.copyWith(page: 0),
           domain: state.domain.copyWith(
-          seedConversations: List.unmodifiable(baseConversations),
-              visibleConversations: sortPartnerConversations(baseConversations),
+            seedConversations: List.unmodifiable(baseConversations),
+            visibleConversations: sortPartnerConversations(baseConversations),
           ),
         ),
       );
@@ -117,8 +118,9 @@ class PartnerCubit extends Cubit<PartnerState> {
 
   void selectCategory(int index) {
     if (index == state.interaction.selectedCategoryIndex) return;
-    final interaction =
-        state.interaction.copyWith(selectedCategoryIndex: index);
+    final interaction = state.interaction.copyWith(
+      selectedCategoryIndex: index,
+    );
     _emitFiltered(interaction);
   }
 
@@ -252,10 +254,7 @@ class PartnerCubit extends Cubit<PartnerState> {
     final offset = nextPage * seed.length;
     final moreConversations = generateMorePartnerConversations(seed, offset);
 
-    final merged = [
-      ...state.domain.visibleConversations,
-      ...moreConversations,
-    ];
+    final merged = [...state.domain.visibleConversations, ...moreConversations];
 
     emit(
       state.copyWith(

@@ -76,9 +76,7 @@ class ContinueReadingCard extends StatelessWidget {
         ),
         child: Stack(
           children: [
-            Positioned.fill(
-              child: _CardBackdrop(coverAsset: book.coverAsset),
-            ),
+            Positioned.fill(child: _CardBackdrop(coverAsset: book.coverAsset)),
             Padding(
               padding: const EdgeInsets.all(AppSpacing.xs),
               child: Row(
@@ -180,10 +178,7 @@ class _CardBackdrop extends StatelessWidget {
             sigmaX: AppSizes.continueReadingBgBlurSigma,
             sigmaY: AppSizes.continueReadingBgBlurSigma,
           ),
-          child: AppAssetImage(
-            assetPath: coverAsset,
-            fit: BoxFit.fitWidth,
-          ),
+          child: AppAssetImage(assetPath: coverAsset, fit: BoxFit.fitWidth),
         ),
       ),
     );

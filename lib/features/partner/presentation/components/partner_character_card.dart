@@ -13,11 +13,7 @@ import 'partner_trait_tag.dart';
 
 /// L3 — 探索页角色卡片。
 class PartnerCharacterCard extends StatefulWidget {
-  const PartnerCharacterCard({
-    super.key,
-    required this.character,
-    this.onTap,
-  });
+  const PartnerCharacterCard({super.key, required this.character, this.onTap});
 
   final PartnerCharacter character;
   final VoidCallback? onTap;
@@ -36,9 +32,15 @@ class _PartnerCharacterCardState extends State<PartnerCharacterCard> {
         character.collectionStatus == PartnerCollectionStatus.collected;
 
     return GestureDetector(
-      onTapDown: widget.onTap == null ? null : (_) => setState(() => _pressed = true),
-      onTapUp: widget.onTap == null ? null : (_) => setState(() => _pressed = false),
-      onTapCancel: widget.onTap == null ? null : () => setState(() => _pressed = false),
+      onTapDown: widget.onTap == null
+          ? null
+          : (_) => setState(() => _pressed = true),
+      onTapUp: widget.onTap == null
+          ? null
+          : (_) => setState(() => _pressed = false),
+      onTapCancel: widget.onTap == null
+          ? null
+          : () => setState(() => _pressed = false),
       onTap: widget.onTap,
       child: Container(
         decoration: BoxDecoration(
@@ -61,7 +63,9 @@ class _PartnerCharacterCardState extends State<PartnerCharacterCard> {
                   portraitAsset: character.coverAsset,
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(AppSizes.partnerCharacterCardPadding),
+                  padding: const EdgeInsets.all(
+                    AppSizes.partnerCharacterCardPadding,
+                  ),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -155,10 +159,7 @@ class _CharacterCardFooter extends StatelessWidget {
             ),
           ),
           const SizedBox(width: AppSpacing.xxs),
-          AppText(
-            followerCount,
-            style: AppTextStyles.partnerFollowerCount,
-          ),
+          AppText(followerCount, style: AppTextStyles.partnerFollowerCount),
         ],
       ),
     );
@@ -166,10 +167,7 @@ class _CharacterCardFooter extends StatelessWidget {
 }
 
 class _CoverSection extends StatelessWidget {
-  const _CoverSection({
-    required this.eraTitle,
-    required this.portraitAsset,
-  });
+  const _CoverSection({required this.eraTitle, required this.portraitAsset});
 
   final String eraTitle;
   final String portraitAsset;
@@ -227,10 +225,7 @@ class _CoverSection extends StatelessWidget {
 }
 
 class _CollectionBadge extends StatelessWidget {
-  const _CollectionBadge({
-    required this.label,
-    required this.collected,
-  });
+  const _CollectionBadge({required this.label, required this.collected});
 
   final String label;
   final bool collected;

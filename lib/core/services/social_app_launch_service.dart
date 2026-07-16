@@ -85,10 +85,7 @@ class SocialAppLaunchService {
         Uri.parse('weixin://'),
         Uri.parse('wechat://'),
       ],
-      SocialAppTarget.qq => [
-        Uri.parse('mqqapi://'),
-        Uri.parse('mqq://'),
-      ],
+      SocialAppTarget.qq => [Uri.parse('mqqapi://'), Uri.parse('mqq://')],
       SocialAppTarget.douyin => [
         Uri.parse('snssdk1128://'),
         Uri.parse('aweme://'),

@@ -10,10 +10,7 @@ import 'partner_message_list.dart';
 
 /// L3 — 消息 Tab 主体（会话列表，顶栏下方直接接列表）。
 class PartnerMessageBody extends StatelessWidget {
-  const PartnerMessageBody({
-    super.key,
-    required this.onConversationTap,
-  });
+  const PartnerMessageBody({super.key, required this.onConversationTap});
 
   static const double _bottomNavReserve =
       AppBottomNav.barHeight + AppSpacing.xl;
@@ -37,9 +34,7 @@ class PartnerMessageBody extends StatelessWidget {
             );
           },
         ),
-        const SliverToBoxAdapter(
-          child: SizedBox(height: _bottomNavReserve),
-        ),
+        const SliverToBoxAdapter(child: SizedBox(height: _bottomNavReserve)),
       ],
     );
   }

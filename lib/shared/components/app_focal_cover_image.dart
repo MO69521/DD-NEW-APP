@@ -125,8 +125,9 @@ class AppFocalCoverImage extends StatelessWidget {
       );
     }
 
-    final alignmentX =
-        scaledWidth > containerWidth ? focalPoint.dx * 2 - 1 : 0.0;
+    final alignmentX = scaledWidth > containerWidth
+        ? focalPoint.dx * 2 - 1
+        : 0.0;
 
     return _FocalCoverLayout(
       scaledWidth: scaledWidth,

@@ -75,24 +75,24 @@ class _RankingTabsState extends State<RankingTabs> {
         scrollDirection: Axis.horizontal,
         physics: const BouncingScrollPhysics(),
         child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          for (var i = 0; i < tabs.length; i++) ...[
-            if (i > 0) const SizedBox(width: AppSpacing.md),
-            _RankingTabItem(
-              tab: tabs[i],
-              index: i,
-              selectedIndex: tabs.indexOf(widget.selected),
-              onTap: () {
-                widget.onSelected(tabs[i]);
-                _syncScrollPosition(i);
-              },
-            ),
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            for (var i = 0; i < tabs.length; i++) ...[
+              if (i > 0) const SizedBox(width: AppSpacing.md),
+              _RankingTabItem(
+                tab: tabs[i],
+                index: i,
+                selectedIndex: tabs.indexOf(widget.selected),
+                onTap: () {
+                  widget.onSelected(tabs[i]);
+                  _syncScrollPosition(i);
+                },
+              ),
+            ],
           ],
-        ],
-          ),
         ),
-      );
+      ),
+    );
   }
 
   void _syncScrollPosition(int selectedIndex) {

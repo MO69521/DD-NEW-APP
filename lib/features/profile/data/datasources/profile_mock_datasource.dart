@@ -55,12 +55,7 @@ class ProfileMockDataSource implements ProfileDataSource {
     ),
   ];
 
-  static const List<String> _mockPartnerAvatarUrls = [
-    '',
-    '',
-    '',
-    '',
-  ];
+  static const List<String> _mockPartnerAvatarUrls = ['', '', '', ''];
 
   static const int _vipMonthlyEnergy = 13710;
   static const double _vipPriceYuan = 9.9;

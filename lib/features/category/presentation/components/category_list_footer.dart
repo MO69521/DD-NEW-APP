@@ -10,9 +10,6 @@ class CategoryListFooter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppListLoadMoreFooter(
-      isLoading: isLoadingMore,
-      asSliver: true,
-    );
+    return AppListLoadMoreFooter(isLoading: isLoadingMore, asSliver: true);
   }
 }

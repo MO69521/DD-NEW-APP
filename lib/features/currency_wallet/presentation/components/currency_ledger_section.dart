@@ -31,10 +31,7 @@ class CurrencyLedgerSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return CurrencyWalletSectionCard(
       title: _title,
-      trailing: AppText(
-        _recentLabel,
-        style: AppTextStyles.captionMdDarkMuted,
-      ),
+      trailing: AppText(_recentLabel, style: AppTextStyles.captionMdDarkMuted),
       child: records.isEmpty
           ? Padding(
               padding: const EdgeInsets.symmetric(vertical: AppSpacing.xl),

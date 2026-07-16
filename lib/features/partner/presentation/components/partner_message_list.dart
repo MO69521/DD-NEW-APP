@@ -30,34 +30,31 @@ class PartnerMessageList extends StatelessWidget {
     }
 
     return SliverList(
-      delegate: SliverChildBuilderDelegate(
-        (context, index) {
-          if (index >= conversations.length) {
-            return const Padding(
-              padding: EdgeInsets.symmetric(vertical: AppSpacing.md),
-              child: Center(
-                child: SizedBox(
-                  width: AppSizes.partnerLoadingIndicatorSize,
-                  height: AppSizes.partnerLoadingIndicatorSize,
-                  child: CircularProgressIndicator(
-                    strokeWidth: AppSizes.partnerLoadingIndicatorStrokeWidth,
-                    color: AppPartnerColors.primary,
-                  ),
+      delegate: SliverChildBuilderDelegate((context, index) {
+        if (index >= conversations.length) {
+          return const Padding(
+            padding: EdgeInsets.symmetric(vertical: AppSpacing.md),
+            child: Center(
+              child: SizedBox(
+                width: AppSizes.partnerLoadingIndicatorSize,
+                height: AppSizes.partnerLoadingIndicatorSize,
+                child: CircularProgressIndicator(
+                  strokeWidth: AppSizes.partnerLoadingIndicatorStrokeWidth,
+                  color: AppPartnerColors.primary,
                 ),
               ),
-            );
-          }
-
-          final conversation = conversations[index];
-          return PartnerMessageRow(
-            conversation: conversation,
-            onTap: onConversationTap == null
-                ? null
-                : () => onConversationTap!(conversation),
+            ),
           );
-        },
-        childCount: conversations.length + (isLoadingMore ? 1 : 0),
-      ),
+        }
+
+        final conversation = conversations[index];
+        return PartnerMessageRow(
+          conversation: conversation,
+          onTap: onConversationTap == null
+              ? null
+              : () => onConversationTap!(conversation),
+        );
+      }, childCount: conversations.length + (isLoadingMore ? 1 : 0)),
     );
   }
 }

@@ -43,9 +43,7 @@ class BookDetailTabSwitcher extends StatelessWidget {
               Positioned(
                 top: -AppSpacing.xs,
                 left:
-                    itemWidth * discussionIndex +
-                    itemWidth / 2 +
-                    AppSpacing.xs,
+                    itemWidth * discussionIndex + itemWidth / 2 + AppSpacing.xs,
                 child: AppTabCountBadge(count: discussionCount),
               ),
           ],
@@ -56,10 +54,7 @@ class BookDetailTabSwitcher extends StatelessWidget {
 }
 
 class _TabItemContent extends StatelessWidget {
-  const _TabItemContent({
-    required this.tab,
-    required this.selected,
-  });
+  const _TabItemContent({required this.tab, required this.selected});
 
   final BookDetailTab tab;
   final bool selected;

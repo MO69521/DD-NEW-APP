@@ -32,7 +32,10 @@ String _resolveInitialLocation() {
   if (tab != null && tab.isNotEmpty) {
     final params = Map<String, String>.from(uri.queryParameters);
     final query = params.entries
-        .map((e) => '${Uri.encodeQueryComponent(e.key)}=${Uri.encodeQueryComponent(e.value)}')
+        .map(
+          (e) =>
+              '${Uri.encodeQueryComponent(e.key)}=${Uri.encodeQueryComponent(e.value)}',
+        )
         .join('&');
     return query.isEmpty ? AppRoutes.home : '${AppRoutes.home}?$query';
   }

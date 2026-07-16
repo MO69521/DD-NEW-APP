@@ -14,22 +14,21 @@ class RankingCubit extends Cubit<RankingState> {
   RankingCubit({
     RankingRepository? repository,
     RankingDimension initialDimension = RankingDimension.recommend,
-  })  : _repository = repository ??
-            const RankingRepositoryImpl(RankingMockDataSource()),
-        super(
-          RankingState(
-            interaction:
-                RankingInteractionState(selectedDimension: initialDimension),
-          ),
-        );
+  }) : _repository =
+           repository ?? const RankingRepositoryImpl(RankingMockDataSource()),
+       super(
+         RankingState(
+           interaction: RankingInteractionState(
+             selectedDimension: initialDimension,
+           ),
+         ),
+       );
 
   final RankingRepository _repository;
 
   Future<void> load() async {
     emit(
-      state.copyWith(
-        ui: state.ui.copyWith(isLoading: true, clearError: true),
-      ),
+      state.copyWith(ui: state.ui.copyWith(isLoading: true, clearError: true)),
     );
 
     try {
@@ -56,8 +55,7 @@ class RankingCubit extends Cubit<RankingState> {
     if (dimension == state.interaction.selectedDimension) return;
     emit(
       state.copyWith(
-        interaction:
-            state.interaction.copyWith(selectedDimension: dimension),
+        interaction: state.interaction.copyWith(selectedDimension: dimension),
       ),
     );
   }

@@ -95,10 +95,7 @@ class _GoldEnergyRewardChip extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: AppSizes.welfareTaskRewardChipHeight,
-      padding: const EdgeInsets.only(
-        left: AppSpacing.xs,
-        right: AppSpacing.xs,
-      ),
+      padding: const EdgeInsets.only(left: AppSpacing.xs, right: AppSpacing.xs),
       decoration: BoxDecoration(
         color: AppWelfareColors.checkInCumulativeBg,
         borderRadius: BorderRadius.circular(AppRadius.full),

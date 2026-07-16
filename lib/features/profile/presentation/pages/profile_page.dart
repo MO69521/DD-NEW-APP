@@ -168,14 +168,12 @@ class _ProfileView extends StatelessWidget {
                               freeClaimOptions: content.freeClaimOptions,
                               onPackageTap: (package) =>
                                   EnergyRechargePurchaseDialog.show(
-                                context,
-                                package: package,
-                              ),
+                                    context,
+                                    package: package,
+                                  ),
                               onFreeClaimTap: (option) {
                                 if (option.kind == EnergyFreeClaimKind.vip) {
-                                  AppRouter.pushNamed(
-                                    AppRoutes.membershipName,
-                                  );
+                                  AppRouter.pushNamed(AppRoutes.membershipName);
                                 } else {
                                   mainTabController?.switchTo(
                                     MainTabConfig.welfareIndex,

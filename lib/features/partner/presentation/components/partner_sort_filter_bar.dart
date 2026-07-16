@@ -83,27 +83,29 @@ class _SortOptionState extends State<_SortOption> {
     final color = widget.isSelected
         ? AppPartnerColors.primary
         : (_pressed
-            ? AppPartnerColors.textPrimary
-            : AppPartnerColors.textSecondary);
+              ? AppPartnerColors.textPrimary
+              : AppPartnerColors.textSecondary);
     final textStyle = widget.isSelected
         ? AppTextStyles.partnerSortActive
         : AppTextStyles.partnerSortInactive;
 
     return GestureDetector(
-      onTapDown: widget.onTap == null ? null : (_) => setState(() => _pressed = true),
-      onTapUp: widget.onTap == null ? null : (_) => setState(() => _pressed = false),
-      onTapCancel: widget.onTap == null ? null : () => setState(() => _pressed = false),
+      onTapDown: widget.onTap == null
+          ? null
+          : (_) => setState(() => _pressed = true),
+      onTapUp: widget.onTap == null
+          ? null
+          : (_) => setState(() => _pressed = false),
+      onTapCancel: widget.onTap == null
+          ? null
+          : () => setState(() => _pressed = false),
       onTap: widget.onTap,
       behavior: HitTestBehavior.opaque,
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           if (widget.icon != null) ...[
-            Icon(
-              widget.icon,
-              size: AppSizes.partnerSortIconSize,
-              color: color,
-            ),
+            Icon(widget.icon, size: AppSizes.partnerSortIconSize, color: color),
             const SizedBox(width: AppSpacing.xxs),
           ],
           if (widget.showNewBadge) ...[
@@ -119,10 +121,7 @@ class _SortOptionState extends State<_SortOption> {
             ),
             const SizedBox(width: AppSpacing.xxs),
           ],
-          AppText(
-            widget.label,
-            style: textStyle.copyWith(color: color),
-          ),
+          AppText(widget.label, style: textStyle.copyWith(color: color)),
         ],
       ),
     );
@@ -148,9 +147,15 @@ class _FilterButtonState extends State<_FilterButton> {
         : AppPartnerColors.textSecondary;
 
     return GestureDetector(
-      onTapDown: widget.onTap == null ? null : (_) => setState(() => _pressed = true),
-      onTapUp: widget.onTap == null ? null : (_) => setState(() => _pressed = false),
-      onTapCancel: widget.onTap == null ? null : () => setState(() => _pressed = false),
+      onTapDown: widget.onTap == null
+          ? null
+          : (_) => setState(() => _pressed = true),
+      onTapUp: widget.onTap == null
+          ? null
+          : (_) => setState(() => _pressed = false),
+      onTapCancel: widget.onTap == null
+          ? null
+          : () => setState(() => _pressed = false),
       onTap: widget.onTap,
       behavior: HitTestBehavior.opaque,
       child: Container(
@@ -165,7 +170,10 @@ class _FilterButtonState extends State<_FilterButton> {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            AppText('筛选', style: AppTextStyles.partnerFilterLabel.copyWith(color: color)),
+            AppText(
+              '筛选',
+              style: AppTextStyles.partnerFilterLabel.copyWith(color: color),
+            ),
             const SizedBox(width: AppSpacing.xxs),
             Icon(
               Icons.filter_list_rounded,

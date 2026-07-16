@@ -46,10 +46,7 @@ class AppNetworkAvatar extends StatelessWidget {
     return DecoratedBox(
       decoration: BoxDecoration(
         borderRadius: radius,
-        border: Border.all(
-          color: colors.coverBorder,
-          width: borderWidth,
-        ),
+        border: Border.all(color: colors.coverBorder, width: borderWidth),
       ),
       child: ClipRRect(
         borderRadius: radius,
@@ -76,11 +73,7 @@ class _Placeholder extends StatelessWidget {
       fit: BoxFit.cover,
       errorBuilder: (context, error, stackTrace) => ColoredBox(
         color: colors.surfaceGlass,
-        child: Icon(
-          Icons.person,
-          size: size * 0.5,
-          color: colors.textMuted,
-        ),
+        child: Icon(Icons.person, size: size * 0.5, color: colors.textMuted),
       ),
     );
   }

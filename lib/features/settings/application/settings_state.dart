@@ -11,14 +11,8 @@ class SettingsState extends Equatable {
   final SettingsUiState ui;
   final SettingsDomainState domain;
 
-  SettingsState copyWith({
-    SettingsUiState? ui,
-    SettingsDomainState? domain,
-  }) {
-    return SettingsState(
-      ui: ui ?? this.ui,
-      domain: domain ?? this.domain,
-    );
+  SettingsState copyWith({SettingsUiState? ui, SettingsDomainState? domain}) {
+    return SettingsState(ui: ui ?? this.ui, domain: domain ?? this.domain);
   }
 
   @override

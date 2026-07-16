@@ -119,9 +119,7 @@ class _NotificationSwitchRow extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
       child: ConstrainedBox(
-        constraints: const BoxConstraints(
-          minHeight: AppSizes.listRowMinHeight,
-        ),
+        constraints: const BoxConstraints(minHeight: AppSizes.listRowMinHeight),
         child: Row(
           children: [
             Expanded(

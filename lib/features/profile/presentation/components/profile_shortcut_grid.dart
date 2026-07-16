@@ -12,11 +12,7 @@ import '../../../../core/theme/app_theme_context.dart';
 
 /// L3 组件 — 我的页底部功能入口网格（Figma 208:7141）。
 class ProfileShortcutGrid extends StatelessWidget {
-  const ProfileShortcutGrid({
-    super.key,
-    required this.items,
-    this.onItemTap,
-  });
+  const ProfileShortcutGrid({super.key, required this.items, this.onItemTap});
 
   final List<ProfileMenuItem> items;
   final ValueChanged<ProfileMenuAction>? onItemTap;
@@ -34,9 +30,7 @@ class ProfileShortcutGrid extends StatelessWidget {
         color: colors.surfaceCard,
         borderRadius: BorderRadius.circular(AppRadius.lg),
       ),
-      child: Column(
-        children: _buildRows(),
-      ),
+      child: Column(children: _buildRows()),
     );
   }
 

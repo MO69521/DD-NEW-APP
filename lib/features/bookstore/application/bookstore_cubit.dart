@@ -69,9 +69,7 @@ class BookstoreCubit extends Cubit<BookstoreState> {
     if (state.interaction.continueReadingDismissed) return;
     emit(
       state.copyWith(
-        interaction: state.interaction.copyWith(
-          continueReadingDismissed: true,
-        ),
+        interaction: state.interaction.copyWith(continueReadingDismissed: true),
       ),
     );
   }

@@ -8,9 +8,6 @@ class SearchClearHistoryDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const AppConfirmDialog(
-      title: '删除提示',
-      message: '确认删除全部搜索历史吗？',
-    );
+    return const AppConfirmDialog(title: '删除提示', message: '确认删除全部搜索历史吗？');
   }
 }

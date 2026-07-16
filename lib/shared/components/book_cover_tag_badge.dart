@@ -52,10 +52,7 @@ class BookCoverTagBadge extends StatelessWidget {
           decoration: BoxDecoration(
             color: backgroundColor,
             borderRadius: borderRadius,
-            border: Border.all(
-              color: borderColor,
-              width: AppSizes.hairline,
-            ),
+            border: Border.all(color: borderColor, width: AppSizes.hairline),
           ),
           child: Padding(
             padding: const EdgeInsets.symmetric(

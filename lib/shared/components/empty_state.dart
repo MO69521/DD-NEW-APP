@@ -44,10 +44,9 @@ class EmptyState extends StatelessWidget {
         ],
         AppText(
           title,
-          style: titleStyle ??
-              AppTextStyles.titleMedium.copyWith(
-                color: AppColors.textOnDark,
-              ),
+          style:
+              titleStyle ??
+              AppTextStyles.titleMedium.copyWith(color: AppColors.textOnDark),
           textAlign: TextAlign.center,
         ),
         if (description != null) ...[
@@ -60,10 +59,7 @@ class EmptyState extends StatelessWidget {
             textAlign: TextAlign.center,
           ),
         ],
-        if (action != null) ...[
-          SizedBox(height: actionGap),
-          action!,
-        ],
+        if (action != null) ...[SizedBox(height: actionGap), action!],
       ],
     );
 

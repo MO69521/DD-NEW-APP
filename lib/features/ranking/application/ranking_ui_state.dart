@@ -30,5 +30,10 @@ class RankingUiState extends Equatable {
   }
 
   @override
-  List<Object?> get props => [isLoading, isLoadingMore, hasMoreData, errorMessage];
+  List<Object?> get props => [
+    isLoading,
+    isLoadingMore,
+    hasMoreData,
+    errorMessage,
+  ];
 }

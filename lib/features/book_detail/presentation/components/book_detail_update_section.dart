@@ -146,10 +146,7 @@ class _TimelineNode extends StatelessWidget {
       child: Container(
         width: AppSizes.bookDetailUpdateDotInnerSize,
         height: AppSizes.bookDetailUpdateDotInnerSize,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: innerColor,
-        ),
+        decoration: BoxDecoration(shape: BoxShape.circle, color: innerColor),
       ),
     );
   }

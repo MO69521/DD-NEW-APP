@@ -4,7 +4,7 @@ enum BookSerializationStatus {
   completed;
 
   String get label => switch (this) {
-        BookSerializationStatus.serializing => '连载',
-        BookSerializationStatus.completed => '完结',
-      };
+    BookSerializationStatus.serializing => '连载',
+    BookSerializationStatus.completed => '完结',
+  };
 }

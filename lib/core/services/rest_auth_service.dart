@@ -56,7 +56,8 @@ class RestAuthService implements AuthService {
     final type = switch (e.type) {
       ApiErrorType.timeout => AuthFailureType.timeout,
       ApiErrorType.unauthorized => AuthFailureType.unauthorized,
-      ApiErrorType.notConfigured || ApiErrorType.network => AuthFailureType.network,
+      ApiErrorType.notConfigured ||
+      ApiErrorType.network => AuthFailureType.network,
       _ => AuthFailureType.unknown,
     };
     return AuthFailure(type, e.message);
@@ -81,7 +82,6 @@ class LoginRequest {
 }
 
 class LoginResponse {
-
   factory LoginResponse.fromJson(Map<String, Object?> json) {
     return LoginResponse(
       session: AuthSession.fromJson(json['data'] as Map<String, Object?>),

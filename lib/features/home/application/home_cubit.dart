@@ -9,14 +9,16 @@ import 'home_state.dart';
 /// application 层状态管理，state 仅在此层创建与修改。
 class HomeCubit extends Cubit<HomeState> {
   HomeCubit({HomeRepository? repository})
-      : _repository = repository ??
-            const HomeRepositoryImpl(HomeLocalDataSource()),
-        super(const HomeState());
+    : _repository =
+          repository ?? const HomeRepositoryImpl(HomeLocalDataSource()),
+      super(const HomeState());
 
   final HomeRepository _repository;
 
   Future<void> load() async {
-    emit(state.copyWith(ui: state.ui.copyWith(isLoading: true, clearError: true)));
+    emit(
+      state.copyWith(ui: state.ui.copyWith(isLoading: true, clearError: true)),
+    );
 
     try {
       final info = await _repository.getHomeInfo();

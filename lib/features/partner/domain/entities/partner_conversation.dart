@@ -24,13 +24,13 @@ class PartnerConversation extends Equatable {
 
   @override
   List<Object?> get props => [
-        id,
-        characterId,
-        characterName,
-        avatarAsset,
-        affectionLevel,
-        lastMessagePreview,
-        lastMessageAt,
-        unreadCount,
-      ];
+    id,
+    characterId,
+    characterName,
+    avatarAsset,
+    affectionLevel,
+    lastMessagePreview,
+    lastMessageAt,
+    unreadCount,
+  ];
 }

@@ -1,12 +1,7 @@
 import 'package:equatable/equatable.dart';
 
 /// 账号安全绑定类型。
-enum AccountSecurityBindingType {
-  phone,
-  qq,
-  wechat,
-  douyin,
-}
+enum AccountSecurityBindingType { phone, qq, wechat, douyin }
 
 /// 安全设置绑定项（手机号 / 第三方账号）。
 class AccountSecurityBinding extends Equatable {

@@ -24,13 +24,13 @@ class PartnerInteractionScene extends Equatable {
 
   @override
   List<Object?> get props => [
-        id,
-        characterId,
-        characterName,
-        backgroundAsset,
-        affectionLevel,
-        upgradeHint,
-        sceneIndex,
-        totalScenes,
-      ];
+    id,
+    characterId,
+    characterName,
+    backgroundAsset,
+    affectionLevel,
+    upgradeHint,
+    sceneIndex,
+    totalScenes,
+  ];
 }

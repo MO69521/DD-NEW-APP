@@ -25,7 +25,9 @@ class PartnerInteractionSideActions extends StatelessWidget {
       children: [
         for (var i = 0; i < _actions.length; i++) ...[
           if (i > 0)
-            const SizedBox(height: AppSizes.partnerInteractionSideActionSpacing),
+            const SizedBox(
+              height: AppSizes.partnerInteractionSideActionSpacing,
+            ),
           _SideActionButton(
             icon: _actions[i].$1,
             label: _actions[i].$2,
@@ -70,7 +72,10 @@ class _SideActionButton extends StatelessWidget {
             ),
           ),
           const SizedBox(height: AppSizes.partnerInteractionSideActionLabelGap),
-          AppText(label, style: AppTextStyles.partnerInteractionSideActionLabel),
+          AppText(
+            label,
+            style: AppTextStyles.partnerInteractionSideActionLabel,
+          ),
         ],
       ),
     );

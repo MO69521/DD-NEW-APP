@@ -47,8 +47,7 @@ class PartnerDomainState extends Equatable {
       seedCharacters: seedCharacters ?? this.seedCharacters,
       visibleCharacters: visibleCharacters ?? this.visibleCharacters,
       seedConversations: seedConversations ?? this.seedConversations,
-      visibleConversations:
-          visibleConversations ?? this.visibleConversations,
+      visibleConversations: visibleConversations ?? this.visibleConversations,
       seedInteractionScenes:
           seedInteractionScenes ?? this.seedInteractionScenes,
       visibleInteractionScenes:
@@ -61,14 +60,14 @@ class PartnerDomainState extends Equatable {
 
   @override
   List<Object?> get props => [
-        content,
-        seedCharacters,
-        visibleCharacters,
-        seedConversations,
-        visibleConversations,
-        seedInteractionScenes,
-        visibleInteractionScenes,
-        messageUnreadCount,
-        interactionUnreadCount,
-      ];
+    content,
+    seedCharacters,
+    visibleCharacters,
+    seedConversations,
+    visibleConversations,
+    seedInteractionScenes,
+    visibleInteractionScenes,
+    messageUnreadCount,
+    interactionUnreadCount,
+  ];
 }

@@ -102,7 +102,9 @@ class _ElasticTabIndicatorState extends State<ElasticTabIndicator>
         final center = progressData.center;
         final isHorizontal = widget.axis == Axis.horizontal;
         final boxWidth = isHorizontal ? widget.width * stretch : widget.width;
-        final boxHeight = isHorizontal ? widget.height : widget.height * stretch;
+        final boxHeight = isHorizontal
+            ? widget.height
+            : widget.height * stretch;
 
         return Positioned(
           left: isHorizontal ? center - boxWidth / 2 : widget.crossOffset,

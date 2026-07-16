@@ -113,9 +113,7 @@ class _ComponentGallery extends StatelessWidget {
           iconLabelGap: AppSizes.buttonIconLabelGapTight,
         ),
         const SizedBox(height: AppSpacing.xs),
-        const _CaptionNote(
-          text: '覆盖主按钮、次按钮、高亮态、不同尺寸、带图标、loading、disabled。',
-        ),
+        const _CaptionNote(text: '覆盖主按钮、次按钮、高亮态、不同尺寸、带图标、loading、disabled。'),
       ],
     );
   }

@@ -50,7 +50,9 @@ class ShareBottomSheet extends StatelessWidget {
     ];
 
     return ClipRRect(
-      borderRadius: const BorderRadius.vertical(top: Radius.circular(AppRadius.xl)),
+      borderRadius: const BorderRadius.vertical(
+        top: Radius.circular(AppRadius.xl),
+      ),
       child: BackdropFilter(
         filter: ImageFilter.blur(
           sigmaX: AppSizes.glassBlurSigma,
@@ -77,7 +79,9 @@ class ShareBottomSheet extends StatelessWidget {
                 ),
                 const SizedBox(height: AppSpacing.lg),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AppSpacing.md,
+                  ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -94,7 +98,9 @@ class ShareBottomSheet extends StatelessWidget {
                 ),
                 const SizedBox(height: AppSpacing.lg),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AppSpacing.md,
+                  ),
                   child: AppButton(
                     label: '取消',
                     variant: AppButtonVariant.secondary,
@@ -113,11 +119,7 @@ class ShareBottomSheet extends StatelessWidget {
 }
 
 class _ShareChannelData {
-  const _ShareChannelData({
-    required this.label,
-    this.iconAsset,
-    this.iconData,
-  });
+  const _ShareChannelData({required this.label, this.iconAsset, this.iconData});
 
   final String label;
   final String? iconAsset;

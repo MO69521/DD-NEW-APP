@@ -178,10 +178,7 @@ class CurrencyWalletMockDataSource implements CurrencyWalletDataSource {
             title: '星尘有效期',
             body: '星尘有效期为30个自然日，自获得之日起计算。若未在有效期内使用，星尘将自动失效。',
           ),
-          CurrencyInfoSection(
-            title: '兑换次数',
-            body: '每日仅可兑换一次。',
-          ),
+          CurrencyInfoSection(title: '兑换次数', body: '每日仅可兑换一次。'),
         ],
         primaryActionLabel: '兑换5能量',
         secondaryActionLabel: '去【福利页】赚更多',

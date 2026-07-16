@@ -8,7 +8,6 @@ class BookstoreMockDataSource implements BookstoreDataSource {
   const BookstoreMockDataSource();
 
   @override
-
   Future<BookstorePageContent> fetchPageContent() async {
     return const BookstorePageContent(
       searchPlaceholder: _searchPlaceholder,

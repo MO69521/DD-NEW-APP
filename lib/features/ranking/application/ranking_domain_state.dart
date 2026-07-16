@@ -7,10 +7,7 @@ import '../domain/entities/ranking_page_content.dart';
 
 /// 榜单详情页领域状态。
 class RankingDomainState extends Equatable {
-  const RankingDomainState({
-    this.content,
-    this.currentPage = 1,
-  });
+  const RankingDomainState({this.content, this.currentPage = 1});
 
   final RankingPageContent? content;
   final int currentPage;
@@ -20,10 +17,7 @@ class RankingDomainState extends Equatable {
   List<Book> booksFor(RankingDimension dimension, RankingChannel channel) =>
       content?.booksFor(dimension, channel) ?? const [];
 
-  RankingDomainState copyWith({
-    RankingPageContent? content,
-    int? currentPage,
-  }) {
+  RankingDomainState copyWith({RankingPageContent? content, int? currentPage}) {
     return RankingDomainState(
       content: content ?? this.content,
       currentPage: currentPage ?? this.currentPage,

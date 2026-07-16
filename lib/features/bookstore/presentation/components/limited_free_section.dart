@@ -106,7 +106,8 @@ class _LimitedFreeSectionState extends State<LimitedFreeSection> {
                           child: Builder(
                             builder: (context) {
                               final book = visibleBooks[index];
-                              final heroTag = 'book-cover-limitedfree-${book.id}';
+                              final heroTag =
+                                  'book-cover-limitedfree-${book.id}';
                               return BookGridCard(
                                 title: book.title,
                                 category: book.category,

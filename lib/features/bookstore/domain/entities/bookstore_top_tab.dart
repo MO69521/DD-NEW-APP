@@ -5,8 +5,8 @@ enum BookstoreTopTab {
   ranking;
 
   String get label => switch (this) {
-        BookstoreTopTab.recommend => '推荐',
-        BookstoreTopTab.category => '分类',
-        BookstoreTopTab.ranking => '排行',
-      };
+    BookstoreTopTab.recommend => '推荐',
+    BookstoreTopTab.category => '分类',
+    BookstoreTopTab.ranking => '排行',
+  };
 }

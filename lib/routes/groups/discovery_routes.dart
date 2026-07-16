@@ -18,8 +18,7 @@ List<RouteBase> discoveryRoutes() => [
           ? extra
           : RankingDimension.recommend;
       return BlocProvider(
-        create: (_) =>
-            RankingCubit(initialDimension: initialDimension)..load(),
+        create: (_) => RankingCubit(initialDimension: initialDimension)..load(),
         child: const RankingPage(),
       );
     },
@@ -27,10 +26,8 @@ List<RouteBase> discoveryRoutes() => [
   GoRoute(
     path: AppRoutes.search,
     name: AppRoutes.searchName,
-    builder: (context, state) => BlocProvider(
-      create: (_) => SearchCubit(),
-      child: const SearchPage(),
-    ),
+    builder: (context, state) =>
+        BlocProvider(create: (_) => SearchCubit(), child: const SearchPage()),
   ),
   GoRoute(
     path: AppRoutes.category,

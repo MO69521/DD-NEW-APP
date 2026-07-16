@@ -3,9 +3,7 @@ import 'package:equatable/equatable.dart';
 import '../domain/entities/my_message_tab.dart';
 
 class MyMessagesInteractionState extends Equatable {
-  const MyMessagesInteractionState({
-    this.selectedTab = MyMessageTab.reply,
-  });
+  const MyMessagesInteractionState({this.selectedTab = MyMessageTab.reply});
 
   final MyMessageTab selectedTab;
 

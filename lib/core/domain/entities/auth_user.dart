@@ -2,7 +2,6 @@ import 'package:equatable/equatable.dart';
 
 /// 登录用户基础资料，对齐后端用户信息响应。
 class AuthUser extends Equatable {
-
   factory AuthUser.fromJson(Map<String, Object?> json) {
     return AuthUser(
       id: json['id'] as String,

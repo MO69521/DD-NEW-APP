@@ -8,5 +8,6 @@ class ProfileRepositoryImpl implements ProfileRepository {
   final ProfileDataSource _dataSource;
 
   @override
-  Future<ProfilePageContent> fetchPageContent() => _dataSource.fetchPageContent();
+  Future<ProfilePageContent> fetchPageContent() =>
+      _dataSource.fetchPageContent();
 }

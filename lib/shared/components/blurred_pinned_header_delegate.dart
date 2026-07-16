@@ -5,10 +5,7 @@ import '../layouts/app_chrome_blur.dart';
 
 /// 吸顶 Sliver 头部委托：毛玻璃背景，内容可滚入下方。
 class BlurredPinnedHeaderDelegate extends SliverPersistentHeaderDelegate {
-  BlurredPinnedHeaderDelegate({
-    required this.height,
-    required this.child,
-  });
+  BlurredPinnedHeaderDelegate({required this.height, required this.child});
 
   final double height;
   final Widget child;

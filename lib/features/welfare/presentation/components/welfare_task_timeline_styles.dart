@@ -5,7 +5,11 @@ import '../../../../core/theme/app_welfare_colors.dart';
 import '../../domain/entities/welfare_models.dart';
 
 /// 时间轴奖励节点三态视觉。
-typedef WelfareTimelineNodeStyle = ({Color background, Color? border, Color text});
+typedef WelfareTimelineNodeStyle = ({
+  Color background,
+  Color? border,
+  Color text,
+});
 
 WelfareTimelineNodeStyle welfareTimelineNodeStyle(
   WelfareTaskTimelineNode node,

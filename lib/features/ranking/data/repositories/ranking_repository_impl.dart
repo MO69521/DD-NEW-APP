@@ -21,10 +21,9 @@ class RankingRepositoryImpl implements RankingRepository {
     required RankingDimension dimension,
     required RankingChannel channel,
     required int page,
-  }) =>
-      _dataSource.fetchMoreBooks(
-        dimension: dimension,
-        channel: channel,
-        page: page,
-      );
+  }) => _dataSource.fetchMoreBooks(
+    dimension: dimension,
+    channel: channel,
+    page: page,
+  );
 }

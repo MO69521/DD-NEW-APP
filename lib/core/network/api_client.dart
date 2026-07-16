@@ -63,9 +63,7 @@ class HttpApiClient implements ApiClient {
     String path, {
     Map<String, String>? query,
   }) {
-    return _send(
-      () => _client.get(_uri(path, query), headers: _headers()),
-    );
+    return _send(() => _client.get(_uri(path, query), headers: _headers()));
   }
 
   Uri _uri(String path, [Map<String, String>? query]) {

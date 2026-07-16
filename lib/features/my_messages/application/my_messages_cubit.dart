@@ -23,9 +23,7 @@ class MyMessagesCubit extends Cubit<MyMessagesState> {
 
   void onTabSelected(MyMessageTab tab) {
     emit(
-      state.copyWith(
-        interaction: state.interaction.copyWith(selectedTab: tab),
-      ),
+      state.copyWith(interaction: state.interaction.copyWith(selectedTab: tab)),
     );
   }
 }

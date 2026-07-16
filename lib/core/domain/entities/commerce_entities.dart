@@ -1,12 +1,7 @@
 import 'package:equatable/equatable.dart';
 
 /// 跨 feature 共享的虚拟货币与充值套餐契约（纯 Dart）。
-enum CurrencyType {
-  energy,
-  wishStar,
-  love,
-  stardust,
-}
+enum CurrencyType { energy, wishStar, love, stardust }
 
 /// 能量充值支付方式（跨 feature 共享）。
 enum PaymentMethod { wechat, alipay }

@@ -57,12 +57,13 @@ class _AppGradientCtaButtonState extends State<AppGradientCtaButton>
       vsync: this,
       duration: AppDurations.membershipCtaSweep,
     );
-    _breathScale = Tween<double>(
-      begin: AppSizes.membershipCtaBreathScaleMin,
-      end: AppSizes.membershipCtaBreathScaleMax,
-    ).animate(
-      CurvedAnimation(parent: _breathController, curve: Curves.easeInOut),
-    );
+    _breathScale =
+        Tween<double>(
+          begin: AppSizes.membershipCtaBreathScaleMin,
+          end: AppSizes.membershipCtaBreathScaleMax,
+        ).animate(
+          CurvedAnimation(parent: _breathController, curve: Curves.easeInOut),
+        );
     _syncAnimations();
   }
 

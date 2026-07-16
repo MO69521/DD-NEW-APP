@@ -33,9 +33,7 @@ class AppAsyncPageBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (isLoading) {
-      return Center(
-        child: CircularProgressIndicator(color: loadingColor),
-      );
+      return Center(child: CircularProgressIndicator(color: loadingColor));
     }
 
     if (errorMessage != null) {
@@ -44,10 +42,7 @@ class AppAsyncPageBody extends StatelessWidget {
         description: errorMessage,
         action: onRetry == null
             ? null
-            : AppButton(
-                label: retryLabel,
-                onPressed: onRetry,
-              ),
+            : AppButton(label: retryLabel, onPressed: onRetry),
       );
     }
 

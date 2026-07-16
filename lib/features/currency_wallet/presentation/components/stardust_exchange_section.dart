@@ -109,9 +109,7 @@ class _StardustOptionCard extends StatelessWidget {
                   isExpanded: true,
                   fitLabel: true,
                   leadingIcon: AppAssetImage(
-                    assetPath: CurrencyConfig.iconAsset(
-                      CurrencyType.stardust,
-                    ),
+                    assetPath: CurrencyConfig.iconAsset(CurrencyType.stardust),
                     width: AppSizes.welfareCurrencyIconSize,
                     height: AppSizes.welfareCurrencyIconSize,
                   ),
@@ -130,4 +128,3 @@ class _StardustOptionCard extends StatelessWidget {
     );
   }
 }
-

@@ -78,8 +78,7 @@ class _EditorPickContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<EditorPickCubit>();
-    final topInset =
-        AppLayout.chromeTopHeight(context) + AppSpacing.sm;
+    final topInset = AppLayout.chromeTopHeight(context) + AppSpacing.sm;
 
     return NotificationListener<ScrollNotification>(
       onNotification: (notification) {

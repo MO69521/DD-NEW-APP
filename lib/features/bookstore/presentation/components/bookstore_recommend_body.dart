@@ -26,7 +26,8 @@ class BookstoreRecommendBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<BookstoreCubit>();
-    final topInset = AppLayout.chromeTopHeight(
+    final topInset =
+        AppLayout.chromeTopHeight(
           context,
           barHeight: AppSizes.bookstoreTopHeaderHeight,
         ) +
@@ -48,10 +49,14 @@ class BookstoreRecommendBody extends StatelessWidget {
             sliver: SliverList(
               delegate: SliverChildListDelegate([
                 SizedBox(height: topInset),
-                BlocSelector<BookstoreCubit, BookstoreState, ({
-                  RankingTab selectedTab,
-                  Map<RankingTab, List<Book>> booksByTab,
-                })>(
+                BlocSelector<
+                  BookstoreCubit,
+                  BookstoreState,
+                  ({
+                    RankingTab selectedTab,
+                    Map<RankingTab, List<Book>> booksByTab,
+                  })
+                >(
                   selector: (state) => (
                     selectedTab: state.interaction.selectedRankingTab,
                     booksByTab: state.domain.rankingBooksByTab,
@@ -89,9 +94,8 @@ class BookstoreRecommendBody extends StatelessWidget {
                   builder: (context, books) {
                     return EditorPickSection(
                       books: books,
-                      onMoreTap: () => AppRouter.pushNamed(
-                        AppRoutes.editorPickName,
-                      ),
+                      onMoreTap: () =>
+                          AppRouter.pushNamed(AppRoutes.editorPickName),
                       onBookTap: (book, heroTag) =>
                           AppRouter.goBookDetail(book, coverHeroTag: heroTag),
                     );
@@ -109,8 +113,10 @@ class BookstoreRecommendBody extends StatelessWidget {
                       children: [
                         GuessLikeSection(
                           books: state.guessLikeBooks,
-                          onBookTap: (book, heroTag) =>
-                              AppRouter.goBookDetail(book, coverHeroTag: heroTag),
+                          onBookTap: (book, heroTag) => AppRouter.goBookDetail(
+                            book,
+                            coverHeroTag: heroTag,
+                          ),
                         ),
                         if (state.ui.isLoadingMoreGuessLike) ...[
                           const SizedBox(height: AppSpacing.md),

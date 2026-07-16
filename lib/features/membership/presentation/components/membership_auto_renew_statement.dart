@@ -30,10 +30,7 @@ class MembershipAutoRenewStatement extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Center(
-            child: AppText(
-              title,
-              style: AppTextStyles.membershipSectionTitle,
-            ),
+            child: AppText(title, style: AppTextStyles.membershipSectionTitle),
           ),
           const SizedBox(height: AppSpacing.md),
           for (var i = 0; i < paragraphs.length; i++) ...[

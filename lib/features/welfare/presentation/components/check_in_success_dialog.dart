@@ -85,78 +85,78 @@ class CheckInSuccessDialog extends StatelessWidget {
         clipBehavior: Clip.none,
         children: [
           ConstrainedBox(
-              constraints: BoxConstraints(maxHeight: maxHeight),
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  color: AppColors.dialogBackground,
-                  borderRadius: BorderRadius.circular(AppRadius.xl),
-                  border: Border.all(color: AppColors.borderGlass),
+            constraints: BoxConstraints(maxHeight: maxHeight),
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                color: AppColors.dialogBackground,
+                borderRadius: BorderRadius.circular(AppRadius.xl),
+                border: Border.all(color: AppColors.borderGlass),
+              ),
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.fromLTRB(
+                  AppSpacing.lg,
+                  AppSpacing.xl,
+                  AppSpacing.lg,
+                  AppSpacing.lg,
                 ),
-                child: SingleChildScrollView(
-                  padding: const EdgeInsets.fromLTRB(
-                    AppSpacing.lg,
-                    AppSpacing.xl,
-                    AppSpacing.lg,
-                    AppSpacing.lg,
-                  ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const _EnergyBadge(),
-                      const SizedBox(height: AppSpacing.sm),
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          AppText(
-                            '签到成功',
-                            style: AppTextStyles.titleMedium.copyWith(
-                              color: AppColors.textOnDark,
-                            ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const _EnergyBadge(),
+                    const SizedBox(height: AppSpacing.sm),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        AppText(
+                          '签到成功',
+                          style: AppTextStyles.titleMedium.copyWith(
+                            color: AppColors.textOnDark,
                           ),
-                          const SizedBox(width: AppSpacing.xs),
-                          AppText(
-                            '+${summary.todayRewardEnergy}',
-                            style: AppTextStyles.titleMedium.copyWith(
-                              color: AppColors.textOnDark,
-                            ),
+                        ),
+                        const SizedBox(width: AppSpacing.xs),
+                        AppText(
+                          '+${summary.todayRewardEnergy}',
+                          style: AppTextStyles.titleMedium.copyWith(
+                            color: AppColors.textOnDark,
                           ),
-                        ],
-                      ),
-                      const SizedBox(height: AppSpacing.sm),
-                      CheckInSubtitle(
-                        totalDays: summary.totalDays,
-                        daysUntilNextReward: summary.daysUntilNextReward,
-                      ),
-                      const SizedBox(height: AppSpacing.lg),
-                      CheckInMilestoneProgress(
-                        totalDays: summary.totalDays,
-                        milestones: summary.milestones,
-                      ),
-                      const SizedBox(height: AppSpacing.lg),
-                      CheckInCalendar(days: summary.weekDays),
-                      const SizedBox(height: AppSpacing.lg),
-                      _VipRewardButton(
-                        label: 'VIP 再领取${summary.vipExtraEnergy}能量',
-                        onTap: () {
-                          Navigator.of(context).pop();
-                          onVipClaim?.call();
-                        },
-                      ),
-                      const SizedBox(height: AppSpacing.sm),
-                      AppButton(
-                        label: '看视频 再领${summary.videoExtraStardust}星辰',
-                        variant: AppButtonVariant.secondary,
-                        isExpanded: true,
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                          onWatchVideo?.call();
-                        },
-                      ),
-                    ],
-                  ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: AppSpacing.sm),
+                    CheckInSubtitle(
+                      totalDays: summary.totalDays,
+                      daysUntilNextReward: summary.daysUntilNextReward,
+                    ),
+                    const SizedBox(height: AppSpacing.lg),
+                    CheckInMilestoneProgress(
+                      totalDays: summary.totalDays,
+                      milestones: summary.milestones,
+                    ),
+                    const SizedBox(height: AppSpacing.lg),
+                    CheckInCalendar(days: summary.weekDays),
+                    const SizedBox(height: AppSpacing.lg),
+                    _VipRewardButton(
+                      label: 'VIP 再领取${summary.vipExtraEnergy}能量',
+                      onTap: () {
+                        Navigator.of(context).pop();
+                        onVipClaim?.call();
+                      },
+                    ),
+                    const SizedBox(height: AppSpacing.sm),
+                    AppButton(
+                      label: '看视频 再领${summary.videoExtraStardust}星辰',
+                      variant: AppButtonVariant.secondary,
+                      isExpanded: true,
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        onWatchVideo?.call();
+                      },
+                    ),
+                  ],
                 ),
               ),
             ),
+          ),
           Positioned(
             top: AppSpacing.lg,
             right: AppSpacing.lg,

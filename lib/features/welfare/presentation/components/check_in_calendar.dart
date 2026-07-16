@@ -50,11 +50,20 @@ class CheckInCalendar extends StatelessWidget {
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(width: cellWidth, child: _CheckInDayCard(day: days[4])),
+                SizedBox(
+                  width: cellWidth,
+                  child: _CheckInDayCard(day: days[4]),
+                ),
                 const SizedBox(width: _gap),
-                SizedBox(width: cellWidth, child: _CheckInDayCard(day: days[5])),
+                SizedBox(
+                  width: cellWidth,
+                  child: _CheckInDayCard(day: days[5]),
+                ),
                 const SizedBox(width: _gap),
-                SizedBox(width: wideWidth, child: _CheckInDayCard(day: days[6])),
+                SizedBox(
+                  width: wideWidth,
+                  child: _CheckInDayCard(day: days[6]),
+                ),
               ],
             ),
           ],

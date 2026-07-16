@@ -65,10 +65,7 @@ class AppButton extends StatelessWidget {
   /// VIP 变体用粉金渐变填充（其它变体为纯色，返回 null）。
   LinearGradient? get _gradient => switch (variant) {
     AppButtonVariant.vip => const LinearGradient(
-      colors: [
-        AppBrandColors.vipGradientStart,
-        AppBrandColors.vipGradientEnd,
-      ],
+      colors: [AppBrandColors.vipGradientStart, AppBrandColors.vipGradientEnd],
     ),
     _ => null,
   };

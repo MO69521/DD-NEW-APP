@@ -8,8 +8,6 @@ class SplashLogo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox.expand(
-      child: Image.asset(_assetPath, fit: BoxFit.cover),
-    );
+    return SizedBox.expand(child: Image.asset(_assetPath, fit: BoxFit.cover));
   }
 }

@@ -38,22 +38,24 @@ class PartnerExploreBody extends StatelessWidget {
           child: SizedBox(height: AppSizes.partnerHeaderToCategoryGap),
         ),
         SliverToBoxAdapter(
-          child: BlocSelector<PartnerCubit, PartnerState, ({
-            List<String> tags,
-            int selectedIndex,
-          })>(
-            selector: (state) => (
-              tags: state.domain.categoryTags,
-              selectedIndex: state.interaction.selectedCategoryIndex,
-            ),
-            builder: (context, data) {
-              return PartnerCategoryChipBar(
-                tags: data.tags,
-                selectedIndex: data.selectedIndex,
-                onSelected: cubit.selectCategory,
-              );
-            },
-          ),
+          child:
+              BlocSelector<
+                PartnerCubit,
+                PartnerState,
+                ({List<String> tags, int selectedIndex})
+              >(
+                selector: (state) => (
+                  tags: state.domain.categoryTags,
+                  selectedIndex: state.interaction.selectedCategoryIndex,
+                ),
+                builder: (context, data) {
+                  return PartnerCategoryChipBar(
+                    tags: data.tags,
+                    selectedIndex: data.selectedIndex,
+                    onSelected: cubit.selectCategory,
+                  );
+                },
+              ),
         ),
         const SliverToBoxAdapter(
           child: SizedBox(height: AppSizes.partnerCategoryToSortGap),

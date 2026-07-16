@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../core/theme/app_colors.dart';
 
-
 /// 通用页面脚手架布局。
 class AppScaffold extends StatelessWidget {
   const AppScaffold({

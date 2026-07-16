@@ -36,7 +36,9 @@ class AppTabCountBadge extends StatelessWidget {
       ),
       child: AppText(
         count > 99 ? '99+' : '$count',
-        style: AppTextStyles.captionSm.copyWith(color: AppColors.white100), // light-audit: effect 彩色角标上恒白字
+        style: AppTextStyles.captionSm.copyWith(
+          color: AppColors.white100,
+        ), // light-audit: effect 彩色角标上恒白字
         maxLines: 1,
       ),
     );

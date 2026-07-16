@@ -27,14 +27,12 @@ class SearchRepositoryImpl implements SearchRepository {
   Future<List<String>> fetchHotKeywords() => _dataSource.fetchHotKeywords();
 
   @override
-  Future<List<String>> fetchSearchHistory() =>
-      _dataSource.fetchSearchHistory();
+  Future<List<String>> fetchSearchHistory() => _dataSource.fetchSearchHistory();
 
   @override
   Future<List<String>> addSearchHistory(String keyword) =>
       _dataSource.addSearchHistory(keyword);
 
   @override
-  Future<List<String>> clearSearchHistory() =>
-      _dataSource.clearSearchHistory();
+  Future<List<String>> clearSearchHistory() => _dataSource.clearSearchHistory();
 }

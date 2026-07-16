@@ -56,9 +56,8 @@ class BookshelfTabScrollView extends StatelessWidget {
                 builder: (context, minutes) {
                   return DailyReadingBanner(
                     todayReadingMinutes: minutes,
-                    onClaimWelfareTap: () => mainTabController?.switchTo(
-                      MainTabConfig.welfareIndex,
-                    ),
+                    onClaimWelfareTap: () =>
+                        mainTabController?.switchTo(MainTabConfig.welfareIndex),
                   );
                 },
               ),

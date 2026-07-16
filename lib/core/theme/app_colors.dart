@@ -34,7 +34,8 @@ abstract final class AppColors {
   static const bool _isLight = AppBrandColors.isLightExperiment;
   static const Color _inkPrimary = AppBrandColors.textPrimary; // #1A1A2E
   static const Color _inkMuted = AppBrandColors.textSecondary; // #6B7280
-  static const Color _inkPlaceholder = AppBrandColors.originalPriceMuted; // #9B9B9B
+  static const Color _inkPlaceholder =
+      AppBrandColors.originalPriceMuted; // #9B9B9B
   static const Color _lightCard = AppPalette.neutralWhite; // #FFFFFF
   // 浅色卡片描边：pink_light 浅粉 / yellow_light 中性浅灰（真源在 AppBrandColors）。
   static const Color _lightBorder = AppBrandColors.lightCardBorder;
@@ -57,15 +58,16 @@ abstract final class AppColors {
 
   static const Color background = AppBrandColors.backgroundDark;
   static const Color surface = _isLight ? _lightCard : _darkSurface;
-  static const Color surfaceSoft =
-      _isLight ? AppPalette.neutralCool50 : _darkSurfaceSoft;
+  static const Color surfaceSoft = _isLight
+      ? AppPalette.neutralCool50
+      : _darkSurfaceSoft;
   static const Color surfaceElevated = AppBrandColors.dialogBackground;
 
   static const Color textPrimary = _isLight ? _inkPrimary : _darkTextPrimary;
-  static const Color textSecondary =
-      _isLight ? _inkMuted : _darkTextSecondary;
-  static const Color textTertiary =
-      _isLight ? _inkPlaceholder : _darkTextTertiary;
+  static const Color textSecondary = _isLight ? _inkMuted : _darkTextSecondary;
+  static const Color textTertiary = _isLight
+      ? _inkPlaceholder
+      : _darkTextTertiary;
   static const Color textOnPrimary = onPrimary;
 
   static const Color borderSubtle = _isLight ? _lightBorder : _darkBorder;
@@ -146,6 +148,13 @@ abstract final class AppColors {
 
   /// 热门搜索置顶热词强调色（复用品牌橙）。
   static const Color searchHotAccent = AppBrandColors.accentOrange;
+
+  /// 分页指示器未选中态颜色：深色态白 20%，浅色态浅灰（适配三主题）。
+  static const Color pageDotInactive = _isLight
+      ? AppPalette
+            .neutralCool300 // #B2B3BA 浅灰，浅色主题可见
+      : white20;
+
   static const Color iconMuted = AppBrandColors.iconMuted;
   static const Color iconMutedSecondary = AppBrandColors.iconMutedSecondary;
   static const Color navActiveBackground = AppPalette.neutralWhite;
@@ -158,23 +167,28 @@ abstract final class AppColors {
   // 4% 几乎不可见，故提高到纯白 30%（white30）。配 BackdropFilter 呈磨砂玻璃。
   static const Color topBarIconFrameBackground = _isLight ? white30 : white04;
   // 磨砂图标框压在头图上，恒暗弱描边（两态皆低透明白）。
-  static const Color topBarIconFrameBorder = _darkBorder; // light-audit: keep-dark
+  static const Color topBarIconFrameBorder =
+      _darkBorder; // light-audit: keep-dark
   static const Color borderGlass = borderSubtle;
   static const Color dividerOnDark = divider;
-  static const Color discussionFilterSelectedBackground =
-      _isLight ? accentYellow : white100;
+  static const Color discussionFilterSelectedBackground = _isLight
+      ? accentYellow
+      : white100;
   static const Color discussionFilterUnselectedText = textOnDarkPlaceholder;
   static const Color discussionItemReplyBackground = surfaceSoft;
   static const Color discussionLikeIcon = textOnDarkPlaceholder;
   static const Color bookDetailUpdateDate = textOnDarkMuted;
   static const Color bookDetailUpdateHighlight = AppPalette.tan400;
-  static const Color bookDetailUpdateDateHighlighted = bookDetailUpdateHighlight;
+  static const Color bookDetailUpdateDateHighlighted =
+      bookDetailUpdateHighlight;
   static const Color bookDetailUpdateLine = dividerOnDark;
   static const Color bookDetailUpdateDotBorder = textOnDarkMuted;
-  static const Color bookDetailUpdateDotBorderHighlighted = bookDetailUpdateHighlight;
+  static const Color bookDetailUpdateDotBorderHighlighted =
+      bookDetailUpdateHighlight;
   static const Color bookDetailUpdateDotInner = textOnDark;
   static const Color bookDetailUpdateText = textOnDark;
-  static const Color bookDetailUpdateTextHighlighted = bookDetailUpdateHighlight;
+  static const Color bookDetailUpdateTextHighlighted =
+      bookDetailUpdateHighlight;
   // 书籍详情悬浮促销条 (Figma 1598:4319)
   static const Color bookDetailPromoGradientStart =
       AppBrandColors.promoBarGradientStart;
@@ -199,15 +213,19 @@ abstract final class AppColors {
 
   /// 榜单名次角标（第 4 名起）深色底：60% 黑，保证白色名次数字清晰可读。
   static const Color rankingMutedBadgeScrim = black60;
+
   /// 榜单名次角标（第 4 名起）数字字色：全主题恒白（含浅粉/浅黄）。
   static const Color rankingMutedBadgeText = white100; // light-audit: keep-dark
 
   /// 按钮不可点击（禁用）态，全局统一（覆盖各变体）。主题感知：
   /// 深色态沿用弱实体面 + 三级字；浅色态用半透明强调色底（pink_light 玫粉 /
   /// yellow_light 黄）+ 85% 白字，避免深色块落在浅底弹窗上显得错误。
-  static const Color buttonDisabledFill =
-      _isLight ? AppBrandColors.accentDisabledFill : _darkSurface;
-  static const Color buttonDisabledText = _isLight ? white85 : _darkTextTertiary;
+  static const Color buttonDisabledFill = _isLight
+      ? AppBrandColors.accentDisabledFill
+      : _darkSurface;
+  static const Color buttonDisabledText = _isLight
+      ? white85
+      : _darkTextTertiary;
 
   /// 弹窗遮罩（80% 不透明黑，无背景模糊）。
   static const Color overlayScrim80 = black80;
@@ -219,19 +237,23 @@ abstract final class AppColors {
   static const Color bookshelfManageCoverOverlaySelected = black40;
 
   /// 书架管理态未选中选择框描边（压在封面缩略图上，随封面恒暗，不随页面主题翻）。
-  static const Color bookshelfSelectionMarkBorderUnselected = _darkDivider; // light-audit: keep-dark
+  static const Color bookshelfSelectionMarkBorderUnselected =
+      _darkDivider; // light-audit: keep-dark
 
   /// 书架空态文案（Figma 1319:9953）。
   static const Color bookshelfEmptyText = AppPalette.neutralGray700;
 
   /// 封面右上角状态角标「完结 / 连载」半透明深底（Figma 1335:12223；压在封面上，浅色实验态恒暗）。
-  static const Color bookCoverTagCompletedScrim = black60; // light-audit: keep-dark
+  static const Color bookCoverTagCompletedScrim =
+      black60; // light-audit: keep-dark
 
   /// 封面角标「完结 / 连载」字色：纯白实体（压在封面上，浅色实验态恒白）。
-  static const Color bookCoverTagCompletedText = white100; // light-audit: keep-dark
+  static const Color bookCoverTagCompletedText =
+      white100; // light-audit: keep-dark
 
   /// 封面角标「完结 / 连载」描边：纯黑 4%（`hairline` 0.5px 由组件指定宽度）。
-  static const Color bookCoverTagCompletedBorder = black04; // light-audit: keep-dark
+  static const Color bookCoverTagCompletedBorder =
+      black04; // light-audit: keep-dark
 
   /// 卡片彩色角标字色（充值「热」/ 免费领取「0/300每日」/ 会员标等）：全主题恒白。
   static const Color cornerBadgeText = white100; // light-audit: keep-dark
@@ -254,7 +276,8 @@ abstract final class AppColors {
   // 榜单详情页 (Figma 220:8376)
   static const Color rankingHeroTitle = AppBrandColors.rankingHeroTitle;
   static const Color rankingHeroSubtitle = AppPalette.cream200Alpha90;
-  static const Color rankingSegmentedSelectedText = AppBrandColors.textOnLightPanel;
+  static const Color rankingSegmentedSelectedText =
+      AppBrandColors.textOnLightPanel;
   static const Color rankingCircleButtonBackground = black30;
   static const Color rankingDimensionIndicator = accentYellow;
 
@@ -271,7 +294,9 @@ abstract final class AppColors {
   static const Color searchActionText = accentYellow;
 
   /// 封面「连载 / 完结」角标：半透明深底 + 白字（图上遮罩，浅色实验态恒暗保可读）。
-  static const Color searchStatusBadgeBackground = _isLight ? black60 : bgTint60;
+  static const Color searchStatusBadgeBackground = _isLight
+      ? black60
+      : bgTint60;
   static const Color searchStatusBadgeText = textOnDark;
 
   /// 输入框光标色。
@@ -310,5 +335,4 @@ abstract final class AppColors {
       AppPalette.neutralWhite; // light-audit: keep-dark
   static const Color continueReadingCloseIcon =
       AppPalette.neutralCool400; // light-audit: keep-dark
-
 }

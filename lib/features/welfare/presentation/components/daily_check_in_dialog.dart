@@ -32,7 +32,8 @@ class DailyCheckInDialog extends StatelessWidget {
   }) {
     return showAppBlurredDialog<void>(
       context: context,
-      builder: (_) => DailyCheckInDialog(summary: summary, onCheckIn: onCheckIn),
+      builder: (_) =>
+          DailyCheckInDialog(summary: summary, onCheckIn: onCheckIn),
     );
   }
 

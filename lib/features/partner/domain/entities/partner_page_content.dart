@@ -26,12 +26,12 @@ class PartnerPageContent extends Equatable {
 
   @override
   List<Object?> get props => [
-        categoryTags,
-        characters,
-        conversations,
-        interactionScenes,
-        messageUnreadCount,
-        interactionUnreadCount,
-        filterOptions,
-      ];
+    categoryTags,
+    characters,
+    conversations,
+    interactionScenes,
+    messageUnreadCount,
+    interactionUnreadCount,
+    filterOptions,
+  ];
 }

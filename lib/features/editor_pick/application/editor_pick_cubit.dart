@@ -14,19 +14,17 @@ import 'editor_pick_ui_state.dart';
 /// application 层状态管理，state 仅在此层创建与修改。
 class EditorPickCubit extends Cubit<EditorPickState> {
   EditorPickCubit({EditorPickRepository? repository})
-      : _repository = repository ??
-            const EditorPickRepositoryImpl(EditorPickMockDataSource()),
-        super(const EditorPickState());
+    : _repository =
+          repository ??
+          const EditorPickRepositoryImpl(EditorPickMockDataSource()),
+      super(const EditorPickState());
 
   final EditorPickRepository _repository;
 
   Future<void> load() async {
     emit(
       state.copyWith(
-        ui: state.ui.copyWith(
-          phase: EditorPickPhase.loading,
-          clearError: true,
-        ),
+        ui: state.ui.copyWith(phase: EditorPickPhase.loading, clearError: true),
       ),
     );
 

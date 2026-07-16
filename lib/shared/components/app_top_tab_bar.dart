@@ -292,4 +292,3 @@ class _AppTopTabItemView extends StatelessWidget {
     );
   }
 }
-

@@ -4,7 +4,6 @@ import 'auth_user.dart';
 
 /// 登录会话，对齐后端登录响应中的 token 与用户资料。
 class AuthSession extends Equatable {
-
   factory AuthSession.fromJson(Map<String, Object?> json) {
     return AuthSession(
       accessToken: json['accessToken'] as String,

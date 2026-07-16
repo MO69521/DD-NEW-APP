@@ -189,7 +189,10 @@ class AppColorScheme extends ThemeExtension<AppColorScheme> {
   }
 
   @override
-  AppColorScheme lerp(covariant ThemeExtension<AppColorScheme>? other, double t) {
+  AppColorScheme lerp(
+    covariant ThemeExtension<AppColorScheme>? other,
+    double t,
+  ) {
     if (other is! AppColorScheme) return this;
     return AppColorScheme(
       background: Color.lerp(background, other.background, t)!,
@@ -206,23 +209,42 @@ class AppColorScheme extends ThemeExtension<AppColorScheme> {
       coverBorder: Color.lerp(coverBorder, other.coverBorder, t)!,
       overlayScrim: Color.lerp(overlayScrim, other.overlayScrim, t)!,
       onLightPanel: Color.lerp(onLightPanel, other.onLightPanel, t)!,
-      navBarBackground: Color.lerp(navBarBackground, other.navBarBackground, t)!,
-      navActiveBackground:
-          Color.lerp(navActiveBackground, other.navActiveBackground, t)!,
+      navBarBackground: Color.lerp(
+        navBarBackground,
+        other.navBarBackground,
+        t,
+      )!,
+      navActiveBackground: Color.lerp(
+        navActiveBackground,
+        other.navActiveBackground,
+        t,
+      )!,
       onNavActive: Color.lerp(onNavActive, other.onNavActive, t)!,
-      gradientFadeStart:
-          Color.lerp(gradientFadeStart, other.gradientFadeStart, t)!,
+      gradientFadeStart: Color.lerp(
+        gradientFadeStart,
+        other.gradientFadeStart,
+        t,
+      )!,
       gradientFadeMid: Color.lerp(gradientFadeMid, other.gradientFadeMid, t)!,
       gradientFadeEnd: Color.lerp(gradientFadeEnd, other.gradientFadeEnd, t)!,
       heroScrimMid: Color.lerp(heroScrimMid, other.heroScrimMid, t)!,
-      statusBadgeBackground:
-          Color.lerp(statusBadgeBackground, other.statusBadgeBackground, t)!,
+      statusBadgeBackground: Color.lerp(
+        statusBadgeBackground,
+        other.statusBadgeBackground,
+        t,
+      )!,
       brandPrimary: Color.lerp(brandPrimary, other.brandPrimary, t)!,
       onBrandPrimary: Color.lerp(onBrandPrimary, other.onBrandPrimary, t)!,
-      heroImageMaskOpaque:
-          Color.lerp(heroImageMaskOpaque, other.heroImageMaskOpaque, t)!,
-      heroImageMaskSoft:
-          Color.lerp(heroImageMaskSoft, other.heroImageMaskSoft, t)!,
+      heroImageMaskOpaque: Color.lerp(
+        heroImageMaskOpaque,
+        other.heroImageMaskOpaque,
+        t,
+      )!,
+      heroImageMaskSoft: Color.lerp(
+        heroImageMaskSoft,
+        other.heroImageMaskSoft,
+        t,
+      )!,
       heroImageMaskTransparent: Color.lerp(
         heroImageMaskTransparent,
         other.heroImageMaskTransparent,

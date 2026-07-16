@@ -13,8 +13,8 @@ import 'search_ui_state.dart';
 /// application 层状态管理，state 仅在此层创建与修改。
 class SearchCubit extends Cubit<SearchState> {
   SearchCubit({SearchRepository? repository})
-      : _repository = repository ?? _defaultRepository(),
-        super(const SearchState()) {
+    : _repository = repository ?? _defaultRepository(),
+      super(const SearchState()) {
     loadRecommendations();
     loadKeywords();
   }
@@ -51,20 +51,13 @@ class SearchCubit extends Cubit<SearchState> {
   /// 清空搜索历史。
   Future<void> clearHistory() async {
     final history = await _repository.clearSearchHistory();
-    emit(
-      state.copyWith(
-        domain: state.domain.copyWith(searchHistory: history),
-      ),
-    );
+    emit(state.copyWith(domain: state.domain.copyWith(searchHistory: history)));
   }
 
   Future<void> loadRecommendations() async {
     emit(
       state.copyWith(
-        ui: state.ui.copyWith(
-          isRecommendationsLoading: true,
-          clearError: true,
-        ),
+        ui: state.ui.copyWith(isRecommendationsLoading: true, clearError: true),
       ),
     );
 

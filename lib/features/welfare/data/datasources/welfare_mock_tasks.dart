@@ -96,10 +96,7 @@ const WelfareTaskListSummary _taskListSummary = WelfareTaskListSummary(
           label: '6次',
           rewards: [
             WelfareTaskReward(type: CheckInRewardType.energy, label: '60'),
-            WelfareTaskReward(
-              type: CheckInRewardType.stardust,
-              label: '1000',
-            ),
+            WelfareTaskReward(type: CheckInRewardType.stardust, label: '1000'),
           ],
         ),
         WelfareTaskTimelineNode(
@@ -148,10 +145,7 @@ const WelfareTaskListSummary _taskListSummary = WelfareTaskListSummary(
           label: '12',
           rewards: [
             WelfareTaskReward(type: CheckInRewardType.energy, label: '40'),
-            WelfareTaskReward(
-              type: CheckInRewardType.stardust,
-              label: '1000',
-            ),
+            WelfareTaskReward(type: CheckInRewardType.stardust, label: '1000'),
           ],
           isActive: true,
           showVideoIcon: true,
@@ -160,10 +154,7 @@ const WelfareTaskListSummary _taskListSummary = WelfareTaskListSummary(
           label: '1800',
           rewards: [
             WelfareTaskReward(type: CheckInRewardType.energy, label: '40'),
-            WelfareTaskReward(
-              type: CheckInRewardType.stardust,
-              label: '1800',
-            ),
+            WelfareTaskReward(type: CheckInRewardType.stardust, label: '1800'),
           ],
           showVideoIcon: true,
         ),
@@ -177,10 +168,7 @@ const WelfareTaskListSummary _taskListSummary = WelfareTaskListSummary(
           label: '120min',
           rewards: [
             WelfareTaskReward(type: CheckInRewardType.energy, label: '60'),
-            WelfareTaskReward(
-              type: CheckInRewardType.stardust,
-              label: '2000',
-            ),
+            WelfareTaskReward(type: CheckInRewardType.stardust, label: '2000'),
           ],
         ),
         WelfareTaskTimelineNode(
@@ -198,9 +186,7 @@ const WelfareTaskListSummary _taskListSummary = WelfareTaskListSummary(
       progressLabel: '(1/1)',
       description: '吃饭时间来打卡，立即领取能量 ',
       descriptionHighlight: '03:59:50',
-      rewards: [
-        WelfareTaskReward(type: CheckInRewardType.energy, label: '12'),
-      ],
+      rewards: [WelfareTaskReward(type: CheckInRewardType.energy, label: '12')],
       action: WelfareTaskAction(
         type: WelfareTaskActionType.checkIn,
         label: '去签到',
@@ -213,9 +199,7 @@ const WelfareTaskListSummary _taskListSummary = WelfareTaskListSummary(
       progressLabel: '(1/1)',
       description: '睡前来打卡，立即领取能量，打卡时间',
       descriptionHighlight: '20:24:00',
-      rewards: [
-        WelfareTaskReward(type: CheckInRewardType.energy, label: '12'),
-      ],
+      rewards: [WelfareTaskReward(type: CheckInRewardType.energy, label: '12')],
       action: WelfareTaskAction(
         type: WelfareTaskActionType.claimReward,
         label: '去领取',
@@ -232,10 +216,7 @@ const WelfareTaskListSummary _taskListSummary = WelfareTaskListSummary(
         WelfareTaskReward(type: CheckInRewardType.energy, label: '12'),
         WelfareTaskReward(type: CheckInRewardType.freeCard, label: '20min'),
       ],
-      action: WelfareTaskAction(
-        type: WelfareTaskActionType.open,
-        label: '去开启',
-      ),
+      action: WelfareTaskAction(type: WelfareTaskActionType.open, label: '去开启'),
     ),
     WelfareTaskItem(
       id: 'first_recharge',
@@ -243,9 +224,7 @@ const WelfareTaskListSummary _taskListSummary = WelfareTaskListSummary(
       title: '首次充值奖励',
       progressLabel: '(0/1)',
       description: '充值任意金额立即领取能量奖励',
-      rewards: [
-        WelfareTaskReward(type: CheckInRewardType.energy, label: '12'),
-      ],
+      rewards: [WelfareTaskReward(type: CheckInRewardType.energy, label: '12')],
       action: WelfareTaskAction(
         type: WelfareTaskActionType.recharge,
         label: '去充值',

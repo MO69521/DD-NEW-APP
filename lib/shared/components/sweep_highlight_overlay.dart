@@ -110,11 +110,7 @@ class _SweepHighlightOverlayState extends State<SweepHighlightOverlay>
                       widget.highlightColor.withValues(alpha: 0.28),
                       widget.edgeColor,
                     ]
-                  : [
-                      widget.edgeColor,
-                      widget.highlightColor,
-                      widget.edgeColor,
-                    ];
+                  : [widget.edgeColor, widget.highlightColor, widget.edgeColor];
               final stops = widget.softEdges
                   ? const [0.0, 0.28, 0.5, 0.72, 1.0]
                   : const [0.0, 0.5, 1.0];

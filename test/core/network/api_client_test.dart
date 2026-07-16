@@ -29,7 +29,9 @@ void main() {
           expect(request.url.toString(), '$baseUrl/auth/sms/login');
           expect(request.headers['Content-Type'], contains('application/json'));
           return http.Response(
-            jsonEncode({'data': {'ok': true}}),
+            jsonEncode({
+              'data': {'ok': true},
+            }),
             200,
           );
         }),

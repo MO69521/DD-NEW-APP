@@ -80,38 +80,37 @@ class _AccountSettingsView extends StatelessWidget {
             AppSpacing.xl,
           ),
           children: [
-                AccountSettingsSection(
-                  title: '个人信息',
-                  children: [
-                    AccountSettingsInfoRow(
-                      label: '头像',
-                      avatarUrl: content.avatarUrl,
-                      onTap: cubit.onAvatarTap,
-                    ),
-                    AccountSettingsInfoRow(
-                      label: '昵称',
-                      value: content.nickname,
-                      onTap: cubit.onNicknameTap,
-                    ),
-                    AccountSettingsInfoRow(
-                      label: '用户 ID',
-                      value: content.userId,
-                      showChevron: false,
-                    ),
-                  ],
+            AccountSettingsSection(
+              title: '个人信息',
+              children: [
+                AccountSettingsInfoRow(
+                  label: '头像',
+                  avatarUrl: content.avatarUrl,
+                  onTap: cubit.onAvatarTap,
                 ),
-                const SizedBox(height: AppSpacing.md),
-                AccountSettingsSection(
-                  title: '安全设置',
-                  children: [
-                    for (final binding in content.securityBindings)
-                      AccountSettingsSecurityRow(
-                        binding: binding,
-                        onTap: () =>
-                            cubit.onSecurityBindingTap(binding.type),
-                      ),
-                  ],
+                AccountSettingsInfoRow(
+                  label: '昵称',
+                  value: content.nickname,
+                  onTap: cubit.onNicknameTap,
                 ),
+                AccountSettingsInfoRow(
+                  label: '用户 ID',
+                  value: content.userId,
+                  showChevron: false,
+                ),
+              ],
+            ),
+            const SizedBox(height: AppSpacing.md),
+            AccountSettingsSection(
+              title: '安全设置',
+              children: [
+                for (final binding in content.securityBindings)
+                  AccountSettingsSecurityRow(
+                    binding: binding,
+                    onTap: () => cubit.onSecurityBindingTap(binding.type),
+                  ),
+              ],
+            ),
           ],
         ),
       ),

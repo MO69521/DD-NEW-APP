@@ -10,11 +10,7 @@ import '../widgets/app_text.dart';
 ///
 /// 符合卡片层级规范：外层一张卡，内部行用 Padding/Row，禁止卡中卡。
 class AppGroupedListCard extends StatelessWidget {
-  const AppGroupedListCard({
-    super.key,
-    this.title,
-    required this.children,
-  });
+  const AppGroupedListCard({super.key, this.title, required this.children});
 
   final String? title;
   final List<Widget> children;

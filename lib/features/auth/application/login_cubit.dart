@@ -290,9 +290,7 @@ class LoginCubit extends Cubit<LoginState> {
   void consumePendingSocialAppInstall() {
     if (state.ui.pendingSocialAppInstall == null) return;
     emit(
-      state.copyWith(
-        ui: state.ui.copyWith(clearPendingSocialAppInstall: true),
-      ),
+      state.copyWith(ui: state.ui.copyWith(clearPendingSocialAppInstall: true)),
     );
   }
 

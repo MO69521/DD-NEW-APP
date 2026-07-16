@@ -259,6 +259,7 @@ abstract final class AppSizes {
   static const double bookshelfClaimWelfareCtaPaddingHorizontal = 11;
   static const double bookshelfClaimWelfareCtaPaddingVertical = 7;
   static const double bookshelfManageActionFontSize = 14;
+
   /// 通用选择标记（[AppSelectionMark]）圆形直径与内部对勾尺寸（全局统一）。
   static const double selectionMarkSize = 20;
   static const double bookshelfSelectionCheckIconSize = 16;

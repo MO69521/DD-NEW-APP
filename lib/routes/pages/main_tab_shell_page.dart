@@ -85,51 +85,51 @@ class _MainTabShellPageState extends State<MainTabShellPage> {
       ],
       child: _FirstLaunchDialogs(
         child: BlocSelector<BookshelfCubit, BookshelfState, bool>(
-        selector: (state) => state.interaction.isManaging,
-        builder: (context, isBookshelfManaging) {
-          return MainTabShell(
-            initialIndex: widget.initialIndex,
-            controller: _mainTabController,
-            hideBottomNav: isBookshelfManaging,
-            pages: [
-              BookstorePage(
-                mainTabController: _mainTabController,
-                categoryTabBuilder: (context) {
-                  final topChrome =
-                      AppLayout.chromeTopHeight(
-                        context,
-                        barHeight: AppSizes.bookstoreTopHeaderHeight,
-                      ) +
-                      AppSizes.categoryHeaderToFilterGap;
-                  return BlocProvider(
-                    create: (_) => CategoryCubit()..load(),
-                    child: CategoryTabBody(
-                      topScrollPadding: topChrome,
-                      bottomScrollPadding:
-                          AppBottomNav.barHeight + AppSpacing.xl,
-                    ),
-                  );
-                },
-                rankingTabBuilder: (context) => BlocProvider(
-                  create: (_) =>
-                      RankingCubit(initialDimension: RankingDimension.recommend)
-                        ..load(),
-                  child: const RankingTabBody(embedded: true),
+          selector: (state) => state.interaction.isManaging,
+          builder: (context, isBookshelfManaging) {
+            return MainTabShell(
+              initialIndex: widget.initialIndex,
+              controller: _mainTabController,
+              hideBottomNav: isBookshelfManaging,
+              pages: [
+                BookstorePage(
+                  mainTabController: _mainTabController,
+                  categoryTabBuilder: (context) {
+                    final topChrome =
+                        AppLayout.chromeTopHeight(
+                          context,
+                          barHeight: AppSizes.bookstoreTopHeaderHeight,
+                        ) +
+                        AppSizes.categoryHeaderToFilterGap;
+                    return BlocProvider(
+                      create: (_) => CategoryCubit()..load(),
+                      child: CategoryTabBody(
+                        topScrollPadding: topChrome,
+                        bottomScrollPadding:
+                            AppBottomNav.barHeight + AppSpacing.xl,
+                      ),
+                    );
+                  },
+                  rankingTabBuilder: (context) => BlocProvider(
+                    create: (_) => RankingCubit(
+                      initialDimension: RankingDimension.recommend,
+                    )..load(),
+                    child: const RankingTabBody(embedded: true),
+                  ),
                 ),
-              ),
-              WelfarePage(
-                onRechargePackageTap: (package) =>
-                    EnergyRechargePurchaseDialog.show(
-                      context,
-                      package: package,
-                    ),
-              ),
-              const PartnerPage(),
-              BookshelfPage(mainTabController: _mainTabController),
-              ProfilePage(mainTabController: _mainTabController),
-            ],
-          );
-        },
+                WelfarePage(
+                  onRechargePackageTap: (package) =>
+                      EnergyRechargePurchaseDialog.show(
+                        context,
+                        package: package,
+                      ),
+                ),
+                const PartnerPage(),
+                BookshelfPage(mainTabController: _mainTabController),
+                ProfilePage(mainTabController: _mainTabController),
+              ],
+            );
+          },
         ),
       ),
     );

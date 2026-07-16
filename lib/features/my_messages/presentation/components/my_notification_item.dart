@@ -82,7 +82,10 @@ class MyNotificationItem extends StatelessWidget {
     return AppPressable(
       onTap: onTap,
       pressScale: AppSizes.tapPressScaleSubtle,
-      child: Opacity(opacity: isRead ? AppSizes.myMessagesReadOpacity : 1, child: card),
+      child: Opacity(
+        opacity: isRead ? AppSizes.myMessagesReadOpacity : 1,
+        child: card,
+      ),
     );
   }
 }

@@ -96,12 +96,16 @@ void main() {
 
   test('fetchHotKeywords / fetchSearchHistory 解析字符串数组', () async {
     final hot = await buildDataSource(
-      (_) => {'data': ['重生悬疑', '姜知']},
+      (_) => {
+        'data': ['重生悬疑', '姜知'],
+      },
     ).fetchHotKeywords();
     expect(hot, ['重生悬疑', '姜知']);
 
     final history = await buildDataSource(
-      (_) => {'data': ['烧脑', '古风']},
+      (_) => {
+        'data': ['烧脑', '古风'],
+      },
     ).fetchSearchHistory();
     expect(history, ['烧脑', '古风']);
   });

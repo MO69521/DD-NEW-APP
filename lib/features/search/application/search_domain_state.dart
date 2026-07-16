@@ -38,10 +38,10 @@ class SearchDomainState extends Equatable {
 
   @override
   List<Object?> get props => [
-        results,
-        recommendations,
-        hotKeywords,
-        searchHistory,
-        suggestions,
-      ];
+    results,
+    recommendations,
+    hotKeywords,
+    searchHistory,
+    suggestions,
+  ];
 }

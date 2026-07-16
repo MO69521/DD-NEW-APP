@@ -16,10 +16,7 @@ import 'partner_interaction_side_actions.dart';
 
 /// L3 — 互动 Tab 单屏场景（全屏背景 + 悬浮控件）。
 class PartnerInteractionScenePage extends StatelessWidget {
-  const PartnerInteractionScenePage({
-    super.key,
-    required this.scene,
-  });
+  const PartnerInteractionScenePage({super.key, required this.scene});
 
   final PartnerInteractionScene scene;
 
@@ -139,10 +136,7 @@ class _ReviewButton extends StatelessWidget {
 }
 
 class _PageIndicator extends StatelessWidget {
-  const _PageIndicator({
-    required this.current,
-    required this.total,
-  });
+  const _PageIndicator({required this.current, required this.total});
 
   final int current;
   final int total;

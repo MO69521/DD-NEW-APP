@@ -188,7 +188,10 @@ class MembershipMockDataSource {
       title: '《会员连续订阅说明（EULA）》',
       url: 'https://example.com/vip/eula',
     ),
-    MembershipAgreement(title: '《隐私政策》', url: 'https://example.com/vip/privacy'),
+    MembershipAgreement(
+      title: '《隐私政策》',
+      url: 'https://example.com/vip/privacy',
+    ),
   ];
 
   String statementTitle() => '自动续费服务声明';

@@ -56,8 +56,9 @@ abstract final class AppBrandColors {
       : AppPalette.neutralCool950;
 
   /// 主强调色（主 CTA / 点赞 / 互动选中）。
-  static const Color accent =
-      themeId == _pinkLight ? AppPalette.pink500 : AppPalette.yellow500;
+  static const Color accent = themeId == _pinkLight
+      ? AppPalette.pink500
+      : AppPalette.yellow500;
 
   /// 主强调色上的文字 / 图标：粉底翻白、黄底（yellow_dark / yellow_light）用深墨。
   static const Color onAccent = themeId == _pinkLight
@@ -78,8 +79,9 @@ abstract final class AppBrandColors {
       : AppPalette.yellow500Alpha40;
 
   /// 浅色外壳卡片细描边：pink_light 用浅粉，yellow_light 用中性浅灰（yellow_dark 不使用）。
-  static const Color lightCardBorder =
-      themeId == _pinkLight ? AppPalette.pink100 : AppPalette.neutralCool200;
+  static const Color lightCardBorder = themeId == _pinkLight
+      ? AppPalette.pink100
+      : AppPalette.neutralCool200;
 
   /// 极光渐变亮核（暖米金）。pink_light 暂复用 yellow_dark（v1 已知项）。
   static const Color auroraGlow = AppPalette.cream100;
@@ -88,12 +90,14 @@ abstract final class AppBrandColors {
   static const Color auroraEdge = AppPalette.wine950;
 
   /// 弹窗底。浅色包用白底。
-  static const Color dialogBackground =
-      isLightExperiment ? AppPalette.neutralWhite : AppPalette.neutralCool880;
+  static const Color dialogBackground = isLightExperiment
+      ? AppPalette.neutralWhite
+      : AppPalette.neutralCool880;
 
   /// 主题壳主文字（深壳纯白；浅色包深墨）。
-  static const Color textOnDark =
-      isLightExperiment ? AppPalette.neutralBlue950 : AppPalette.neutralWhite;
+  static const Color textOnDark = isLightExperiment
+      ? AppPalette.neutralBlue950
+      : AppPalette.neutralWhite;
 
   /// 实心浮层/卡片底（如「继续阅读」浮层）。浅色包用白面板。
   static const Color surfaceMuted = isLightExperiment

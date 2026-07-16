@@ -82,14 +82,12 @@ class _CircleActionButton extends StatelessWidget {
       child: Container(
         width: size,
         height: size,
-        decoration: BoxDecoration(
-          color: color,
-          shape: BoxShape.circle,
-        ),
+        decoration: BoxDecoration(color: color, shape: BoxShape.circle),
         alignment: Alignment.center,
         child: AppText(
           label,
-          style: labelStyle ?? AppTextStyles.partnerInteractionBottomActionLabel,
+          style:
+              labelStyle ?? AppTextStyles.partnerInteractionBottomActionLabel,
           textAlign: TextAlign.center,
         ),
       ),

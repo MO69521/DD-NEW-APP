@@ -17,5 +17,11 @@ class MembershipBenefitDetail extends Equatable {
   final String exampleImageAsset;
 
   @override
-  List<Object?> get props => [id, iconAsset, label, description, exampleImageAsset];
+  List<Object?> get props => [
+    id,
+    iconAsset,
+    label,
+    description,
+    exampleImageAsset,
+  ];
 }

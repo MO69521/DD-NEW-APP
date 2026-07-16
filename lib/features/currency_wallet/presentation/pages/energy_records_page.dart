@@ -75,14 +75,16 @@ class _EnergyRecordsPageState extends State<EnergyRecordsPage> {
                         children: [
                           EnergyRecordsTabBar(
                             selectedTab: state.selectedTab,
-                            onTabTap:
-                                context.read<EnergyRecordsCubit>().selectTab,
+                            onTabTap: context
+                                .read<EnergyRecordsCubit>()
+                                .selectTab,
                             swipeProgress: _tabSwipeProgress,
                           ),
                           Expanded(
                             child: AppSwipeTabSwitcher(
-                              selectedIndex: EnergyRecordsTab.values
-                                  .indexOf(state.selectedTab),
+                              selectedIndex: EnergyRecordsTab.values.indexOf(
+                                state.selectedTab,
+                              ),
                               onSwipeProgressChanged: (progress) =>
                                   _tabSwipeProgress.value = progress,
                               onIndexChanged: (index) => context

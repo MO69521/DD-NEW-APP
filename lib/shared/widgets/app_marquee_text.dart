@@ -95,49 +95,49 @@ class _AppMarqueeTextState extends State<AppMarqueeText>
           height: textHeight,
           // 右缘渐隐（替代硬切）：溢出文本在右侧平滑淡出，滚动时新文本也渐入。
           child: ShaderMask(
-          blendMode: BlendMode.dstIn,
-          shaderCallback: (bounds) {
-            final stop = bounds.width <= 0
-                ? 1.0
-                : (1 - (AppSpacing.lg / bounds.width)).clamp(0.0, 1.0);
-            return LinearGradient(
-              begin: Alignment.centerLeft,
-              end: Alignment.centerRight,
-              colors: const [
-                AppColors.white100, // light-audit: effect 跑马灯 alpha 淡出蒙版
-                AppColors.white100, // light-audit: effect
-                AppColors.white00, // light-audit: effect
-              ],
-              stops: [0.0, stop, 1.0],
-            ).createShader(bounds);
-          },
-          child: ClipRect(
-          child: AnimatedBuilder(
-            animation: _controller,
-            builder: (context, _) {
-              final t = _controller.value;
-              final progress = t <= restFraction
-                  ? 0.0
-                  : (t - restFraction) / (1 - restFraction);
-              return OverflowBox(
-                alignment: Alignment.centerLeft,
-                maxWidth: double.infinity,
-                maxHeight: textHeight,
-                child: Transform.translate(
-                  offset: Offset(-distance * progress, 0),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      AppText(widget.text, style: style, maxLines: 1),
-                      const SizedBox(width: AppSizes.marqueeGap),
-                      AppText(widget.text, style: style, maxLines: 1),
-                    ],
-                  ),
-                ),
-              );
+            blendMode: BlendMode.dstIn,
+            shaderCallback: (bounds) {
+              final stop = bounds.width <= 0
+                  ? 1.0
+                  : (1 - (AppSpacing.lg / bounds.width)).clamp(0.0, 1.0);
+              return LinearGradient(
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+                colors: const [
+                  AppColors.white100, // light-audit: effect 跑马灯 alpha 淡出蒙版
+                  AppColors.white100, // light-audit: effect
+                  AppColors.white00, // light-audit: effect
+                ],
+                stops: [0.0, stop, 1.0],
+              ).createShader(bounds);
             },
-          ),
-          ),
+            child: ClipRect(
+              child: AnimatedBuilder(
+                animation: _controller,
+                builder: (context, _) {
+                  final t = _controller.value;
+                  final progress = t <= restFraction
+                      ? 0.0
+                      : (t - restFraction) / (1 - restFraction);
+                  return OverflowBox(
+                    alignment: Alignment.centerLeft,
+                    maxWidth: double.infinity,
+                    maxHeight: textHeight,
+                    child: Transform.translate(
+                      offset: Offset(-distance * progress, 0),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          AppText(widget.text, style: style, maxLines: 1),
+                          const SizedBox(width: AppSizes.marqueeGap),
+                          AppText(widget.text, style: style, maxLines: 1),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
           ),
         );
       },

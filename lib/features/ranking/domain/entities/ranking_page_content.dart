@@ -16,7 +16,7 @@ class RankingPageContent extends Equatable {
 
   /// 维度 -> 频道 -> 书单。
   final Map<RankingDimension, Map<RankingChannel, List<Book>>>
-      booksByDimensionChannel;
+  booksByDimensionChannel;
 
   /// 取指定维度 + 频道书单，缺省回退到该维度「全部」。
   List<Book> booksFor(RankingDimension dimension, RankingChannel channel) {

@@ -37,8 +37,11 @@ class MyMessageItem extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _HeaderRow(name: message.senderName, isAuthor: message.isAuthor,
-                  timeLabel: message.timeLabel),
+              _HeaderRow(
+                name: message.senderName,
+                isAuthor: message.isAuthor,
+                timeLabel: message.timeLabel,
+              ),
               const SizedBox(height: AppSpacing.xs),
               if (message.isDeleted)
                 const AppText(

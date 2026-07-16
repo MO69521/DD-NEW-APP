@@ -5,8 +5,7 @@ import 'package:image_picker/image_picker.dart';
 /// 仅暴露领域友好的接口（返回本地文件路径列表），
 /// 上层无需感知 [ImagePicker] / [XFile] 等平台细节。
 class ImagePickerService {
-  ImagePickerService([ImagePicker? picker])
-    : _picker = picker ?? ImagePicker();
+  ImagePickerService([ImagePicker? picker]) : _picker = picker ?? ImagePicker();
 
   final ImagePicker _picker;
 

@@ -83,7 +83,8 @@ class AppTopBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final centerChild = center ?? (title != null ? _buildTitle() : null);
-    final leadingChild = leading ?? (onBack != null ? _buildBackButton() : null);
+    final leadingChild =
+        leading ?? (onBack != null ? _buildBackButton() : null);
     final trailingChild =
         trailing ?? (actions.isNotEmpty ? _buildActions() : null);
 
@@ -124,9 +125,7 @@ class AppTopBar extends StatelessWidget {
 
   Widget _buildTitle() {
     return ConstrainedBox(
-      constraints: const BoxConstraints(
-        maxWidth: AppSizes.topBarTitleMaxWidth,
-      ),
+      constraints: const BoxConstraints(maxWidth: AppSizes.topBarTitleMaxWidth),
       child: AppText(
         title!,
         style: AppTextStyles.sectionTitleDark,

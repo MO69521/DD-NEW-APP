@@ -91,10 +91,8 @@ class _LiquidSweepCtaBackgroundPainter extends CustomPainter {
 }
 
 class _LiquidSweepCtaClipper extends CustomClipper<Path> {
-  _LiquidSweepCtaClipper({
-    required this.progress,
-    required this.borderRadius,
-  }) : super(reclip: progress);
+  _LiquidSweepCtaClipper({required this.progress, required this.borderRadius})
+    : super(reclip: progress);
 
   final Animation<double> progress;
   final double borderRadius;

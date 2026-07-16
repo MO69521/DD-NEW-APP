@@ -144,4 +144,3 @@ class _GenderCard extends StatelessWidget {
     );
   }
 }
-

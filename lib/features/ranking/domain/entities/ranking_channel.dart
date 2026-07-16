@@ -5,8 +5,8 @@ enum RankingChannel {
   male;
 
   String get label => switch (this) {
-        RankingChannel.all => '全部',
-        RankingChannel.female => '女频',
-        RankingChannel.male => '男频',
-      };
+    RankingChannel.all => '全部',
+    RankingChannel.female => '女频',
+    RankingChannel.male => '男频',
+  };
 }

@@ -61,11 +61,7 @@ class GuessLikeSection extends StatelessWidget {
 }
 
 class _GuessLikeBookCard extends StatelessWidget {
-  const _GuessLikeBookCard({
-    required this.book,
-    this.heroTag,
-    this.onTap,
-  });
+  const _GuessLikeBookCard({required this.book, this.heroTag, this.onTap});
 
   static const String _defaultSummary =
       '在这个充满竞争的商业世界里，病娇总裁李昊天以其独特的魅力和阴郁个性吸引了众多追随者。';

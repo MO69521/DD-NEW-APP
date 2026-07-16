@@ -17,10 +17,7 @@ class EditorPickState extends Equatable {
     EditorPickUiState? ui,
     EditorPickDomainState? domain,
   }) {
-    return EditorPickState(
-      ui: ui ?? this.ui,
-      domain: domain ?? this.domain,
-    );
+    return EditorPickState(ui: ui ?? this.ui, domain: domain ?? this.domain);
   }
 
   @override

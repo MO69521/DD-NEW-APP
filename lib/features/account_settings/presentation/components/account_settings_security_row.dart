@@ -27,48 +27,46 @@ class AccountSettingsSecurityRow extends StatelessWidget {
       onTap: onTap,
       pressScale: AppSizes.tapPressScaleSubtle,
       child: ConstrainedBox(
-        constraints: const BoxConstraints(
-          minHeight: AppSizes.listRowMinHeight,
-        ),
+        constraints: const BoxConstraints(minHeight: AppSizes.listRowMinHeight),
         child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
-            child: Row(
-              children: [
-                AppIcon(
-                  assetPath: binding.iconAsset,
-                  width: AppSizes.accountSettingsBindingIconSize,
-                  height: AppSizes.accountSettingsBindingIconSize,
+          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
+          child: Row(
+            children: [
+              AppIcon(
+                assetPath: binding.iconAsset,
+                width: AppSizes.accountSettingsBindingIconSize,
+                height: AppSizes.accountSettingsBindingIconSize,
+                color: AppColors.textOnDark,
+              ),
+              const SizedBox(width: AppSpacing.sm),
+              AppText(
+                binding.isBound && binding.displayValue != null
+                    ? binding.displayValue!
+                    : binding.label,
+                style: AppTextStyles.bodyMedium.copyWith(
                   color: AppColors.textOnDark,
                 ),
-                const SizedBox(width: AppSpacing.sm),
-                AppText(
-                  binding.isBound && binding.displayValue != null
-                      ? binding.displayValue!
-                      : binding.label,
-                  style: AppTextStyles.bodyMedium.copyWith(
-                    color: AppColors.textOnDark,
-                  ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const Spacer(),
-                AppText(
-                  binding.actionLabel,
-                  style: AppTextStyles.bodyMedium.copyWith(
-                    color: AppColors.textOnDarkPlaceholder,
-                  ),
-                ),
-                const SizedBox(width: AppSpacing.xxs),
-                const AppIcon(
-                  assetPath: AppIconAssets.arrowRight,
-                  width: AppSpacing.sm,
-                  height: AppSpacing.sm,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+              const Spacer(),
+              AppText(
+                binding.actionLabel,
+                style: AppTextStyles.bodyMedium.copyWith(
                   color: AppColors.textOnDarkPlaceholder,
                 ),
-              ],
-            ),
+              ),
+              const SizedBox(width: AppSpacing.xxs),
+              const AppIcon(
+                assetPath: AppIconAssets.arrowRight,
+                width: AppSpacing.sm,
+                height: AppSpacing.sm,
+                color: AppColors.textOnDarkPlaceholder,
+              ),
+            ],
           ),
         ),
+      ),
     );
   }
 }

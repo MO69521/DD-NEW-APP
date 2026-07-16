@@ -11,8 +11,8 @@ import '../widgets/app_text.dart';
 /// L2 组件 — 年龄段单选胶囊（整行）。
 ///
 /// 新手弹窗（[OnboardingProfileDialog]）与偏好设置页（[ReadingPreferencesPage]）
-/// 共用，保证选项高度 / 选中样式一致：选中态 8% 黄底 + 黄色**加粗**字（无描边），
-/// 未选态卡片底 + 细描边 + 纯白字（不带透明度）。
+/// 共用，保证选项高度 / 选中样式一致：选中态 8% 主色底 + 主色**加粗**字（无描边），
+/// 未选态浅色填充底 + 细描边 + 主文字色（三主题适配）。
 class AgeRangeOption extends StatelessWidget {
   const AgeRangeOption({
     super.key,
@@ -34,12 +34,12 @@ class AgeRangeOption extends StatelessWidget {
         decoration: BoxDecoration(
           color: selected
               ? AppColors.segmentedSelectedFill
-              : AppColors.surfaceCard,
+              : AppColors.surfaceSoft,
           borderRadius: BorderRadius.circular(AppRadius.full),
           border: Border.all(
             color: selected
                 ? AppColors.segmentedSelectedBorder
-                : AppColors.borderGlass,
+                : AppColors.borderSubtle,
             width: AppSizes.hairline,
           ),
         ),
@@ -52,9 +52,7 @@ class AgeRangeOption extends StatelessWidget {
             child: AppText(
               label,
               style: AppTextStyles.bodyMedium.copyWith(
-                color: selected
-                    ? AppColors.accentYellow
-                    : AppColors.textOnDark,
+                color: selected ? AppColors.primary : AppColors.textPrimary,
                 fontWeight: selected ? AppFontWeights.semibold : null,
               ),
               maxLines: 1,

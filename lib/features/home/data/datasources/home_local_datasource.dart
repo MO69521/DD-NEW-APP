@@ -8,9 +8,6 @@ class HomeLocalDataSource implements HomeDataSource {
   @override
   Future<HomeInfo> fetchHomeInfo() async {
     await Future<void>.delayed(const Duration(milliseconds: 300));
-    return const HomeInfo(
-      appName: '点点穿书',
-      tagline: 'Feature-First 架构已就绪',
-    );
+    return const HomeInfo(appName: '点点穿书', tagline: 'Feature-First 架构已就绪');
   }
 }

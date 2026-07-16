@@ -4,7 +4,7 @@ enum BookshelfTab {
   history;
 
   String get label => switch (this) {
-        BookshelfTab.shelf => '书架',
-        BookshelfTab.history => '阅读历史',
-      };
+    BookshelfTab.shelf => '书架',
+    BookshelfTab.history => '阅读历史',
+  };
 }

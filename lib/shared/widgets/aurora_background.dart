@@ -110,7 +110,10 @@ class _AuroraBackgroundState extends State<AuroraBackground>
     if (child == null) return aurora;
     return Stack(
       fit: StackFit.passthrough,
-      children: [Positioned.fill(child: aurora), child],
+      children: [
+        Positioned.fill(child: aurora),
+        child,
+      ],
     );
   }
 }

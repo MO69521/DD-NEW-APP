@@ -59,10 +59,9 @@ abstract final class ServiceLocator {
 
   /// 统一 REST 客户端（单例）。自动注入当前会话 token 作为 Bearer 鉴权头。
   /// 各 feature 后续接入真实接口的 remote datasource 依赖此客户端。
-  static ApiClient get apiClient =>
-      _apiClient ??= HttpApiClient(
-        accessTokenProvider: () => authSession.currentSession?.accessToken,
-      );
+  static ApiClient get apiClient => _apiClient ??= HttpApiClient(
+    accessTokenProvider: () => authSession.currentSession?.accessToken,
+  );
 
   /// 认证接口服务，可通过配置在 mock / rest 间切换。
   static AuthService get authService =>

@@ -89,10 +89,7 @@ class _Thumbnail extends StatelessWidget {
       ),
       // 选中态：边框与图片之间留间隙，形成描边环。
       child: isSelected
-          ? Padding(
-              padding: const EdgeInsets.all(AppSpacing.xxs),
-              child: image,
-            )
+          ? Padding(padding: const EdgeInsets.all(AppSpacing.xxs), child: image)
           : image,
     );
   }

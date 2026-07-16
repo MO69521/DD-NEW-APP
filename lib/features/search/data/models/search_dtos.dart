@@ -53,7 +53,11 @@ class SearchResultItemDto {
   static List<SearchResultItem> listToEntities(Object? jsonList) {
     if (jsonList is! List) return const [];
     return jsonList
-        .map((e) => SearchResultItemDto.fromJson(e as Map<String, Object?>).toEntity())
+        .map(
+          (e) => SearchResultItemDto.fromJson(
+            e as Map<String, Object?>,
+          ).toEntity(),
+        )
         .toList();
   }
 }
@@ -78,7 +82,11 @@ class SearchSuggestionDto {
   static List<SearchSuggestion> listToEntities(Object? jsonList) {
     if (jsonList is! List) return const [];
     return jsonList
-        .map((e) => SearchSuggestionDto.fromJson(e as Map<String, Object?>).toEntity())
+        .map(
+          (e) => SearchSuggestionDto.fromJson(
+            e as Map<String, Object?>,
+          ).toEntity(),
+        )
         .toList();
   }
 }
@@ -134,8 +142,9 @@ class SearchRecommendationItemDto {
     if (jsonList is! List) return const [];
     return jsonList
         .map(
-          (e) => SearchRecommendationItemDto.fromJson(e as Map<String, Object?>)
-              .toEntity(),
+          (e) => SearchRecommendationItemDto.fromJson(
+            e as Map<String, Object?>,
+          ).toEntity(),
         )
         .toList();
   }

@@ -32,9 +32,6 @@ class BookshelfDeleteConfirmDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppConfirmDialog(
-      title: _title,
-      message: _description,
-    );
+    return AppConfirmDialog(title: _title, message: _description);
   }
 }

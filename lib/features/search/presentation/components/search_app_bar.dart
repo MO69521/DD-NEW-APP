@@ -49,7 +49,9 @@ class _SearchAppBarState extends State<SearchAppBar> {
     super.initState();
     _controller = TextEditingController(text: widget.initialQuery);
     // 键盘在页面转场结束后再升起，避免与 push 动画抢帧导致的顿挫。
-    WidgetsBinding.instance.addPostFrameCallback((_) => _focusAfterTransition());
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) => _focusAfterTransition(),
+    );
   }
 
   void _focusAfterTransition() {

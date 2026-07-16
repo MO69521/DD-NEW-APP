@@ -3,10 +3,7 @@ import 'package:equatable/equatable.dart';
 import '../domain/entities/profile_page_content.dart';
 
 class ProfileUiState extends Equatable {
-  const ProfileUiState({
-    this.isLoading = false,
-    this.errorMessage,
-  });
+  const ProfileUiState({this.isLoading = false, this.errorMessage});
 
   final bool isLoading;
   final String? errorMessage;

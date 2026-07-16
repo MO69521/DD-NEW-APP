@@ -134,5 +134,3 @@ class _DailyCheckInSectionState extends State<DailyCheckInSection> {
     );
   }
 }
-
-

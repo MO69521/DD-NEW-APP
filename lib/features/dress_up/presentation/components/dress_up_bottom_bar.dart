@@ -10,11 +10,7 @@ import '../../../../shared/widgets/app_button.dart';
 ///
 /// 选中项即为当前使用中时，按钮置灰禁用并显示「已装扮」；否则可点击装扮。
 class DressUpBottomBar extends StatelessWidget {
-  const DressUpBottomBar({
-    super.key,
-    required this.isEquipped,
-    this.onEquip,
-  });
+  const DressUpBottomBar({super.key, required this.isEquipped, this.onEquip});
 
   final bool isEquipped;
   final VoidCallback? onEquip;

@@ -8,5 +8,6 @@ class SettingsRepositoryImpl implements SettingsRepository {
   final SettingsDataSource _dataSource;
 
   @override
-  Future<SettingsPageContent> fetchPageContent() => _dataSource.fetchPageContent();
+  Future<SettingsPageContent> fetchPageContent() =>
+      _dataSource.fetchPageContent();
 }

@@ -130,10 +130,7 @@ class _UserInfo extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        AppNetworkAvatar(
-          imageUrl: avatarUrl,
-          size: AppSizes.profileAvatarSize,
-        ),
+        AppNetworkAvatar(imageUrl: avatarUrl, size: AppSizes.profileAvatarSize),
         const SizedBox(width: AppSpacing.md),
         Expanded(
           child: Column(

@@ -140,10 +140,7 @@ class BookDetailPromoBar extends StatelessWidget {
       child: Stack(
         children: [
           const Positioned.fill(
-            child: AppAssetImage(
-              assetPath: _rewardTagAsset,
-              fit: BoxFit.fill,
-            ),
+            child: AppAssetImage(assetPath: _rewardTagAsset, fit: BoxFit.fill),
           ),
           Positioned(
             left: 0,
@@ -192,12 +189,13 @@ class _ClaimButtonState extends State<_ClaimButton>
       vsync: this,
       duration: AppDurations.membershipCtaSweep,
     )..repeat();
-    _breathScale = Tween<double>(
-      begin: AppSizes.membershipCtaBreathScaleMin,
-      end: AppSizes.membershipCtaBreathScaleMax,
-    ).animate(
-      CurvedAnimation(parent: _breathController, curve: Curves.easeInOut),
-    );
+    _breathScale =
+        Tween<double>(
+          begin: AppSizes.membershipCtaBreathScaleMin,
+          end: AppSizes.membershipCtaBreathScaleMax,
+        ).animate(
+          CurvedAnimation(parent: _breathController, curve: Curves.easeInOut),
+        );
   }
 
   @override

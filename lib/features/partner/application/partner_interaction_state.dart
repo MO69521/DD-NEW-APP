@@ -43,11 +43,11 @@ class PartnerInteractionState extends Equatable {
 
   @override
   List<Object?> get props => [
-        topTab,
-        selectedCategoryIndex,
-        sortMode,
-        selectedFilterIndex,
-        isFilterSheetOpen,
-        interactionSceneIndex,
-      ];
+    topTab,
+    selectedCategoryIndex,
+    sortMode,
+    selectedFilterIndex,
+    isFilterSheetOpen,
+    interactionSceneIndex,
+  ];
 }

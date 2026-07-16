@@ -35,8 +35,7 @@ class PartnerMockDataSource implements PartnerDataSource {
 
   static List<PartnerConversation> _buildConversations() {
     final now = DateTime.now();
-    const preview =
-        '林子杰放下手中的相机，略微抬头，眼神中带着一丝不易察觉的疑惑……';
+    const preview = '林子杰放下手中的相机，略微抬头，眼神中带着一丝不易察觉的疑惑……';
 
     return [
       PartnerConversation(
