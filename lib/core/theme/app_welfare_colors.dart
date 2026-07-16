@@ -75,10 +75,6 @@ abstract final class AppWelfareColors {
       ? AppColors
             .white100 // 浅色主题纯白描边
       : Color(0xFF121721);
-  static const Color checkInMilestoneBubbleStart = Color(
-    0xFFFFD443,
-  ); // light-audit: keep-dark 里程碑气泡黄
-  static const Color checkInMilestoneBubbleEnd = AppBrandColors.accent;
   // 里程碑数值 / 文字：深色白字，浅色墨字（浅底可读）。
   static const Color checkInMilestoneAmount = _isLight
       ? AppColors.textPrimary

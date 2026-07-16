@@ -79,7 +79,8 @@ flowchart LR
 ### bookshelf · [bookshelf_page.dart](../lib/features/bookshelf/presentation/pages/bookshelf_page.dart)
 - **职责**：一级 Tab「书架」：书架/阅读历史双 Tab、书单管理、今日阅读横幅、推荐加载更多。
 - **模块**：`bookshelf_page_header`、`bookshelf_page_tabs`、`bookshelf_tab_scroll_view`、`daily_reading_banner`、`bookshelf_book_grid`、`bookshelf_selectable_book_card`、`bookshelf_empty_view`、`bookshelf_recommendation_section`、`bookshelf_manage_action_overlay`/`action_bar`、`bookshelf_delete_confirm_dialog`。
-- **公共组件**：`AppAsyncPageBody`、`AppSwipeTabSwitcher`、`AppBlurredChromeBar`、`AppTabTopTexture`、`AppTopBar`、`AppTopBarTextButton`、`ElasticTabRow`、`BookGridSkeleton`、`BookGridCard`、`SectionHeader`、`AppListLoadMoreFooter`、`AppConfirmDialog`、`AppSelectionMark`、`AnimatedCountText`、`EmptyState`、`AppBottomNav`、`MainTabController`。
+- **公共组件**：`AppAsyncPageBody`、`AppSwipeTabSwitcher`、`AppBlurredChromeBar`、`AppTabTopTexture`、`AppTopBar`、`AppTopBarTextButton`、`ElasticTabRow`、`BookGridSkeleton`、`BookGridCard`（书架 3 列网格开启 `showCardBackground` 铺卡面底）、`BookCardSurface`、`SectionHeader`、`AppListLoadMoreFooter`、`AppConfirmDialog`、`AppSelectionMark`、`AnimatedCountText`、`EmptyState`、`AppBottomNav`、`MainTabController`。
+- **卡面底**：书架/阅读历史网格及管理态选择卡的每本书统一铺 `BookCardSurface`（`surfaceCard` 语义面：浅色主题白面、`yellow_dark` 深灰面；`md` 圆角 + `xs` 内边距）；`bookshelf_book_grid` 的 `itemHeightForWidth` 已按卡面内边距扣除封面宽度换算高度。
 - **Model**：`BookshelfPageContent`、`BookshelfTab`、`Book`。
 - **Repository**：`BookshelfRepository`（+`BookshelfMembershipService`）。
 - **接入点**：`bookshelf_cubit.dart` → `BookshelfRepositoryImpl` → `bookshelf_data_source.dart`（仅 Mock）。`loadMoreRecommendations()` 本地生成，待接接口。用户态强，需登录后返回个人数据。

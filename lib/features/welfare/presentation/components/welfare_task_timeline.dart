@@ -10,6 +10,7 @@ import '../../../../shared/widgets/app_text.dart';
 import '../../domain/entities/welfare_models.dart';
 import 'welfare_task_timeline_reward_row.dart';
 import 'welfare_task_timeline_styles.dart';
+import 'welfare_timeline_dot.dart';
 
 /// L3 组件 — 福利任务横向进度时间轴。
 class WelfareTaskTimeline extends StatelessWidget {
@@ -119,35 +120,12 @@ class _TimelineProgressBar extends StatelessWidget {
               left:
                   _nodeCenterX(index) - AppSizes.welfareTaskTimelineDotSize / 2,
               top: dotTop,
-              child: _TimelineDot(node: nodes[index]),
+              child: WelfareTimelineDot(
+                isHighlighted:
+                    nodes[index].isReached || nodes[index].isActive,
+              ),
             ),
         ],
-      ),
-    );
-  }
-}
-
-class _TimelineDot extends StatelessWidget {
-  const _TimelineDot({required this.node});
-
-  final WelfareTaskTimelineNode node;
-
-  @override
-  Widget build(BuildContext context) {
-    final isHighlighted = node.isReached || node.isActive;
-
-    return Container(
-      width: AppSizes.welfareTaskTimelineDotSize,
-      height: AppSizes.welfareTaskTimelineDotSize,
-      decoration: BoxDecoration(
-        color: isHighlighted
-            ? AppWelfareColors.taskTimelineDotReached
-            : AppWelfareColors.taskTimelineDot,
-        shape: BoxShape.circle,
-        border: Border.all(
-          color: AppWelfareColors.taskTimelineDotBorder,
-          width: AppSizes.welfareTaskTimelineDotBorderWidth,
-        ),
       ),
     );
   }

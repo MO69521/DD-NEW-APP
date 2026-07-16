@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../../core/domain/entities/book.dart';
 import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
+import '../../../../shared/components/book_card_surface.dart';
 import '../../../../shared/components/book_grid_card.dart';
 import 'bookshelf_selectable_book_card.dart';
 
@@ -24,8 +25,11 @@ class BookshelfBookGrid extends StatelessWidget {
   static double itemHeightForWidth(double maxWidth) {
     const totalSpacing = AppSpacing.md * (crossAxisCount - 1);
     final itemWidth = (maxWidth - totalSpacing) / crossAxisCount;
-    final coverHeight = itemWidth / AppSizes.bookCoverGridAspectRatio;
-    return coverHeight +
+    // 卡面底占满单元格，封面宽度需扣除左右卡面内边距。
+    final coverWidth = itemWidth - BookCardSurface.padding * 2;
+    final coverHeight = coverWidth / AppSizes.bookCoverGridAspectRatio;
+    return BookCardSurface.padding * 2 +
+        coverHeight +
         AppSizes.bookGridCoverToTextGap +
         AppSizes.bookGridTextBlockHeight;
   }
@@ -77,6 +81,7 @@ class BookshelfBookGrid extends StatelessWidget {
           coverTag: book.coverTag,
           onTap: onBookTap == null ? null : () => onBookTap(book, heroTag),
           heroTag: heroTag,
+          showCardBackground: true,
         );
       }, childCount: books.length),
     );
@@ -110,6 +115,7 @@ class BookshelfBookGrid extends StatelessWidget {
               coverAsset: book.coverAsset,
               coverTag: book.coverTag,
               onTap: onBookTap == null ? null : () => onBookTap!(book),
+              showCardBackground: true,
             );
           },
         );

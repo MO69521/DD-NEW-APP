@@ -78,9 +78,9 @@ abstract final class AppBrandColors {
       ? AppPalette.pink500Alpha40
       : AppPalette.yellow500Alpha40;
 
-  /// 浅色外壳卡片细描边：pink_light 用浅粉，yellow_light 用中性浅灰（yellow_dark 不使用）。
+  /// 浅色外壳卡片细描边：pink_light 用更浅的浅粉（pink75），yellow_light 用中性浅灰（yellow_dark 不使用）。
   static const Color lightCardBorder = themeId == _pinkLight
-      ? AppPalette.pink100
+      ? AppPalette.pink75
       : AppPalette.neutralCool200;
 
   /// 极光渐变亮核（暖米金）。pink_light 暂复用 yellow_dark（v1 已知项）。

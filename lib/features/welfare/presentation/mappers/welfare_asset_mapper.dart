@@ -25,8 +25,8 @@ abstract final class WelfareAssetMapper {
     return switch (type) {
       // 能量图标全局统一为 energy.svg（矢量，按使用尺寸缩放不失真）。
       CheckInRewardType.energy => 'assets/icons/welfare/energy.svg',
-      CheckInRewardType.stardust =>
-        'assets/icons/welfare/check_in_stardust.png',
+      // 星尘图标全局统一为 stardust.png（与货币条星尘共用同一张切图）。
+      CheckInRewardType.stardust => 'assets/icons/welfare/stardust.png',
       CheckInRewardType.freeCard => 'assets/icons/welfare/free_card.png',
     };
   }

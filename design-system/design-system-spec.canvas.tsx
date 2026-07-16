@@ -1685,7 +1685,7 @@ function SemanticTierView() {
             ["textPrimary", swatch("#FFFFFF"), "#FFFFFF", "#1A1A2E", "一级文字"],
             ["textSecondary", swatch("#9AA0AA"), "#9AA0AA", "#6B7280", "二级文字"],
             ["textTertiary", swatch("#737B86"), "#737B86", "#9B9B9B", "三级文字 / 占位"],
-            ["borderSubtle", alphaSwatch("rgba(255,255,255,0.04)", APP.bg), "whiteAlpha04", "#F4D9E4", "弱描边（深色态全局边框）"],
+            ["borderSubtle", alphaSwatch("rgba(255,255,255,0.04)", APP.bg), "whiteAlpha04", "#F8E6ED", "弱描边（深色态全局边框）"],
             ["divider", swatch("#232A33"), "#232A33", "#F3F4F6", "分割线"],
             ["overlayScrim80", alphaSwatch("rgba(0,0,0,0.8)", "#FFFFFF"), "blackAlpha80", "blackAlpha80", "弹窗遮罩"],
           ].map((r) => r.map(cell))}
@@ -1882,7 +1882,7 @@ function BrandSwatches() {
       title: "粉 / 品红（pink · magenta）",
       note: "浅色实验主强调、伙伴粉、VIP 粉紫渐变",
       colors: [
-        ["pink100", "#F4D9E4"],
+        ["pink75", "#F8E6ED"],
         ["pink100Soft", "#FFD5DB"],
         ["pink200", "#FF9CC7"],
         ["pink400", "#FF7AA8"],
@@ -2015,7 +2015,7 @@ function MultiStyleSection() {
             ["标题 / 正文", tvCode("textPrimary"), tv("#FFFFFF", "白"), tv("#1A1A2E", "墨")],
             ["次要文字", tvCode("textSecondary"), tv("#9AA0AA"), tv("#6B7280")],
             ["卡片面", tvCode("surface"), tv("#151B24"), tv("#FFFFFF")],
-            ["卡片描边", tvCode("borderSubtle"), tvCode("whiteAlpha04 · 4% 白"), tv("#F4D9E4", "浅粉")],
+            ["卡片描边", tvCode("borderSubtle"), tvCode("whiteAlpha04 · 4% 白"), tv("#F8E6ED", "浅粉")],
             ["分割线", tvCode("divider"), tv("#232A33"), tv("#F3F4F6")],
             ["主按钮 · 底", tvCode("primary"), tv("#FFE847", "黄"), tv("#FF4D88", "粉")],
             ["主按钮 · 字", tvCode("onPrimary"), tv("#090E17", "深"), tv("#FFFFFF", "白")],

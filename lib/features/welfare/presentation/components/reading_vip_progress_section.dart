@@ -11,6 +11,7 @@ import '../../../../shared/widgets/app_text.dart';
 import '../../domain/entities/welfare_models.dart';
 import '../mappers/welfare_asset_mapper.dart';
 import 'welfare_reward_bubble.dart';
+import 'welfare_timeline_dot.dart';
 
 /// L3 组件 — VIP 翻倍中的 7 日阅读福利进度卡（Figma 559:23119）。
 class ReadingVipProgressSection extends StatelessWidget {
@@ -212,7 +213,9 @@ class _ReadingProgressNode extends StatelessWidget {
                     height: AppSizes.welfareReadingFreeCardHeight,
                     fit: BoxFit.contain,
                   )
-                : _ProgressDot(isActive: node.isActive || node.isReached),
+                : WelfareTimelineDot(
+                    isHighlighted: node.isActive || node.isReached,
+                  ),
           ),
         ),
         const SizedBox(height: AppSpacing.xs),
@@ -226,26 +229,6 @@ class _ReadingProgressNode extends StatelessWidget {
           overflow: TextOverflow.ellipsis,
         ),
       ],
-    );
-  }
-}
-
-class _ProgressDot extends StatelessWidget {
-  const _ProgressDot({required this.isActive});
-
-  final bool isActive;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: AppSizes.welfareTaskTimelineDotSize,
-      height: AppSizes.welfareTaskTimelineDotSize,
-      decoration: BoxDecoration(
-        color: isActive
-            ? AppWelfareColors.taskTimelineFill
-            : AppWelfareColors.taskTimelineDot,
-        shape: BoxShape.circle,
-      ),
     );
   }
 }

@@ -48,6 +48,7 @@
 - 使用 `flutter_svg`，经 `AppIcon` / `AppAssetImage` 加载。
 - **通用单色图标**：仍可用 `color` 参数注入 token 语义色。
 - **主题完整色稿**（底栏 Tab、书详加入书架 / 送心）：经 `AppThemeAssets` 按主题选文件，**禁止**再染 `color`。
+- **导出禁用 Display P3（强制）**：Figma 导出 SVG 时若开启 P3，`fill`/`stroke`/`stop-color` 会带 `style="...:color(display-p3 …);"`。`flutter_svg` 无法解析 `color(display-p3 …)`，且 CSS `style` 优先级高于 `fill=`/`stroke=` 呈现属性，会导致填充/描边被丢弃——图标渲染为纯描边或**整体不可见**（曾致 `yellow_light` 底栏图标只剩黑描边 / 消失）。导出时关闭 P3 用 sRGB 十六进制；已入库的 P3 SVG 需清洗掉 `style` 内的 `…:color(display-p3 …);` 声明（保留同段的 `#hex` 呈现属性即可）。
 
 ## 5.1 主题资源（`AppThemeAssets`）
 

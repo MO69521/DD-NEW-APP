@@ -63,7 +63,8 @@ abstract final class AppPalette {
   static const Color neutralGray500 = Color(0xFF919191);
   static const Color neutralGray600 = Color(0xFF8C8C8C);
   static const Color neutralGray700 = Color(0xFF757575);
-  static const Color pink100 = Color(0xFFF4D9E4);
+  // 浅色卡片细描边用的浅粉白（比旧 pink100 #F4D9E4 更轻，降低粉气、仍保留一点粉）。
+  static const Color pink75 = Color(0xFFF8E6ED);
 
   // ── 主题基色 Alpha 原语 ──
   static const Color neutralCool950Alpha00 = Color(0x00090E17);

@@ -18,6 +18,121 @@
 
 > 研发知识库与工程变更日志，**追加式**记录，勿覆盖历史。每次开发按「日期 / 新增 / 修改 / 删除 / 影响模块 / Breaking Changes」登记。
 
+## 2026-07-16（底栏选中标签改用主文字色）
+
+### 修改
+- 底部导航选中态标签颜色由 `AppColors.accentYellow`（品牌强调色）改为 `AppColors.textPrimary`：`navLabelActiveDark`（`lib/core/theme/app_text_styles.dart`）。
+- 三主题经 `textPrimary` 既有 `_isLight` 分支解析：`yellow_light` / `pink_light` 深墨 `#1A1A2E`（黑字），`yellow_dark` 纯白。选中态图标仍为主题色稿（黄/粉），仅标签文字改色。
+- 已在 iPhone 17 模拟器 `--dart-define=THEME=yellow_light` 验证：选中「书架」标签为黑字、图标黄色，未选标签灰色。
+
+### 影响模块
+- `lib/core/theme/app_text_styles.dart`（`navLabelActiveDark`）
+- `design-system/README.md`（§底部导航：选中标签由 `primary` 更正为 `textPrimary`）
+
+### Breaking Changes
+- 无。
+
+## 2026-07-16（修复 yellow_light 底栏图标不显示）
+
+### 修改
+- 清洗 `assets/icons/nav/yellow_light/` 全部 10 个底栏 Tab 图标：去掉 `fill`/`stroke` 的 `style="...:color(display-p3 …);"` 声明，保留同段 `#hex` 呈现属性。
+- 根因：这批 SVG 由 Figma 以 Display P3 导出，`flutter_svg` 无法解析 `color(display-p3 …)`，而 CSS `style` 优先级高于 `fill=`/`stroke=`，导致填充/描边被丢弃——激活态 `书城` 只剩黑描边、未选中态 `福利/伙伴/书架/我的` 完全不可见。
+- 已在 iPhone 17 模拟器 `--dart-define=THEME=yellow_light` 重建验证：激活态黄色实心 home、未选中态灰色图标均正常显示。
+- `pink_light` / `yellow_dark` 两包为纯 `#hex` 导出，不受影响，无需改动。
+
+### 影响模块
+- `assets/icons/nav/yellow_light/*.svg`（10 个）
+- `docs/09_Assets.md`（新增「导出禁用 Display P3」强制约定）
+
+### Breaking Changes
+- 无。
+
+## 2026-07-16（书架书卡增加卡面底）
+
+### 新增
+- 新增 `lib/shared/components/book_card_surface.dart`（`BookCardSurface`）：网格书卡卡面底，卡面色走语义 `AppColors.surfaceCard`、`AppRadius.md` 圆角、`AppSpacing.xs` 内边距，作为卡面样式单一真源。
+
+### 修改
+- 书架/阅读历史网格每本书铺一层卡面底：`BookCardVertical` / `BookGridCard` 新增可选 `showCardBackground`（默认 false，其余调用点外观不变），书架网格 `BookshelfBookGrid` 两处渲染路径开启。
+- 书架管理态选择卡 `BookshelfSelectableBookCard` 同步铺 `BookCardSurface`。
+- `BookshelfBookGrid.itemHeightForWidth` 按卡面内边距扣除封面宽度重新换算单元格高度。
+- 三主题统一：卡面 `surfaceCard` 与标题 `textOnDark`(=`textPrimary`) 均经既有 `_isLight` 分支解析——`pink_light`/`yellow_light` 为白面 + 深墨字，`yellow_dark` 为深灰面 + 白字，文字与卡面对比在三主题均可读，无新增 token、无 keep-dark 例外。
+
+### 影响模块
+- `lib/shared/components/book_card_surface.dart`（新增）
+- `lib/shared/components/book_card_variants.dart`、`lib/shared/components/book_grid_card.dart`
+- `lib/features/bookshelf/presentation/components/bookshelf_book_grid.dart`、`bookshelf_selectable_book_card.dart`
+- `docs/05_Components.md`、`docs/06_Pages.md`
+
+### Breaking Changes
+- 无（`showCardBackground` 默认 false，`BookCardVertical`/`BookGridCard` 现有调用点行为不变）。
+
+## 2026-07-16（福利进度节点统一：7日阅读对齐任务时间线）
+
+### 新增
+- `welfare_timeline_dot.dart`：抽出共享的进度时间线节点圆点 `WelfareTimelineDot`（已达/可领橙色实心 `taskTimelineDotReached` + 未达灰底 `taskTimelineDot`，统一 2px 描边环 `taskTimelineDotBorder`）。
+
+### 修改
+- `welfare_task_timeline.dart`：任务时间线节点由私有 `_TimelineDot` 改为复用 `WelfareTimelineDot`（外观不变）。
+- `reading_vip_progress_section.dart`：7 日阅读福利进度节点由私有 `_ProgressDot`（无描边、高亮用 `taskTimelineFill`）改为复用 `WelfareTimelineDot`，补齐描边环并与任务时间线节点样式完全一致。
+- 节点色 token 均为主题分支（`taskTimelineDotReached`/`taskTimelineDot`/`taskTimelineDotBorder`），一处共用三主题（`yellow_dark`/`pink_light`/`yellow_light`）自动解析。
+
+### 影响模块
+- `lib/features/welfare/presentation/components/welfare_timeline_dot.dart`（新增 L3）
+- `lib/features/welfare/presentation/components/welfare_task_timeline.dart`
+- `lib/features/welfare/presentation/components/reading_vip_progress_section.dart`
+
+### Breaking Changes
+- 无
+
+## 2026-07-16（福利页切图统一命名对齐）
+
+### 修改
+- 切图更新并统一命名后，`WelfareAssetMapper.checkInRewardIconAsset` 的星尘图标由 `check_in_stardust.png` 改为 `stardust.png`（与货币条星尘 `CurrencyConfig` 共用同一张切图，去掉重复文件）。
+- 其余福利图标引用（`recharge_info.svg`、`vip_badge.png`、`check_in_claimed.svg`、`stardust.png`、`energy.svg` 等）本已是统一命名，无需改动。
+- 图标为主题无关的共享资源，一处引用三主题（`yellow_dark`/`pink_light`/`yellow_light`）共用；已在 `yellow_light` 预览机验证福利页图标全部正常渲染。
+
+### 影响模块
+- `lib/features/welfare/presentation/mappers/welfare_asset_mapper.dart`
+- `assets/icons/welfare/`（切图重命名，按目录注册自动打包）
+
+### Breaking Changes
+- 无
+
+## 2026-07-16（pink_light 卡片描边调浅）
+
+### 新增
+- `AppPalette.pink75 = #F8E6ED`：比旧 `pink100 #F4D9E4` 更浅的浅粉，用作 `pink_light` 浅色卡片细描边（经用户确认取值）。
+
+### 修改
+- `AppBrandColors.lightCardBorder`（`pink_light` 分支）由 `pink100` 改为 `pink75`，全局卡片描边（`borderSubtle` / `guessLikeTagBorder` 等）粉色系整体调浅。`yellow_light`（中性浅灰 `neutralCool200`）与 `yellow_dark`（`whiteAlpha04`）不受影响。
+- 同步 `design-system/README.md`、`design-system-spec.canvas.tsx`（+ 托管副本）三处一致。
+
+### 删除
+- `AppPalette.pink100`（改色后不再被引用）。
+
+### 影响模块
+- `lib/core/theme/app_palette.dart`、`lib/core/theme/app_brand_colors.dart`
+- `design-system/README.md`、`design-system/design-system-spec.canvas.tsx`
+
+### Breaking Changes
+- 无（仅 `pink_light` 描边取值变浅）
+
+## 2026-07-16（每日签到里程碑气泡底色对齐累计签到卡）
+
+### 修改
+- `check_in_milestone_bubble.dart`：里程碑能量气泡（100/150/200）由黄色渐变底改为与左侧「累计签到」卡同底（`checkInDayBg`），符合 `design-system/README.md` §签到色「里程碑气泡底 = `checkInDayBg`」的既有规范。三主题经 `_isLight` 分支自动覆盖。去掉气泡描边（描边在底部三角尾巴处会穿帮）。
+
+### 删除
+- `app_welfare_colors.dart`：移除改色后不再引用的 `checkInMilestoneBubbleStart` / `checkInMilestoneBubbleEnd` 渐变 token（此前未在 README 登记）。
+
+### 影响模块
+- `lib/features/welfare/presentation/components/check_in_milestone_bubble.dart`
+- `lib/core/theme/app_welfare_colors.dart`
+
+### Breaking Changes
+- 无
+
 ## 2026-07-15（flutter-post-edit-audit skill 瘦身：references 下沉）
 
 ### 修改

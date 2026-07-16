@@ -13,6 +13,7 @@ class BookGridCard extends StatelessWidget {
     this.coverTag,
     this.onTap,
     this.heroTag,
+    this.showCardBackground = false,
   });
 
   final String title;
@@ -21,6 +22,9 @@ class BookGridCard extends StatelessWidget {
   final BookCoverTag? coverTag;
   final VoidCallback? onTap;
   final Object? heroTag;
+
+  /// 透传给 [BookCardVertical]：是否为整张卡片铺卡面底（默认关闭）。
+  final bool showCardBackground;
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +35,7 @@ class BookGridCard extends StatelessWidget {
       coverTag: coverTag,
       onTap: onTap,
       heroTag: heroTag,
+      showCardBackground: showCardBackground,
     );
   }
 }

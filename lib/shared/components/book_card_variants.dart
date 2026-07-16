@@ -8,6 +8,7 @@ import '../widgets/app_pressable.dart';
 import '../widgets/app_text.dart';
 import '../widgets/book_cover.dart';
 import '../../core/theme/app_colors.dart';
+import 'book_card_surface.dart';
 import 'book_cover_tag_badge.dart';
 
 /// 网格变体：上图下文。
@@ -20,6 +21,7 @@ class BookCardVertical extends StatelessWidget {
     this.coverTag,
     this.onTap,
     this.heroTag,
+    this.showCardBackground = false,
   });
 
   final String title;
@@ -29,35 +31,41 @@ class BookCardVertical extends StatelessWidget {
   final VoidCallback? onTap;
   final Object? heroTag;
 
+  /// 是否为整张卡片（封面 + 文本）铺一层卡面底（[BookCardSurface]）。
+  /// 默认关闭，仅书架网格开启，其余调用点外观不变。
+  final bool showCardBackground;
+
   @override
   Widget build(BuildContext context) {
+    final content = Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        BookCover(
+          assetPath: coverAsset,
+          aspectRatio: AppSizes.bookCoverGridAspectRatio,
+          heroTag: heroTag,
+          topEndBadge: coverTag == null
+              ? null
+              : BookCoverTagBadge(tag: coverTag!),
+        ),
+        const SizedBox(height: AppSizes.bookGridCoverToTextGap),
+        _BookCardTextContent(
+          title: title,
+          category: category,
+          titleStyle: AppTextStyles.bookGridTitleDark.copyWith(
+            color: AppColors.textOnDark,
+          ),
+          titleMaxLines: 2,
+          titleCategoryGap: AppSizes.bookGridTitleCategoryGap,
+          fixedHeight: AppSizes.bookGridTextBlockHeight,
+          pinCategoryBottom: false,
+        ),
+      ],
+    );
+
     return AppPressable(
       onTap: onTap,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          BookCover(
-            assetPath: coverAsset,
-            aspectRatio: AppSizes.bookCoverGridAspectRatio,
-            heroTag: heroTag,
-            topEndBadge: coverTag == null
-                ? null
-                : BookCoverTagBadge(tag: coverTag!),
-          ),
-          const SizedBox(height: AppSizes.bookGridCoverToTextGap),
-          _BookCardTextContent(
-            title: title,
-            category: category,
-            titleStyle: AppTextStyles.bookGridTitleDark.copyWith(
-              color: AppColors.textOnDark,
-            ),
-            titleMaxLines: 2,
-            titleCategoryGap: AppSizes.bookGridTitleCategoryGap,
-            fixedHeight: AppSizes.bookGridTextBlockHeight,
-            pinCategoryBottom: false,
-          ),
-        ],
-      ),
+      child: showCardBackground ? BookCardSurface(child: content) : content,
     );
   }
 }

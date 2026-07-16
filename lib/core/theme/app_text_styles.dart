@@ -260,7 +260,8 @@ abstract final class AppTextStyles {
 
   static TextStyle get navLabelActiveDark => captionSm.copyWith(
     fontWeight: AppFontWeights.medium,
-    color: AppColors.accentYellow,
+    // 选中态标签用主文字色（浅色主题深墨、深色主题纯白），三主题经 textPrimary 分支解析。
+    color: AppColors.textPrimary,
   );
 
   static TextStyle get navLabelInactiveDark => captionSm.copyWith(
