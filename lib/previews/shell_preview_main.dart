@@ -26,7 +26,7 @@ class ShellPreviewApp extends StatelessWidget {
       value: AppTheme.systemUiOverlayStyle,
       child: MaterialApp.router(
         title: '主 Tab 预览',
-        theme: AppTheme.dark,
+        theme: AppTheme.current,
         debugShowCheckedModeBanner: false,
         routerConfig: AppRouter.router,
       ),

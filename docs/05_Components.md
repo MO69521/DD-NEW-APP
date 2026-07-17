@@ -19,6 +19,7 @@
 | `AppAssetImage` · [app_asset_image.dart](../lib/shared/widgets/app_asset_image.dart) | 按扩展名自动选 SVG/位图 | `assetPath` req · `width` · `height` · `fit` · `color` | 全站通用（40+） | 强烈建议 | 与 `AppIcon` 职责相近，可评估合并 |
 | `AppIcon` · [app_icon.dart](../lib/shared/widgets/app_icon.dart) | 加载 SVG 图标 | `assetPath` req · `width/height` · `color` | 约 25 处 | 建议 | 可并入 `AppAssetImage` |
 | `AppSwitch` · [app_switch.dart](../lib/shared/widgets/app_switch.dart) | 深色 UI 开关 | `value` req · `onChanged` req | settings、dev_tools | 建议 | 已足够 |
+| `AppDigitCodeInput` · [app_digit_code_input.dart](../lib/shared/widgets/app_digit_code_input.dart) | 分格数字验证码/密码输入（单格最大 56px） | `value`/`onChanged`/`length` req · `obscureText` · `autoFocus` | auth、settings、dev_tools | 强烈建议 | 已覆盖验证码与独立密码 |
 | `AppSelectionMark` · [app_selection_mark.dart](../lib/shared/widgets/app_selection_mark.dart) | 圆形选中标记 | `isSelected` req · 各色/边宽可覆写 | auth、bookshelf、currency_wallet、help_feedback | 建议 | 已足够 |
 | `AppNetworkAvatar` · [app_network_avatar.dart](../lib/shared/widgets/app_network_avatar.dart) | 圆形网络头像 + 占位 | `imageUrl` req · `size` req · `placeholderAsset` | my_messages、dress_up、membership、profile、account_settings | 建议 | 已足够 |
 | `AnimatedCountText` · [animated_count_text.dart](../lib/shared/widgets/animated_count_text.dart) | 数值滚动文本 | `value` req · `style` · `prefix/suffix` | currency_wallet、bookshelf | 建议 | 已足够 |
@@ -80,11 +81,11 @@
 | `AppGroupedListCard` · [app_grouped_list_card.dart](../lib/shared/components/app_grouped_list_card.dart) | 分组列表卡（标题 + 分割线） | `title` · `children` req | settings、account_settings | 建议 | 已足够 |
 | `AppNavigationListRow` · [app_navigation_list_row.dart](../lib/shared/components/app_navigation_list_row.dart) | 导航列表行（标题 + 箭头） | `label` req · `subtitle` · `trailing` · `onTap` | settings、account_settings | 建议 | 已足够 |
 | `BookCardLargeRow` · [book_card_large_row.dart](../lib/shared/components/book_card_large_row.dart) | 大封面横向书卡 | `coverAsset`/`title` req · `meta` · `description` · `trailing` | category、editor_pick、ranking、search | 强烈建议 | 已足够 |
-| `BookGridCard` · [book_grid_card.dart](../lib/shared/components/book_grid_card.dart) | 网格竖向书卡（薄封装） | `title`/`category`/`coverAsset` req · `coverTag` · `heroTag` · `showCardBackground`(默认 false) | book_detail、bookshelf、bookstore | 强烈建议 | 与 `BookCardVertical` 可评估合并 |
-| `book_card_variants.dart`（`BookCardVertical` / `BookCardRankingCompact` / `BookCardHorizontal`） | 书卡变体集合 | 各 `title/category/coverAsset` req · Vertical 支持 `showCardBackground` 铺卡面底 | Vertical 经 `BookGridCard`；其余遗留 | 部分（Vertical 是） | **收敛**：`RankingCompact`/`Horizontal` 遗留，建议合并或删 |
-| `BookCardSurface` · [book_card_surface.dart](../lib/shared/components/book_card_surface.dart) | 网格书卡卡面底（`surfaceCard` + `md` 圆角 + `xs` 内边距，三主题语义解析） | `child` req · 静态 `padding`/`radius` 供网格高度换算复用 | bookshelf（书架/阅读历史 + 管理态选择卡） | 建议 | 已足够 |
+| `BookGridCard` · [book_grid_card.dart](../lib/shared/components/book_grid_card.dart) | 网格竖向书卡（薄封装） | `title`/`category`/`coverAsset` req · `coverTag` · `heroTag` · `showCardBackground`(默认 false；开启时封面左/上/右贴边) | book_detail、bookshelf、bookstore | 强烈建议 | 与 `BookCardVertical` 可评估合并 |
+| `book_card_variants.dart`（`BookCardVertical` / `BookCardRankingCompact` / `BookCardHorizontal`） | 书卡变体集合 | 各 `title/category/coverAsset` req · Vertical 支持 `showCardBackground` 铺卡面底，封面贴齐卡面左/上/右，文字区保留 `xs` 内边距 | Vertical 经 `BookGridCard`；其余遗留 | 部分（Vertical 是） | **收敛**：`RankingCompact`/`Horizontal` 遗留，建议合并或删 |
+| `BookCardSurface` · [book_card_surface.dart](../lib/shared/components/book_card_surface.dart) | 网格书卡卡面底（`surfaceCard` + `md` 圆角 + 可配置 `contentPadding`，三主题语义解析） | `child` req · `contentPadding` 默认 `xs` · 静态 `padding`/`radius` 供网格高度换算复用 | bookshelf（书架/阅读历史 + 管理态选择卡） | 建议 | 已足够 |
 | `BookListTile` · [book_list_tile.dart](../lib/shared/components/book_list_tile.dart) | 榜单紧凑横向书项（遗留） | `title/category/coverAsset` req | 未被引用 | 否 | **建议删除**（死代码） |
-| `BookCoverTagBadge` · [book_cover_tag_badge.dart](../lib/shared/components/book_cover_tag_badge.dart) | 封面状态角标（磨砂底） | `tag` req · `bookCoverTagBlurSigma` | bookstore；书卡内部 | 建议 | 已足够 |
+| `BookCoverTagBadge` · [book_cover_tag_badge.dart](../lib/shared/components/book_cover_tag_badge.dart) | 封面状态角标（距右上角 4px + 10px regular 文字 + 4×2px 内边距 + 磨砂底） | `tag` req · `bookCoverTagBlurSigma` | bookstore；书卡内部 | 建议 | 三主题统一紧凑样式；“更新”描边固定纯白 4%，减少封面遮挡 |
 | `RankingRankBadge` · [ranking_rank_badge.dart](../lib/shared/components/ranking_rank_badge.dart) | 榜单名次角标（Top3 SVG；4 名起恒白字） | `rank` req | bookstore、ranking | 建议 | 已足够 |
 | 书卡骨架族 · [book_card_skeletons.dart](../lib/shared/components/book_card_skeletons.dart)（`BookLargeRowListSkeleton` / `BookGridSkeleton` 等） | 书卡加载骨架 | `count` · `columns` · `padding` | category、ranking、search、bookshelf | 强烈建议 | 已足够 |
 

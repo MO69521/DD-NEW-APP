@@ -1,13 +1,13 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/config/api_env.dart';
+import '../../../core/domain/entities/book.dart';
 import '../../../core/services/service_locator.dart';
 import '../../../core/theme/app_durations.dart';
 import '../../../core/theme/app_sizes.dart';
 import '../data/datasources/bookstore_mock_datasource.dart';
 import '../data/datasources/bookstore_remote_datasource.dart';
 import '../data/repositories/bookstore_repository_impl.dart';
-import '../../../../core/domain/entities/book.dart';
 import '../domain/entities/bookstore_top_tab.dart';
 import '../domain/repositories/bookstore_repository.dart';
 import 'bookstore_domain_state.dart';
@@ -20,13 +20,14 @@ class BookstoreCubit extends Cubit<BookstoreState> {
       super(const BookstoreState());
 
   final BookstoreRepository _repository;
+  Future<void>? _refreshFuture;
 
   /// 默认仓储：`API_ENV=rest` 时用真实接口，否则用 Mock（无后端时默认）。
   static BookstoreRepository _defaultRepository() {
     return BookstoreRepositoryImpl(
       ApiEnvConfig.isRest
           ? BookstoreRemoteDataSource(ServiceLocator.apiClient)
-          : const BookstoreMockDataSource(),
+          : BookstoreMockDataSource(),
     );
   }
 
@@ -53,6 +54,42 @@ class BookstoreCubit extends Cubit<BookstoreState> {
           ),
         ),
       );
+    }
+  }
+
+  /// 保留当前页面内容执行刷新，避免复用首次加载态造成整页闪屏。
+  Future<void> refresh() {
+    return _refreshFuture ??= _refreshContent().whenComplete(() {
+      _refreshFuture = null;
+    });
+  }
+
+  Future<void> _refreshContent() async {
+    emit(state.copyWith(ui: state.ui.copyWith(isRefreshing: true)));
+    // 刷新动画单轮为 0.8 秒；快速请求也至少完整播放两轮后再释放占位。
+    final refreshAnimationCycle = AppDurations.slow + AppDurations.normal;
+    final minimumVisibleFuture = Future<void>.delayed(
+      refreshAnimationCycle * 2,
+    );
+
+    try {
+      final content = await _repository.fetchPageContent();
+      await minimumVisibleFuture;
+      emit(
+        state.copyWith(
+          ui: state.ui.copyWith(
+            isRefreshing: false,
+            guessLikePage: 0,
+            clearError: true,
+          ),
+          domain: BookstoreDomainState(content: content),
+          guessLikeBooks: List.unmodifiable(content.guessLikeBooks),
+        ),
+      );
+    } catch (_) {
+      await minimumVisibleFuture;
+      emit(state.copyWith(ui: state.ui.copyWith(isRefreshing: false)));
+      rethrow;
     }
   }
 

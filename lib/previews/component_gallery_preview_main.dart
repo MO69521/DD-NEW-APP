@@ -24,7 +24,7 @@ class ComponentGalleryPreviewApp extends StatelessWidget {
       value: AppTheme.systemUiOverlayStyle,
       child: MaterialApp(
         title: '点点穿书 · 组件总览',
-        theme: AppTheme.dark,
+        theme: AppTheme.current,
         debugShowCheckedModeBanner: false,
         home: const ComponentGalleryPage(),
       ),

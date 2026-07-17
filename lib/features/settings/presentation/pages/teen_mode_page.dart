@@ -6,6 +6,7 @@ import '../../../../core/theme/app_radius.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../routes/app_router.dart';
+import '../../../../routes/app_routes.dart';
 import '../../../../shared/components/app_top_bar.dart';
 import '../../../../shared/layouts/app_page_chrome.dart';
 import '../../../../shared/widgets/app_button.dart';
@@ -67,7 +68,8 @@ class TeenModePage extends StatelessWidget {
               label: '开启青少年模式',
               variant: AppButtonVariant.accent,
               isExpanded: true,
-              onPressed: () {},
+              onPressed: () =>
+                  AppRouter.pushNamed(AppRoutes.teenModePasswordName),
             ),
             const SizedBox(height: AppSpacing.md),
             AppText(

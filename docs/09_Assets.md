@@ -13,9 +13,11 @@
 | `assets/lottie/` | Lottie 动画（当前仅 `README.md` 占位，**暂无 .json**） | `AppLottie`（待接入） |
 | `assets/shaders/` | 片元着色器 `aurora.frag`、`liquid_button.frag` | `AuroraBackground` / 液态按钮 |
 
-## 2. Images（位图）
+## 2. Images（图片资源）
 
 - `assets/images/<feature>/`：按业务分目录；**空状态插图**统一放 [`assets/images/empty_states/`](../assets/images/empty_states/)（三主题公用，经 [`AppSharedAssets`](../lib/core/theme/app_shared_assets.dart)）。
+- 书城下拉刷新使用 `assets/images/bookstore/refresh_bear/frame_01.png` … `frame_20.png` 透明序列帧，三主题共用并经 `AppSharedAssets.bookstoreRefreshBearFrames` 集中取用；源图 500×500，界面按 50×50 播放。
+- 书架今日阅读横幅的小熊使用 `assets/images/bookshelf/reading_bear.svg`，由 `AppAssetImage` 自动经 `flutter_svg` 加载；以 64×64 方形画布和 top 8 偏移绘制，使用 `BoxFit.contain` 保持比例，下半身由横幅底边裁剪。
 - **随主题变的位图**：`assets/images/<feature>/<themeId>/`（例：登录头图、我的 Hero、底栏纹理）。
 - `assets/covers/`：书籍封面 mock（真实接入后由后端返回 `coverUrl`，网络图走 `AppNetworkAvatar` / `Image.network` 封装）。
 - 加载：统一 `AppAssetImage(assetPath: ...)`；封面场景用 `BookCover`；主题位图经 `AppThemeAssets`；空态等共用图经 `AppSharedAssets`。
@@ -58,7 +60,7 @@
 |---|---|
 | 底栏纹理 | `assets/images/bottom_nav/<themeId>/nav_texture.png` |
 | 一级 Tab 顶纹理 | `assets/images/tab_top/<themeId>/top_texture.png`（`AppThemeAssets.tabTopTexture`；切图未到位时为 `null`） |
-| 登录页头图 | `assets/images/auth/<themeId>/login_top_bg.png` |
+| 登录页头图 | `yellow_light` 复用 `assets/images/profile/yellow_light/hero_background_default.png`；`pink_light` / `yellow_dark` 保持 `assets/images/auth/<themeId>/login_top_bg.png` |
 | 我的页默认头图 | `assets/images/profile/<themeId>/hero_background_default.png` |
 | 底栏 Tab（10） | `assets/icons/nav/<themeId>/{bookstore,welfare,partner,bookshelf,profile}_{active,inactive}.svg` |
 | 书详加入书架 / 送心（4） | `assets/icons/book_detail/<themeId>/{add_to_shelf,in_shelf,send_heart,send_heart_sent}.svg` |

@@ -2,20 +2,23 @@ import '../../../../core/domain/entities/book.dart';
 import '../../../../core/domain/entities/book_cover_tag.dart';
 import '../../domain/entities/bookstore_page_content.dart';
 import 'bookstore_data_source.dart';
+import 'bookstore_mock_snapshot.dart';
 
-/// Mock 数据源：Phase 1 静态数据；真实接口见 [BookstoreRemoteDataSource]。
+/// Mock 数据源：基于本地书单生成连续内容快照；真实接口见 [BookstoreRemoteDataSource]。
 class BookstoreMockDataSource implements BookstoreDataSource {
-  const BookstoreMockDataSource();
-
+  int _snapshotIndex = 0;
   @override
   Future<BookstorePageContent> fetchPageContent() async {
-    return const BookstorePageContent(
+    final content = buildBookstoreMockSnapshot(
+      snapshotIndex: _snapshotIndex,
       searchPlaceholder: _searchPlaceholder,
       rankingBooksByTab: _rankingBooksByTab,
       editorPicks: _editorPicks,
       guessLikeBooks: _guessYouLike,
       continueReadingBook: _continueReadingBook,
     );
+    _snapshotIndex += 1;
+    return content;
   }
 
   static const Book _continueReadingBook = Book(
@@ -24,11 +27,8 @@ class BookstoreMockDataSource implements BookstoreDataSource {
     category: '都市甜宠',
     coverAsset: 'assets/covers/cover_03.png',
   );
-
   static const String _searchPlaceholder = '穿书后：将门六姝';
-
-  // 榜单书单：推荐 / 人气 / 飙升 / 完结为独立数据；追更 / 潜力 / 互动榜暂复用
-  // 现有书单（mock），接入接口后替换为各自数据。
+  // 推荐 / 人气 / 飙升 / 完结独立；其余榜单暂复用现有 Mock 书单。
   static const Map<RankingTab, List<Book>> _rankingBooksByTab = {
     RankingTab.recommend: _recommendRanking,
     RankingTab.popular: _popularRanking,

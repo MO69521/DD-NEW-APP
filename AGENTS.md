@@ -22,3 +22,17 @@ For every change that touches `lib/**/*.dart` or `design-system/**`:
 
 Pure questions or iterations with no `lib/` or `design-system/` changes do not
 require the audit.
+
+## Preview refresh
+
+After every completed UI, theme, or asset iteration, automatically run:
+
+```bash
+.cursor/hooks/refresh-preview.sh
+```
+
+Do this after checks and the post-edit audit, before reporting completion. If a
+Flutter preview is running, the script syncs the workspace and refreshes it:
+Dart-only changes use hot reload, while `pubspec.yaml` and asset changes such as
+SVG, PNG, fonts, shaders, or JSON use hot restart. If no preview is running, the
+script exits without error; mention that preview verification was skipped.

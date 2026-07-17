@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import '../../core/theme/app_colors.dart';
@@ -49,6 +51,7 @@ class _AppToastView extends StatefulWidget {
 
 class _AppToastViewState extends State<_AppToastView> {
   bool _visible = false;
+  Timer? _dismissTimer;
 
   @override
   void initState() {
@@ -56,11 +59,17 @@ class _AppToastViewState extends State<_AppToastView> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
       setState(() => _visible = true);
-      Future.delayed(AppDurations.toastVisible, () {
+      _dismissTimer = Timer(AppDurations.toastVisible, () {
         if (!mounted) return;
         setState(() => _visible = false);
       });
     });
+  }
+
+  @override
+  void dispose() {
+    _dismissTimer?.cancel();
+    super.dispose();
   }
 
   void _onFadeEnd() {

@@ -53,6 +53,7 @@ abstract final class AppSizes {
   static const double buttonLoadingIndicatorSize = 16;
   static const double buttonIconLabelGap = 8;
   static const double buttonIconLabelGapTight = 4;
+  static const double digitCodeBoxMaxSize = 56;
 
   // ── 搜索栏 / 玻璃态胶囊 ──
   static const double searchBarHeight = 40;
@@ -74,6 +75,7 @@ abstract final class AppSizes {
   static const double bookstoreLoadMoreTriggerOffset = 240;
   static const double bookstoreLoadingIndicatorSize = 20;
   static const double bookstoreLoadingIndicatorStrokeWidth = 2;
+  static const double bookstoreRefreshAnimationSize = 50;
 
   // ── 底部导航 (Figma 353:1522 / 294:5130) ──
   static const double bottomNavBarHeight = 82;
@@ -247,10 +249,11 @@ abstract final class AppSizes {
   // ── 书架页 (Figma 220:9341 / 377:1909) ──
   static const double bookshelfHeaderHeight = 44;
   static const double bookshelfReadingBannerHeight = 54;
-  static const double bookshelfBearIllustrationWidth = 60;
+  static const double bookshelfBearIllustrationWidth = 64;
   static const double bookshelfBearIllustrationHeight = 46;
-  static const double bookshelfBearIllustrationPaintHeight = 54;
-  static const double bookshelfBearIllustrationInset = 3;
+  static const double bookshelfBearIllustrationPaintHeight = 64;
+  static const double bookshelfBearIllustrationLeftInset = 3;
+  static const double bookshelfBearIllustrationTopInset = 8;
   static const double bookshelfReadingBannerContentInsetLeft = 72;
   static const double bookshelfHeaderToBannerGap = 18;
   static const double bookshelfBannerToGridGap = 24;
@@ -272,8 +275,8 @@ abstract final class AppSizes {
   static const double bookshelfEmptyBottomPadding = 8;
 
   // ── 封面右上角状态角标（Figma 1335:12223） ──
-  static const double bookCoverTagInsetTop = 8;
-  static const double bookCoverTagInsetRight = 8.5;
+  static const double bookCoverTagInsetTop = 4;
+  static const double bookCoverTagInsetRight = 4;
 
   /// 封面右上角状态角标背景模糊半径（全主题统一，压在封面上磨砂可读）。
   static const double bookCoverTagBlurSigma = 8;

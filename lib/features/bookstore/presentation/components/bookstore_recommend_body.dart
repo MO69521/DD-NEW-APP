@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -11,27 +12,62 @@ import '../../../../shared/layouts/app_bottom_nav.dart';
 import '../../application/bookstore_cubit.dart';
 import '../../application/bookstore_state.dart';
 import '../../domain/entities/bookstore_top_tab.dart';
+import 'bookstore_refresh_visual.dart';
 import '../components/editor_pick_section.dart';
 import '../components/guess_like_section.dart';
 import '../components/limited_free_section.dart';
 import '../components/ranking_section.dart';
 
+Widget _buildBookstoreRefreshIndicator(
+  BuildContext context,
+  RefreshIndicatorMode refreshState,
+  double pulledExtent,
+  double refreshTriggerPullDistance,
+  double refreshIndicatorExtent,
+) {
+  final progress = (pulledExtent / refreshTriggerPullDistance)
+      .clamp(0.0, 1.0)
+      .toDouble();
+  return Center(
+    child: BookstoreRefreshVisual(
+      refreshState: refreshState,
+      progress: progress,
+    ),
+  );
+}
+
 /// 书城「推荐」Tab 滚动内容：推荐榜 + 编辑推荐 + 猜你喜欢。
-class BookstoreRecommendBody extends StatelessWidget {
+class BookstoreRecommendBody extends StatefulWidget {
   const BookstoreRecommendBody({super.key});
 
+  @override
+  State<BookstoreRecommendBody> createState() => _BookstoreRecommendBodyState();
+}
+
+class _BookstoreRecommendBodyState extends State<BookstoreRecommendBody> {
   static const double _bottomNavReserve =
       AppBottomNav.barHeight + AppSpacing.xl;
+  bool _didPrecacheRefreshFrames = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_didPrecacheRefreshFrames) return;
+    _didPrecacheRefreshFrames = true;
+    precacheBookstoreRefreshFrames(context);
+  }
 
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<BookstoreCubit>();
+    final chromeTopHeight = AppLayout.chromeTopHeight(
+      context,
+      barHeight: AppSizes.bookstoreTopHeaderHeight,
+    );
     final topInset =
-        AppLayout.chromeTopHeight(
-          context,
-          barHeight: AppSizes.bookstoreTopHeaderHeight,
-        ) +
-        AppSizes.bookstoreHeaderToFirstSectionGap;
+        chromeTopHeight + AppSizes.bookstoreHeaderToFirstSectionGap;
+    final refreshIndicatorExtent = chromeTopHeight - AppSpacing.md;
+    final refreshTriggerPullDistance = chromeTopHeight + AppSpacing.xl;
 
     return NotificationListener<ScrollNotification>(
       onNotification: (notification) {
@@ -43,7 +79,16 @@ class BookstoreRecommendBody extends StatelessWidget {
         return false;
       },
       child: CustomScrollView(
+        physics: const BouncingScrollPhysics(
+          parent: AlwaysScrollableScrollPhysics(),
+        ),
         slivers: [
+          CupertinoSliverRefreshControl(
+            refreshTriggerPullDistance: refreshTriggerPullDistance,
+            refreshIndicatorExtent: refreshIndicatorExtent,
+            builder: _buildBookstoreRefreshIndicator,
+            onRefresh: cubit.refresh,
+          ),
           SliverPadding(
             padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm),
             sliver: SliverList(

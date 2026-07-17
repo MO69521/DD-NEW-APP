@@ -9,7 +9,7 @@
 | **数据来源 DataSource** | 提供原始数据 | **Mock 为主**（`*_mock_datasource.dart` / `home_local_datasource.dart`）；仅 `bookstore`、`search` 另有 `*_remote_datasource.dart` | `features/<name>/data/datasources/` |
 | **Repository** | domain 数据契约（UI 只认抽象） | `RepositoryImpl` 依赖 `*_data_source.dart` 抽象，做 DTO→entity 映射与错误归一 | `features/<name>/domain/repositories/`（抽象）+ `data/repositories/`（实现） |
 | **Model** | 数据形态 | domain entities（纯 Dart，`Book`/`BookstorePageContent`/…）；data 层 DTO（`*_dto.dart`，仅 bookstore/search 已建） | `features/<name>/domain/entities/`、`core/domain/entities/`、`data/models/` |
-| **Service** | 跨 feature 能力/会话/网络 | `ServiceLocator` 单例：`authService`(mock/rest)、`authSession`、`apiClient`、`membershipStatus`、`bookshelfMembership`、`onboarding`、`imagePicker`、`socialAppLaunch` | `core/services/`、`core/network/` |
+| **Service** | 跨 feature 能力/会话/网络 | `ServiceLocator` 单例：`authService`(mock/rest)、`authSession`、`apiClient`、`membershipStatus`、`bookshelfMembership`、`onboarding`、`teenMode`、`imagePicker`、`socialAppLaunch` | `core/services/`、`core/network/` |
 | **UI** | 渲染 state、触发 action | `Page` 订阅 `Cubit` 的 state（UI/Domain/Interaction 分离），只读不改数据 | `features/<name>/presentation/` |
 
 **关键事实**：
@@ -105,7 +105,7 @@ static BookstoreRepository _defaultRepository() {
   return BookstoreRepositoryImpl(
     ApiEnvConfig.isRest
         ? BookstoreRemoteDataSource(ServiceLocator.apiClient) // API_ENV=rest
-        : const BookstoreMockDataSource(),                    // 缺省
+        : BookstoreMockDataSource(),                          // 缺省；刷新轮换内容快照
   );
 }
 ```
@@ -130,7 +130,7 @@ flutter run --dart-define=API_ENV=rest --dart-define=API_BASE_URL=https://api.ex
 ## 5. 特殊数据流（不走 feature Repository）
 
 - **会话/鉴权**：`LoginCubit → AuthRepository → AuthService(Rest/Mock) + AuthSessionService`；token 存于 `authSession`，被 `ApiClient` 自动读取注入。**待办**：`InMemoryAuthSessionService` 重启即失效，接入前替换为安全存储。
-- **跨页共享态**（本地服务，非后端）：加/删书架 `BookshelfMembershipService`、会员/用户态 `MembershipStatusService`、新手信息 `OnboardingService`、选图 `ImagePickerService`、第三方拉起 `SocialAppLaunchService`。接真实后端时，这些 service 内部改为经 `ApiClient` 调接口（对 UI 透明）。
+- **跨页共享态**（本地服务，非后端）：加/删书架 `BookshelfMembershipService`、会员/用户态 `MembershipStatusService`、新手信息 `OnboardingService`、青少年模式开启态 `TeenModeService`、选图 `ImagePickerService`、第三方拉起 `SocialAppLaunchService`。青少年模式当前只保存进程内开启态，不保存明文密码；接真实后端时，这些 service 内部改为经 `ApiClient` 调接口（对 UI 透明）。
 - **本地模拟的写操作**：签到、送心/点赞/评论、猜你喜欢分页、装扮穿戴、会员开通等目前在 Cubit 内本地乐观更新，接入时在对应 Repository/DataSource 增加写方法并回填服务端结果。
 
 ## 6. 约定（强制）

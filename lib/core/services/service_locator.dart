@@ -11,6 +11,7 @@ import 'mock_auth_service.dart';
 import 'onboarding_service.dart';
 import 'rest_auth_service.dart';
 import 'social_app_launch_service.dart';
+import 'teen_mode_service.dart';
 
 /// 全局服务注册入口，跨 feature 共享服务通过此处暴露。
 ///
@@ -31,6 +32,7 @@ abstract final class ServiceLocator {
   static OnboardingService? _onboarding;
   static ImagePickerService? _imagePicker;
   static SocialAppLaunchService? _socialAppLaunch;
+  static TeenModeService? _teenMode;
   static const AuthServiceConfig _authConfig = AuthServiceConfig();
 
   /// 会员状态共享服务（单例）。
@@ -52,6 +54,9 @@ abstract final class ServiceLocator {
   /// 第三方登录宿主 App 拉起 / 下载引导服务（单例）。
   static SocialAppLaunchService get socialAppLaunch =>
       _socialAppLaunch ??= const SocialAppLaunchService();
+
+  /// 青少年模式共享状态服务（单例）。
+  static TeenModeService get teenMode => _teenMode ??= TeenModeService();
 
   /// 登录会话共享服务（单例）。
   static AuthSessionService get authSession =>
@@ -77,6 +82,7 @@ abstract final class ServiceLocator {
     _membershipStatus ??= MockMembershipStatusService();
     _bookshelfMembership ??= BookshelfMembershipService();
     _onboarding ??= OnboardingService();
+    _teenMode ??= TeenModeService();
     _authSession ??= InMemoryAuthSessionService(
       initialSession: _skipAuthForPreview ? _previewSession : null,
     );

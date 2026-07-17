@@ -7,6 +7,13 @@ import 'app_radius.dart';
 import 'app_text_styles.dart';
 
 abstract final class AppTheme {
+  /// 当前编译主题对应的 Material 主题。
+  ///
+  /// Material 的 [ThemeData.brightness] 会传递给系统输入法，因此浅色包必须
+  /// 使用 light，确保所有 TextField 拉起浅色键盘；yellow_dark 继续使用 dark。
+  static ThemeData get current =>
+      AppBrandColors.isLightExperiment ? light : dark;
+
   /// 系统状态栏 / 导航栏样式：深色壳用白图标，浅色实验包用深图标（保证可读）。
   static const SystemUiOverlayStyle systemUiOverlayStyle =
       AppBrandColors.isLightExperiment ? _lightOverlayStyle : _darkOverlayStyle;
@@ -32,6 +39,7 @@ abstract final class AppTheme {
   static ThemeData get light {
     return ThemeData(
       useMaterial3: true,
+      brightness: Brightness.light,
       colorScheme: const ColorScheme.light(
         primary: AppColors.primary,
         onPrimary: AppColors.onPrimary,

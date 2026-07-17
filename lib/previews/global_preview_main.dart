@@ -54,7 +54,7 @@ class GlobalPreviewApp extends StatelessWidget {
       value: AppTheme.systemUiOverlayStyle,
       child: MaterialApp.router(
         title: '点点穿书 · 全局预览',
-        theme: AppTheme.dark,
+        theme: AppTheme.current,
         debugShowCheckedModeBanner: false,
         routerConfig: AppRouter.router,
       ),

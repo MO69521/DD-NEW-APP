@@ -14,7 +14,7 @@ import '../widgets/app_text.dart';
 ///
 /// 全局统一角标组件，由 [BookCoverTag] 驱动视觉；全主题统一 [BackdropFilter] 磨砂底，
 /// 压在封面上更易辨认：
-/// - 更新：主色黄底 + 深色字（强调）
+/// - 更新：主色黄底 + 深色字（强调）+ 纯白 4% 描边
 /// - 完结 / 连载：半透明深底 + 白字 + 黑 4% 描边
 class BookCoverTagBadge extends StatelessWidget {
   const BookCoverTagBadge({super.key, required this.tag});
@@ -34,7 +34,7 @@ class BookCoverTagBadge extends StatelessWidget {
       BookCoverTag.serializing => AppColors.bookCoverTagCompletedText,
     };
     final borderColor = switch (tag) {
-      BookCoverTag.updated => AppColors.borderSubtle,
+      BookCoverTag.updated => AppColors.bookCoverTagUpdatedBorder,
       BookCoverTag.completed ||
       BookCoverTag.serializing => AppColors.bookCoverTagCompletedBorder,
     };
@@ -56,8 +56,8 @@ class BookCoverTagBadge extends StatelessWidget {
           ),
           child: Padding(
             padding: const EdgeInsets.symmetric(
-              horizontal: AppSpacing.xs,
-              vertical: AppSpacing.xxs,
+              horizontal: AppSpacing.xxs,
+              vertical: AppSpacing.xxsHalf,
             ),
             child: AppText(
               tag.label,

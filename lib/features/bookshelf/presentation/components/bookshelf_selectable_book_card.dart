@@ -32,6 +32,7 @@ class BookshelfSelectableBookCard extends StatelessWidget {
       onTap: onTap,
       pressScale: AppSizes.tapPressScaleSubtle,
       child: BookCardSurface(
+        contentPadding: EdgeInsets.zero,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -54,30 +55,37 @@ class BookshelfSelectableBookCard extends StatelessWidget {
                   ),
               ],
             ),
-            const SizedBox(height: AppSizes.bookGridCoverToTextGap),
-            SizedBox(
-              height: AppSizes.bookGridTextBlockHeight,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  AppText(
-                    book.title,
-                    style: AppTextStyles.bookGridTitleDark.copyWith(
-                      color: AppColors.textOnDark,
+            Padding(
+              padding: const EdgeInsets.only(
+                left: BookCardSurface.padding,
+                top: AppSizes.bookGridCoverToTextGap,
+                right: BookCardSurface.padding,
+                bottom: BookCardSurface.padding,
+              ),
+              child: SizedBox(
+                height: AppSizes.bookGridTextBlockHeight,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    AppText(
+                      book.title,
+                      style: AppTextStyles.bookGridTitleDark.copyWith(
+                        color: AppColors.textOnDark,
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
                     ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(height: AppSizes.bookGridTitleCategoryGap),
-                  AppText(
-                    book.category,
-                    style: AppTextStyles.bookTagDark.copyWith(
-                      color: AppColors.textOnDarkMuted,
+                    const SizedBox(height: AppSizes.bookGridTitleCategoryGap),
+                    AppText(
+                      book.category,
+                      style: AppTextStyles.bookTagDark.copyWith(
+                        color: AppColors.textOnDarkMuted,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ],

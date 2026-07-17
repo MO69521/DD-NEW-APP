@@ -26,7 +26,7 @@ class PartnerPreviewApp extends StatelessWidget {
       value: AppTheme.systemUiOverlayStyle,
       child: MaterialApp.router(
         title: '伙伴页预览',
-        theme: AppTheme.dark,
+        theme: AppTheme.current,
         debugShowCheckedModeBanner: false,
         routerConfig: AppRouter.router,
       ),

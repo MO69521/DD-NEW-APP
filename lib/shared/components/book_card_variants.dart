@@ -37,36 +37,53 @@ class BookCardVertical extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final content = Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        BookCover(
-          assetPath: coverAsset,
-          aspectRatio: AppSizes.bookCoverGridAspectRatio,
-          heroTag: heroTag,
-          topEndBadge: coverTag == null
-              ? null
-              : BookCoverTagBadge(tag: coverTag!),
-        ),
-        const SizedBox(height: AppSizes.bookGridCoverToTextGap),
-        _BookCardTextContent(
-          title: title,
-          category: category,
-          titleStyle: AppTextStyles.bookGridTitleDark.copyWith(
-            color: AppColors.textOnDark,
-          ),
-          titleMaxLines: 2,
-          titleCategoryGap: AppSizes.bookGridTitleCategoryGap,
-          fixedHeight: AppSizes.bookGridTextBlockHeight,
-          pinCategoryBottom: false,
-        ),
-      ],
+    final cover = BookCover(
+      assetPath: coverAsset,
+      aspectRatio: AppSizes.bookCoverGridAspectRatio,
+      heroTag: heroTag,
+      topEndBadge: coverTag == null ? null : BookCoverTagBadge(tag: coverTag!),
+    );
+    final textContent = _BookCardTextContent(
+      title: title,
+      category: category,
+      titleStyle: AppTextStyles.bookGridTitleDark.copyWith(
+        color: AppColors.textOnDark,
+      ),
+      titleMaxLines: 2,
+      titleCategoryGap: AppSizes.bookGridTitleCategoryGap,
+      fixedHeight: AppSizes.bookGridTextBlockHeight,
+      pinCategoryBottom: false,
     );
 
-    return AppPressable(
-      onTap: onTap,
-      child: showCardBackground ? BookCardSurface(child: content) : content,
-    );
+    final content = showCardBackground
+        ? BookCardSurface(
+            contentPadding: EdgeInsets.zero,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                cover,
+                Padding(
+                  padding: const EdgeInsets.only(
+                    left: BookCardSurface.padding,
+                    top: AppSizes.bookGridCoverToTextGap,
+                    right: BookCardSurface.padding,
+                    bottom: BookCardSurface.padding,
+                  ),
+                  child: textContent,
+                ),
+              ],
+            ),
+          )
+        : Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              cover,
+              const SizedBox(height: AppSizes.bookGridCoverToTextGap),
+              textContent,
+            ],
+          );
+
+    return AppPressable(onTap: onTap, child: content);
   }
 }
 

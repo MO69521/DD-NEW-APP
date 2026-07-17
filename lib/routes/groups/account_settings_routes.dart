@@ -109,6 +109,11 @@ List<RouteBase> accountSettingsRoutes() => [
     builder: (context, state) => const TeenModePage(),
   ),
   GoRoute(
+    path: AppRoutes.teenModePassword,
+    name: AppRoutes.teenModePasswordName,
+    builder: (context, state) => const TeenModePasswordPage(),
+  ),
+  GoRoute(
     path: AppRoutes.settingsDocument,
     name: AppRoutes.settingsDocumentName,
     builder: (context, state) {

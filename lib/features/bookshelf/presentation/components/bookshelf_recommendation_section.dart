@@ -35,33 +35,61 @@ class BookshelfRecommendationSection extends StatelessWidget {
       children: [
         const SectionHeader(title: '为你推荐'),
         const SizedBox(height: AppSpacing.md),
-        LayoutBuilder(
-          builder: (context, constraints) {
-            final itemWidth = (constraints.maxWidth - AppSpacing.md) / 2;
-            return Wrap(
-              spacing: AppSpacing.md,
-              runSpacing: AppSpacing.md,
-              children: [
-                for (final book in books)
-                  SizedBox(
-                    width: itemWidth,
-                    child: Builder(
-                      builder: (context) {
-                        final heroTag = 'book-cover-shelfrec-${book.id}';
-                        return _BookshelfRecommendationCard(
-                          book: book,
-                          heroTag: heroTag,
-                          onTap: onBookTap == null
-                              ? null
-                              : () => onBookTap!(book, heroTag),
-                        );
-                      },
-                    ),
-                  ),
-              ],
-            );
-          },
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: _RecommendationColumn(
+                books: books.indexed
+                    .where((entry) => entry.$1.isEven)
+                    .map((entry) => entry.$2)
+                    .toList(growable: false),
+                onBookTap: onBookTap,
+              ),
+            ),
+            const SizedBox(width: AppSpacing.md),
+            Expanded(
+              child: _RecommendationColumn(
+                books: books.indexed
+                    .where((entry) => entry.$1.isOdd)
+                    .map((entry) => entry.$2)
+                    .toList(growable: false),
+                onBookTap: onBookTap,
+              ),
+            ),
+          ],
         ),
+      ],
+    );
+  }
+}
+
+class _RecommendationColumn extends StatelessWidget {
+  const _RecommendationColumn({required this.books, this.onBookTap});
+
+  final List<Book> books;
+  final void Function(Book book, Object coverHeroTag)? onBookTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        for (var index = 0; index < books.length; index++) ...[
+          if (index > 0) const SizedBox(height: AppSpacing.md),
+          Builder(
+            builder: (context) {
+              final book = books[index];
+              final heroTag = 'book-cover-shelfrec-${book.id}';
+              return _BookshelfRecommendationCard(
+                book: book,
+                heroTag: heroTag,
+                onTap: onBookTap == null
+                    ? null
+                    : () => onBookTap!(book, heroTag),
+              );
+            },
+          ),
+        ],
       ],
     );
   }

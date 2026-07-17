@@ -35,11 +35,15 @@ class MainTabShellPage extends StatefulWidget {
   const MainTabShellPage({
     super.key,
     this.initialIndex = 0,
+    this.initialToastMessage,
+    this.initialToastEventId,
     this.initialBookshelfTabIntent,
     this.initialBookstoreTopTabIntent,
   });
 
   final int initialIndex;
+  final String? initialToastMessage;
+  final String? initialToastEventId;
   final String? initialBookshelfTabIntent;
   final String? initialBookstoreTopTabIntent;
 
@@ -53,12 +57,29 @@ class _MainTabShellPageState extends State<MainTabShellPage> {
   @override
   void initState() {
     super.initState();
+    _showRouteToast(widget.initialToastMessage);
     final intent = widget.initialBookshelfTabIntent;
     if (intent != null && intent.isNotEmpty) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         _mainTabController.openBookshelfTab(intent);
       });
     }
+  }
+
+  @override
+  void didUpdateWidget(covariant MainTabShellPage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.initialToastEventId != widget.initialToastEventId) {
+      _showRouteToast(widget.initialToastMessage);
+    }
+  }
+
+  void _showRouteToast(String? message) {
+    if (message == null || message.isEmpty) return;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      AppToast.show(context, message);
+    });
   }
 
   @override

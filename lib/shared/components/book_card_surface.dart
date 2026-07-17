@@ -9,9 +9,14 @@ import '../../core/theme/app_spacing.dart';
 /// 卡面色走语义 [AppColors.surfaceCard]（浅色主题=白面，深色主题=深灰面），
 /// 三主题经既有 `_isLight` 分支自然解析；圆角/内边距复用全局 token，样式单一真源在此。
 class BookCardSurface extends StatelessWidget {
-  const BookCardSurface({super.key, required this.child});
+  const BookCardSurface({
+    super.key,
+    required this.child,
+    this.contentPadding = const EdgeInsets.all(padding),
+  });
 
   final Widget child;
+  final EdgeInsetsGeometry contentPadding;
 
   /// 卡面内边距（封面/文本与卡边留白），供网格高度换算复用。
   static const double padding = AppSpacing.xs;
@@ -22,7 +27,8 @@ class BookCardSurface extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(padding),
+      padding: contentPadding,
+      clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
         color: AppColors.surfaceCard,
         borderRadius: BorderRadius.circular(radius),

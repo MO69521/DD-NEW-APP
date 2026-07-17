@@ -23,7 +23,7 @@ class EditorPickPreviewApp extends StatelessWidget {
       value: AppTheme.systemUiOverlayStyle,
       child: MaterialApp.router(
         title: '编辑推荐详情页预览',
-        theme: AppTheme.dark,
+        theme: AppTheme.current,
         debugShowCheckedModeBanner: false,
         routerConfig: AppRouter.router,
       ),

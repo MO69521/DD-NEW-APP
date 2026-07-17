@@ -25,13 +25,12 @@ class BookshelfBookGrid extends StatelessWidget {
   static double itemHeightForWidth(double maxWidth) {
     const totalSpacing = AppSpacing.md * (crossAxisCount - 1);
     final itemWidth = (maxWidth - totalSpacing) / crossAxisCount;
-    // 卡面底占满单元格，封面宽度需扣除左右卡面内边距。
-    final coverWidth = itemWidth - BookCardSurface.padding * 2;
-    final coverHeight = coverWidth / AppSizes.bookCoverGridAspectRatio;
-    return BookCardSurface.padding * 2 +
-        coverHeight +
+    // 封面贴齐卡面左/上/右边，文字区保留左右与底部内边距。
+    final coverHeight = itemWidth / AppSizes.bookCoverGridAspectRatio;
+    return coverHeight +
         AppSizes.bookGridCoverToTextGap +
-        AppSizes.bookGridTextBlockHeight;
+        AppSizes.bookGridTextBlockHeight +
+        BookCardSurface.padding;
   }
 
   static Widget sliver({

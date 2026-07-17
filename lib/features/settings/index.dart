@@ -10,4 +10,5 @@ export 'presentation/pages/notification_settings_page.dart';
 export 'presentation/pages/personalized_ads_page.dart';
 export 'presentation/pages/reading_preferences_page.dart';
 export 'presentation/pages/teen_mode_page.dart';
+export 'presentation/pages/teen_mode_password_page.dart';
 export 'presentation/pages/settings_document_page.dart';

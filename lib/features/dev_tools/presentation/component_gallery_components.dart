@@ -171,17 +171,33 @@ class _ComponentGallery extends StatelessWidget {
   }
 
   Widget _buildListAndForm() {
-    return AppGroupedListCard(
-      title: '设置列表',
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        const AppNavigationListRow(label: '阅读偏好', trailingText: '默认'),
-        AppNavigationListRow(
-          label: '推送通知',
-          subtitle: '展示副标题和右侧控件',
-          trailing: AppSwitch(value: switchValue, onChanged: onSwitchChanged),
-          showChevron: false,
+        AppDigitCodeInput(
+          value: '12',
+          length: 4,
+          obscureText: true,
+          autoFocus: false,
+          onChanged: (_) {},
         ),
-        const AppNavigationListRow(label: '帮助与反馈', trailingText: '去看看'),
+        const SizedBox(height: AppSpacing.md),
+        AppGroupedListCard(
+          title: '设置列表',
+          children: [
+            const AppNavigationListRow(label: '阅读偏好', trailingText: '默认'),
+            AppNavigationListRow(
+              label: '推送通知',
+              subtitle: '展示副标题和右侧控件',
+              trailing: AppSwitch(
+                value: switchValue,
+                onChanged: onSwitchChanged,
+              ),
+              showChevron: false,
+            ),
+            const AppNavigationListRow(label: '帮助与反馈', trailingText: '去看看'),
+          ],
+        ),
       ],
     );
   }

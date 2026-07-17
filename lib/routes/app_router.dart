@@ -54,8 +54,18 @@ abstract final class AppRouter {
   }
 
   /// 跳转主 Tab 容器并切换到指定 Tab（如二级页「去福利页」→ 福利中心）。
-  static void goMainTab(int index) {
-    go('${AppRoutes.home}?tab=$index');
+  static void goMainTab(int index, {String? toastMessage}) {
+    final location = Uri(
+      path: AppRoutes.home,
+      queryParameters: {
+        'tab': '$index',
+        if (toastMessage != null && toastMessage.isNotEmpty) ...{
+          'toast': toastMessage,
+          'toastEvent': DateTime.now().microsecondsSinceEpoch.toString(),
+        },
+      },
+    ).toString();
+    go(location);
   }
 
   /// 书籍详情页跳转入口：所有书卡点击统一走此方法，携带书籍以渲染真实封面。

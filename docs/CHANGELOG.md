@@ -2,6 +2,178 @@
 
 > 研发知识库与工程变更日志，**追加式**记录，勿覆盖历史。每次开发按「日期 / 新增 / 修改 / 删除 / 影响模块 / Breaking Changes」登记。
 
+## 2026-07-16（书城推荐页拉动刷新）
+
+### 修改
+- 书城推荐页接入自适应拉动刷新，内容不足一屏时也可触发；`yellow_dark`、`pink_light`、`yellow_light` 共用同一交互。
+- 刷新视觉的出现起点避开顶部 Chrome，随拉动在顶栏与「推荐榜」首卡之间的留白区域逐渐显现。
+- 松手触发后改由 `CupertinoSliverRefreshControl` 持续占据滚动空间：50×50 奔跑小熊序列帧循环播放的同时，推荐卡片及后续内容保持下移；刷新任务完成后才释放空间并整体回弹。Mock 快速返回时使用 `AppDurations.slow * 4`（2 秒）保证弹簧先收敛到固定停留态，并让 1 秒周期的动画完整循环两次。
+- 书城私有刷新视觉插槽接入 20 帧透明 PNG：手指保持拖动、尚未松开时即以 1 秒周期循环播放，刷新中继续奔跑，完成后随回弹消失；三主题共用 `AppSharedAssets.bookstoreRefreshBearFrames`。
+- 将序列帧解码前移到书城推荐页进入阶段，拖动前即完成缓存，避免首次下拉时因逐帧加载而静止、松手后才开始播放；组件测试改用真实按住手势，验证未松手期间帧持续变化且不会提前触发刷新。
+- 修复手指持续按住且刷新任务已完成时动画停在 `done` 帧的问题：刷新视觉在 `drag / armed / refresh / done` 全部可见阶段持续循环，仅在 `inactive` 完全收起后停止。
+- 收紧书城刷新停留态：刷新占位高度由 `chromeTopHeight + AppSpacing.lg` 调整为 `chromeTopHeight`，小熊同步下移 `AppSpacing.sm` 以保持屏幕位置不变，使刷新中下移内容与动画的间距缩小 24px；刷新完成前二者固定停留，完成后统一回弹并隐藏动画。
+- 二次优化刷新停留态：小熊视觉偏移调整为 `AppSpacing.xxl + AppSpacing.xl`，刷新占位收紧为 `chromeTopHeight - AppSpacing.md`，同时保持原刷新触发距离，使小熊净下移约 12px、下方内容与动画间距再缩小约 28px。
+- 按预览反馈将刷新小熊在二次优化位置上继续下移 `AppSpacing.lg`（24px），刷新占位与触发距离保持不变，使动画进一步靠近下方首卡。
+- 加快刷新小熊序列帧速率：单轮由 1 秒缩短为 `AppDurations.slow + AppDurations.normal`（0.8 秒），快速刷新最短停留同步调整为 1.6 秒，仍保证完整循环两次后再回弹消失。
+- 预览 Mock 数据源改为连续内容快照：首次加载保持原顺序，每次刷新后依次轮换榜单、限时免费/编辑推荐及猜你喜欢书籍，确保动画结束后页面信息有可见更新；真实接口模式仍使用服务端返回的新数据。
+- 书封右上角“更新 / 完结 / 连载”共享角标文字由 12px 下调一档至 `AppFontSizes.xs`（10px），角标容器、内边距及配色保持不变，三主题与所有书卡场景统一生效。
+- 继续收紧书封状态角标：内边距由横向 8px / 纵向 4px 下调一档至横向 4px / 纵向 2px，降低对封面的遮挡；文字、圆角、磨砂和配色保持不变，三主题同步。
+- 书封黄色“更新”角标描边由主题感知 `borderSubtle` 收敛为 `bookCoverTagUpdatedBorder`，真值固定为 `whiteAlpha04`（纯白 4%），三个主题统一；“完结/连载”角标保持原样。
+- 封面状态角标定位由顶部 8px / 右侧 8.5px 收紧为顶部/右侧各 4px，更贴近书封右上角，同时保留圆角安全留白；三个主题与所有书卡场景同步。
+- 刷新视觉在留白区域内下移 `AppSpacing.xxl`，尺寸统一走 `AppSizes.bookstoreRefreshAnimationSize`。
+- 新增独立 `BookstoreCubit.refresh()`：刷新时保留现有页面，完成后替换最新书城内容并重置「猜你喜欢」分页，避免复用首次 loading 导致整页闪屏。
+- 同一轮刷新进行中重复触发时复用在途请求，避免重复访问数据源。
+
+### 测试
+- 新增 Cubit 测试，覆盖无闪屏刷新、内容替换、分页重置和重复请求合并。
+- 新增推荐页组件测试，验证刷新入口与 `AlwaysScrollableScrollPhysics` 接线。
+- 三主题编译参数均通过专项测试。
+
+### 影响模块
+- `lib/features/bookstore/application/bookstore_cubit.dart`
+- `lib/features/bookstore/presentation/components/bookstore_recommend_body.dart`
+- `test/features/bookstore/`
+- `docs/06_Pages.md`
+
+### Breaking Changes
+- 无。
+
+## 2026-07-16（浅色主题系统键盘外观）
+
+### 修改
+- 应用与全部预览入口由固定 `AppTheme.dark` 改为 `AppTheme.current`，根据编译主题选择 Material 亮度。
+- `pink_light` / `yellow_light` 的所有系统输入框统一拉起浅色键盘；默认 `yellow_dark` 继续使用深色键盘。
+
+### 测试
+- 新增主题亮度测试，并分别覆盖 `yellow_dark`、`pink_light`、`yellow_light` 编译参数。
+
+### 影响模块
+- `lib/core/theme/app_theme.dart`
+- `lib/app.dart`
+- `lib/previews/*_main.dart`
+- `test/core/theme/app_theme_test.dart`
+- `design-system/README.md`
+
+### Breaking Changes
+- 无。
+
+## 2026-07-16（搜索热搜书籍复用榜单排行角标）
+
+### 修改
+- 搜索初始态「热搜书籍」移除左侧独立的彩色数字排行列，改为在书封左上角复用共享 `RankingRankBadge`。
+- Top 1–3 与榜单页一致使用 `rank_1.svg` / `rank_2.svg` / `rank_3.svg`；第 4 名起复用统一弱化数字角标。
+- `SearchRecommendationRow` 新增可选 `rank`，仅热搜排行场景传入；其他普通推荐列表保持无排行角标。
+- 三主题复用同一共享组件、SVG 和语义色，无主题特例。
+
+### 测试
+- 新增组件测试，验证传入排行时渲染对应 `RankingRankBadge`，未传入时不显示。
+
+### 影响模块
+- `lib/features/search/presentation/components/search_empty_body.dart`
+- `lib/features/search/presentation/components/search_recommendation_row.dart`
+- `test/features/search/presentation/search_recommendation_row_test.dart`
+- `docs/06_Pages.md`
+
+### Breaking Changes
+- 无（`rank` 为可选参数）。
+
+## 2026-07-16（青少年模式 4 位独立密码页）
+
+### 新增
+- 新增青少年模式“设置密码”页：返回顶栏、标题说明、4 位数字密码输入与“确定”按钮；输入满 4 位前按钮保持统一禁用态。
+- 新增 L1 `AppDigitCodeInput` 分格数字输入，支持可配置位数、密码圆点与自动聚焦；单格最大 56px，登录 6 位验证码紧凑铺满，青少年模式 4 位密码保持同尺寸并自动拉开。
+- 新增 `/settings/teen-mode/password` 路由，并接通“开启青少年模式”主按钮。
+
+### 修改
+- 登录验证码的原有私有实现收敛为 `AppDigitCodeInput` 薄封装，交互不变；当前格描边与光标改走 `primary`，三主题分别解析黄/粉强调色。
+- 青少年密码页的背景、文字、输入格、按钮全部使用语义 token，统一覆盖 `yellow_dark`、`pink_light`、`yellow_light`。
+- 设置满 4 位密码后点击“确定”，通过主 Tab 路由参数回到“我的”（index 4），目标页首帧显示“青少年模式已开启” Toast；提示不会随密码页路由销毁。
+- 修复首页主 Tab 被复用时 toast 参数不再触发的问题：提示改为携带独立路由事件，并在页面更新阶段响应；同时同步切换到“我的”Tab。
+- 新增青少年模式进程内共享状态；开启后再次进入设置页，“青少年模式”右侧由“未开启”更新为“已开启”，且不保存明文密码。
+
+### 测试
+- 新增青少年密码页 widget 测试：校验 4 位掩码输入、未完成禁用、输满启用及数字长度限制。
+- 新增主 Tab 路由提示测试：校验目标 Tab 为“我的”且首帧展示“青少年模式已开启” Toast。
+- 新增主 Tab 复用回归测试与设置菜单状态测试，覆盖 toast 重触发、Tab 切换及“已开启”文案。
+
+### 影响模块
+- `lib/shared/widgets/app_digit_code_input.dart`
+- `lib/features/auth/presentation/components/verification_code_input.dart`
+- `lib/features/settings/presentation/pages/teen_mode_page.dart`、`teen_mode_password_page.dart`
+- `lib/routes/app_routes.dart`、`lib/routes/groups/account_settings_routes.dart`
+- `design-system/`、`docs/05_Components.md`、`docs/06_Pages.md`
+
+### Breaking Changes
+- 无。
+
+## 2026-07-16（浅黄登录与我的页共用新版头图）
+
+### 修改
+- `yellow_light` 默认 Hero 更新为新版 `assets/images/profile/yellow_light/hero_background_default.png`（1125×900，5:4）。
+- `AppThemeAssets.authLoginTopBg` 仅在 `yellow_light` 下解析到 `profile/yellow_light/hero_background_default.png`，与「我的」页共用；`pink_light` / `yellow_dark` 继续解析原 `auth/<themeId>/login_top_bg.png`，外观不变。
+- 登录页继续使用 `BoxFit.fitWidth`，「我的」页继续使用 `BoxFit.cover`，图片宽高比未变化，无需调整现有布局。
+
+### 测试
+- 新增资源映射测试，并分别用 `yellow_light`、`pink_light`、默认 `yellow_dark` 编译参数验证主题分支。
+
+### 影响模块
+- `lib/features/auth/presentation/components/login_layout.dart`
+- `lib/core/theme/app_theme_assets.dart`
+- `assets/images/profile/yellow_light/hero_background_default.png`
+- `test/features/auth/presentation/login_layout_test.dart`
+- `docs/09_Assets.md`、`assets/images/README.md`
+
+### Breaking Changes
+- 无；仅 `yellow_light` 登录页头图变化，`pink_light` / `yellow_dark` 保持原资源。
+
+## 2026-07-16（书架推荐卡改为双列瀑布流）
+
+### 修改
+- 书架「为你推荐」由按行对齐的 `Wrap` 改为两列独立排列：卡片按原数据顺序左右交替进入两列，短卡片不会再被同一行的高卡片撑出空白。
+- 两列横向间距与每列纵向卡片间距统一复用 `AppSpacing.md = 16px`。
+
+### 测试
+- 新增布局测试，锁定左右列 16px 间距及同列相邻卡片 16px 间距。
+
+### 影响模块
+- `lib/features/bookshelf/presentation/components/bookshelf_recommendation_section.dart`
+- `test/features/bookshelf/presentation/bookshelf_recommendation_section_test.dart`
+- `docs/06_Pages.md`
+
+### Breaking Changes
+- 无。
+
+## 2026-07-16（书架书卡封面三边贴齐）
+
+### 修改
+- 书架/阅读历史网格卡对齐书城卡片流：封面取消左、上、右内边距，直接占满卡面宽度；标题与分类区域继续保留 `xs` 左右/底部内边距。
+- `BookCardSurface` 新增可配置 `contentPadding`，默认值保持原 `xs`；书架普通态与管理态显式使用零外层内边距，外观一致。
+- `BookshelfBookGrid.itemHeightForWidth` 按满宽封面重新计算高度，避免放大后的封面或底部文字被裁切。
+- 三主题继续复用 `surfaceCard` 与既有文字语义色，无新增 token。
+
+### 影响模块
+- `lib/shared/components/book_card_surface.dart`、`book_card_variants.dart`
+- `lib/features/bookshelf/presentation/components/bookshelf_book_grid.dart`、`bookshelf_selectable_book_card.dart`
+- `design-system/README.md`、`design-system/design-system-spec.canvas.tsx`、`docs/05_Components.md`
+
+### Breaking Changes
+- 无（`BookCardSurface.contentPadding` 默认仍为 `xs`，非书架调用行为不变）。
+
+## 2026-07-16（书架阅读横幅小熊切换 SVG）
+
+### 修改
+- 书架「今日已阅读」横幅的小熊资源由 `reading_bear.png` 切换为新版 `reading_bear.svg`，统一经 `AppAssetImage` / `flutter_svg` 加载。
+- 方形 SVG 放大为 64×64、整体下移到 top 8，并使用 `BoxFit.contain` 保持比例；横幅 `Stack` 使用 `Clip.hardEdge`，由卡片底边裁掉腿部与下半身，只露出头部和上半身。
+- 清理 SVG 中 Flutter 不支持的 Display P3 CSS 声明，保留 sRGB `fill` / `stroke` 属性，避免真机渲染缺色或不可见。
+
+### 影响模块
+- `lib/features/bookshelf/presentation/components/daily_reading_banner.dart`
+- `assets/images/bookshelf/reading_bear.svg`
+- `docs/09_Assets.md`、`assets/images/README.md`
+
+### Breaking Changes
+- 无。
+
 # CHANGELOG
 
 > 研发知识库与工程变更日志，**追加式**记录，勿覆盖历史。每次开发按「日期 / 新增 / 修改 / 删除 / 影响模块 / Breaking Changes」登记。

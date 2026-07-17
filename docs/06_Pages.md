@@ -19,7 +19,7 @@ flowchart LR
 ## 1. 发现 / 内容域
 
 ### bookstore · [bookstore_page.dart](../lib/features/bookstore/presentation/pages/bookstore_page.dart)
-- **职责**：书城主 Tab 容器（推荐/分类/排行），顶栏切换 + 底部「继续阅读」浮层（全主题锁定深色壳 `continueReadingCard*`，不随浅色包翻转）。
+- **职责**：书城主 Tab 容器（推荐/分类/排行），顶栏切换 + 底部「继续阅读」浮层（全主题锁定深色壳 `continueReadingCard*`，不随浅色包翻转）；推荐页进入时预缓存全部 20 帧，避免首次拖动临时解码造成首帧停滞。50×50 奔跑小熊随拉动在顶栏与首卡之间逐渐显现，视觉下移至 `AppSpacing.xxl + AppSpacing.xl + AppSpacing.lg`；刷新占位高度为 `chromeTopHeight - AppSpacing.md`，手势触发距离保持不变，小熊在上一版基础上再下移 24px，并进一步靠近下方首卡。从开始拖动到刷新完成后的收起阶段，只要小熊仍可见就以 0.8 秒周期持续循环奔跑；松手后先让弹簧收敛到固定停留态，最短展示 `(AppDurations.slow + AppDurations.normal) * 2`（1.6 秒），保证完整循环两次，刷新完成才释放占位，内容自动回弹且动画消失。刷新期间保留现有数据，完成后替换最新书城内容并重置「猜你喜欢」分页；预览 Mock 每次返回下一组书籍排序，真实接口模式直接展示服务端最新快照。
 - **模块**：`bookstore_page_header`、`bookstore_recommend_body`、`continue_reading_card`、`ranking_section`、`limited_free_section`、`editor_pick_section`、`guess_like_section`（分类/排行 Tab 由 `CategoryTabBody`、`RankingTabBody` 注入）。
 - **公共组件**：`AppPageChrome`、`AppTabTopTexture`、`MainTabController`、`AppAsyncPageBody`、`AppTopBar`、`AppTopBarIconButton`、`AppTopTabBar`、`AppSwipeTabSwitcher`、`BookGridCard`、`SectionHeader`、`BookCoverTagBadge`、`RankingRankBadge`、`BookCover`、`AppMarqueeText`。
 - **Model**：`BookstorePageContent`、`BookstoreTopTab`、`Book`、`RankingTab`。
@@ -77,7 +77,7 @@ flowchart LR
 - **接入点**：`book_discussion_detail_cubit.dart` → `BookDiscussionRepositoryImpl` → `book_discussion_data_source.dart`（仅 Mock，需新增 remote）。
 
 ### bookshelf · [bookshelf_page.dart](../lib/features/bookshelf/presentation/pages/bookshelf_page.dart)
-- **职责**：一级 Tab「书架」：书架/阅读历史双 Tab、书单管理、今日阅读横幅、推荐加载更多。
+- **职责**：一级 Tab「书架」：书架/阅读历史双 Tab、书单管理、今日阅读横幅、推荐加载更多；「为你推荐」使用双列瀑布流，每列独立向下排列，横纵间距统一 16px，短卡后的下一张卡即时上移。
 - **模块**：`bookshelf_page_header`、`bookshelf_page_tabs`、`bookshelf_tab_scroll_view`、`daily_reading_banner`、`bookshelf_book_grid`、`bookshelf_selectable_book_card`、`bookshelf_empty_view`、`bookshelf_recommendation_section`、`bookshelf_manage_action_overlay`/`action_bar`、`bookshelf_delete_confirm_dialog`。
 - **公共组件**：`AppAsyncPageBody`、`AppSwipeTabSwitcher`、`AppBlurredChromeBar`、`AppTabTopTexture`、`AppTopBar`、`AppTopBarTextButton`、`ElasticTabRow`、`BookGridSkeleton`、`BookGridCard`（书架 3 列网格开启 `showCardBackground` 铺卡面底）、`BookCardSurface`、`SectionHeader`、`AppListLoadMoreFooter`、`AppConfirmDialog`、`AppSelectionMark`、`AnimatedCountText`、`EmptyState`、`AppBottomNav`、`MainTabController`。
 - **卡面底**：书架/阅读历史网格及管理态选择卡的每本书统一铺 `BookCardSurface`（`surfaceCard` 语义面：浅色主题白面、`yellow_dark` 深灰面；`md` 圆角 + `xs` 内边距）；`bookshelf_book_grid` 的 `itemHeightForWidth` 已按卡面内边距扣除封面宽度换算高度。
@@ -86,7 +86,7 @@ flowchart LR
 - **接入点**：`bookshelf_cubit.dart` → `BookshelfRepositoryImpl` → `bookshelf_data_source.dart`（仅 Mock）。`loadMoreRecommendations()` 本地生成，待接接口。用户态强，需登录后返回个人数据。
 
 ### search · [search_page.dart](../lib/features/search/presentation/pages/search_page.dart)
-- **职责**：搜索页：联想/加载/结果/无结果/初始推荐五态切换，支持加书架。
+- **职责**：搜索页：联想/加载/结果/无结果/初始推荐五态切换，支持加书架；初始态「热搜书籍」排行复用榜单统一 `RankingRankBadge`，Top 1–3 使用 SVG、第 4 名起使用弱化数字角标并叠在封面左上角，三主题一致。
 - **模块**：`search_app_bar`、`search_suggestion_list`/`row`、`search_result_list`/`row`、`search_empty_body`、`search_keyword_section`/`chip`、`search_recommendation_row`、`search_clear_history_dialog`。
 - **公共组件**：`AppPageChrome`、`AppTopBar`、`BookCardLargeRow`、书卡骨架、`EmptyState`、`AppBlurredDialog`、`AppConfirmDialog`、`AppToast`、`AppBottomNav`。
 - **Model**：`SearchSuggestion`、`SearchResultItem`、`SearchRecommendationItem`、`BookSerializationStatus`、`Book`。
@@ -233,7 +233,8 @@ flowchart LR
 
 ### settings 子页
 - **[settings_document_page.dart](../lib/features/settings/presentation/pages/settings_document_page.dart)**：协议/隐私/第三方清单静态文档。组件 `AppPageChrome`+`AppTopBar`。Model `SettingsDocument`。无 cubit，路由层直调 `SettingsDocumentMockDataSource.fetchDocument()`（协议可走静态 CMS）。
-- **[teen_mode_page.dart](../lib/features/settings/presentation/pages/teen_mode_page.dart)**：青少年模式说明（UI 占位，无接入）。
+- **[teen_mode_page.dart](../lib/features/settings/presentation/pages/teen_mode_page.dart)**：青少年模式说明；主 CTA 跳转 4 位独立密码设置。
+- **[teen_mode_password_page.dart](../lib/features/settings/presentation/pages/teen_mode_password_page.dart)**：开启青少年模式前设置 4 位独立密码；复用 `AppDigitCodeInput` 的验证码同款分格输入，输满后启用“确定”。确定后写入进程内共享开启状态、清空二级页栈回到“我的”Tab，并在目标页显示“青少年模式已开启” Toast；再次进入设置页时菜单状态显示“已开启”。密码持久化/申诉重置待后端接入。
 - **[reading_preferences_page.dart](../lib/features/settings/presentation/pages/reading_preferences_page.dart)**：性别/年龄偏好。组件 `AgeRangeOption`/`GenderAvatarOption`。`ReadingPreferencesCubit` 纯内存，保存未持久化，待接偏好接口。
 - **[notification_settings_page.dart](../lib/features/settings/presentation/pages/notification_settings_page.dart)**：通知开关。组件 `AppSwitch`。`NotificationSettingsCubit` 纯内存，待接接口。
 - **[personalized_ads_page.dart](../lib/features/settings/presentation/pages/personalized_ads_page.dart)**：个性化广告开关。组件 `AppSwitch`。纯内存，待接接口。

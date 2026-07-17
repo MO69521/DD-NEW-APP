@@ -26,6 +26,7 @@ export 'layouts/main_tab_shell.dart';
 export 'widgets/app_nav_icon.dart';
 export 'widgets/app_asset_image.dart';
 export 'widgets/app_button.dart';
+export 'widgets/app_digit_code_input.dart';
 export 'widgets/app_icon.dart';
 export 'widgets/app_switch.dart';
 export 'widgets/app_text.dart';

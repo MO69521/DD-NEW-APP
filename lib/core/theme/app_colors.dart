@@ -255,6 +255,10 @@ abstract final class AppColors {
   static const Color bookCoverTagCompletedBorder =
       black04; // light-audit: keep-dark
 
+  /// 封面角标「更新」描边：纯白 4%（`hairline` 0.5px 由组件指定宽度）。
+  static const Color bookCoverTagUpdatedBorder =
+      white04; // light-audit: keep-dark
+
   /// 卡片彩色角标字色（充值「热」/ 免费领取「0/300每日」/ 会员标等）：全主题恒白。
   static const Color cornerBadgeText = white100; // light-audit: keep-dark
 

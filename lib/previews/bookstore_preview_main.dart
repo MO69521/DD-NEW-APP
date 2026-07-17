@@ -27,7 +27,7 @@ class BookstorePreviewApp extends StatelessWidget {
       value: AppTheme.systemUiOverlayStyle,
       child: MaterialApp.router(
         title: '书城推荐页预览',
-        theme: AppTheme.dark,
+        theme: AppTheme.current,
         debugShowCheckedModeBanner: false,
         routerConfig: AppRouter.router,
       ),

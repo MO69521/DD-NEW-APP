@@ -105,6 +105,7 @@ export default function DesignSystemSpec() {
     { part: "02", title: "搜索框", keywords: "", render: <SearchSection /> },
     { part: "02", title: "开关", keywords: "", render: <SwitchSection /> },
     { part: "02", title: "选项选择", keywords: "", render: <OptionSelectSection /> },
+    { part: "02", title: "分格数字输入", keywords: "验证码 密码 PIN", render: <DigitCodeInputSection /> },
     { part: "02", title: "扫光高亮层", keywords: "", render: <SweepHighlightSection /> },
     { part: "02", title: "轻提示", keywords: "", render: <ToastSection /> },
     { part: "02", title: "空状态", keywords: "", render: <EmptyStateSection /> },
@@ -349,6 +350,12 @@ const MOTION_CATEGORIES: Array<{ title: string; items: MotionEffect[] }> = [
   {
     title: "呼吸 / 循环 / 引导 / 加载",
     items: [
+      {
+        name: "书城刷新奔跑小熊",
+        desc: "20 帧以 0.8 秒周期持续循环,松手后至少跑满两轮再回弹",
+        tech: "页面预缓存 + AnimationController + AppAssetImage · 最短 1.6 秒 · 50×50 · 下移 xxl+xl+lg · 刷新占位=chromeTopHeight-md",
+        path: "lib/features/bookstore/presentation/components/bookstore_refresh_visual.dart",
+      },
       {
         name: "AppTabCountBadge",
         desc: "Tab 悬浮数字角标（纯白字 white100）,>99 显示 99+",
@@ -2033,6 +2040,9 @@ function MultiStyleSection() {
         <Text tone="tertiary" size="small">
           「头图 / 封面遮罩」为图上遮罩，双职责已拆分：浅壳恒用黑色低透明，保证图上白字可读（不随浅背景变浅）。
         </Text>
+        <Text tone="tertiary" size="small">
+          主题资源例外：仅 yellow_light 登录页复用 profile/yellow_light/hero_background_default.png；pink_light / yellow_dark 登录页保留各自 auth/login_top_bg.png。
+        </Text>
       </Stack>
 
       <Callout tone="warning" title="§B feature 品牌色跨主题恒定 + 迭代规矩">
@@ -2134,12 +2144,12 @@ function SizeIndexSection() {
     ["顶栏 AppTopBar", "顶栏高度 / 图标框 / 返回钮", "topBar*"],
     ["按钮 AppButton", "内边距 / loading / 图标间距", "buttonPadding*"],
     ["搜索栏 / 玻璃模糊", "搜索框高 / 各级磨砂半径", "searchBarHeight · glassBlurSigma · strongBlurSigma"],
-    ["书城首页", "顶栏 / 加载 / 继续阅读浮层", "bookstore* · continueReading*"],
+    ["书城首页", "顶栏 / 加载(刷新跑熊 50×50) / 继续阅读浮层", "bookstore* · continueReading*"],
     ["底部导航 AppBottomNav", "胶囊 / 图标 / 弹跳缩放", "bottomNav*"],
     ["榜单", "指示器 / 轮播 / 头图 / 维度导航", "ranking* · tab*"],
     ["书籍封面 / 书卡", "列表/网格封面 / 大封面横向书卡", "bookCover* · bookGrid* · bookCardLarge*"],
     ["福利页", "头图 / 签到里程碑 / 任务时间线 / 充值弹窗", "welfare* · rechargePurchaseDialog*"],
-    ["书架页", "顶栏 / 阅读横幅 / 空状态 / 封面角标", "bookshelf* · bookCoverTag*"],
+    ["书架页", "顶栏 / 阅读横幅（小熊 64×64、top 8、底边裁剪）/ 空状态 / 封面角标", "bookshelf* · bookCoverTag*"],
     ["我的页", "Hero / 头像 / 快捷入口 / 成就勋章", "profile* · homeIndicator* · listRowMinHeight"],
     ["我的-子页", "账号设置 / 消息 / 卡包", "accountSettings* · myMessages* · cardPack*"],
     ["设置页", "Logo / 开关 AppSwitch", "settings* · appSwitch*"],
@@ -2312,17 +2322,37 @@ function CardSection() {
   return (
     <SpecSection
         zh="卡片"
-        note="书卡族 · 底 4% 白底 + 圆角 · 禁止卡中卡 · 可点按"
+        note="书卡族 · 底 4% 白底 + 圆角 · 卡面变体封面左/上/右贴边、文字区 xs 内边距 · 封面状态角标距右上角 4px、10px regular / padding 4×2，更新角标描边为纯白 4% · 禁止卡中卡 · 可点按"
         src="lib/shared/components/book_card_variants.dart"
       >
       <Stage>
         <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-          <Pressable style={{ width: 112 }}>
-            <GlassPlaceholder height={150} style={{ marginBottom: 8 }} />
-            <div style={{ color: APP.text, fontSize: 14, fontWeight: 600 }}>示例书名标题</div>
-            <div style={{ color: APP.textMuted, fontSize: 12, marginTop: 4 }}>都市 · 悬疑</div>
-            <div style={{ marginTop: 8 }}>
-              <Caption>竖版 BookCardVertical · 上图下文</Caption>
+          <Pressable style={{ width: 112, overflow: "hidden", borderRadius: 12, background: APP.surface }}>
+            <GlassPlaceholder height={150} style={{ position: "relative" }}>
+              <div
+                style={{
+                  position: "absolute",
+                  top: 4,
+                  right: 4,
+                  padding: "2px 4px",
+                  borderRadius: "0 4px 0 4px",
+                  background: APP.accent,
+                  color: APP.onAccent,
+                  border: "0.5px solid rgba(255,255,255,0.04)",
+                  fontSize: 10,
+                  fontWeight: 400,
+                  lineHeight: 1,
+                }}
+              >
+                更新
+              </div>
+            </GlassPlaceholder>
+            <div style={{ padding: 8 }}>
+              <div style={{ color: APP.text, fontSize: 14, fontWeight: 600 }}>示例书名标题</div>
+              <div style={{ color: APP.textMuted, fontSize: 12, marginTop: 4 }}>都市 · 悬疑</div>
+              <div style={{ marginTop: 8 }}>
+                <Caption>竖版 BookCardVertical · 封面三边贴齐</Caption>
+              </div>
             </div>
           </Pressable>
           <Pressable style={{ display: "flex", gap: 12, width: 300 }}>
@@ -2976,6 +3006,54 @@ function OptionSelectSection() {
         <Code>assets/images/onboarding/gender_*.png</Code>。年龄胶囊源码{" "}
         <Code>lib/shared/components/age_range_option.dart</Code>
         ；新手弹窗与偏好设置页共用。
+      </Text>
+    </SpecSection>
+  );
+}
+
+function DigitCodeInputSection() {
+  return (
+    <SpecSection
+        zh="分格数字输入"
+        note="AppDigitCodeInput（L1）· 验证码 / 独立密码共用 · 位数与掩码可配置"
+        src="lib/shared/widgets/app_digit_code_input.dart"
+      >
+      <Stage>
+        <div style={{ display: "flex", justifyContent: "space-between", width: 320 }}>
+          {["•", "•", "", ""].map((value, index) => {
+            const active = index === 2;
+            return (
+              <div
+                key={index}
+                style={{
+                  width: 56,
+                  aspectRatio: "1 / 1",
+                  borderRadius: 12,
+                  background: active ? "transparent" : APP.surface,
+                  border: active
+                    ? `1px solid ${APP.accent}`
+                    : "1px solid transparent",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  color: APP.text,
+                  fontSize: 24,
+                  fontWeight: 700,
+                  boxSizing: "border-box",
+                }}
+              >
+                {active ? (
+                  <span style={{ width: 1, height: 24, background: APP.accent }} />
+                ) : value}
+              </div>
+            );
+          })}
+        </div>
+      </Stage>
+      <Text tone="tertiary" size="small">
+        <Code>length</Code> 控制位数，<Code>obscureText</Code> 控制圆点掩码；
+        空格使用 <Code>surfaceCard</Code>，当前格描边与光标使用 <Code>primary</Code>，
+        yellow_dark / pink_light / yellow_light 自动解析对应主题。
       </Text>
     </SpecSection>
   );

@@ -63,13 +63,14 @@ abstract final class AppThemeAssets {
   // 登录页 / 我的页 · 头图
   // ══════════════════════════════════════════════════════════════
 
-  /// 登录页顶部头图。
-  static const String authLoginTopBg =
-      'assets/images/auth/$_pack/login_top_bg.png';
-
   /// 「我的」页默认 Hero 头图（装扮未换背景时的公用默认图）。
   static const String profileHeroBackgroundDefault =
       'assets/images/profile/$_pack/hero_background_default.png';
+
+  /// 登录页顶部头图：仅浅黄主题复用「我的」页新版 Hero，其余主题保持原登录图。
+  static const String authLoginTopBg = _pack == AppThemeId.yellowLight
+      ? profileHeroBackgroundDefault
+      : 'assets/images/auth/$_pack/login_top_bg.png';
 
   // ══════════════════════════════════════════════════════════════
   // 书籍详情 / 搜索结果 · 加入书架 / 送心（随主题）

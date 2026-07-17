@@ -13,7 +13,7 @@ class App extends StatelessWidget {
       value: AppTheme.systemUiOverlayStyle,
       child: MaterialApp.router(
         title: '点点穿书',
-        theme: AppTheme.dark,
+        theme: AppTheme.current,
         routerConfig: AppRouter.router,
         debugShowCheckedModeBanner: false,
       ),

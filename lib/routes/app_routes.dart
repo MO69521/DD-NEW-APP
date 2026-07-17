@@ -69,6 +69,8 @@ abstract final class AppRoutes {
   static const String readingPreferencesName = 'readingPreferences';
   static const String teenMode = '/settings/teen-mode';
   static const String teenModeName = 'teenMode';
+  static const String teenModePassword = '/settings/teen-mode/password';
+  static const String teenModePasswordName = 'teenModePassword';
   static const String settingsDocument = '/settings/document/:type';
   static const String settingsDocumentName = 'settingsDocument';
 }

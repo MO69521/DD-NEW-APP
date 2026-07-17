@@ -34,6 +34,8 @@ List<RouteBase> rootRoutes() => [
       final maxIndex = MainTabConfig.items.length - 1;
       return MainTabShellPage(
         initialIndex: initialIndex.clamp(0, maxIndex),
+        initialToastMessage: state.uri.queryParameters['toast'],
+        initialToastEventId: state.uri.queryParameters['toastEvent'],
         initialBookshelfTabIntent: state.uri.queryParameters['bookshelfTab'],
         initialBookstoreTopTabIntent:
             state.uri.queryParameters['bookstoreTopTab'],

@@ -21,7 +21,7 @@ class DailyReadingBanner extends StatelessWidget {
   final int todayReadingMinutes;
   final VoidCallback onClaimWelfareTap;
 
-  static const String _bearAsset = 'assets/images/bookshelf/reading_bear.png';
+  static const String _bearAsset = 'assets/images/bookshelf/reading_bear.svg';
   static const String _energyIconAsset = 'assets/icons/welfare/energy.svg';
 
   @override
@@ -33,18 +33,18 @@ class DailyReadingBanner extends StatelessWidget {
         borderRadius: BorderRadius.circular(AppRadius.bookshelfReadingBanner),
       ),
       child: Stack(
-        clipBehavior: Clip.none,
+        clipBehavior: Clip.hardEdge,
         children: [
           const Positioned(
-            left: AppSizes.bookshelfBearIllustrationInset,
-            top: AppSizes.bookshelfBearIllustrationInset,
+            left: AppSizes.bookshelfBearIllustrationLeftInset,
+            top: AppSizes.bookshelfBearIllustrationTopInset,
             width: AppSizes.bookshelfBearIllustrationWidth,
             height: AppSizes.bookshelfBearIllustrationPaintHeight,
             child: AppAssetImage(
               assetPath: _bearAsset,
               width: AppSizes.bookshelfBearIllustrationWidth,
               height: AppSizes.bookshelfBearIllustrationPaintHeight,
-              fit: BoxFit.fitWidth,
+              fit: BoxFit.contain,
             ),
           ),
           Padding(

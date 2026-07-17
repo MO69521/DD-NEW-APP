@@ -3,13 +3,20 @@ import 'package:flutter/material.dart';
 import '../../../../core/domain/entities/book.dart';
 import '../../../../core/domain/entities/book_cover_tag.dart';
 import '../../../../shared/components/book_card_large_row.dart';
+import '../../../../shared/components/ranking_rank_badge.dart';
 import '../../domain/entities/search_recommendation_item.dart';
 
 /// L3 — 搜索默认推荐行：映射到共享 [BookCardLargeRow]，布局与分类列表一致。
 class SearchRecommendationRow extends StatelessWidget {
-  const SearchRecommendationRow({super.key, required this.item, this.onTap});
+  const SearchRecommendationRow({
+    super.key,
+    required this.item,
+    this.rank,
+    this.onTap,
+  });
 
   final SearchRecommendationItem item;
+  final int? rank;
   final void Function(Book book)? onTap;
 
   @override
@@ -21,6 +28,7 @@ class SearchRecommendationRow extends StatelessWidget {
       description: item.description,
       footer: item.author,
       coverTag: BookCoverTag.fromLabel(item.badgeLabel),
+      leadingBadge: rank == null ? null : RankingRankBadge(rank: rank!),
       padding: EdgeInsets.zero,
       heroTag: 'book-cover-${item.book.id}',
       onTap: onTap == null ? null : () => onTap!(item.book),

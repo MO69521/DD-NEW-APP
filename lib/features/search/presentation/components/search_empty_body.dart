@@ -124,52 +124,14 @@ class SearchEmptyBody extends StatelessWidget {
             sliver: SliverList.separated(
               itemCount: domain.recommendations.length,
               separatorBuilder: (_, _) => const SizedBox(height: AppSpacing.md),
-              itemBuilder: (context, index) => Row(
-                children: [
-                  _SearchRankNumber(rank: index + 1),
-                  const SizedBox(width: AppSpacing.xs),
-                  Expanded(
-                    child: SearchRecommendationRow(
-                      item: domain.recommendations[index],
-                      onTap: AppRouter.goBookDetail,
-                    ),
-                  ),
-                ],
+              itemBuilder: (context, index) => SearchRecommendationRow(
+                item: domain.recommendations[index],
+                rank: index + 1,
+                onTap: AppRouter.goBookDetail,
               ),
             ),
           ),
       ],
-    );
-  }
-}
-
-/// 热搜书籍名次编号：前三名 红 / 橙 / 黄，其余白色 60%。
-class _SearchRankNumber extends StatelessWidget {
-  const _SearchRankNumber({required this.rank});
-
-  final int rank;
-
-  Color get _color => switch (rank) {
-    1 => AppColors.error,
-    2 => AppColors.searchHotAccent,
-    3 => AppColors.accentYellow,
-    _ => AppColors.textOnDarkPlaceholder,
-  };
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: AppSpacing.lg,
-      child: AppText(
-        '$rank',
-        style: TextStyle(
-          fontSize: AppFontSizes.xl,
-          fontWeight: rank <= 3 ? AppFontWeights.bold : AppFontWeights.regular,
-          color: _color,
-          height: AppLineHeights.none,
-        ),
-        textAlign: TextAlign.center,
-      ),
     );
   }
 }

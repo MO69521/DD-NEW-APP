@@ -13,7 +13,10 @@ import 'settings_ui_state.dart';
 class SettingsCubit extends Cubit<SettingsState> {
   SettingsCubit({SettingsRepository? repository})
     : _repository =
-          repository ?? const SettingsRepositoryImpl(SettingsMockDataSource()),
+          repository ??
+          SettingsRepositoryImpl(
+            SettingsMockDataSource(ServiceLocator.teenMode),
+          ),
       super(const SettingsState());
 
   static const String _mockLatestVersion = '3.9.6.7';

@@ -44,6 +44,14 @@ class _MainTabShellState extends State<MainTabShell> {
       oldWidget.controller?.detach();
       widget.controller?.attach(_switchToTab);
     }
+    if (oldWidget.initialIndex != widget.initialIndex &&
+        widget.initialIndex >= 0 &&
+        widget.initialIndex < widget.pages.length) {
+      _selectedIndex = widget.initialIndex;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        widget.controller?.notifyTabChanged(_selectedIndex);
+      });
+    }
   }
 
   @override

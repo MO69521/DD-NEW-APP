@@ -848,7 +848,7 @@ abstract final class AppTextStyles {
 
   /// 封面右上角状态角标文字（Figma 1335:12223）；颜色随变体覆盖。
   static const TextStyle bookCoverTagLabel = TextStyle(
-    fontSize: AppFontSizes.md,
+    fontSize: AppFontSizes.xs,
     fontWeight: AppFontWeights.regular,
     color: AppColors.textOnDark,
     height: AppLineHeights.none,
