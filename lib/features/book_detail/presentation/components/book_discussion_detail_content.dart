@@ -129,7 +129,7 @@ class _PostHeader extends StatelessWidget {
                 post.isLiked ? Icons.thumb_up_alt : Icons.thumb_up_alt_outlined,
                 size: AppSizes.bookDetailDiscussionLikeIconSize,
                 color: post.isLiked
-                    ? AppColors.accentYellow
+                    ? AppColors.accentText
                     : AppColors.iconMuted,
               ),
               const SizedBox(width: AppSpacing.xxsHalf),
@@ -197,7 +197,7 @@ class _ReplyItem extends StatelessWidget {
                     : Icons.thumb_up_alt_outlined,
                 size: AppSizes.bookDetailDiscussionLikeIconSize,
                 color: reply.isLiked
-                    ? AppColors.accentYellow
+                    ? AppColors.accentText
                     : AppColors.iconMuted,
               ),
               const SizedBox(width: AppSpacing.xxsHalf),

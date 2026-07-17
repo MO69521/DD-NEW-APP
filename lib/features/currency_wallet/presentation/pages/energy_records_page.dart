@@ -304,7 +304,7 @@ class EnergyRecordsEmptyView extends StatelessWidget {
             child: AppText(
               '!',
               style: AppTextStyles.displayLarge.copyWith(
-                color: AppColors.accentYellow,
+                color: AppColors.accentText,
               ),
             ),
           ),

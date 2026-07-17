@@ -33,6 +33,7 @@ class BookDetailBottomBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppBlurredChromeBar(
+      scrimColor: AppColors.bottomActionBarScrim,
       child: DecoratedBox(
         decoration: const BoxDecoration(
           border: Border(

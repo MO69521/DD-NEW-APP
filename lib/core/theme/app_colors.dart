@@ -56,6 +56,13 @@ abstract final class AppColors {
   static const Color onPrimary = AppBrandColors.onAccent;
   static const Color primarySoft = AppBrandColors.accentSoft04;
 
+  /// 当前主题面上可读的强调色文字 / 图标（选中字、链接、点赞高亮等）：
+  /// 浅色态取强调文字档（`yellow_light` 深黄 `yellow700`、`pink_light` 深粉
+  /// `pink600`——亮黄/亮粉在白面上不可读）；深色态保持亮强调色（`yellow500`）。
+  static const Color accentText = _isLight
+      ? AppBrandColors.accentText
+      : accentYellow;
+
   static const Color background = AppBrandColors.backgroundDark;
   static const Color surface = _isLight ? _lightCard : _darkSurface;
   static const Color surfaceSoft = _isLight
@@ -112,6 +119,10 @@ abstract final class AppColors {
   /// 顶栏滚动后底色（仅 `AppPageChrome`，如书城等 Tab 页）：深色态毛玻璃（约 80% tint）；
   /// 浅色态纯白不透明（`white100`）。书详情顶栏走 `chromeBarScrim`，不受此影响、保持磨砂。
   static const Color topChromeBarScrolledScrim = _isLight ? white100 : bgTint80;
+
+  /// 二级页底部固定操作栏底色（书详情 / 装扮等）：浅色态纯白不透明（与底部导航一致）；
+  /// 深色态保持毛玻璃 tint（80% 壳基色，配 BackdropFilter），深色观感不变。
+  static const Color bottomActionBarScrim = _isLight ? white100 : bgTint80;
   static const Color topBarHeroScrimStart = black30;
   static const Color topBarHeroScrimEnd = black00;
 
@@ -219,11 +230,14 @@ abstract final class AppColors {
 
   /// 按钮不可点击（禁用）态，全局统一（覆盖各变体）。主题感知：
   /// 深色态沿用弱实体面 + 三级字；浅色态用半透明强调色底（pink_light 玫粉 /
-  /// yellow_light 黄）+ 85% 白字，避免深色块落在浅底弹窗上显得错误。
+  /// yellow_light 黄）。字色：pink_light 玫粉底上用 85% 白字；yellow_light 黄底上
+  /// 白字不可读，改用 30% 纯黑字（保持「黑字降透明度」的禁用观感）。
   static const Color buttonDisabledFill = _isLight
       ? AppBrandColors.accentDisabledFill
       : _darkSurface;
-  static const Color buttonDisabledText = _isLight
+  static const Color buttonDisabledText = AppBrandColors.isYellowLight
+      ? black30
+      : _isLight
       ? white85
       : _darkTextTertiary;
 
@@ -274,7 +288,8 @@ abstract final class AppColors {
   static const Color segmentedSelectedFill = AppBrandColors.accentSoft08;
   // 选中态去描边（全局统一）：仅靠 fill + 文字色区分选中
   static const Color segmentedSelectedBorder = white00;
-  static const Color segmentedSelectedText = accentYellow;
+  // 选中文字：浅色态亮黄/亮粉在白面上不可读，走强调文字档 accentText。
+  static const Color segmentedSelectedText = accentText;
   static const Color segmentedUnselectedText = textOnDarkPlaceholder;
 
   // 榜单详情页 (Figma 220:8376)
@@ -294,8 +309,8 @@ abstract final class AppColors {
   static const double rankingHeroImageLayerOpacity = 1.0;
 
   // 搜索页（深色态）
-  /// 顶栏「搜索」动作文字色，沿用深色态强调色。
-  static const Color searchActionText = accentYellow;
+  /// 顶栏「搜索」动作文字色：走强调文字档（浅色态深黄/深粉，深色态亮黄）。
+  static const Color searchActionText = accentText;
 
   /// 封面「连载 / 完结」角标：半透明深底 + 白字（图上遮罩，浅色实验态恒暗保可读）。
   static const Color searchStatusBadgeBackground = _isLight

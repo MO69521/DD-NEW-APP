@@ -95,6 +95,8 @@ abstract final class AppPalette {
   static const Color yellow500Alpha04 = Color(0x0AFFE847);
   static const Color yellow500Alpha08 = Color(0x14FFE847);
   static const Color yellow500Alpha40 = Color(0x66FFE847);
+  // 黄阶文字档：白底 / 浅壳底上可读的深黄（对白底对比度约 5.3:1，AA 正文达标）。
+  static const Color yellow700 = Color(0xFF8F6400);
   static const Color pink500Alpha04 = Color(0x0AFF4D88);
   static const Color pink500Alpha08 = Color(0x14FF4D88);
   static const Color pink500Alpha40 = Color(0x66FF4D88);

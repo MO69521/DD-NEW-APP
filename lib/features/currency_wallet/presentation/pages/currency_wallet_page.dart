@@ -187,7 +187,8 @@ class _CurrencyWalletBottomBar extends StatelessWidget {
           AppSpacing.lg,
           AppSpacing.sm,
         ),
-        color: AppColors.backgroundDark,
+        // 浅色态纯白、深色态壳基色（bgTint80 不透明化差异不可见），与其余底部操作栏一致。
+        color: AppColors.bottomActionBarScrim,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [

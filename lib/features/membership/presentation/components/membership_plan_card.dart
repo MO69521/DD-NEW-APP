@@ -23,7 +23,7 @@ class MembershipPlanCard extends StatelessWidget {
   final bool selected;
   final VoidCallback? onTap;
 
-  /// 选中态金色渐变遮罩（标题 / 价格）。
+  /// 选中态文字遮罩：深色为金渐变，浅色为 brown800 实色。
   Widget _goldMask(Widget child) {
     if (!selected) return child;
     return ShaderMask(
@@ -32,8 +32,8 @@ class MembershipPlanCard extends StatelessWidget {
         begin: Alignment.centerLeft,
         end: Alignment.centerRight,
         colors: [
-          AppMembershipColors.planSelectedGoldStart,
-          AppMembershipColors.planSelectedGoldEnd,
+          AppMembershipColors.planSelectedTextStart,
+          AppMembershipColors.planSelectedTextEnd,
         ],
       ).createShader(bounds),
       child: child,

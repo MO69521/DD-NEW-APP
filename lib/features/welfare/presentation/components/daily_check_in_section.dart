@@ -58,6 +58,7 @@ class _DailyCheckInSectionState extends State<DailyCheckInSection> {
       decoration: BoxDecoration(
         color: colors.surfaceCard,
         borderRadius: BorderRadius.circular(AppRadius.welfareCheckInSection),
+        border: Border.all(color: colors.borderGlass, width: AppSizes.hairline),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

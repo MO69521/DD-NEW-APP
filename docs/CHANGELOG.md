@@ -2,6 +2,82 @@
 
 > 研发知识库与工程变更日志，**追加式**记录，勿覆盖历史。每次开发按「日期 / 新增 / 修改 / 删除 / 影响模块 / Breaking Changes」登记。
 
+## 2026-07-17（浅色会员套餐卡填充与主文字调整）
+
+### 修改
+- `pink_light` / `yellow_light` 会员套餐未选中卡由 `surfaceSoft` 改为纯白 `surfaceCard`。
+- 浅色主题选中卡填充由描边金 `#FFE794` 的 8% 提升为 30%（`0x4DFFE794`）；标题与价格由浅金渐变改为 `brown800 #5D3A12` 实色。
+- `yellow_dark` 保持原 8% 金底、金色渐变标题与价格，不受浅色调整影响。
+
+### 影响模块
+- 会员页套餐选择卡；设计规范 README / Canvas 与页面文档同步。
+
+### Breaking Changes
+- 无。
+
+## 2026-07-17（全局排查：强调色文字/图标浅色态统一走 accentText）
+
+### 修改
+- `AppColors.accentText` 语义升级为「当前主题面上可读的强调文字/图标」：浅色态取 `AppBrandColors.accentText`（`yellow_light` 深黄 `yellow700`、`pink_light` 深粉 `pink600`），深色态保持亮强调色 `yellow500`；`segmentedSelectedText` 收敛为直接引用 `accentText`。
+- 全局排查亮黄文字/图标落在白面上不可读的场景，统一改走 `accentText`（深色主题视觉不变）：
+  - `AgeRangeOption` 选中字（新手性别年龄弹窗 / 偏好设置页共用）；
+  - 搜索页顶栏「搜索」动作字（`searchActionText`）；
+  - `linkSmallDark` 链接样式基色；
+  - 书详情讨论区 / 讨论详情点赞高亮图标（3 处）；
+  - 书详情讨论回复输入栏「发送」可用态；
+  - 登录验证码「重新获取验证码」可点态；
+  - 帮助反馈提交成功提示文字；
+  - 能量记录空态「!」占位符；
+  - 福利签到「今日可领」奖励文字（`checkInRewardTodayText`）。
+- 保持亮黄不变（品牌强调语言，非文字阅读场景）：选中描边环/卡片选中边框（性别头像、星尘兑换、充值包、装扮卡）、Tab 底部指示线（elastic 系列、分类筛选下划线）、输入焦点线/光标、开关圆钮、Toast 黄底、作者徽黄底、加载指示器。
+
+### 影响模块
+- 新手弹窗、偏好设置、搜索、书详情讨论、登录、帮助反馈、能量记录、福利签到；`design-system/README.md` 对应条目同步。
+
+### Breaking Changes
+- 无。
+
+## 2026-07-17（分段控件选中文字浅色态改用强调文字档）
+
+### 修改
+- `AppColors.segmentedSelectedText`：深色态保持亮强调色（`yellow500`）；浅色态改用 `AppBrandColors.accentText` —— `yellow_light` 深黄 `yellow700 #8F6400`、`pink_light` 深粉 `pink600 #E03D74`，解决白面 8% 强调底上亮黄/亮粉选中字可读性差的问题。
+- 覆盖点：书籍详情页 Tab 切换（选中字与选中态讨论计数）、榜单频道分段控件（同一 token，全局同步）。
+- `design-system/README.md` 分段控件行与 `AppSegmentedSwitch` 组件说明、可视化三主题对照表同步更新。
+
+### 影响模块
+- 所有使用 `AppSegmentedSwitch` / `segmentedSelectedText` 的页面（书详情、榜单等）；`yellow_dark` 视觉不变。
+
+### Breaking Changes
+- 无。
+
+## 2026-07-17（黄色梯度扩展：新增深黄文字档 yellow700 / accentText）
+
+### 新增
+- `AppPalette.yellow700 #8F6400`：黄阶文字档，白底 / 浅色面上可读的深黄（对白底对比度约 5.3:1，WCAG AA 正文达标）。
+- `AppBrandColors.accentText`（暴露为 `AppColors.accentText`）：白底强调文字语义（价格、链接、高亮字段）——`yellow_dark` / `yellow_light` 取 `yellow700`，`pink_light` 取 `pink600 #E03D74`。
+
+### 修改
+- `design-system/README.md` §4.1.1 主强调行登记 `yellow700`，§A 强调身份列表登记 `accentText`；可视化色卡「黄 / 金」分组新增 `yellow700` 并同步托管副本。
+- `docs/04_DesignToken.md` 原色与主题壳源色行同步登记。
+
+### 影响模块
+- 仅新增 token，未改任何现有页面取色；后续文字场景可直接引用 `AppColors.accentText`。
+
+### Breaking Changes
+- 无。
+
+## 2026-07-17（yellow_light 福利卡片描边统一减淡）
+
+### 修改
+- 补齐福利页充值区与每日签到外层卡片的 `borderGlass` + `hairline` 描边，与余额、用餐签到、阅读 VIP 和任务区块统一。
+- `yellow_light` 的全局弱卡片描边由 `neutralCool200 #E5E7EB` 调淡为 `neutralCool100 #F3F4F6`；`pink_light` 的 `pink75 #F8E6ED` 与 `yellow_dark` 的 `whiteAlpha04` 保持不变。
+
+### 影响模块
+- 福利中心及所有复用 `borderSubtle` / `borderGlass` 的浅黄主题卡片。
+
+### Breaking Changes
+- 无。
+
 ## 2026-07-16（书城推荐页拉动刷新）
 
 ### 修改
@@ -189,6 +265,61 @@
 # CHANGELOG
 
 > 研发知识库与工程变更日志，**追加式**记录，勿覆盖历史。每次开发按「日期 / 新增 / 修改 / 删除 / 影响模块 / Breaking Changes」登记。
+
+## 2026-07-17（浅色主题二级页底部操作栏改纯白）
+
+### 新增
+- `AppColors.bottomActionBarScrim`：二级页底部固定操作栏底色语义 token——浅色态纯白不透明（`white100`，与底部导航一致）；深色态保持 `bgTint80` 毛玻璃/壳基色观感不变。
+
+### 修改
+- 书详情底栏（`book_detail_bottom_bar.dart`）、装扮底栏（`dress_up_bottom_bar.dart`）：`AppBlurredChromeBar` 传入 `scrimColor: bottomActionBarScrim`（原默认 `chromeBarScrim`，浅色下呈浅灰 tint）。
+- 书评详情回复输入栏（`book_discussion_reply_input_bar.dart`）、钱包底栏（`currency_wallet_page.dart`）：底色由 `backgroundDark` 改为 `bottomActionBarScrim`；深色态 `bgTint80` 叠在同色壳背景上视觉等价，深色观感不变。
+
+### 影响模块
+- `lib/core/theme/app_colors.dart`
+- `lib/features/book_detail/presentation/components/book_detail_bottom_bar.dart`、`book_discussion_reply_input_bar.dart`
+- `lib/features/dress_up/presentation/components/dress_up_bottom_bar.dart`
+- `lib/features/currency_wallet/presentation/pages/currency_wallet_page.dart`
+- `design-system/README.md`（登记 `bottomActionBarScrim`）
+
+### Breaking Changes
+- 无。
+
+## 2026-07-17（yellow_light 会员 Hero 极光增强）
+
+### 新增
+- `AppMembershipColors.heroAuroraOpacity`：会员 Hero 极光强度的主题语义 token。
+- 三主题专项测试，锁定 `yellow_light=0.45`、`yellow_dark/pink_light=0.26`，防止浅黄增强误影响其他主题。
+
+### 修改
+- 会员 Hero 的极光透明度由页面内固定 `0.26` 改为主题 token；`yellow_light` 浅底上的黄色增强至 `0.45`，标题、皇冠与用户卡仍保持清晰。
+- 同步设计规范 README、Canvas 运动目录与会员页文档。
+
+### 影响模块
+- `lib/core/theme/app_membership_colors.dart`
+- `lib/features/membership/presentation/components/membership_hero.dart`
+- `test/core/theme/app_membership_colors_test.dart`
+
+### Breaking Changes
+- 无；仅 `yellow_light` 会员 Hero 视觉增强。
+
+## 2026-07-17（yellow_light 按钮禁用字色改黑）
+
+### 新增
+- `AppBrandColors.isYellowLight`：黄浅包单独判定开关（供需与 `pink_light` 区分的少量语义，如按钮禁用字色）。
+
+### 修改
+- `yellow_light` 按钮不可点击态字色由 85% 白（`white85`）改为 30% 纯黑（`AppColors.black30`）：`AppColors.buttonDisabledText` 增加 `isYellowLight` 分支。黄底禁用面上白字不可读，改「黑字降透明度」观感。
+- `pink_light`（玫粉底 + 85% 白字）与 `yellow_dark`（三级字）不变；禁用底 `buttonDisabledFill` 不变。
+- 同步 `design-system/README.md`：按钮禁用态字色分主题说明、`isYellowLight` 登记进身份开关命名前缀、AppButton disabled 状态描述。
+- `.cursor/skills/flutter-post-edit-audit/scripts/audit.sh`：将 `app_colors.dart`（颜色 token registry，扁平数据单一真源）并入 §11 文件行数豁免名单，与 `app_sizes.dart` / `app_text_styles.dart` 同类。
+
+### 影响模块
+- `lib/core/theme/app_colors.dart`、`lib/core/theme/app_brand_colors.dart`
+- `design-system/README.md`、`.cursor/skills/flutter-post-edit-audit/scripts/audit.sh`
+
+### Breaking Changes
+- 无。
 
 ## 2026-07-16（底栏选中标签改用主文字色）
 

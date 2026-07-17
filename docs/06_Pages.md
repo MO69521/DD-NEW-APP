@@ -107,6 +107,7 @@ flowchart LR
 - **职责**：福利中心 Tab：货币余额、充值套餐、签到、任务。
 - **模块**：`welfare_page_header`、`daily_check_in_section`、`meal_check_in_section`、`reading_vip_progress_section`、`welfare_task_list_section`、`check_in_calendar`、`check_in_success_dialog`、`welfare_rules_dialog`。
 - **公共组件**：`BlurredPinnedHeaderDelegate`、`AppTabTopTexture`、`AppAsyncPageBody`、`CurrencyBalanceBar`、`RechargePackagesSection`、`AppGradientCtaButton`、`AppConfetti`、`showAppBlurredDialog`、`DialogCloseButton`、`LiquidSweepCtaClip`、`SweepHighlightOverlay`、`AppTopBar`、`AppTopBarIconButton`、`AppToast`、`AppBottomNav`。
+- **卡片描边**：余额、充值、每日签到、用餐签到、阅读 VIP 与任务等外层卡片统一使用 `borderGlass` + `hairline`；`yellow_light` 解析为更轻的 `neutralCool100 #F3F4F6`，`pink_light` / `yellow_dark` 保持原主题取值。
 - **Model**：`WelfarePageContent`、`CheckInSummary`、`MealCheckInSummary`、`WelfareTaskListSummary`、`WelfareTaskItem`、`CurrencyBalance`、`RechargePackage`。
 - **Repository**：`WelfareRepository`。
 - **接入点**：`welfare_cubit.dart` → `WelfareRepositoryImpl` → `welfare_data_source.dart`（仅 Mock）。`checkIn()` 当前仅本地标记，待接签到写接口（返回奖励与当天状态）。
@@ -121,6 +122,8 @@ flowchart LR
 
 ### membership · [membership_page.dart](../lib/features/membership/presentation/pages/membership_page.dart)
 - **职责**：VIP 会员开通页：账户状态、套餐选择、购买、权益说明。
+- **主题视觉**：Hero 极光由 `AppMembershipColors.heroAuroraOpacity` 控制；`yellow_light` 在浅底上增强至 `0.45`，`yellow_dark` / `pink_light` 保持 `0.26`，不影响另外两套主题。
+- **套餐卡浅色态**：未选中卡使用纯白 `surfaceCard`；选中卡使用自身金色描边 `#FFE794` 的 30% 填充，标题与价格使用 `brown800 #5D3A12`；`yellow_dark` 保持原 8% 金底与金渐变文字。
 - **模块**：`membership_app_bar`、`membership_hero`、`membership_user_card`、`membership_plan_selector`/`plan_card`、`membership_purchase_bar`/`cta_button`、`membership_benefits_section`/`benefit_item`、`membership_auto_renew_statement`。
 - **公共组件**：`AppAsyncPageBody`、`AppBlurredChromeBar`、`AppScrollBlurScope`、`OverscrollStretch`、`AuroraBackground`、`AppPageDots`、`AppGradientCtaButton`、`AppNetworkAvatar`、`AppToast`。
 - **Model**：`MembershipPageContent`、`MembershipPlan`、`MembershipBenefit`、`MembershipHeroSlide`、`MembershipAgreement`、`MemberAccount`。

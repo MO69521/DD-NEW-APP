@@ -447,8 +447,8 @@ const MOTION_CATEGORIES: Array<{ title: string; items: MotionEffect[] }> = [
     items: [
       {
         name: "极光 GLSL 背景",
-        desc: "噪声 + 三色渐变动态极光，含降级渐变",
-        tech: "FragmentShader + Ticker 驱动 uTime + CustomPaint",
+        desc: "噪声 + 三色渐变动态极光，含降级渐变；会员 Hero 在 yellow_light 下增强黄色",
+        tech: "FragmentShader + Ticker 驱动 uTime + CustomPaint · membership opacity: yellow_light 0.45 / 其余 0.26",
         path: "lib/shared/widgets/aurora_background.dart",
       },
       {
@@ -1716,12 +1716,14 @@ function SemanticTierView() {
             ["checkInCumulativeBg", alphaSwatch("rgba(255,232,71,0.08)", APP.bg), "yellow500Alpha08（8% primary）", "累计签到徽章底"],
             ["checkInCumulativeBorder", alphaSwatch("rgba(255,255,255,0)", APP.bg), "whiteAlpha00（透明）", "累计徽章描边"],
             ["checkInMilestoneAmount", <Row gap={4}>{swatch("#FFFFFF")}{swatch("#1A1A2E")}</Row>, "深 whiteAlpha100 / 浅 textPrimary（_isLight 翻转）", "里程碑数值（浅色翻墨字）"],
-            ["planSelectedBg", alphaSwatch("rgba(255,231,148,0.08)", APP.bg), "0x14FFE794（8% 会员金）", "会员方案选中卡底"],
+            ["planSelectedBg", <Row gap={4}>{alphaSwatch("rgba(255,231,148,0.08)", APP.bg)}{alphaSwatch("rgba(255,231,148,0.30)", "#FFFFFF")}</Row>, "深 8% / 浅 30% 描边金", "会员方案选中卡底（浅色增强）"],
             ["planSelectedBorder", swatch("#FFE794"), "#FFE794（ctaGradientStart）", "会员方案选中描边"],
             ["planSelectedGoldStart", swatch("#FFE794"), "#FFE794（ctaGradientStart）", "选中金渐变起"],
             ["planSelectedGoldEnd", swatch("#FFCD5A"), "#FFCD5A（ctaGradientEnd）", "选中金渐变止"],
+            ["planSelectedTextStart / …End", <Row gap={4}>{swatch("#FFE794")}{swatch("#FFCD5A")}{swatch("#5D3A12")}</Row>, "深 金渐变 / 浅 brown800", "选中卡标题与价格"],
             ["planSelectedSecondary", alphaSwatch("rgba(255,255,255,0.6)", APP.bg), "whiteAlpha60", "选中卡次要文字"],
             ["planSelectedFooterText", swatch("#202020"), "#202020（textOnLightPanel）", "选中卡脚文字"],
+            ["planUnselectedBg", <Row gap={4}>{alphaSwatch("rgba(255,255,255,0.04)", APP.bg)}{swatch("#FFFFFF")}</Row>, "深 whiteAlpha04 / 浅 surfaceCard", "未选中卡底（浅色纯白）"],
             ["searchHotAccent", swatch("#FF7E32"), "#FF7E32（accentOrange）", "搜索热词强调"],
             ["bookDetailUpdateHighlight", swatch("#F0B16A"), "#F0B16A", "书详情「更新」高亮：日期 / 圆点边 / 文字"],
             ["rankingSegmentedSelectedText", swatch("#202020"), "#202020（textOnLightPanel）", "榜单分段控件选中字"],
@@ -1771,7 +1773,7 @@ function ComponentTierView() {
       rows: [
         ["AppTopTabBar", <Row gap={4}>{swatch("#FFE847")}{swatch("#FFFFFF")}{swatch("#9AA0AA")}</Row>, "primary / textPrimary / textSecondary", "选中线、选中文字、未选中文字"],
         ["AppBottomNav", <Row gap={4}>{swatch("#151B24")}{swatch("#FFE847")}{swatch("#ABACB3")}</Row>, "navBarBackground / primary / iconMutedSecondary", "底部导航底、选中态、未选态"],
-        ["SegmentedSwitch", <Row gap={4}>{alphaSwatch("rgba(255,232,71,0.08)", APP.bg)}{swatch("#FFE847")}{swatch("#737B86")}</Row>, "segmentedSelectedFill / primary / textTertiary", "分段选中底、选中字、未选字"],
+        ["SegmentedSwitch", <Row gap={4}>{alphaSwatch("rgba(255,232,71,0.08)", APP.bg)}{swatch("#FFE847")}{swatch("#737B86")}</Row>, "segmentedSelectedFill / segmentedSelectedText / textTertiary", "分段选中底、选中字（深色亮黄；浅色 accentText：yellow700 / pink600）、未选字"],
       ],
     },
     {
@@ -1853,9 +1855,10 @@ function BrandSwatches() {
     },
     {
       title: "黄 / 金（yellow · gold · amber）",
-      note: "主强调黄、VIP 会员金、警告琥珀",
+      note: "主强调黄、深黄文字档（白底可读）、VIP 会员金、警告琥珀",
       colors: [
         ["yellow500", "#FFE847"],
+        ["yellow700", "#8F6400"],
         ["gold400", "#F9C74F"],
         ["amber500", "#FFA940"],
       ],
@@ -2009,32 +2012,32 @@ function MultiStyleSection() {
       </Stack>
 
       <Stack gap={8}>
-        <Text weight="semibold">同一组件在两个风格下的取色对比</Text>
+        <Text weight="semibold">同一组件在三个风格下的取色对比</Text>
         <Text tone="secondary" size="small">
           同一组件、同一套语义 token，`themeId` 不同则解析出不同颜色；组件代码不变。
           token 级明细见规范 §4.2 语义层。
         </Text>
         <Table
-          headers={["组件 / 场景", "取色 token", "yellow_dark", "pink_light"]}
-          columnAlign={["left", "left", "left", "left"]}
+          headers={["组件 / 场景", "取色 token", "yellow_dark", "pink_light", "yellow_light"]}
+          columnAlign={["left", "left", "left", "left", "left"]}
           rows={[
-            ["页面背景", tvCode("background"), tv("#090E17"), tv("#F4F2F4")],
-            ["标题 / 正文", tvCode("textPrimary"), tv("#FFFFFF", "白"), tv("#1A1A2E", "墨")],
-            ["次要文字", tvCode("textSecondary"), tv("#9AA0AA"), tv("#6B7280")],
-            ["卡片面", tvCode("surface"), tv("#151B24"), tv("#FFFFFF")],
-            ["卡片描边", tvCode("borderSubtle"), tvCode("whiteAlpha04 · 4% 白"), tv("#F8E6ED", "浅粉")],
-            ["分割线", tvCode("divider"), tv("#232A33"), tv("#F3F4F6")],
-            ["主按钮 · 底", tvCode("primary"), tv("#FFE847", "黄"), tv("#FF4D88", "粉")],
-            ["主按钮 · 字", tvCode("onPrimary"), tv("#090E17", "深"), tv("#FFFFFF", "白")],
-            ["底部导航 · 底", tvCode("navBarBackground"), tvCode("whiteAlpha20"), tvCode("blackAlpha04")],
-            ["底部导航 · 选中", tvCode("accent"), tv("#FFE847", "黄"), tv("#FF4D88", "粉")],
-            ["顶栏毛玻璃", tvCode("chromeBarScrim"), tvCode("bgTint80 · 深"), tvCode("bgTint80 · 粉")],
-            ["弹窗底", tvCode("surfaceElevated"), tv("#131820"), tv("#FFFFFF", "白")],
-            ["分段选中 · 底/字", tvCode("segmentedSelectedFill / …Text"), tvCode("黄 8% / 黄字"), tvCode("粉 8% / 粉字")],
-            ["骨架屏", tvCode("shimmerBase / Highlight"), tvCode("whiteAlpha08 / whiteAlpha24"), tvCode("blackAlpha04 / blackAlpha08")],
-            ["头图 / 封面遮罩", tvCode("rankingHeroScrim / searchStatusBadge"), tvCode("bgTint · 暗"), tvCode("black · 暗（恒暗）")],
-            ["Toast / 作者徽 · 底", tvCode("primary"), tv("#FFE847", "黄"), tv("#FF4D88", "粉")],
-            ["状态栏图标", tvCode("systemUiOverlayStyle"), tvNote("白图标"), tvNote("深图标")],
+            ["页面背景", tvCode("background"), tv("#090E17"), tv("#F4F2F4"), tv("#F8F7FC")],
+            ["标题 / 正文", tvCode("textPrimary"), tv("#FFFFFF", "白"), tv("#1A1A2E", "墨"), tv("#1A1A2E", "墨")],
+            ["次要文字", tvCode("textSecondary"), tv("#9AA0AA"), tv("#6B7280"), tv("#6B7280")],
+            ["卡片面", tvCode("surface"), tv("#151B24"), tv("#FFFFFF"), tv("#FFFFFF")],
+            ["卡片描边", tvCode("borderSubtle"), tvCode("whiteAlpha04 · 4% 白"), tv("#F8E6ED", "浅粉"), tv("#F3F4F6", "浅灰")],
+            ["分割线", tvCode("divider"), tv("#232A33"), tv("#F3F4F6"), tv("#F3F4F6")],
+            ["主按钮 · 底", tvCode("primary"), tv("#FFE847", "黄"), tv("#FF4D88", "粉"), tv("#FFE847", "黄")],
+            ["主按钮 · 字", tvCode("onPrimary"), tv("#090E17", "深"), tv("#FFFFFF", "白"), tv("#090E17", "深")],
+            ["底部导航 · 底", tvCode("navBarBackground"), tvCode("whiteAlpha20"), tvCode("blackAlpha04"), tvCode("blackAlpha04")],
+            ["底部导航 · 选中", tvCode("accent"), tv("#FFE847", "黄"), tv("#FF4D88", "粉"), tv("#FFE847", "黄")],
+            ["顶栏毛玻璃", tvCode("chromeBarScrim"), tvCode("bgTint80 · 深"), tvCode("bgTint80 · 粉"), tvCode("bgTint80 · 中性浅灰")],
+            ["弹窗底", tvCode("surfaceElevated"), tv("#131820"), tv("#FFFFFF", "白"), tv("#FFFFFF", "白")],
+            ["分段选中 · 底/字", tvCode("segmentedSelectedFill / …Text"), tvCode("黄 8% / 亮黄字"), tvCode("粉 8% / 深粉字 pink600"), tvCode("黄 8% / 深黄字 yellow700")],
+            ["骨架屏", tvCode("shimmerBase / Highlight"), tvCode("whiteAlpha08 / whiteAlpha24"), tvCode("blackAlpha04 / blackAlpha08"), tvCode("blackAlpha04 / blackAlpha08")],
+            ["头图 / 封面遮罩", tvCode("rankingHeroScrim / searchStatusBadge"), tvCode("bgTint · 暗"), tvCode("black · 暗（恒暗）"), tvCode("black · 暗（恒暗）")],
+            ["Toast / 作者徽 · 底", tvCode("primary"), tv("#FFE847", "黄"), tv("#FF4D88", "粉"), tv("#FFE847", "黄")],
+            ["状态栏图标", tvCode("systemUiOverlayStyle"), tvNote("白图标"), tvNote("深图标"), tvNote("深图标")],
           ].map((r) => r.map(cell))}
         />
         <Text tone="tertiary" size="small">

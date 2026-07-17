@@ -84,6 +84,10 @@ class _RechargePackagesSectionState extends State<RechargePackagesSection> {
       decoration: BoxDecoration(
         color: AppColors.surfaceCard,
         borderRadius: BorderRadius.circular(AppRadius.lg),
+        border: Border.all(
+          color: AppColors.borderGlass,
+          width: AppSizes.hairline,
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

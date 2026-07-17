@@ -34,5 +34,12 @@ After every completed UI, theme, or asset iteration, automatically run:
 Do this after checks and the post-edit audit, before reporting completion. If a
 Flutter preview is running, the script syncs the workspace and refreshes it:
 Dart-only changes use hot reload, while `pubspec.yaml` and asset changes such as
-SVG, PNG, fonts, shaders, or JSON use hot restart. If no preview is running, the
-script exits without error; mention that preview verification was skipped.
+SVG, PNG, fonts, shaders, or JSON use hot restart.
+
+The refresh must actually apply every time, not be skipped. So if no preview is
+running when a UI, theme, or asset iteration completes, start one before
+reporting completion: follow `.cursor/rules/icloud-ios-simulator-workflow.mdc`
+(sync to `/tmp/diandian-sim-preview`, then `flutter run` on the booted
+simulator) and keep that `flutter run` process alive so subsequent iterations
+hot-reload into it. Only skip (and say so) if no simulator is booted or the
+build cannot start.

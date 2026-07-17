@@ -86,7 +86,7 @@ class HelpFeedbackFormView extends StatelessWidget {
                   AppText(
                     submitMessage!,
                     style: AppTextStyles.labelMedium.copyWith(
-                      color: AppColors.accentYellow,
+                      color: AppColors.accentText,
                     ),
                   ),
                 ],

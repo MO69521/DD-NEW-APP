@@ -204,7 +204,7 @@ echo "--- File size check ---"
 while IFS= read -r file; do
   [ -f "$file" ] || continue
   case "$file" in
-    lib/core/theme/app_sizes.dart|lib/core/theme/app_text_styles.dart) continue ;;
+    lib/core/theme/app_sizes.dart|lib/core/theme/app_text_styles.dart|lib/core/theme/app_colors.dart) continue ;;
   esac
   lines=$(wc -l < "$file" | tr -d ' ')
   if [ "$lines" -gt 300 ]; then

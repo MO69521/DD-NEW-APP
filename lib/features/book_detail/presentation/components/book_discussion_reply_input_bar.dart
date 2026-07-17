@@ -37,7 +37,8 @@ class BookDiscussionReplyInputBar extends StatelessWidget {
         height: AppSizes.bookDiscussionDetailInputBarHeight,
         padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
         decoration: const BoxDecoration(
-          color: AppColors.backgroundDark,
+          // 浅色态纯白、深色态壳 tint，与其余二级页底部操作栏一致。
+          color: AppColors.bottomActionBarScrim,
           border: Border(top: BorderSide(color: AppColors.borderGlass)),
         ),
         alignment: Alignment.center,
@@ -76,7 +77,7 @@ class BookDiscussionReplyInputBar extends StatelessWidget {
                   isSubmitting ? '发送中...' : '发送',
                   style: AppTextStyles.bodyMedium.copyWith(
                     color: canSend
-                        ? AppColors.accentYellow
+                        ? AppColors.accentText
                         : AppColors.textOnDarkMuted,
                   ),
                 ),

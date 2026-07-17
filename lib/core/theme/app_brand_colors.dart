@@ -38,6 +38,9 @@ abstract final class AppBrandColors {
   static const bool isLightExperiment =
       themeId == _pinkLight || themeId == _yellowLight;
 
+  /// 黄色浅色包单独判定（供需与 `pink_light` 区分处理的少量语义，如按钮禁用字色）。
+  static const bool isYellowLight = themeId == _yellowLight;
+
   // ══════════════════════════════════════════════════════════════
   // §A 主题壳源色（随 --dart-define=THEME 从 AppPalette 选）
   // ══════════════════════════════════════════════════════════════
@@ -65,6 +68,13 @@ abstract final class AppBrandColors {
       ? AppPalette.neutralWhite
       : AppPalette.neutralCool950;
 
+  /// 主强调色文字档：白底 / 浅色面上的可读强调文字（价格、链接、高亮字段）。
+  /// 亮黄 `yellow500` 在白底上不可读，黄系主题（yellow_dark / yellow_light）用
+  /// 深黄 `yellow700`（白底对比度约 5.3:1，AA 达标）；pink_light 用品牌粉深档 `pink600`。
+  static const Color accentText = themeId == _pinkLight
+      ? AppPalette.pink600
+      : AppPalette.yellow700;
+
   /// 主强调 4% / 8% 柔化底（开启 / 选中态大色块底色），跟随强调色。
   static const Color accentSoft04 = themeId == _pinkLight
       ? AppPalette.pink500Alpha04
@@ -78,10 +88,10 @@ abstract final class AppBrandColors {
       ? AppPalette.pink500Alpha40
       : AppPalette.yellow500Alpha40;
 
-  /// 浅色外壳卡片细描边：pink_light 用更浅的浅粉（pink75），yellow_light 用中性浅灰（yellow_dark 不使用）。
+  /// 浅色外壳卡片细描边：pink_light 用浅粉（pink75），yellow_light 用更轻的中性浅灰（neutralCool100；yellow_dark 不使用）。
   static const Color lightCardBorder = themeId == _pinkLight
       ? AppPalette.pink75
-      : AppPalette.neutralCool200;
+      : AppPalette.neutralCool100;
 
   /// 极光渐变亮核（暖米金）。pink_light 暂复用 yellow_dark（v1 已知项）。
   static const Color auroraGlow = AppPalette.cream100;

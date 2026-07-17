@@ -280,7 +280,7 @@ class _Header extends StatelessWidget {
                       : Icons.thumb_up_alt_outlined,
                   size: AppSizes.bookDetailDiscussionLikeIconSize,
                   color: post.isLiked
-                      ? AppColors.accentYellow
+                      ? AppColors.accentText
                       : AppColors.discussionLikeIcon,
                 ),
                 const SizedBox(width: AppSpacing.xxsHalf),

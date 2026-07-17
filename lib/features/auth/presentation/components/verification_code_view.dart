@@ -107,7 +107,7 @@ class _ResendCodeAction extends StatelessWidget {
         style: AppTextStyles.bodyMedium.copyWith(
           color: onTap == null
               ? AppColors.textOnDarkMuted
-              : AppColors.accentYellow,
+              : AppColors.accentText,
         ),
       ),
     );

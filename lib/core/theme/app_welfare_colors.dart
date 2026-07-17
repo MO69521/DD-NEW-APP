@@ -41,8 +41,8 @@ abstract final class AppWelfareColors {
       ? AppColors.onPrimary
       : AppBrandColors.textOnLightPanel;
 
-  /// 今日可领奖励文字（主黄）。
-  static const Color checkInRewardTodayText = AppBrandColors.checkInYellow;
+  /// 今日可领奖励文字：走强调文字档（深色亮黄；浅色深黄/深粉，8% 黄底上可读）。
+  static const Color checkInRewardTodayText = AppColors.accentText;
   // 普通签到日 / 里程碑气泡 / 累计卡底：深色 4% 白叠底，浅色翻为弱实体面。
   static const Color checkInDayBg = _isLight
       ? AppColors.surfaceSoft

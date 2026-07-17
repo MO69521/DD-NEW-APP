@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_durations.dart';
+import '../../../../core/theme/app_membership_colors.dart';
 import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../shared/widgets/aurora_background.dart';
@@ -199,7 +200,7 @@ class _MembershipHeroState extends State<MembershipHero>
               blendMode: BlendMode.dstIn,
               child: const ClipRect(
                 child: AuroraBackground(
-                  opacity: 0.26,
+                  opacity: AppMembershipColors.heroAuroraOpacity,
                   amplitude: 0.9,
                   colorStops: [
                     AppColors.accentYellow,

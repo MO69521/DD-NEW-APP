@@ -243,7 +243,7 @@ abstract final class AppTextStyles {
   );
 
   static TextStyle get linkSmallDark => labelMedium.copyWith(
-    color: AppColors.accentYellow,
+    color: AppColors.accentText,
     fontWeight: AppFontWeights.regular,
     height: AppLineHeights.none,
   );
