@@ -145,6 +145,9 @@ abstract final class AppSizes {
 
   // ── 福利页 (Figma 294:4943) ──
   static const double welfareHeaderHeight = 44;
+
+  /// 福利页头部装饰渐变高度（用户指定 300，较默认 [tabTopTextureHeight] 更高）。
+  static const double welfareTabTopTextureHeight = 300;
   static const double welfareCurrencyBarHeight = 76;
   static const double welfareVipBannerHeight = 49;
   static const double welfareRechargeCardHeight = 140;

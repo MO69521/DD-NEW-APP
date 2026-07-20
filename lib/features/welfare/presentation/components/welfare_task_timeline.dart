@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_radius.dart';
 import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
@@ -189,12 +188,13 @@ class _TimelineFooterCell extends StatelessWidget {
       ],
     );
 
-    // 可领取：文案做成按钮样式（纯白 4% 底 + 胶囊圆角）。
+    // 可领取：文案做成按钮样式（与行内奖励角标同底 + 胶囊圆角；
+    // 原 surfaceCard 与福利卡片容器同色导致按钮底不可见）。
     final cell = Container(
       padding: const EdgeInsets.symmetric(vertical: AppSpacing.xs),
       decoration: node.isActive
           ? BoxDecoration(
-              color: AppColors.surfaceCard,
+              color: AppWelfareColors.taskRewardChipBg,
               borderRadius: BorderRadius.circular(AppRadius.full),
             )
           : null,

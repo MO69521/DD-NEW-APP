@@ -97,6 +97,7 @@ flowchart LR
 
 ### partner · [partner_page.dart](../lib/features/partner/presentation/pages/partner_page.dart)
 - **职责**：一级 Tab「伙伴」：探索/消息/互动三 Tab。
+- **状态（暂下线）**：底部导航与主壳入口已注释（`MainTabConfig` / `MainTabShellPage`）；feature 代码保留，恢复时取消注释并顺延书架/我的下标。
 - **模块**：`partner_page_header`、`partner_explore_body`、`partner_message_body`、`partner_interaction_body`、`partner_filter_sheet`、`partner_top_tabs`、`partner_character_grid`/`card`、`partner_message_list`/`row`、`partner_interaction_scene_page` 等。
 - **公共组件**：`AppAsyncPageBody`、`AppSwipeTabSwitcher`、`AppBlurredChromeBar`、`AppTopBar`、`AppTopBarIconButton`、`AppTopTabBar`、`AppScrollBlurScope`、`AuroraBackground`、`EmptyState`、`AppBottomNav`。
 - **Model**：`PartnerPageContent`、`PartnerTopTab`、`PartnerCharacter`、`PartnerConversation`、`PartnerInteractionScene`、`PartnerSortMode`、`PartnerCollectionStatus`。

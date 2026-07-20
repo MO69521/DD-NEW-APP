@@ -23,7 +23,7 @@ flowchart LR
 | 能力 | 组件 / 位置 | 说明 |
 |---|---|---|
 | 数字滚动 | `AnimatedCountText`（[animated_count_text.dart](../lib/shared/widgets/animated_count_text.dart)） | 数值变化从旧值滚到新值，时长 `numberRoll` |
-| Tab 文字过渡 | `AppAnimatedTabLabel`（[app_animated_tab_label.dart](../lib/shared/components/app_animated_tab_label.dart)） | 选中/未选中样式插值 |
+| Tab 文字过渡 | `AppAnimatedTabLabel`（[app_animated_tab_label.dart](../lib/shared/components/app_animated_tab_label.dart)） | 选中/未选中样式插值；点击切换仅 from/to 两端交叉过渡（不扫过中间索引），跟手滑动仍按连续进度插值 |
 | Tab 指示条 | `ElasticTabIndicator`（[elastic_tab_indicator.dart](../lib/shared/components/elastic_tab_indicator.dart)） | 平移 + 宽度拉伸回弹（§3.5 规范：弹性只作用于宽度恢复） |
 | 底部导航图标 | `AppNavIcon`（[app_nav_icon.dart](../lib/shared/widgets/app_nav_icon.dart)） | 选中缩放微动画 |
 

@@ -18,9 +18,11 @@ class MainTabItem {
 abstract final class MainTabConfig {
   static const int bookstoreIndex = 0;
   static const int welfareIndex = 1;
-  static const int partnerIndex = 2;
-  static const int bookshelfIndex = 3;
-  static const int profileIndex = 4;
+  // 暂时下线「伙伴」一级 Tab；恢复时取消注释本项与 items 对应条目，
+  // 并将 [bookshelfIndex] / [profileIndex] 下标各 +1。
+  // static const int partnerIndex = 2;
+  static const int bookshelfIndex = 2;
+  static const int profileIndex = 3;
 
   static const List<MainTabItem> items = [
     MainTabItem(
@@ -33,11 +35,12 @@ abstract final class MainTabConfig {
       iconAsset: AppThemeAssets.navWelfareInactive,
       selectedIconAsset: AppThemeAssets.navWelfareActive,
     ),
-    MainTabItem(
-      label: '伙伴',
-      iconAsset: AppThemeAssets.navPartnerInactive,
-      selectedIconAsset: AppThemeAssets.navPartnerActive,
-    ),
+    // 暂时下线「伙伴」一级 Tab（三主题共用配置，恢复时取消注释）。
+    // MainTabItem(
+    //   label: '伙伴',
+    //   iconAsset: AppThemeAssets.navPartnerInactive,
+    //   selectedIconAsset: AppThemeAssets.navPartnerActive,
+    // ),
     MainTabItem(
       label: '书架',
       iconAsset: AppThemeAssets.navBookshelfInactive,

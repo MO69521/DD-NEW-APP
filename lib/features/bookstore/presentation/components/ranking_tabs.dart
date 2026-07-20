@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/theme/app_durations.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/theme/app_theme_context.dart';
@@ -100,8 +101,17 @@ class _RankingTabsState extends State<RankingTabs> {
     final maxOffset = _scrollController.position.maxScrollExtent;
     if (maxOffset <= 0) return;
 
-    final targetOffset = selectedIndex <= 1 ? 0.0 : maxOffset;
-    _scrollController.jumpTo(targetOffset.clamp(0.0, maxOffset));
+    final targetOffset = (selectedIndex <= 1 ? 0.0 : maxOffset).clamp(
+      0.0,
+      maxOffset,
+    );
+    if ((targetOffset - _scrollController.offset).abs() < 1) return;
+    // 平滑滚动到目标位置；jumpTo 硬跳会让跨档切换观感突兀。
+    _scrollController.animateTo(
+      targetOffset,
+      duration: AppDurations.normal,
+      curve: Curves.easeInOut,
+    );
   }
 }
 

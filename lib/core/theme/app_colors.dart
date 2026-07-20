@@ -219,6 +219,14 @@ abstract final class AppColors {
   static const Color gradientFadeStart = bgTint00;
   static const Color gradientFadeMid = bgTint90;
   static const Color gradientFadeEnd = backgroundDark;
+
+  /// 一级 Tab 顶部装饰渐变（用户指定，仅 `yellow_light` 可见）：
+  /// 顶部主黄（`primary`）→ 底部白 0%（`white00`）垂直渐隐。
+  /// 其余主题起色同为透明，渐变整体不可见，保持原透明槽位 / 贴图表现。
+  static const Color tabTopHeaderGradientStart = AppBrandColors.isYellowLight
+      ? primary
+      : white00;
+  static const Color tabTopHeaderGradientEnd = white00;
   static const Color coverBorder = black04;
   static const Color overlayScrim = black30;
 
@@ -250,9 +258,16 @@ abstract final class AppColors {
   /// 书架管理态封面遮罩（已选中，略浅以保留选中反馈）。
   static const Color bookshelfManageCoverOverlaySelected = black40;
 
-  /// 书架管理态未选中选择框描边（压在封面缩略图上，随封面恒暗，不随页面主题翻）。
+  /// 通用未选中选择框描边（页面面上：登录协议 / 支付方式 / 全选等）。
   static const Color bookshelfSelectionMarkBorderUnselected =
       _darkDivider; // light-audit: keep-dark
+
+  /// 封面上的未选中多选圈（书架管理态，压在封面图上恒白系，用户指定泛白）：
+  /// 30% 白底 + 85% 白描边，三主题一致，保证任意封面上可见。
+  static const Color selectionMarkOnCoverUnselectedFill =
+      white30; // light-audit: keep-dark
+  static const Color selectionMarkOnCoverUnselectedBorder =
+      white85; // light-audit: keep-dark
 
   /// 书架空态文案（Figma 1319:9953）。
   static const Color bookshelfEmptyText = AppPalette.neutralGray700;

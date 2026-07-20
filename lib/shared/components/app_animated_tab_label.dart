@@ -84,11 +84,23 @@ class _AppAnimatedTabLabelState extends State<AppAnimatedTabLabel>
     super.dispose();
   }
 
-  double get _effectiveProgress {
+  /// 当前 Tab 的选中度 t（0..1）。
+  ///
+  /// - 跟手模式：按 swipeProgress 与本 Tab 的距离连续插值；
+  /// - 点击模式：只在 from / to 两个端点间交叉过渡，**不经过中间索引**——
+  ///   否则跨档切换（如 0 → 2）时进度路过中间 Tab，会让它闪一下选中态。
+  double _selectionT() {
     final swipe = widget.swipeProgress?.value;
-    if (swipe != null) return swipe;
+    if (swipe != null) {
+      return 1 - (swipe - widget.index).abs().clamp(0.0, 1.0);
+    }
+    if (_fromIndex == _toIndex) {
+      return widget.index == _toIndex ? 1.0 : 0.0;
+    }
     final eased = Curves.easeInOut.transform(_controller.value);
-    return _fromIndex + (_toIndex - _fromIndex) * eased;
+    if (widget.index == _toIndex) return eased;
+    if (widget.index == _fromIndex) return 1 - eased;
+    return 0.0;
   }
 
   @override
@@ -96,11 +108,7 @@ class _AppAnimatedTabLabelState extends State<AppAnimatedTabLabel>
     return AnimatedBuilder(
       animation: widget.swipeProgress ?? _controller,
       builder: (context, _) {
-        final distance = (_effectiveProgress - widget.index).abs().clamp(
-          0.0,
-          1.0,
-        );
-        final t = 1 - distance;
+        final t = _selectionT();
         if (widget.lockGeometryDuringSwipe && widget.swipeProgress != null) {
           return _buildLockedGeometryLabel(t);
         }

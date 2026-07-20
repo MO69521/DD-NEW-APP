@@ -56,7 +56,7 @@ abstract final class AppWelfareColors {
   static const Color checkInDayLabelMuted = _isLight
       ? AppColors.textSecondary
       : AppColors.white60;
-  static const Color checkInCumulativeBg = checkInHighlightSurface;
+  // checkInCumulativeBg 已移除：行内奖励角标统一走 taskRewardChipBg（2026-07-17）。
   static const Color checkInCumulativeBorder = AppColors.white00;
   static const Color checkInCumulativeLabel = AppBrandColors.goldMedium;
   static const Color checkInCumulativeValue = AppBrandColors.goldDark;

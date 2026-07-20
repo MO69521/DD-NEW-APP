@@ -6,11 +6,10 @@ import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/theme/app_welfare_colors.dart';
-import '../../../../shared/widgets/app_asset_image.dart';
 import '../../../../shared/widgets/app_button.dart';
 import '../../../../shared/widgets/app_text.dart';
 import '../../domain/entities/welfare_models.dart';
-import '../mappers/welfare_asset_mapper.dart';
+import 'welfare_task_reward_chip.dart';
 
 /// L3 组件 — 吃饭签到简行（Figma 559:23066）。
 class MealCheckInSection extends StatelessWidget {
@@ -74,52 +73,18 @@ class MealCheckInSection extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                 ),
                 const SizedBox(height: AppSpacing.sm),
-                _GoldEnergyRewardChip(amount: summary.rewardAmount),
+                // 与任务行奖励角标统一样式（taskRewardChipBg 底），不再单独用金色底。
+                WelfareTaskRewardChip(
+                  reward: WelfareTaskReward(
+                    type: CheckInRewardType.energy,
+                    label: '${summary.rewardAmount}',
+                  ),
+                ),
               ],
             ),
           ),
           const SizedBox(width: AppSpacing.md),
           _VipClaimButton(onTap: onVipClaimTap),
-        ],
-      ),
-    );
-  }
-}
-
-class _GoldEnergyRewardChip extends StatelessWidget {
-  const _GoldEnergyRewardChip({required this.amount});
-
-  final int amount;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: AppSizes.welfareTaskRewardChipHeight,
-      padding: const EdgeInsets.only(left: AppSpacing.xs, right: AppSpacing.xs),
-      decoration: BoxDecoration(
-        color: AppWelfareColors.checkInCumulativeBg,
-        borderRadius: BorderRadius.circular(AppRadius.full),
-        border: Border.all(
-          color: AppWelfareColors.checkInCumulativeBorder,
-          width: AppSizes.hairline,
-        ),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          AppAssetImage(
-            assetPath: WelfareAssetMapper.checkInMilestoneEnergyIconAsset(),
-            width: AppSizes.welfareTaskRewardIconSize,
-            height: AppSizes.welfareTaskRewardIconSize,
-          ),
-          const SizedBox(width: AppSpacing.xxsHalf),
-          AppText(
-            '$amount',
-            style: AppTextStyles.captionMd.copyWith(
-              color: AppWelfareColors.checkInMilestoneAmount,
-              fontWeight: AppFontWeights.medium,
-            ),
-          ),
         ],
       ),
     );

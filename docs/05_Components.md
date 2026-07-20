@@ -51,7 +51,7 @@
 |---|---|---|---|---|---|
 | `AppTopTabBar` (+`AppTopTabItem`) · [app_top_tab_bar.dart](../lib/shared/components/app_top_tab_bar.dart) | 顶部一级 Tab 栏（弹性指示 + 角标） | `items` req · `selectedIndex` req · `onSelected` req · `swipeProgress` | bookstore、partner、my_messages、help_feedback | 强烈建议 | 已足够 |
 | `AppSwipeTabSwitcher` · [app_swipe_tab_switcher.dart](../lib/shared/components/app_swipe_tab_switcher.dart) | Tab 内容区跟手左右切换 | `children`/`child` · `selectedIndex` req · `onIndexChanged` req · `tabCount` | 全站通用 | 强烈建议 | 已足够 |
-| `AppAnimatedTabLabel` · [app_animated_tab_label.dart](../lib/shared/components/app_animated_tab_label.dart) | Tab 文字选中态插值过渡 | `index`/`selectedIndex`/`label` req · `active/inactiveStyle` req | 经 `AppTopTabBar`；bookshelf、dress_up、bookstore | 建议 | 已足够 |
+| `AppAnimatedTabLabel` · [app_animated_tab_label.dart](../lib/shared/components/app_animated_tab_label.dart) | Tab 文字选中态插值过渡（点击跨档不经中间索引） | `index`/`selectedIndex`/`label` req · `active/inactiveStyle` req | 经 `AppTopTabBar`；bookshelf、dress_up、bookstore | 建议 | 已足够 |
 | `ElasticTabIndicator` · [elastic_tab_indicator.dart](../lib/shared/components/elastic_tab_indicator.dart) | 弹性指示条（平移+拉伸回弹） | `selectedIndex` req · `slotWidth/slotPitch` · `axis` · `swipeProgress` | currency_wallet；shared（tab 系列） | 强烈建议 | 已足够（底层件） |
 | `ElasticTabRow` · [elastic_tab_row.dart](../lib/shared/components/elastic_tab_row.dart) | 变宽 Tab 行 + 内置指示条 | `selectedIndex` req · `children` req · `swipeProgress` | bookshelf、dress_up | 建议 | 已足够 |
 | `AppSegmentedSwitch` (+`AppSegmentedItemBuilder`) · [app_segmented_switch.dart](../lib/shared/components/app_segmented_switch.dart) | 毛玻璃横向分段开关 | `itemCount`/`selectedIndex`/`onChanged`/`itemBuilder` req | book_detail、ranking | 建议 | 已足够 |
@@ -68,7 +68,7 @@
 | `DialogCloseButton` · [dialog_close_button.dart](../lib/shared/components/dialog_close_button.dart) | 弹窗右上角关闭按钮 | `onTap` req | 全站通用 | 强烈建议 | 已足够 |
 | `AppToast` · [app_toast.dart](../lib/shared/components/app_toast.dart) | 全局轻提示（静态 API） | `AppToast.show(context, message)` | 全站通用 | 强烈建议 | 已足够 |
 | `EmptyState` · [empty_state.dart](../lib/shared/components/empty_state.dart) | 空状态组合 | `title` req · `description` · `action` · `illustration` | 全站通用 | 强烈建议 | 已足够 |
-| `AppTabTopTexture` · [app_tab_top_texture.dart](../lib/shared/components/app_tab_top_texture.dart) | 一级 Tab 顶部装饰纹理（全宽 × 120） | 无必填 | 书城 / 福利 / 书架 | 建议 | 切图未到位时透明槽位 |
+| `AppTabTopTexture`（`height` 可覆写，默认 120；福利页 300） · [app_tab_top_texture.dart](../lib/shared/components/app_tab_top_texture.dart) | 一级 Tab 顶部装饰纹理（全宽 × 120） | 无必填 | 书城 / 福利 / 书架 | 建议 | 切图未到位时透明槽位 |
 | `AppListLoadMoreFooter` · [app_list_load_more_footer.dart](../lib/shared/components/app_list_load_more_footer.dart) | 上拉加载指示（可 Sliver） | `isLoading` req · `asSliver` · `padding` | bookshelf、category、editor_pick | 建议 | 已足够 |
 | `AppConfetti` · [app_confetti.dart](../lib/shared/components/app_confetti.dart) | 礼花庆祝层 | `duration` | welfare | 建议 | 已足够 |
 | `ShareBottomSheet` · [share_bottom_sheet.dart](../lib/shared/components/share_bottom_sheet.dart) | 分享底部弹层（静态 show） | `onChannelTap` | book_detail | 建议 | 使用面小，可推广 |
@@ -123,7 +123,7 @@
 |---|---|---|---|---|---|
 | `MainTabShell` (+`MainTabPlaceholder`) · [main_tab_shell.dart](../lib/shared/layouts/main_tab_shell.dart) | 主 Tab 壳（切换 + 共享底栏） | `pages` req · `initialIndex` · `controller` · `hideBottomNav` | routes（根路由） | 内部件 | `MainTabPlaceholder` 未用，建议删 |
 | `MainTabController` · [main_tab_controller.dart](../lib/shared/layouts/main_tab_controller.dart) | 外部切 Tab 控制器 | 无（默认构造） | routes、bookshelf、bookstore、profile | 建议 | 已足够 |
-| `AppBottomNav` (+`AppBottomNavStyle`) · [app_bottom_nav.dart](../lib/shared/layouts/app_bottom_nav.dart) | 底部 5 Tab 导航栏 | `items` · `selectedIndex` · `onTabChanged` · `style` · `blurEnabled` | 实例：`main_tab_shell`；`barHeight` 常量全站留白通用 | 建议 | 已足够 |
+| `AppBottomNav` (+`AppBottomNavStyle`) · [app_bottom_nav.dart](../lib/shared/layouts/app_bottom_nav.dart) | 底部导航栏（当前 4 Tab；「伙伴」暂时下线） | `items` · `selectedIndex` · `onTabChanged` · `style` · `blurEnabled` | 实例：`main_tab_shell`；`barHeight` 常量全站留白通用 | 建议 | 已足够 |
 | `AppPageChrome` · [app_page_chrome.dart](../lib/shared/layouts/app_page_chrome.dart) | 页面 Chrome 叠层（内容滚入顶栏下 + 顶栏毛玻璃） | `topBar` req · `body` req | 全站二级页通用 | 强烈建议 | 已足够 |
 | `AppScrollBlurScope` · [app_scroll_blur_scope.dart](../lib/shared/layouts/app_scroll_blur_scope.dart) | 滚动判定→顶栏毛玻璃开关 | `builder` req | book_detail、membership、partner、ranking | 建议 | 已足够 |
 | `AppChromeBlur` · [app_chrome_blur.dart](../lib/shared/layouts/app_chrome_blur.dart) | Chrome 毛玻璃滚动判定工具 | 静态方法 | shared 内部 | 内部件 | 已足够 |

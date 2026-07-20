@@ -96,7 +96,8 @@ class _WelfareView extends StatelessWidget {
       backgroundColor: AppColors.backgroundDark,
       body: Stack(
         children: [
-          const AppTabTopTexture(),
+          // 福利页头部装饰渐变加高（用户指定 300）。
+          const AppTabTopTexture(height: AppSizes.welfareTabTopTextureHeight),
           CustomScrollView(
             slivers: [
               SliverPersistentHeader(

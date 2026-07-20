@@ -1713,8 +1713,7 @@ function SemanticTierView() {
             ["checkInHighlightBorder", swatch("#FFE847"), "primary #FFE847", "高亮卡描边"],
             ["checkInRewardTodayText", swatch("#FFE847"), "primary #FFE847", "今日奖励文字"],
             ["checkInDayBg", <Row gap={4}>{alphaSwatch("rgba(255,255,255,0.04)", APP.bg)}{swatch("#F8F7FC")}</Row>, "深 whiteAlpha04 / 浅 surfaceSoft（_isLight 翻转）", "普通签到日底（浅色翻实体面）"],
-            ["checkInCumulativeBg", alphaSwatch("rgba(255,232,71,0.08)", APP.bg), "yellow500Alpha08（8% primary）", "累计签到徽章底"],
-            ["checkInCumulativeBorder", alphaSwatch("rgba(255,255,255,0)", APP.bg), "whiteAlpha00（透明）", "累计徽章描边"],
+            ["checkInCumulativeBorder", alphaSwatch("rgba(255,255,255,0)", APP.bg), "whiteAlpha00（透明）", "时间轴可领取气泡描边（checkInCumulativeBg 已移除，行内奖励角标统一 taskRewardChipBg）"],
             ["checkInMilestoneAmount", <Row gap={4}>{swatch("#FFFFFF")}{swatch("#1A1A2E")}</Row>, "深 whiteAlpha100 / 浅 textPrimary（_isLight 翻转）", "里程碑数值（浅色翻墨字）"],
             ["planSelectedBg", <Row gap={4}>{alphaSwatch("rgba(255,231,148,0.08)", APP.bg)}{alphaSwatch("rgba(255,231,148,0.30)", "#FFFFFF")}</Row>, "深 8% / 浅 30% 描边金", "会员方案选中卡底（浅色增强）"],
             ["planSelectedBorder", swatch("#FFE794"), "#FFE794（ctaGradientStart）", "会员方案选中描边"],
@@ -2551,7 +2550,7 @@ function BottomNavSection() {
   return (
     <SpecSection
         zh="底部导航"
-        note="AppBottomNav · 图标 26 · 选中弹跳（1.18→0.92→1）· neutralCool200 描边"
+        note="AppBottomNav · 当前 4 Tab（书城/福利/书架/我的；伙伴暂时下线）· 图标 26 · 选中弹跳（1.18→0.92→1）· neutralCool200 描边"
         src="lib/shared/layouts/app_bottom_nav.dart"
       >
       <Stage>
@@ -2568,7 +2567,7 @@ function TabTopTextureSection() {
   return (
     <SpecSection
       zh="一级 Tab 顶纹理"
-      note="AppTabTopTexture · 全宽 × tabTopTextureHeight(120) · 书城/福利/书架 · 切图未到位时透明槽位"
+      note="AppTabTopTexture · 全宽 × height（默认 tabTopTextureHeight 120；福利页 welfareTabTopTextureHeight 300）· 书城/福利/书架 · 无贴图时铺 tabTopHeaderGradient*（仅 yellow_light：主黄 → 白 0% 垂直渐隐；其余主题透明槽位）"
       src="lib/shared/components/app_tab_top_texture.dart"
     >
       <Stage>

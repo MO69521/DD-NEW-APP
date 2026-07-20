@@ -51,7 +51,14 @@ class BookshelfSelectableBookCard extends StatelessWidget {
                   Positioned(
                     right: AppSpacing.xxs,
                     bottom: AppSpacing.xxs,
-                    child: AppSelectionMark(isSelected: isSelected),
+                    // 压在封面上的未选中圈用泛白样式，保证任意封面上可见。
+                    child: AppSelectionMark(
+                      isSelected: isSelected,
+                      unselectedBackgroundColor:
+                          AppColors.selectionMarkOnCoverUnselectedFill,
+                      unselectedBorderColor:
+                          AppColors.selectionMarkOnCoverUnselectedBorder,
+                    ),
                   ),
               ],
             ),

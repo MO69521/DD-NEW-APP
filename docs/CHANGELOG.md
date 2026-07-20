@@ -2,6 +2,98 @@
 
 > 研发知识库与工程变更日志，**追加式**记录，勿覆盖历史。每次开发按「日期 / 新增 / 修改 / 删除 / 影响模块 / Breaking Changes」登记。
 
+## 2026-07-17（书架管理态封面多选圈泛白）
+
+### 新增
+- `AppColors.selectionMarkOnCoverUnselectedFill`（30% 白）/ `selectionMarkOnCoverUnselectedBorder`（85% 白）：封面上未选中多选圈泛白样式（用户指定，keep-dark 恒白系，三主题一致）。
+
+### 修改
+- 书架 / 阅读历史管理态书卡（`BookshelfSelectableBookCard`）封面右下角 `AppSelectionMark` 未选中态由「透明底 + 深灰描边」（封面上几乎不可见）覆写为泛白样式。页面面上的其他使用点（登录协议、支付方式、全选、帮助反馈）保持默认样式不变。
+
+### 影响模块
+- 书架 / 阅读历史管理模式；`design-system/README.md` 组件行同步。
+
+### Breaking Changes
+- 无。
+
+## 2026-07-17（福利任务时间轴气泡底色不可见修复）
+
+### 修改
+- 时间轴非高亮奖励气泡（已领取 / 未达成）与「领取」按钮态底色由 `surfaceCard` 改为 `taskRewardChipBg`（深色 4% 白 / 浅色 `surfaceSoft` 弱实体面）。根因：`surfaceCard` 与福利卡片容器同色（深浅主题均同色），气泡完全不可见；改后与行内奖励角标同底，三主题均可见。
+
+### 影响模块
+- 福利页「看视频得奖励」「阅读时长奖励」等时间轴任务；高亮黄色气泡不变。
+
+### Breaking Changes
+- 无。
+
+## 2026-07-17（福利任务「热门」火苗图标浅色态修正为恒白）
+
+### 修改
+- 福利任务行 `_PopularIcon` 橙色渐变圆底上的火苗图标由 `textOnDark`（浅色主题翻深墨导致显示为黑色）改为 `cornerBadgeText`（饱和色底恒白，`light-audit: keep-dark`）。三主题验证：`yellow_dark` 视觉不变（原本即白），`pink_light` / `yellow_light` 修正为白。
+
+### 影响模块
+- 福利页任务行「热门」标识；搜索热词火苗为橙色刻意设计，不受影响。
+
+### Breaking Changes
+- 无。
+
+## 2026-07-17（福利页行内奖励角标背景统一）
+
+### 修改
+- 「VIP 签到奖励」的能量角标（`MealCheckInSection` 私有 `_GoldEnergyRewardChip`，金色 8% 黄底）删除，改为复用任务行统一的 `WelfareTaskRewardChip`（`taskRewardChipBg` 底 + `taskRewardChipText` 字），与「看视频得奖励」等行内角标同款。
+- `WelfareTaskRewardChip` 收敛：移除 `gold / surface` 双变体（gold 变体已无使用方），仅保留统一 surface 样式。
+
+### 删除
+- `AppWelfareColors.checkInCumulativeBg`（已无使用方）；`checkInCumulativeBorder` 保留（时间轴可领取气泡仍引用）。
+
+### 影响模块
+- 福利页 VIP 签到奖励 / 任务行奖励角标；`design-system/` README 与 canvas 同步。
+
+### Breaking Changes
+- 无（`WelfareTaskRewardChipVariant` 为 feature 内部枚举，无外部引用）。
+
+## 2026-07-17（yellow_light 一级 Tab 头部渐变装饰）
+
+### 新增
+- `AppColors.tabTopHeaderGradientStart / tabTopHeaderGradientEnd`（用户指定）：一级 Tab 头部垂直渐变——`yellow_light` 顶部主黄 `primary #FFE847` → 底部白 0%（`white00`）；`yellow_dark` / `pink_light` 起止均透明（不可见）。
+- `AppSizes.welfareTabTopTextureHeight = 300`（用户指定）：福利页头部装饰渐变加高。
+
+### 修改
+- `AppTabTopTexture`：`AppThemeAssets.tabTopTexture` 为 null 时由纯透明槽位改为铺上述头部渐变；有贴图时行为不变。新增可选 `height` 参数（默认 `tabTopTextureHeight` 120），福利页传 `welfareTabTopTextureHeight` 300。书城 / 福利 / 书架三个一级 Tab 页头部随之生效。
+
+### 影响模块
+- 一级 Tab 页头部装饰（仅 `yellow_light` 可见变化）；`design-system/` 与 03_Theme 同步。
+
+### Breaking Changes
+- 无。
+
+## 2026-07-17（修复榜单 Tab 跨档切换发跳）
+
+### 修改
+- `AppAnimatedTabLabel`：点击切换（无 `swipeProgress`）时进度不再线性扫过中间索引，改为仅 from / to 两端交叉过渡——跨档点击（如「完结榜」→「潜力榜」）中间 Tab 不再闪一下选中态。跟手滑动模式行为不变。
+- 书城 `RankingTabs`：选中后 Tab 行横向定位由 `jumpTo` 硬跳改为 `animateTo`（`AppDurations.normal` + easeInOut）平滑滚动。
+
+### 影响模块
+- 书城首页榜单 Tab；全站复用 `AppAnimatedTabLabel` 的顶栏 Tab（点击切换过渡更干净，无视觉回归）。
+
+### Breaking Changes
+- 无。
+
+## 2026-07-17（暂时下线底部导航「伙伴」Tab）
+
+### 修改
+- `MainTabConfig`：注释「伙伴」一级 Tab 配置；书架 / 我的下标前移为 2 / 3（三主题共用）。
+- `MainTabShellPage`：注释 `PartnerCubit` 注入与 `PartnerPage` 挂载；feature 代码保留便于恢复。
+- `AppBottomNav` / 伙伴预览入口同步说明为当前 4 Tab。
+- 文档与设计规范：`docs/05_Components.md`、`docs/06_Pages.md`、`design-system/README.md` 登记暂下线状态。
+
+### 影响模块
+- 主壳底部导航；伙伴一级入口（暂不可达）。
+
+### Breaking Changes
+- 路由 `?tab=` 下标变化：原书架 `3` → `2`，原我的 `4` → `3`；原伙伴 `2` 暂不可用。
+
 ## 2026-07-17（浅色会员套餐卡填充与主文字调整）
 
 ### 修改

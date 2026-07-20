@@ -12,8 +12,9 @@ import '../../features/bookshelf/application/bookshelf_cubit.dart';
 import '../../features/bookshelf/application/bookshelf_state.dart';
 import '../../features/bookshelf/index.dart';
 import '../../features/category/index.dart';
-import '../../features/partner/application/partner_cubit.dart';
-import '../../features/partner/index.dart';
+// 暂时下线「伙伴」一级 Tab；恢复时取消注释 PartnerCubit / PartnerPage。
+// import '../../features/partner/application/partner_cubit.dart';
+// import '../../features/partner/index.dart';
 import '../../features/profile/application/profile_cubit.dart';
 import '../../features/profile/index.dart';
 import '../../features/onboarding/index.dart';
@@ -100,7 +101,8 @@ class _MainTabShellPageState extends State<MainTabShellPage> {
           },
         ),
         BlocProvider(create: (_) => WelfareCubit()..load()),
-        BlocProvider(create: (_) => PartnerCubit()..load()),
+        // 暂时下线「伙伴」一级 Tab。
+        // BlocProvider(create: (_) => PartnerCubit()..load()),
         BlocProvider(create: (_) => BookshelfCubit()..load()),
         BlocProvider(create: (_) => ProfileCubit()..load()),
       ],
@@ -145,7 +147,8 @@ class _MainTabShellPageState extends State<MainTabShellPage> {
                         package: package,
                       ),
                 ),
-                const PartnerPage(),
+                // 暂时下线「伙伴」一级 Tab。
+                // const PartnerPage(),
                 BookshelfPage(mainTabController: _mainTabController),
                 ProfilePage(mainTabController: _mainTabController),
               ],

@@ -10,38 +10,23 @@ import '../../../../shared/widgets/app_text.dart';
 import '../../domain/entities/welfare_models.dart';
 import '../mappers/welfare_asset_mapper.dart';
 
-/// 福利任务奖励标签视觉变体。
-enum WelfareTaskRewardChipVariant { gold, surface }
-
 /// L3 组件 — 福利任务奖励标签。
+///
+/// 福利页所有行内奖励角标（VIP 签到奖励 / 看视频等任务行）统一此样式：
+/// `taskRewardChipBg` 底 + `taskRewardChipText` 字，保证同页观感一致。
 class WelfareTaskRewardChip extends StatelessWidget {
-  const WelfareTaskRewardChip({
-    super.key,
-    required this.reward,
-    this.variant = WelfareTaskRewardChipVariant.gold,
-  });
+  const WelfareTaskRewardChip({super.key, required this.reward});
 
   final WelfareTaskReward reward;
-  final WelfareTaskRewardChipVariant variant;
 
   @override
   Widget build(BuildContext context) {
-    final isSurface = variant == WelfareTaskRewardChipVariant.surface;
-
     return Container(
       height: AppSizes.welfareTaskRewardChipHeight,
       padding: const EdgeInsets.only(left: AppSpacing.xs, right: AppSpacing.xs),
       decoration: BoxDecoration(
-        color: isSurface
-            ? AppWelfareColors.taskRewardChipBg
-            : AppWelfareColors.checkInCumulativeBg,
+        color: AppWelfareColors.taskRewardChipBg,
         borderRadius: BorderRadius.circular(AppRadius.full),
-        border: isSurface
-            ? null
-            : Border.all(
-                color: AppWelfareColors.checkInCumulativeBorder,
-                width: AppSizes.hairline,
-              ),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -51,9 +36,7 @@ class WelfareTaskRewardChip extends StatelessWidget {
           AppText(
             reward.label,
             style: AppTextStyles.welfareTaskRewardChipLabel.copyWith(
-              color: isSurface
-                  ? AppWelfareColors.taskRewardChipText
-                  : AppWelfareColors.goldMedium,
+              color: AppWelfareColors.taskRewardChipText,
             ),
           ),
         ],

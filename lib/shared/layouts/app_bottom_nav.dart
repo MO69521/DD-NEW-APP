@@ -15,7 +15,7 @@ import '../widgets/app_text.dart';
 
 enum AppBottomNavStyle { fullWidthSolid, glassCapsule }
 
-/// App Shell 底部 5 Tab 导航栏。
+/// App Shell 底部导航栏（当前 4 Tab；「伙伴」暂时下线）。
 class AppBottomNav extends StatelessWidget {
   const AppBottomNav({
     super.key,

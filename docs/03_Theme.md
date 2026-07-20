@@ -27,6 +27,7 @@ flowchart TD
 - **主题切换**：编译期实验包机制，`--dart-define=THEME=<id>`（默认 `yellow_dark`）。当前三包：`yellow_dark`（默认深色）、`pink_light`（粉色浅色系）、`yellow_light`（黄色浅色系：壳背景 `neutralCool50` #F8F7FC 中性浅灰，主强调色换黄 `#FFE847`）。
 - **两类分支**：§A 拆为「中性外壳」（`backgroundDark`/`bgTint*`：`pink_light`→`pink50`、`yellow_light`→`neutralCool50`；浮层/壳文字两浅色包仍共用）与「强调身份」（`accent`/`onAccent`/`accentSoft*`/`accentDisabledFill`，按 `themeId==pink_light` 判定粉 vs 黄，`yellow_dark` 与 `yellow_light` 同走黄）。主色上文字/图标一律走 `onPrimary`（`onAccent`）：黄底深墨、粉底白字。
 - **主题资源**：[`AppThemeAssets`](../lib/core/theme/app_theme_assets.dart) 与颜色层平行，按 `THEME` 解析底栏图标 / 书详加入书架·送心 / 底栏纹理 / 一级 Tab 顶纹理（`tabTopTexture`，切图未到位时 null）等路径；详见 [09_Assets.md](./09_Assets.md)。
+- **一级 Tab 头部渐变**（用户指定，仅 `yellow_light`）：`AppColors.tabTopHeaderGradientStart/End`——`tabTopTexture` 为 null 时 `AppTabTopTexture` 铺顶部主黄（`primary`）→ 底部白 0%（`white00`）垂直渐隐；`yellow_dark` / `pink_light` 起止均透明，观感不变。
 - **约束**：默认恒为 `yellow_dark`，§A 的 yellow_dark 分支（`AppPalette` 深色原色）不得改动。
 
 ## 2. 字体系统

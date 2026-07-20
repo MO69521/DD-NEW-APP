@@ -139,10 +139,7 @@ class _TaskTextBlock extends StatelessWidget {
             runSpacing: AppSpacing.xs,
             children: [
               for (final reward in task.rewards)
-                WelfareTaskRewardChip(
-                  reward: reward,
-                  variant: WelfareTaskRewardChipVariant.surface,
-                ),
+                WelfareTaskRewardChip(reward: reward),
             ],
           ),
         ],
@@ -173,7 +170,8 @@ class _PopularIcon extends StatelessWidget {
           assetPath: AppIconAssets.hotFlame,
           width: AppSizes.welfareTaskRewardIconSize,
           height: AppSizes.welfareTaskRewardIconSize,
-          color: AppColors.textOnDark,
+          // 橙色渐变圆底上的火苗恒白（饱和色底），不随浅色主题翻墨字。
+          color: AppColors.cornerBadgeText, // light-audit: keep-dark
         ),
       ),
     );
