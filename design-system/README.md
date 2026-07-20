@@ -559,7 +559,7 @@ feature 专用圆角（在基阶之上按页面命名，如 `navOuter 47` / `sea
 | `LiquidSweepCtaClip` | `shared/components/liquid_sweep_cta_clip.dart` | 强 CTA 液态扫光裁剪壳：保留宿主原尺寸/渐变/切图，只让扫光经过的边缘产生轻微液态形变；用于所有“呼吸缩放 + 扫光”的 CTA |
 | `SweepHighlightOverlay` | `shared/components/sweep_highlight_overlay.dart` | 扫光高亮层：高亮带循环滑过（会员/福利 CTA、签到成功 VIP 按钮统一复用）；参数 `highlightColor` / `edgeColor` / `bandWidthRatio` / `duration`，强 CTA 可传外部 `progress` 同步液态边缘形变 |
 | `AppGradientCtaButton` | `shared/components/app_gradient_cta_button.dart` | 渐变强动效 CTA：渐变底 + 呼吸缩放 + 柔边倾斜扫光 + 液态边缘微形变 + loading；固定高度。各处传入自己的渐变/高度/圆角/扫光色。`MembershipCtaButton` 与福利 `CheckInCtaButton` 委派于它；其它已存在的缩放扫光按钮通过 `LiquidSweepCtaClip` 保留原尺寸接入形变 |
-| `CurrencyBalanceBar` / `RechargePackagesSection` / `VipPromoBanner` | `shared/components/` | 业务复用组合组件；福利外层白卡统一使用 `borderGlass` + `hairline` 弱描边（含余额、充值、每日签到等区块）；充值区价格按钮与「免费领 / VIP领取」CTA 共用同款暗色胶囊（`surface` 底、`welfareRechargePrice` 圆角、`welfareRechargePriceButtonHeight` 高），价格按钮用单段落 rich text 使 `¥` 与数字底对齐 |
+| `CurrencyBalanceBar` / `RechargePackagesSection` / `VipPromoBanner` | `shared/components/` | 业务复用组合组件；`CurrencyBalanceBar` 在 `yellow_light` 下按用户指定移除白色填充、描边与模糊，首末项分别贴齐内容区两端，中间项均匀分布；星尘数字上方显示紧凑红色「可兑换能量」标签（水平 padding `xxs`），底部小三角（`sm × xxs`）居中指向数字，复用 `hotSaleBadge` + `welfareHotSaleBadge`。`yellow_dark` / `pink_light` 保留白卡结构且不显示该标签。其余福利外层白卡统一使用 `borderGlass` + `hairline` 弱描边；充值区价格按钮与「免费领 / VIP领取」CTA 共用同款暗色胶囊（`surface` 底、`welfareRechargePrice` 圆角、`welfareRechargePriceButtonHeight` 高），价格按钮用单段落 rich text 使 `¥` 与数字底对齐 |
 
 ### 7.8 Pressable · 通用按压反馈 `AppPressable`（L1 · `shared/widgets/app_pressable.dart`）
 

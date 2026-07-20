@@ -112,7 +112,7 @@
 
 | 组件 / 位置 | 用途 | 主要参数 | 使用范围 | 建议复用 | 可继续抽象 |
 |---|---|---|---|---|---|
-| `CurrencyBalanceBar` · [currency_balance_bar.dart](../lib/shared/components/currency_balance_bar.dart) | 虚拟货币余额条 | `balances` req · `onCurrencyTap` | profile、welfare | 建议（跨 2 页） | 含货币模型，勉强属 shared |
+| `CurrencyBalanceBar` · [currency_balance_bar.dart](../lib/shared/components/currency_balance_bar.dart) | 虚拟货币余额条；`yellow_light` 无白底、首末项两端对齐，星尘数字带红色「可兑换能量」尖角标签 | `balances` req · `onCurrencyTap` | profile、welfare | 建议（跨 2 页） | 含货币模型，勉强属 shared |
 | `RechargePackagesSection` · [recharge_packages_section.dart](../lib/shared/components/recharge_packages_section.dart)（含 2 个 `part`：`_cards` / `_free_claim`） | 充值套餐区块 | `packages` req · `onPackageTap` · `freeClaimOptions` · `collapsible` | currency_wallet、profile、welfare | 建议（跨 3 页） | 业务强；`part` 拆分已合理 |
 | `EnergyRechargePurchaseDialog` · [energy_recharge_purchase_dialog.dart](../lib/shared/components/energy_recharge_purchase_dialog.dart) | 能量充值支付确认弹窗 | `package` req · `onConfirm` · 静态 `show` | profile、routes | 观望 | **偏业务**，使用面窄时下沉 `currency_wallet` |
 | `VipPromoBanner` · [vip_promo_banner.dart](../lib/shared/components/vip_promo_banner.dart) | VIP 开通引导横幅 | `monthlyEnergy`/`priceYuan` req · `onTap` | profile | 观望 | **偏业务**，仅 1 页用，建议下沉 `membership` |

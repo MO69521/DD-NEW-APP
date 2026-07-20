@@ -517,6 +517,12 @@ const MOTION_CATEGORIES: Array<{ title: string; items: MotionEffect[] }> = [
         path: "lib/shared/components/glass_chip_button.dart",
       },
       {
+        name: "CurrencyBalanceBar",
+        desc: "虚拟货币余额条；yellow_light 移除白色填充/描边/模糊，首末项两端对齐，星尘数字上方显示紧凑红色『可兑换能量』标签（xxs 水平内边距 + sm×xxs 小三角）；其余主题不显示",
+        tech: "themeId branch + Row/Align",
+        path: "lib/shared/components/currency_balance_bar.dart",
+      },
+      {
         name: "AppBottomNav 玻璃",
         desc: "悬浮导航渐隐 + 胶囊模糊",
         tech: "LinearGradient + BackdropFilter",
