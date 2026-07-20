@@ -2,13 +2,15 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
+import '../../core/theme/app_brand_colors.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_sizes.dart';
 
 /// L2 — 顶/底 Chrome 区域背景（可选 backdrop blur + 可选底图纹理）。
 ///
 /// - [enabled]：`false` 时不绘制背景，仅渲染 [child]。
-/// - [blurEnabled]：`false` 时跳过 [BackdropFilter]，仅用 [scrimColor]（及可选纹理）实心铺底。
+/// - 浅色主题统一跳过 [BackdropFilter]，使用调用方提供的 100% 实色背景。
+/// - 深色主题下，[blurEnabled] 为 `false` 时跳过 [BackdropFilter]。
 /// - [textureAsset]：铺满底栏背景图，[scrimColor] 叠在纹理之上；为 `null` 时仅 [scrimColor]。
 class AppBlurredChromeBar extends StatelessWidget {
   const AppBlurredChromeBar({
@@ -38,7 +40,8 @@ class AppBlurredChromeBar extends StatelessWidget {
 
     final background = _buildBackground();
 
-    if (!blurEnabled) return background;
+    final shouldBlur = blurEnabled && !AppBrandColors.isLightExperiment;
+    if (!shouldBlur) return background;
 
     return ClipRect(
       child: BackdropFilter(

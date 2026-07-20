@@ -39,7 +39,7 @@
 | 组件 / 位置 | 用途 | 主要参数 | 使用范围 | 建议复用 | 可继续抽象 |
 |---|---|---|---|---|---|
 | `AppTopBar` (+`AppTopBarAction`) · [app_top_bar.dart](../lib/shared/components/app_top_bar.dart) | 通用顶栏（三槽位多变体） | `statusBarHeight` · `title` · `onBack` · `actions` · `showScrim` | 全站二级页通用 | 强烈建议 | 已足够 |
-| `AppTopBarIconButton` · [app_top_bar_icon_button.dart](../lib/shared/components/app_top_bar_icon_button.dart) | 顶栏图标按钮（模糊圆底） | `iconAsset` req · `iconColor` · `onTap` | bookstore、partner、welfare、profile、ranking | 建议 | 已足够 |
+| `AppTopBarIconButton` · [app_top_bar_icon_button.dart](../lib/shared/components/app_top_bar_icon_button.dart) | 顶栏图标按钮（右侧默认裸图标；返回按钮可保留模糊圆框） | `iconAsset` req · `iconColor` · `showFrame` · `onTap` | bookstore、partner、welfare、profile、ranking | 建议 | 已足够 |
 | `AppTopBarTextButton` · [app_top_bar_text_button.dart](../lib/shared/components/app_top_bar_text_button.dart) | 顶栏文字动作 | `label` req · `style` · `onTap` | bookshelf；`AppTopBar` 内部 | 建议 | 已足够 |
 | `AppAsyncPageBody` · [app_async_page_body.dart](../lib/shared/components/app_async_page_body.dart) | 加载/错误/空/内容门闸 | `isLoading` req · `errorMessage` · `onRetry` · `isEmpty` · `child` req | 全站 Tab/二级页通用 | 强烈建议 | 已足够 |
 | `AppBlurredChromeBar` · [app_blurred_chrome_bar.dart](../lib/shared/components/app_blurred_chrome_bar.dart) | Chrome 背景（可选 blur / 纹理） | `child` req · `enabled` · `blurEnabled` · `blurSigma` · `scrimColor` · `textureAsset?` | 全站通用 | 强烈建议 | 已足够 |

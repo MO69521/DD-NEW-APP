@@ -28,7 +28,7 @@ const APP = {
   bg: "#090E17",
   surface: "#151B24", // neutralCool900 · surface
   glass: "#151B24", // neutralCool900 · surfaceGlass
-  navBg: "rgba(255,255,255,0.20)", // whiteAlpha20 · navBarBackground
+  navBg: "#151B24", // neutralCool900 · navBarBackground (yellow_dark)
   border: "rgba(255,255,255,0.08)",
   panelEdge: "rgba(255,255,255,0.10)",
   accent: "#FFE847",
@@ -529,9 +529,9 @@ const MOTION_CATEGORIES: Array<{ title: string; items: MotionEffect[] }> = [
         path: "lib/features/bookstore/presentation/components/continue_reading_card.dart",
       },
       {
-        name: "圆形磨砂图标框",
-        desc: "顶栏圆形磨砂图标按钮（纯白半透明底：深色 4% whiteAlpha04 / 浅色 30% whiteAlpha30 + 4% 白描边）",
-        tech: "ClipOval + BackdropFilter",
+        name: "顶栏图标按钮",
+        desc: "右侧图标动作三主题统一为裸图标（无背景填充/圆框，保留点击热区）；左侧返回按钮浅色为 white100 实底无模糊，深色保留圆形磨砂框",
+        tech: "AppTopBarIconButton(showFrame: false/true)",
         path: "lib/shared/components/app_top_bar_icon_button.dart",
       },
     ],
@@ -2028,9 +2028,9 @@ function MultiStyleSection() {
             ["分割线", tvCode("divider"), tv("#232A33"), tv("#F3F4F6"), tv("#F3F4F6")],
             ["主按钮 · 底", tvCode("primary"), tv("#FFE847", "黄"), tv("#FF4D88", "粉"), tv("#FFE847", "黄")],
             ["主按钮 · 字", tvCode("onPrimary"), tv("#090E17", "深"), tv("#FFFFFF", "白"), tv("#090E17", "深")],
-            ["底部导航 · 底", tvCode("navBarBackground"), tvCode("whiteAlpha20"), tvCode("blackAlpha04"), tvCode("blackAlpha04")],
+            ["底部导航 · 底", tvCode("navBarBackground"), tvCode("surface"), tvCode("white100"), tvCode("white100")],
             ["底部导航 · 选中", tvCode("accent"), tv("#FFE847", "黄"), tv("#FF4D88", "粉"), tv("#FFE847", "黄")],
-            ["顶栏毛玻璃", tvCode("chromeBarScrim"), tvCode("bgTint80 · 深"), tvCode("bgTint80 · 粉"), tvCode("bgTint80 · 中性浅灰")],
+            ["顶部/底部 Chrome", tvCode("chromeBarScrim / bottomNavScrim"), tvCode("bgTint80 · blur"), tvCode("white100 · no blur"), tvCode("white100 · no blur")],
             ["弹窗底", tvCode("surfaceElevated"), tv("#131820"), tv("#FFFFFF", "白"), tv("#FFFFFF", "白")],
             ["分段选中 · 底/字", tvCode("segmentedSelectedFill / …Text"), tvCode("黄 8% / 亮黄字"), tvCode("粉 8% / 深粉字 pink600"), tvCode("黄 8% / 深黄字 yellow700")],
             ["骨架屏", tvCode("shimmerBase / Highlight"), tvCode("whiteAlpha08 / whiteAlpha24"), tvCode("blackAlpha04 / blackAlpha08"), tvCode("blackAlpha04 / blackAlpha08")],
@@ -2567,7 +2567,7 @@ function TabTopTextureSection() {
   return (
     <SpecSection
       zh="一级 Tab 顶纹理"
-      note="AppTabTopTexture · 全宽 × height（默认 tabTopTextureHeight 120；福利页 welfareTabTopTextureHeight 300）· 书城/福利/书架 · 无贴图时铺 tabTopHeaderGradient*（仅 yellow_light：主黄 → 白 0% 垂直渐隐；其余主题透明槽位）"
+      note="AppTabTopTexture · 福利页专用 · 全宽 × welfareTabTopTextureHeight 300 · 无贴图时铺 tabTopHeaderGradient*（仅 yellow_light 福利页：主黄 → 白 0% 垂直渐隐；书城首页/书架不调用，其余主题透明）"
       src="lib/shared/components/app_tab_top_texture.dart"
     >
       <Stage>

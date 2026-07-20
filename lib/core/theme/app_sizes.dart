@@ -63,7 +63,7 @@ abstract final class AppSizes {
   static const double strongBlurSigma = 90;
   static const double statusBarPlaceholderHeight = 44;
 
-  /// 一级 Tab（书城 / 福利 / 书架）顶部纹理层高度（全宽装饰，不占滚动布局）。
+  /// 顶部纹理层默认高度（全宽装饰，不占滚动布局）。
   static const double tabTopTextureHeight = 120;
 
   static const double bookstoreHeaderVerticalInset = 2;

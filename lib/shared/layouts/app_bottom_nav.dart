@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 
 import '../../core/constants/main_tab_config.dart';
+import '../../core/theme/app_brand_colors.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_radius.dart';
 import '../../core/theme/app_sizes.dart';
@@ -141,13 +142,15 @@ class AppBottomNav extends StatelessWidget {
             children: [
               ClipRRect(
                 borderRadius: capsuleRadius,
-                child: BackdropFilter(
-                  filter: ImageFilter.blur(
-                    sigmaX: AppSizes.bottomNavBlurSigma,
-                    sigmaY: AppSizes.bottomNavBlurSigma,
-                  ),
-                  child: navCapsule,
-                ),
+                child: AppBrandColors.isLightExperiment
+                    ? navCapsule
+                    : BackdropFilter(
+                        filter: ImageFilter.blur(
+                          sigmaX: AppSizes.bottomNavBlurSigma,
+                          sigmaY: AppSizes.bottomNavBlurSigma,
+                        ),
+                        child: navCapsule,
+                      ),
               ),
               const SizedBox(height: AppSizes.bottomNavBottomInset),
             ],

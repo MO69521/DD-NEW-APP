@@ -142,6 +142,7 @@ class AppTopBar extends StatelessWidget {
       iconAsset: backIconAsset,
       iconWidth: AppSizes.topBarBackIconWidth,
       iconHeight: AppSizes.topBarBackIconHeight,
+      showFrame: true,
     );
   }
 

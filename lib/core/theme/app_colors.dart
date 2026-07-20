@@ -105,8 +105,9 @@ abstract final class AppColors {
   static const Color bgTint80 = AppBrandColors.bgTint80;
   static const Color bgTint90 = AppBrandColors.bgTint90;
 
-  /// 顶/底 Chrome 毛玻璃半透明底色（约 80% 不透明，弱化内容透出）。
-  static const Color chromeBarScrim = bgTint80;
+  /// 顶/底 Chrome 背景：浅色态纯白 100% 不透明且不模糊；
+  /// 深色态保持约 80% 壳基色 tint，配合 BackdropFilter。
+  static const Color chromeBarScrim = _isLight ? white100 : bgTint80;
 
   /// 底部导航底色：浅色态纯白不透明（`white100`）；深色态与页面壳同色不透明
   /// （`backgroundDark`）。全主题底栏统一实心底，不磨砂透出背后内容。
@@ -117,7 +118,7 @@ abstract final class AppColors {
   static const Color bottomNavTextureScrim = bgTint60;
 
   /// 顶栏滚动后底色（仅 `AppPageChrome`，如书城等 Tab 页）：深色态毛玻璃（约 80% tint）；
-  /// 浅色态纯白不透明（`white100`）。书详情顶栏走 `chromeBarScrim`，不受此影响、保持磨砂。
+  /// 浅色态纯白不透明（`white100`）；深色态保持毛玻璃。
   static const Color topChromeBarScrolledScrim = _isLight ? white100 : bgTint80;
 
   /// 二级页底部固定操作栏底色（书详情 / 装扮等）：浅色态纯白不透明（与底部导航一致）；
@@ -173,10 +174,10 @@ abstract final class AppColors {
 
   /// accent 色面上的文字 / 图标：深色态深墨（黄底上）；浅色实验态白（粉底上可读）。
   static const Color onAccent = onPrimary;
-  static const Color navBarBackground = _isLight ? black04 : surface;
-  // 顶栏圆形磨砂图标框底：深色态纯白 4%（whiteAlpha04）；浅色态头图偏亮，
-  // 4% 几乎不可见，故提高到纯白 30%（white30）。配 BackdropFilter 呈磨砂玻璃。
-  static const Color topBarIconFrameBackground = _isLight ? white30 : white04;
+  static const Color navBarBackground = _isLight ? white100 : surface;
+  // 顶栏返回按钮圆框底：浅色态纯白 100% 实底且不模糊；
+  // 深色态纯白 4%（whiteAlpha04），配 BackdropFilter 呈磨砂玻璃。
+  static const Color topBarIconFrameBackground = _isLight ? white100 : white04;
   // 磨砂图标框压在头图上，恒暗弱描边（两态皆低透明白）。
   static const Color topBarIconFrameBorder =
       _darkBorder; // light-audit: keep-dark
@@ -220,7 +221,7 @@ abstract final class AppColors {
   static const Color gradientFadeMid = bgTint90;
   static const Color gradientFadeEnd = backgroundDark;
 
-  /// 一级 Tab 顶部装饰渐变（用户指定，仅 `yellow_light` 可见）：
+  /// 福利页顶部装饰渐变（用户指定，仅 `yellow_light` 可见）：
   /// 顶部主黄（`primary`）→ 底部白 0%（`white00`）垂直渐隐。
   /// 其余主题起色同为透明，渐变整体不可见，保持原透明槽位 / 贴图表现。
   static const Color tabTopHeaderGradientStart = AppBrandColors.isYellowLight

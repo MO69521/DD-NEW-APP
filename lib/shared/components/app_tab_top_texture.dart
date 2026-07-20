@@ -5,13 +5,13 @@ import '../../core/theme/app_sizes.dart';
 import '../../core/theme/app_theme_assets.dart';
 import '../widgets/app_asset_image.dart';
 
-/// L2 — 一级 Tab（书城 / 福利 / 书架）顶部装饰纹理层。
+/// L2 — 福利页顶部装饰纹理层。
 ///
 /// 全宽、高度默认 [AppSizes.tabTopTextureHeight]（页面可传语义 token 覆写，如
 /// 福利页 [AppSizes.welfareTabTopTextureHeight]），叠在滚动内容之下、不拦截点击。
 /// [AppThemeAssets.tabTopTexture] 为 `null` 时铺主题头部渐变
-/// [AppColors.tabTopHeaderGradientStart]（仅 `yellow_light` 解析为主黄 → 白 0%
-/// 垂直渐隐；其余主题起止均透明，等同原透明槽位）。
+/// [AppColors.tabTopHeaderGradientStart]。该组件仅由福利页调用；仅
+/// `yellow_light` 解析为主黄 → 白 0% 垂直渐隐，其余主题起止均透明。
 class AppTabTopTexture extends StatelessWidget {
   const AppTabTopTexture({
     super.key,

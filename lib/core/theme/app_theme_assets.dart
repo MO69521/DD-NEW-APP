@@ -30,10 +30,10 @@ abstract final class AppThemeAssets {
       'assets/images/bottom_nav/$_pack/nav_texture.png';
 
   // ══════════════════════════════════════════════════════════════
-  // 一级 Tab · 顶部纹理（书城 / 福利 / 书架）
+  // 福利页 · 顶部纹理
   // ══════════════════════════════════════════════════════════════
 
-  /// 一级 Tab 顶部装饰纹理（全宽 × [AppSizes.tabTopTextureHeight]）。
+  /// 福利页顶部装饰纹理（全宽装饰层）。
   /// 切图未到位时为 `null`，[AppTabTopTexture] 只保留透明槽位、不绘制贴图。
   /// 切图到位后改为：`'assets/images/tab_top/$_pack/top_texture.png'`。
   static const String? tabTopTexture = null;

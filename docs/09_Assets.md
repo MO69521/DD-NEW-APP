@@ -59,7 +59,7 @@
 | 语义 | 资源目录 / 文件 |
 |---|---|
 | 底栏纹理 | `assets/images/bottom_nav/<themeId>/nav_texture.png` |
-| 一级 Tab 顶纹理 | `assets/images/tab_top/<themeId>/top_texture.png`（`AppThemeAssets.tabTopTexture`；切图未到位时为 `null`） |
+| 福利页顶部纹理 | `assets/images/tab_top/<themeId>/top_texture.png`（`AppThemeAssets.tabTopTexture`；切图未到位时为 `null`；书城首页 / 书架不调用） |
 | 登录页头图 | `yellow_light` 复用 `assets/images/profile/yellow_light/hero_background_default.png`；`pink_light` / `yellow_dark` 保持 `assets/images/auth/<themeId>/login_top_bg.png` |
 | 我的页默认头图 | `assets/images/profile/<themeId>/hero_background_default.png` |
 | 底栏 Tab（10） | `assets/icons/nav/<themeId>/{bookstore,welfare,partner,bookshelf,profile}_{active,inactive}.svg` |
