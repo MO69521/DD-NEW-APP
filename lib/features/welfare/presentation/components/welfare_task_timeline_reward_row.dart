@@ -49,32 +49,33 @@ class _TimelineRewardPill extends StatelessWidget {
 
     final style = welfareTimelineNodeStyle(node);
 
-    final bubble = WelfareRewardBubble(
-      background: style.background,
-      border: style.border,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          for (var index = 0; index < node.rewards.length; index++) ...[
-            if (index > 0) const SizedBox(height: AppSpacing.xxs),
-            _TimelineRewardRowItem(
-              reward: node.rewards[index],
-              textColor: style.text,
-            ),
-          ],
+    Widget content = Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        for (var index = 0; index < node.rewards.length; index++) ...[
+          if (index > 0) const SizedBox(height: AppSpacing.xxs),
+          _TimelineRewardRowItem(
+            reward: node.rewards[index],
+            textColor: style.text,
+          ),
         ],
-      ),
+      ],
     );
 
-    // 已领取：整枚气泡降至 30% 不透明度。
+    // 已领取只弱化内容，气泡背景保持实体可见。
     if (node.isReached) {
-      return Opacity(
+      content = Opacity(
         opacity: AppSizes.welfareCheckInClaimedRewardOpacity,
-        child: bubble,
+        child: content,
       );
     }
-    return bubble;
+
+    return WelfareRewardBubble(
+      background: style.background,
+      border: style.border,
+      child: content,
+    );
   }
 }
 

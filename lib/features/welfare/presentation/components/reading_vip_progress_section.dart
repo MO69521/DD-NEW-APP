@@ -7,6 +7,7 @@ import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/theme/app_welfare_colors.dart';
 import '../../../../shared/widgets/app_asset_image.dart';
+import '../../../../shared/widgets/app_pressable.dart';
 import '../../../../shared/widgets/app_text.dart';
 import '../../domain/entities/welfare_models.dart';
 import '../mappers/welfare_asset_mapper.dart';
@@ -15,9 +16,14 @@ import 'welfare_timeline_dot.dart';
 
 /// L3 组件 — VIP 翻倍中的 7 日阅读福利进度卡（Figma 559:23119）。
 class ReadingVipProgressSection extends StatelessWidget {
-  const ReadingVipProgressSection({super.key, required this.task});
+  const ReadingVipProgressSection({
+    super.key,
+    required this.task,
+    required this.onInfoTap,
+  });
 
   final WelfareTaskItem task;
+  final VoidCallback onInfoTap;
 
   @override
   Widget build(BuildContext context) {
@@ -43,6 +49,15 @@ class ReadingVipProgressSection extends StatelessWidget {
                 task.title,
                 style: AppTextStyles.welfareSectionTitle.copyWith(
                   color: AppColors.textOnDark,
+                ),
+              ),
+              const SizedBox(width: AppSpacing.xxs),
+              AppPressable(
+                onTap: onInfoTap,
+                child: const Icon(
+                  Icons.info_outline,
+                  size: AppSizes.titleInfoIconSize,
+                  color: AppWelfareColors.subtitleMuted,
                 ),
               ),
               if (task.tagLabel != null) ...[
@@ -173,7 +188,10 @@ class _ReadingProgressTrack extends StatelessWidget {
                 right: 0,
                 child: Align(
                   alignment: Alignment(progress * 2 - 1, -1),
-                  child: _ProgressBadge(label: task.timelineBadgeLabel!),
+                  child: Transform.translate(
+                    offset: const Offset(0, -AppSpacing.xxsHalf),
+                    child: _ProgressBadge(label: task.timelineBadgeLabel!),
+                  ),
                 ),
               ),
           ],
@@ -205,13 +223,20 @@ class _ReadingProgressNode extends StatelessWidget {
           height: AppSizes.welfareTaskTimelineProgressHeight,
           child: Center(
             child: _isFreeCard
-                ? AppAssetImage(
-                    assetPath: WelfareAssetMapper.checkInRewardIconAsset(
-                      CheckInRewardType.freeCard,
+                ? OverflowBox(
+                    maxWidth: AppSizes.welfareReadingFreeCardWidth,
+                    maxHeight: AppSizes.welfareReadingFreeCardHeight,
+                    child: Transform.translate(
+                      offset: const Offset(0, -AppSpacing.xs),
+                      child: AppAssetImage(
+                        assetPath: WelfareAssetMapper.checkInRewardIconAsset(
+                          CheckInRewardType.freeCard,
+                        ),
+                        width: AppSizes.welfareReadingFreeCardWidth,
+                        height: AppSizes.welfareReadingFreeCardHeight,
+                        fit: BoxFit.contain,
+                      ),
                     ),
-                    width: AppSizes.welfareReadingFreeCardWidth,
-                    height: AppSizes.welfareReadingFreeCardHeight,
-                    fit: BoxFit.contain,
                   )
                 : WelfareTimelineDot(
                     isHighlighted: node.isActive || node.isReached,
@@ -242,7 +267,7 @@ class _ProgressBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return WelfareRewardBubble(
-      background: AppColors.surfaceCard,
+      background: AppWelfareColors.taskTimelineFill,
       padding: const EdgeInsets.only(
         left: AppSpacing.xs,
         right: AppSpacing.xs,
@@ -251,7 +276,7 @@ class _ProgressBadge extends StatelessWidget {
       ),
       child: AppText(
         label,
-        style: AppTextStyles.captionMd.copyWith(color: AppColors.textOnDark),
+        style: AppTextStyles.captionMd.copyWith(color: AppColors.white100),
       ),
     );
   }

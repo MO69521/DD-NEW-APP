@@ -352,8 +352,8 @@ const MOTION_CATEGORIES: Array<{ title: string; items: MotionEffect[] }> = [
     items: [
       {
         name: "书城刷新奔跑小熊",
-        desc: "20 帧以 0.8 秒周期持续循环,松手后至少跑满两轮再回弹",
-        tech: "页面预缓存 + AnimationController + AppAssetImage · 最短 1.6 秒 · 50×50 · 下移 xxl+xl+lg · 刷新占位=chromeTopHeight-md",
+        desc: "20 帧以 0.8 秒周期持续循环,上拉时从 36px 平滑放大到 50px,松手后至少跑满两轮再回弹",
+        tech: "页面预缓存 + AnimationController + AppAssetImage · easeOutCubic 进度缩放 · 最短 1.6 秒 · 下移 xxl+xl+lg · 刷新占位=chromeTopHeight-md",
         path: "lib/features/bookstore/presentation/components/bookstore_refresh_visual.dart",
       },
       {
@@ -518,9 +518,21 @@ const MOTION_CATEGORIES: Array<{ title: string; items: MotionEffect[] }> = [
       },
       {
         name: "CurrencyBalanceBar",
-        desc: "虚拟货币余额条；yellow_light 移除白色填充/描边/模糊，首末项两端对齐，星尘数字上方显示紧凑红色『可兑换能量』标签（xxs 水平内边距 + sm×xxs 小三角）；其余主题不显示",
+        desc: "虚拟货币余额条；顺序为星尘→能量→祈愿星→爱心；仅福利页 yellow_light 开启透明样式并两端对齐，我的页始终保留白卡；yellow_light 星尘数字上方显示紧凑红色『可兑换能量』标签（xxs 水平/垂直内边距 + 向上回缩 xxsHalf 的 sm×xxs 小三角并贴近数字），白卡仅裁剪背景层、标签不裁剪；其余主题不显示",
         tech: "themeId branch + Row/Align",
         path: "lib/shared/components/currency_balance_bar.dart",
+      },
+      {
+        name: "WelfareTaskRewardChip",
+        desc: "福利页全局图标 + 数值/时长奖励标签；22 高，xs 水平内边距、xxs 垂直内边距，三主题统一",
+        tech: "taskRewardChipBg + taskRewardChipText",
+        path: "lib/features/welfare/presentation/components/welfare_task_reward_chip.dart",
+      },
+      {
+        name: "ReadingVipProgressSection",
+        desc: "7 日阅读福利时间轴；限免卡透明画布展示框为 48×48，允许溢出 36px 节点框，视觉层上移 xs 且不改变轨道位置",
+        tech: "Stack timeline + OverflowBox + semantic size tokens",
+        path: "lib/features/welfare/presentation/components/reading_vip_progress_section.dart",
       },
       {
         name: "AppBottomNav 玻璃",
@@ -2148,15 +2160,15 @@ function RadiusSection() {
 
 function SizeIndexSection() {
   const groups: Array<[string, string, string]> = [
-    ["通用基础", "描边 / 通用图标 / 启动图", "neutralCool200 · iconSm · splashLogoSize"],
+    ["通用基础", "描边 / 通用图标 / 启动图 / 标题说明图标（20px）", "neutralCool200 · iconSm · titleInfoIconSize · splashLogoSize"],
     ["顶栏 AppTopBar", "顶栏高度 / 图标框 / 返回钮", "topBar*"],
     ["按钮 AppButton", "内边距 / loading / 图标间距", "buttonPadding*"],
     ["搜索栏 / 玻璃模糊", "搜索框高 / 各级磨砂半径", "searchBarHeight · glassBlurSigma · strongBlurSigma"],
     ["书城首页", "顶栏 / 加载(刷新跑熊 50×50) / 继续阅读浮层", "bookstore* · continueReading*"],
     ["底部导航 AppBottomNav", "胶囊 / 图标 / 弹跳缩放", "bottomNav*"],
     ["榜单", "指示器 / 轮播 / 头图 / 维度导航", "ranking* · tab*"],
-    ["书籍封面 / 书卡", "列表/网格封面 / 大封面横向书卡", "bookCover* · bookGrid* · bookCardLarge*"],
-    ["福利页", "头图 / 签到里程碑 / 任务时间线 / 充值弹窗", "welfare* · rechargePurchaseDialog*"],
+    ["书籍封面 / 书卡", "列表/网格封面 / 右下热度与运营标签 / 大封面横向书卡", "bookCover* · bookGrid* · bookCardLarge*"],
+    ["福利页", "头图 / 顶栏说明图标（浅色纯黑）/ 签到里程碑 / 任务时间线 / 充值弹窗 / 规则弹窗顶部120px彩头", "welfareHeaderInfoIcon · welfare* · rechargePurchaseDialog* · dialogTopTextureHeight"],
     ["书架页", "顶栏 / 阅读横幅（小熊 64×64、top 8、底边裁剪）/ 空状态 / 封面角标", "bookshelf* · bookCoverTag*"],
     ["我的页", "Hero / 头像 / 快捷入口 / 成就勋章", "profile* · homeIndicator* · listRowMinHeight"],
     ["我的-子页", "账号设置 / 消息 / 卡包", "accountSettings* · myMessages* · cardPack*"],
@@ -2165,7 +2177,7 @@ function SizeIndexSection() {
     ["搜索页", "顶栏返回 / 输入图标 / 空状态", "searchAppBar* · searchInput* · searchEmpty*"],
     ["会员页", "Hero 轮播 / 方案卡 / 权益宫格 / CTA / 特权详情", "membership*"],
     ["伙伴页", "头部 / 顶部极光 / 角色卡 / 消息 Tab / 互动 Tab", "partner* · partnerTopAuroraHeight · partnerTopAuroraOpacity"],
-    ["分类页", "筛选组 / chip / 下划线", "categoryFilter*"],
+    ["分类页", "筛选组 / chip / 下划线 / 滑出后顶部摘要与点击回顶 / 浅色主题整页纯白", "categoryFilter* · categoryRankingPageBackground"],
     ["帮助与反馈", "Banner / 输入 / 上传框", "helpFeedback*"],
     ["Toast / 交互阈值", "轻提示内边距 / 滑动切换阈值", "toast* · swipeTabVelocityThreshold"],
   ];
@@ -2330,7 +2342,7 @@ function CardSection() {
   return (
     <SpecSection
         zh="卡片"
-        note="书卡族 · 底 4% 白底 + 圆角 · 卡面变体封面左/上/右贴边、文字区 xs 内边距 · 封面状态角标距右上角 4px、10px regular / padding 4×2，更新角标描边为纯白 4% · 禁止卡中卡 · 可点按"
+        note="书卡族 · 底 4% 白底 + 圆角 · 封面右上状态角标 · 右下运营标签：popularity=火花+热度、promotion=橙红文案（src=lib/shared/components/book_cover_bottom_badge.dart）· 推荐页顶部 RankingBookGrid 小封面例外隐藏 · 禁止卡中卡 · 可点按"
         src="lib/shared/components/book_card_variants.dart"
       >
       <Stage>
@@ -2556,7 +2568,7 @@ function BottomNavSection() {
   return (
     <SpecSection
         zh="底部导航"
-        note="AppBottomNav · 当前 4 Tab（书城/福利/书架/我的；伙伴暂时下线）· 图标 26 · 选中弹跳（1.18→0.92→1）· neutralCool200 描边"
+        note="AppBottomNav · 当前 4 Tab（书城/福利/书架/我的；伙伴暂时下线）· 实心底栏仅顶部 0.5px 分割线（浅色实体浅灰 / 深色半透明白）· 图标 26 · 选中弹跳（1.18→0.92→1）· 福利待领取气泡首次进入时渐隐，本会话不再显示"
         src="lib/shared/layouts/app_bottom_nav.dart"
       >
       <Stage>
@@ -2918,7 +2930,7 @@ function OptionSelectSection() {
   return (
     <SpecSection
         zh="选项选择"
-        note="GenderAvatarOption（头像图 + 黄描边环）· AgeRangeOption（选中 8% 黄底+黄字加粗；未选白字+细描边）"
+        note="GenderAvatarOption（头像图 + 黄描边环）· AgeRangeOption（选中 8% 黄底+黄字加粗；yellow_light 额外黄色强调描边；未选浅色底+细描边）"
         src="lib/shared/components/gender_avatar_option.dart"
       >
       <Stage>
@@ -2992,10 +3004,10 @@ function OptionSelectSection() {
                     cursor: "pointer",
                     userSelect: "none",
                     fontSize: 14,
-                    // 对齐 AgeRangeOption：选中 segFill+黄字加粗；未选 surface+白字+细描边
+                    // 对齐 yellow_light AgeRangeOption：选中 segFill+黄字加粗+黄色强调描边
                     background: active ? APP.segFill : APP.surface,
                     border: active
-                      ? `${APP.hair} solid transparent`
+                      ? `1.5px solid ${APP.accent}`
                       : `${APP.hair} solid ${APP.border}`,
                     color: active ? APP.accent : APP.text,
                     fontWeight: active ? 600 : 400,

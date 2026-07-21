@@ -63,13 +63,18 @@ class RechargePackagesSection extends StatefulWidget {
       _RechargePackagesSectionState();
 }
 
-class _RechargePackagesSectionState extends State<RechargePackagesSection> {
+class _RechargePackagesSectionState extends State<RechargePackagesSection>
+    with AutomaticKeepAliveClientMixin {
   late bool _expanded = widget.initiallyExpanded;
+
+  @override
+  bool get wantKeepAlive => true;
 
   void _toggle() => setState(() => _expanded = !_expanded);
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     final header = _RechargeSectionHeader(
       onMoreTap: widget.onMoreTap,
       collapsible: widget.collapsible,

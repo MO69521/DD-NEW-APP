@@ -79,6 +79,10 @@ class CheckInMilestoneProgress extends StatelessWidget {
   Widget build(BuildContext context) {
     const lineTop = AppSizes.welfareCheckInProgressLineTop;
     const lineHeight = AppSizes.welfareCheckInProgressLineHeight;
+    const progressBorderRadius = BorderRadius.only(
+      topRight: Radius.circular(AppRadius.full),
+      bottomRight: Radius.circular(AppRadius.full),
+    );
 
     return SizedBox(
       height: AppSizes.welfareCheckInMilestoneHeight,
@@ -115,17 +119,17 @@ class CheckInMilestoneProgress extends StatelessWidget {
                       top: lineTop,
                       child: Container(
                         height: lineHeight,
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           color: AppWelfareColors.checkInProgressTrack,
-                          borderRadius: BorderRadius.circular(AppRadius.full),
+                          borderRadius: progressBorderRadius,
                         ),
                         alignment: Alignment.centerLeft,
                         child: Container(
                           width: filledWidth,
                           height: lineHeight,
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                             color: AppWelfareColors.checkInProgressFill,
-                            borderRadius: BorderRadius.circular(AppRadius.full),
+                            borderRadius: progressBorderRadius,
                           ),
                         ),
                       ),
@@ -149,7 +153,9 @@ class CheckInMilestoneProgress extends StatelessWidget {
                       Positioned(
                         left: milestoneXs[index] - dotSize / 2,
                         top: dotTop,
-                        child: const CheckInProgressDot(),
+                        child: CheckInProgressDot(
+                          reached: totalDays >= milestones[index].requiredDays,
+                        ),
                       ),
                   ],
                 );

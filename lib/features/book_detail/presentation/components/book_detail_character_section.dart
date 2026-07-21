@@ -72,7 +72,7 @@ class _Header extends StatelessWidget {
           },
           child: const Icon(
             Icons.info_outline,
-            size: AppSizes.bookDetailBottomIconSize,
+            size: AppSizes.titleInfoIconSize,
             color: AppColors.textOnDarkMuted,
           ),
         ),

@@ -7,6 +7,7 @@ import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../shared/components/book_cover_tag_badge.dart';
+import '../../../../shared/components/book_cover_bottom_badge.dart';
 import '../../../../shared/components/section_header.dart';
 import '../../../../shared/widgets/app_pressable.dart';
 import '../../../../shared/widgets/app_text.dart';
@@ -98,6 +99,9 @@ class _GuessLikeBookCard extends StatelessWidget {
               topEndBadge: book.coverTag == null
                   ? null
                   : BookCoverTagBadge(tag: book.coverTag!),
+              bottomEndBadge: book.coverBottomBadge == null
+                  ? null
+                  : BookCoverBottomBadgeView(badge: book.coverBottomBadge!),
             ),
             Padding(
               padding: const EdgeInsets.all(AppSpacing.xs),

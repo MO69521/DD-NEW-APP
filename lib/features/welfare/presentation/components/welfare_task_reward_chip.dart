@@ -23,7 +23,10 @@ class WelfareTaskRewardChip extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: AppSizes.welfareTaskRewardChipHeight,
-      padding: const EdgeInsets.only(left: AppSpacing.xs, right: AppSpacing.xs),
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.xs,
+        vertical: AppSpacing.xxs,
+      ),
       decoration: BoxDecoration(
         color: AppWelfareColors.taskRewardChipBg,
         borderRadius: BorderRadius.circular(AppRadius.full),

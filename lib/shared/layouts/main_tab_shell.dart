@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../core/constants/main_tab_config.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../widgets/app_text.dart';
@@ -14,12 +15,14 @@ class MainTabShell extends StatefulWidget {
     this.initialIndex = 0,
     this.controller,
     this.hideBottomNav = false,
+    this.pendingClaimEnergy,
   });
 
   final List<Widget> pages;
   final int initialIndex;
   final MainTabController? controller;
   final bool hideBottomNav;
+  final int? pendingClaimEnergy;
 
   @override
   State<MainTabShell> createState() => _MainTabShellState();
@@ -27,6 +30,8 @@ class MainTabShell extends StatefulWidget {
 
 class _MainTabShellState extends State<MainTabShell> {
   late int _selectedIndex = widget.initialIndex;
+  late bool _hasVisitedWelfare =
+      widget.initialIndex == MainTabConfig.welfareIndex;
 
   @override
   void initState() {
@@ -48,6 +53,9 @@ class _MainTabShellState extends State<MainTabShell> {
         widget.initialIndex >= 0 &&
         widget.initialIndex < widget.pages.length) {
       _selectedIndex = widget.initialIndex;
+      if (_selectedIndex == MainTabConfig.welfareIndex) {
+        _hasVisitedWelfare = true;
+      }
       WidgetsBinding.instance.addPostFrameCallback((_) {
         widget.controller?.notifyTabChanged(_selectedIndex);
       });
@@ -63,7 +71,12 @@ class _MainTabShellState extends State<MainTabShell> {
   void _switchToTab(int index) {
     if (index < 0 || index >= widget.pages.length) return;
     if (index == _selectedIndex) return;
-    setState(() => _selectedIndex = index);
+    setState(() {
+      _selectedIndex = index;
+      if (index == MainTabConfig.welfareIndex) {
+        _hasVisitedWelfare = true;
+      }
+    });
     widget.controller?.notifyTabChanged(index);
   }
 
@@ -83,6 +96,9 @@ class _MainTabShellState extends State<MainTabShell> {
               bottom: 0,
               child: AppBottomNav(
                 selectedIndex: _selectedIndex,
+                pendingClaimEnergy: _hasVisitedWelfare
+                    ? null
+                    : widget.pendingClaimEnergy,
                 onTabChanged: _onTabChanged,
                 style: AppBottomNavStyle.fullWidthSolid,
               ),

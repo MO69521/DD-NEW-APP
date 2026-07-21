@@ -10,7 +10,8 @@ abstract final class AppSizes {
   static const double hairline = 0.5;
   static const double borderWidthEmphasis = 1.5;
   static const double iconSm = 14;
-  static const double splashLogoSize = 100;
+  static const double splashLogoSize = 315;
+  static const double splashLogoWidthRatio = 0.685;
 
   // ── 通用按压反馈 (AppPressable) ──
   /// 手指按下时缩小到的比例。
@@ -148,6 +149,7 @@ abstract final class AppSizes {
 
   /// 福利页头部装饰渐变高度（用户指定 300，较默认 [tabTopTextureHeight] 更高）。
   static const double welfareTabTopTextureHeight = 300;
+  static const double dialogTopTextureHeight = 120;
   static const double welfareCurrencyBarHeight = 76;
   static const double welfareVipBannerHeight = 49;
   static const double welfareRechargeCardHeight = 140;
@@ -198,6 +200,9 @@ abstract final class AppSizes {
   /// 统一分页指示点：圆点直径与选中点拉长宽度（会员轮播 / 新手引导共用）。
   static const double pageDotSize = 4;
   static const double pageDotActiveWidth = 8;
+
+  /// 标题旁的圆形说明图标（书籍详情 / 福利说明等场景共用）。
+  static const double titleInfoIconSize = 20;
   static const double welfareCheckInClaimedCheckSize = 24;
   static const double welfareCheckInCtaHeight = 42;
   static const double welfareCheckInDayWideMinWidth = 132;
@@ -225,13 +230,13 @@ abstract final class AppSizes {
   static const double welfareTaskActionMinWidth = 74;
   static const double welfareTaskActionIconSize = 16;
   static const double welfareTaskRewardIconSize = 12;
-  static const double welfareTaskRewardChipHeight = 18;
+  static const double welfareTaskRewardChipHeight = 22;
   static const double welfareTaskTimelineNodeWidth = 66;
   static const double welfareTaskTimelineProgressHeight = 36;
   // 限免卡切图为 72×72 方形画布，卡面本体仅占约 70×45 并带透明边距，
-  // 故用方形展示框承载，使卡面渲染为 Figma 的 ≈32.5×20.4。
-  static const double welfareReadingFreeCardWidth = 33;
-  static const double welfareReadingFreeCardHeight = 33;
+  // 故用 48×48 方形展示框承载，并允许透明画布溢出节点布局框以明显放大卡面。
+  static const double welfareReadingFreeCardWidth = 48;
+  static const double welfareReadingFreeCardHeight = 48;
   static const double welfareTaskTimelineLineHeight = 4;
   static const double welfareTaskTimelineDotSize = 12;
   static const double welfareTaskTimelineDotBorderWidth = 2;
@@ -283,6 +288,7 @@ abstract final class AppSizes {
 
   /// 封面右上角状态角标背景模糊半径（全主题统一，压在封面上磨砂可读）。
   static const double bookCoverTagBlurSigma = 8;
+  static const double bookCoverTagIconSize = 12;
 
   // ── 轻提示 Toast ──
   static const double toastPaddingHorizontal = 20;

@@ -25,6 +25,7 @@ abstract final class AppPalette {
   static const Color whiteAlpha04 = Color(0x0AFFFFFF);
   static const Color whiteAlpha00 = Color(0x00FFFFFF);
 
+  static const Color blackAlpha100 = Color(0xFF000000);
   static const Color blackAlpha80 = Color(0xCC000000);
   static const Color blackAlpha60 = Color(0x99000000);
   static const Color blackAlpha40 = Color(0x66000000);

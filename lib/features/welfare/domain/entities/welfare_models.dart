@@ -304,17 +304,17 @@ class WelfareTaskItem extends Equatable {
 /// 任务列表顶部 VIP 权益入口内容（Figma 559:23235）。
 class WelfareTaskVipEntry extends Equatable {
   const WelfareTaskVipEntry({
-    required this.title,
+    required this.titles,
     required this.tagLabel,
     required this.actionLabel,
   });
 
-  final String title;
+  final List<String> titles;
   final String tagLabel;
   final String actionLabel;
 
   @override
-  List<Object?> get props => [title, tagLabel, actionLabel];
+  List<Object?> get props => [titles, tagLabel, actionLabel];
 }
 
 /// 吃饭签到简行数据（Figma 559:23066）。

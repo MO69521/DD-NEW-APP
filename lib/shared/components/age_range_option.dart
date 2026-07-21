@@ -12,7 +12,7 @@ import '../widgets/app_text.dart';
 ///
 /// 新手弹窗（[OnboardingProfileDialog]）与偏好设置页（[ReadingPreferencesPage]）
 /// 共用，保证选项高度 / 选中样式一致：选中态 8% 主色底 + 强调文字档**加粗**字
-/// （accentText：浅色态深黄/深粉、深色态亮黄，无描边），
+/// （accentText：浅色态深黄/深粉、深色态亮黄；yellow_light 增加黄色描边），
 /// 未选态浅色填充底 + 细描边 + 主文字色（三主题适配）。
 class AgeRangeOption extends StatelessWidget {
   const AgeRangeOption({
@@ -32,6 +32,7 @@ class AgeRangeOption extends StatelessWidget {
       onTap: onTap,
       pressScale: AppSizes.tapPressScaleSubtle,
       child: DecoratedBox(
+        key: ValueKey('age-range-option-decoration-$label'),
         decoration: BoxDecoration(
           color: selected
               ? AppColors.segmentedSelectedFill
@@ -39,9 +40,9 @@ class AgeRangeOption extends StatelessWidget {
           borderRadius: BorderRadius.circular(AppRadius.full),
           border: Border.all(
             color: selected
-                ? AppColors.segmentedSelectedBorder
+                ? AppColors.ageRangeSelectedBorder
                 : AppColors.borderSubtle,
-            width: AppSizes.hairline,
+            width: selected ? AppSizes.borderWidthEmphasis : AppSizes.hairline,
           ),
         ),
         child: Padding(

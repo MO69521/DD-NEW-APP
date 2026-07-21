@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../core/constants/main_tab_config.dart';
 import '../../../../core/theme/app_layout.dart';
 import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
@@ -21,6 +22,7 @@ import '../../domain/entities/welfare_page_content.dart';
 import '../components/check_in_success_dialog.dart';
 import '../components/daily_check_in_section.dart';
 import '../components/meal_check_in_section.dart';
+import '../components/reading_welfare_rules_dialog.dart';
 import '../components/reading_vip_progress_section.dart';
 import '../components/welfare_rules_dialog.dart';
 import '../components/welfare_task_list_section.dart';
@@ -33,10 +35,12 @@ class WelfarePage extends StatelessWidget {
     super.key,
     this.onRechargePackageTap,
     this.onRechargeMoreTap,
+    this.onGoReadTap,
   });
 
   final ValueChanged<RechargePackage>? onRechargePackageTap;
   final VoidCallback? onRechargeMoreTap;
+  final VoidCallback? onGoReadTap;
 
   static const double _bottomNavReserve =
       AppBottomNav.barHeight + AppSpacing.xl;
@@ -68,6 +72,7 @@ class WelfarePage extends StatelessWidget {
           hasCheckedInToday: state.ui.hasCheckedInToday,
           onRechargePackageTap: onRechargePackageTap,
           onRechargeMoreTap: onRechargeMoreTap,
+          onGoReadTap: onGoReadTap,
         );
       },
     );
@@ -80,12 +85,14 @@ class _WelfareView extends StatelessWidget {
     required this.hasCheckedInToday,
     this.onRechargePackageTap,
     this.onRechargeMoreTap,
+    this.onGoReadTap,
   });
 
   final WelfarePageContent content;
   final bool hasCheckedInToday;
   final ValueChanged<RechargePackage>? onRechargePackageTap;
   final VoidCallback? onRechargeMoreTap;
+  final VoidCallback? onGoReadTap;
 
   @override
   Widget build(BuildContext context) {
@@ -126,6 +133,7 @@ class _WelfareView extends StatelessWidget {
                     CurrencyBalanceBar(
                       balances: content.currencyBalances,
                       onCurrencyTap: cubit.onCurrencyTap,
+                      useTransparentYellowLightStyle: true,
                     ),
                     const SizedBox(height: AppSpacing.sm),
                     RechargePackagesSection(
@@ -159,10 +167,16 @@ class _WelfareView extends StatelessWidget {
                     const SizedBox(height: AppSpacing.sm),
                     ReadingVipProgressSection(
                       task: content.featuredReadingReward,
+                      onInfoTap: () => showAppBlurredDialog<void>(
+                        context: context,
+                        builder: (_) => const ReadingWelfareRulesDialog(),
+                      ),
                     ),
                     const SizedBox(height: AppSpacing.sm),
                     WelfareTaskListSection(
                       summary: content.taskListSummary,
+                      onTaskActionTap: (task) =>
+                          _handleTaskAction(context, cubit, task),
                       onVipTap: () =>
                           AppRouter.pushNamed(AppRoutes.membershipName),
                     ),
@@ -179,5 +193,40 @@ class _WelfareView extends StatelessWidget {
 
   void _showWatchVideoToast(BuildContext context) {
     AppToast.show(context, '视频功能开发中');
+  }
+
+  void _handleTaskAction(
+    BuildContext context,
+    WelfareCubit cubit,
+    WelfareTaskItem task,
+  ) {
+    switch (task.action.type) {
+      case WelfareTaskActionType.vipClaim:
+        AppRouter.pushNamed(AppRoutes.membershipName);
+        return;
+      case WelfareTaskActionType.watchVideo:
+        _showWatchVideoToast(context);
+        return;
+      case WelfareTaskActionType.goRead:
+        final onTap = onGoReadTap;
+        if (onTap != null) {
+          onTap();
+        } else {
+          AppRouter.goMainTab(MainTabConfig.bookstoreIndex);
+        }
+        return;
+      case WelfareTaskActionType.checkIn:
+        AppToast.show(context, '签到功能开发中');
+        return;
+      case WelfareTaskActionType.claimReward:
+        AppToast.show(context, '领取成功');
+        return;
+      case WelfareTaskActionType.open:
+        AppRouter.pushNamed(AppRoutes.notificationSettingsName);
+        return;
+      case WelfareTaskActionType.recharge:
+        cubit.onCurrencyTap(CurrencyType.energy);
+        return;
+    }
   }
 }

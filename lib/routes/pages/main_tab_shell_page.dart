@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../core/constants/main_tab_config.dart';
 import '../../core/services/service_locator.dart';
 import '../../core/theme/app_durations.dart';
 import '../../core/theme/app_layout.dart';
@@ -20,6 +21,7 @@ import '../../features/profile/index.dart';
 import '../../features/onboarding/index.dart';
 import '../../features/ranking/index.dart';
 import '../../features/welfare/application/welfare_cubit.dart';
+import '../../features/welfare/application/welfare_state.dart';
 import '../../features/welfare/index.dart';
 import '../../features/welfare/presentation/components/check_in_success_dialog.dart';
 import '../../features/welfare/presentation/components/daily_check_in_dialog.dart';
@@ -110,48 +112,53 @@ class _MainTabShellPageState extends State<MainTabShellPage> {
         child: BlocSelector<BookshelfCubit, BookshelfState, bool>(
           selector: (state) => state.interaction.isManaging,
           builder: (context, isBookshelfManaging) {
-            return MainTabShell(
-              initialIndex: widget.initialIndex,
-              controller: _mainTabController,
-              hideBottomNav: isBookshelfManaging,
-              pages: [
-                BookstorePage(
-                  mainTabController: _mainTabController,
-                  categoryTabBuilder: (context) {
-                    final topChrome =
-                        AppLayout.chromeTopHeight(
-                          context,
-                          barHeight: AppSizes.bookstoreTopHeaderHeight,
-                        ) +
-                        AppSizes.categoryHeaderToFilterGap;
-                    return BlocProvider(
-                      create: (_) => CategoryCubit()..load(),
-                      child: CategoryTabBody(
-                        topScrollPadding: topChrome,
-                        bottomScrollPadding:
-                            AppBottomNav.barHeight + AppSpacing.xl,
-                      ),
-                    );
-                  },
-                  rankingTabBuilder: (context) => BlocProvider(
-                    create: (_) => RankingCubit(
-                      initialDimension: RankingDimension.recommend,
-                    )..load(),
-                    child: const RankingTabBody(embedded: true),
-                  ),
-                ),
-                WelfarePage(
-                  onRechargePackageTap: (package) =>
-                      EnergyRechargePurchaseDialog.show(
+            return BlocSelector<WelfareCubit, WelfareState, int?>(
+              selector: (state) => state.domain.content?.pendingClaimEnergy,
+              builder: (context, pendingClaimEnergy) => MainTabShell(
+                initialIndex: widget.initialIndex,
+                controller: _mainTabController,
+                hideBottomNav: isBookshelfManaging,
+                pendingClaimEnergy: pendingClaimEnergy,
+                pages: [
+                  BookstorePage(
+                    mainTabController: _mainTabController,
+                    categoryTabBuilder: (context) {
+                      final topChrome = AppLayout.chromeTopHeight(
                         context,
-                        package: package,
-                      ),
-                ),
-                // 暂时下线「伙伴」一级 Tab。
-                // const PartnerPage(),
-                BookshelfPage(mainTabController: _mainTabController),
-                ProfilePage(mainTabController: _mainTabController),
-              ],
+                        barHeight: AppSizes.bookstoreTopHeaderHeight,
+                      );
+                      return BlocProvider(
+                        create: (_) => CategoryCubit()..load(),
+                        child: CategoryTabBody(
+                          topScrollPadding: topChrome,
+                          bottomScrollPadding:
+                              AppBottomNav.barHeight + AppSpacing.xl,
+                        ),
+                      );
+                    },
+                    rankingTabBuilder: (context) => BlocProvider(
+                      create: (_) => RankingCubit(
+                        initialDimension: RankingDimension.recommend,
+                      )..load(),
+                      child: const RankingTabBody(embedded: true),
+                    ),
+                  ),
+                  WelfarePage(
+                    onRechargePackageTap: (package) =>
+                        EnergyRechargePurchaseDialog.show(
+                          context,
+                          package: package,
+                        ),
+                    onGoReadTap: () => _mainTabController.switchTo(
+                      MainTabConfig.bookstoreIndex,
+                    ),
+                  ),
+                  // 暂时下线「伙伴」一级 Tab。
+                  // const PartnerPage(),
+                  BookshelfPage(mainTabController: _mainTabController),
+                  ProfilePage(mainTabController: _mainTabController),
+                ],
+              ),
             );
           },
         ),

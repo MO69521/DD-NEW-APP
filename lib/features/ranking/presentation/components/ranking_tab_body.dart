@@ -39,7 +39,7 @@ class RankingTabBody extends StatelessWidget {
                 : AppSizes.topBarHeight,
           );
           return ColoredBox(
-            color: AppColors.backgroundDark,
+            color: AppColors.categoryRankingPageBackground,
             child: BookLargeRowListSkeleton(
               padding: EdgeInsets.fromLTRB(
                 AppSpacing.md,
@@ -146,7 +146,7 @@ class _RankingTabStack extends StatelessWidget {
         final headerHeight = pinnedRailTop;
 
         return ColoredBox(
-          color: AppColors.backgroundDark,
+          color: AppColors.categoryRankingPageBackground,
           child: Stack(
             children: [
               CustomScrollView(

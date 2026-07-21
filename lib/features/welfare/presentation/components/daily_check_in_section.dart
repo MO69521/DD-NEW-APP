@@ -41,13 +41,18 @@ class DailyCheckInSection extends StatefulWidget {
   State<DailyCheckInSection> createState() => _DailyCheckInSectionState();
 }
 
-class _DailyCheckInSectionState extends State<DailyCheckInSection> {
+class _DailyCheckInSectionState extends State<DailyCheckInSection>
+    with AutomaticKeepAliveClientMixin {
   bool _expanded = true;
+
+  @override
+  bool get wantKeepAlive => true;
 
   void _toggle() => setState(() => _expanded = !_expanded);
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     final colors = context.appColors;
     final summary = widget.summary;
     return Container(

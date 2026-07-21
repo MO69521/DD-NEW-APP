@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_radius.dart';
+import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../routes/app_router.dart';
@@ -30,41 +31,66 @@ class WelfareRulesDialog extends StatelessWidget {
       child: Stack(
         clipBehavior: Clip.none,
         children: [
-          DecoratedBox(
+          Container(
             decoration: BoxDecoration(
               color: AppColors.dialogBackground,
               borderRadius: BorderRadius.circular(AppRadius.xl),
               border: Border.all(color: AppColors.borderGlass),
             ),
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(
-                AppSpacing.xl,
-                AppSpacing.xl,
-                AppSpacing.xl,
-                AppSpacing.lg,
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(AppRadius.xl),
+              child: Stack(
                 children: [
-                  AppText(
-                    '规则说明',
-                    style: AppTextStyles.titleMedium.copyWith(
-                      color: AppColors.textOnDark,
+                  const Positioned(
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    height: AppSizes.dialogTopTextureHeight,
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [
+                            AppColors.tabTopHeaderGradientStart,
+                            AppColors.tabTopHeaderGradientEnd,
+                          ],
+                        ),
+                      ),
                     ),
-                    textAlign: TextAlign.center,
                   ),
-                  const SizedBox(height: AppSpacing.lg),
-                  for (final section in _sections) ...[
-                    _RuleSection(section: section),
-                    if (section != _sections.last)
-                      const SizedBox(height: AppSpacing.md),
-                  ],
-                  const SizedBox(height: AppSpacing.xl),
-                  const AppButton(
-                    label: '知道了',
-                    variant: AppButtonVariant.accent,
-                    isExpanded: true,
-                    onPressed: AppRouter.pop,
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(
+                      AppSpacing.xl,
+                      AppSpacing.xl,
+                      AppSpacing.xl,
+                      AppSpacing.lg,
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        AppText(
+                          '规则说明',
+                          style: AppTextStyles.titleMedium.copyWith(
+                            color: AppColors.textOnDark,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: AppSpacing.lg),
+                        for (final section in _sections) ...[
+                          _RuleSection(section: section),
+                          if (section != _sections.last)
+                            const SizedBox(height: AppSpacing.md),
+                        ],
+                        const SizedBox(height: AppSpacing.xl),
+                        const AppButton(
+                          label: '知道了',
+                          variant: AppButtonVariant.accent,
+                          isExpanded: true,
+                          onPressed: AppRouter.pop,
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),

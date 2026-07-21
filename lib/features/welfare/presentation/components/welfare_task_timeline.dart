@@ -67,6 +67,7 @@ class _TimelineProgressBar extends StatelessWidget {
 
   double get _trackLeft => AppSizes.welfareTaskTimelineNodeWidth / 2;
 
+  /// 首节点中心到末节点中心的标准进度区间。
   double get _trackWidth => totalWidth - AppSizes.welfareTaskTimelineNodeWidth;
 
   double _nodeCenterX(int index) {
@@ -91,7 +92,7 @@ class _TimelineProgressBar extends StatelessWidget {
       child: Stack(
         children: [
           Positioned(
-            left: _trackLeft,
+            left: 0,
             right: _trackLeft,
             top: lineTop,
             child: Container(
@@ -103,10 +104,12 @@ class _TimelineProgressBar extends StatelessWidget {
             ),
           ),
           Positioned(
-            left: _trackLeft,
+            left: 0,
             top: lineTop,
             child: Container(
-              width: _trackWidth * safeProgress,
+              // 左侧补齐半个节点宽，再按原节点中心区间计算进度，
+              // 保持进度比例不变并与内容区左边界对齐。
+              width: _trackLeft + _trackWidth * safeProgress,
               height: AppSizes.welfareTaskTimelineLineHeight,
               decoration: BoxDecoration(
                 color: AppWelfareColors.taskTimelineFill,
@@ -120,8 +123,7 @@ class _TimelineProgressBar extends StatelessWidget {
                   _nodeCenterX(index) - AppSizes.welfareTaskTimelineDotSize / 2,
               top: dotTop,
               child: WelfareTimelineDot(
-                isHighlighted:
-                    nodes[index].isReached || nodes[index].isActive,
+                isHighlighted: nodes[index].isReached || nodes[index].isActive,
               ),
             ),
         ],
@@ -160,12 +162,19 @@ class _TimelineFooterCell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final color = welfareTimelineFooterColor(node);
+    final label = node.isActive
+        ? '去领取'
+        : node.isReached
+        ? '已领取'
+        : node.label;
+    final showVideoIcon =
+        node.showVideoIcon && !node.isActive && !node.isReached;
 
     final content = Row(
       mainAxisAlignment: MainAxisAlignment.center,
       mainAxisSize: MainAxisSize.min,
       children: [
-        if (node.showVideoIcon) ...[
+        if (showVideoIcon) ...[
           Icon(
             Icons.play_circle_fill_rounded,
             size: AppSizes.welfareTaskRewardIconSize,
@@ -175,7 +184,7 @@ class _TimelineFooterCell extends StatelessWidget {
         ],
         Flexible(
           child: AppText(
-            node.label,
+            label,
             style: AppTextStyles.welfareSubtitle.copyWith(
               color: color,
               height: AppLineHeights.none,

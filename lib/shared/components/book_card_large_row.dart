@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 
 import '../../core/domain/entities/book_cover_tag.dart';
+import '../../core/domain/entities/book_cover_bottom_badge.dart';
 import '../../core/theme/app_sizes.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../widgets/app_pressable.dart';
 import '../widgets/app_text.dart';
 import '../widgets/book_cover.dart';
 import 'book_cover_tag_badge.dart';
+import 'book_cover_bottom_badge.dart';
 
 /// Level 2 — 大封面横向书卡：左封面(可叠角标) + 右标题/标签/简介/脚注 + 尾部操作位。
 ///
@@ -24,6 +26,7 @@ class BookCardLargeRow extends StatelessWidget {
     this.coverWidth = AppSizes.bookCardLargeCoverWidth,
     this.coverHeight = AppSizes.bookCardLargeCoverHeight,
     this.coverTag,
+    this.coverBottomBadge,
     this.leadingBadge,
     this.trailing,
     this.padding = const EdgeInsets.symmetric(
@@ -51,6 +54,7 @@ class BookCardLargeRow extends StatelessWidget {
 
   /// 封面右上角状态角标（更新 / 完结 / 连载），为空则不展示。
   final BookCoverTag? coverTag;
+  final BookCoverBottomBadge? coverBottomBadge;
 
   /// 封面左上角业务角标（如排行名次），为空则不展示。
   final Widget? leadingBadge;
@@ -84,6 +88,9 @@ class BookCardLargeRow extends StatelessWidget {
                   topEndBadge: coverTag == null
                       ? null
                       : BookCoverTagBadge(tag: coverTag!),
+                  bottomEndBadge: coverBottomBadge == null
+                      ? null
+                      : BookCoverBottomBadgeView(badge: coverBottomBadge!),
                 ),
                 if (leadingBadge != null)
                   Positioned(top: 0, left: 0, child: leadingBadge!),

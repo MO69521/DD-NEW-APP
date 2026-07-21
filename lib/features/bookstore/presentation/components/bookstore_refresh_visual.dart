@@ -84,28 +84,41 @@ class _BookstoreRefreshVisualState extends State<BookstoreRefreshVisual>
       RefreshIndicatorMode.drag || RefreshIndicatorMode.done => widget.progress,
       _ => 1.0,
     };
+    final scaleProgress = switch (widget.refreshState) {
+      RefreshIndicatorMode.armed || RefreshIndicatorMode.refresh => 1.0,
+      _ => Curves.easeOutCubic.transform(widget.progress.clamp(0.0, 1.0)),
+    };
+    const minimumScale =
+        (AppSpacing.lg + AppSpacing.sm) /
+        AppSizes.bookstoreRefreshAnimationSize;
+    final scale = minimumScale + (1 - minimumScale) * scaleProgress;
 
     return Transform.translate(
       key: const ValueKey('bookstore-refresh-visual'),
       offset: const Offset(0, AppSpacing.xxl + AppSpacing.xl + AppSpacing.lg),
-      child: Opacity(
-        opacity: opacity,
-        child: SizedBox.square(
-          dimension: AppSizes.bookstoreRefreshAnimationSize,
-          child: AnimatedBuilder(
-            animation: _controller,
-            builder: (context, child) {
-              const frames = AppSharedAssets.bookstoreRefreshBearFrames;
-              final rawFrameIndex = (_controller.value * frames.length).floor();
-              final frameIndex = _shouldLoop
-                  ? rawFrameIndex % frames.length
-                  : rawFrameIndex.clamp(0, frames.length - 1).toInt();
-              return AppAssetImage(
-                assetPath: frames[frameIndex],
-                width: AppSizes.bookstoreRefreshAnimationSize,
-                height: AppSizes.bookstoreRefreshAnimationSize,
-              );
-            },
+      child: Transform.scale(
+        key: const ValueKey('bookstore-refresh-scale'),
+        scale: scale,
+        child: Opacity(
+          opacity: opacity,
+          child: SizedBox.square(
+            dimension: AppSizes.bookstoreRefreshAnimationSize,
+            child: AnimatedBuilder(
+              animation: _controller,
+              builder: (context, child) {
+                const frames = AppSharedAssets.bookstoreRefreshBearFrames;
+                final rawFrameIndex = (_controller.value * frames.length)
+                    .floor();
+                final frameIndex = _shouldLoop
+                    ? rawFrameIndex % frames.length
+                    : rawFrameIndex.clamp(0, frames.length - 1).toInt();
+                return AppAssetImage(
+                  assetPath: frames[frameIndex],
+                  width: AppSizes.bookstoreRefreshAnimationSize,
+                  height: AppSizes.bookstoreRefreshAnimationSize,
+                );
+              },
+            ),
           ),
         ),
       ),

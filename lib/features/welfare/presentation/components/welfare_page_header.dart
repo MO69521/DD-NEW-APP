@@ -36,6 +36,7 @@ class WelfarePageHeader extends StatelessWidget {
         iconAsset: 'assets/icons/welfare/recharge_info.svg',
         iconWidth: AppSizes.welfareRechargeInfoIconSize,
         iconHeight: AppSizes.welfareRechargeInfoIconSize,
+        iconColor: AppColors.welfareHeaderInfoIcon,
       ),
     );
   }

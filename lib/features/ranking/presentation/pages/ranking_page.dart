@@ -10,7 +10,7 @@ class RankingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-      backgroundColor: AppColors.backgroundDark,
+      backgroundColor: AppColors.categoryRankingPageBackground,
       body: RankingTabBody(),
     );
   }

@@ -12,6 +12,7 @@ import '../../../../shared/widgets/app_pressable.dart';
 import '../../../../shared/widgets/app_text.dart';
 import '../../domain/entities/welfare_models.dart';
 import 'welfare_task_row.dart';
+import 'welfare_vip_title_rotator.dart';
 
 /// L3 组件 — 福利页底部任务列表（Figma 559:23234）。
 class WelfareTaskListSection extends StatelessWidget {
@@ -100,13 +101,13 @@ class _TaskVipEntry extends StatelessWidget {
       onTap: onTap,
       pressScale: AppSizes.tapPressScaleSubtle,
       child: Container(
-        // 底部内边距加大：横幅粉色向下延伸，在 VIP 徽标与任务卡之间留出明显间距，
+        // 横幅粉色向下延伸，在 VIP 徽标与任务卡之间保留紧凑间距，
         // 且延伸段被任务卡向上叠压覆盖（见 welfareTaskCardOverlap），两侧不露底。
         padding: const EdgeInsets.only(
           left: AppSpacing.sm,
           right: AppSpacing.sm,
           top: AppSpacing.md,
-          bottom: AppSpacing.xxl,
+          bottom: AppSpacing.xl + AppSpacing.xxs,
         ),
         decoration: BoxDecoration(
           gradient: const LinearGradient(
@@ -130,14 +131,12 @@ class _TaskVipEntry extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    AppText(
-                      entry.title,
-                      style: AppTextStyles.welfareVipBannerLabel.copyWith(
+                    WelfareVipTitleRotator(
+                      titles: entry.titles,
+                      textStyle: AppTextStyles.welfareVipBannerLabel.copyWith(
                         color: AppWelfareColors.vipCtaText,
                         fontWeight: AppFontWeights.semibold,
                       ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
                     ),
                     const SizedBox(height: AppSpacing.sm),
                     _VipEntryBadge(label: entry.tagLabel),

@@ -21,6 +21,7 @@ class EditorPickBookRow extends StatelessWidget {
       description: item.description,
       footer: item.author,
       coverTag: BookCoverTag.fromLabel(item.badgeLabel),
+      coverBottomBadge: item.book.coverBottomBadge,
       padding: EdgeInsets.zero,
       heroTag: 'book-cover-${item.book.id}',
       onTap: onTap == null ? null : () => onTap!(item.book),

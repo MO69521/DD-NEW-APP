@@ -68,6 +68,7 @@ class BookGridSection extends StatelessWidget {
                           category: book.category,
                           coverAsset: book.coverAsset,
                           coverTag: book.coverTag,
+                          coverBottomBadge: book.coverBottomBadge,
                           heroTag: heroTag,
                           onTap: onBookTap == null
                               ? null

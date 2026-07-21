@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 
 import 'book_cover_tag.dart';
+import 'book_cover_bottom_badge.dart';
 
 /// 跨 feature 共享的书籍领域实体（纯 Dart）。
 class Book extends Equatable {
@@ -12,6 +13,7 @@ class Book extends Equatable {
     this.summary,
     this.annotations = const [],
     this.coverTag,
+    this.coverBottomBadge,
   });
 
   final String id;
@@ -31,6 +33,9 @@ class Book extends Equatable {
   /// 封面右上角状态角标（更新 / 完结），后端返回；为空则不展示。
   final BookCoverTag? coverTag;
 
+  /// 封面右下角运营标签（热度或红色活动文案），由后端返回。
+  final BookCoverBottomBadge? coverBottomBadge;
+
   @override
   List<Object?> get props => [
     id,
@@ -40,6 +45,7 @@ class Book extends Equatable {
     summary,
     annotations,
     coverTag,
+    coverBottomBadge,
   ];
 }
 

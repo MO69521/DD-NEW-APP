@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_radius.dart';
 import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
@@ -64,7 +65,7 @@ class _ReadingWelfareDayCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final bodyColor = _isToday
         ? AppWelfareColors.checkInHighlightBg
-        : AppWelfareColors.checkInDayBg;
+        : AppColors.surfaceCard;
     final headerColor = _isToday
         ? AppWelfareColors.checkInHighlightHeader
         : AppWelfareColors.checkInDayHeader;

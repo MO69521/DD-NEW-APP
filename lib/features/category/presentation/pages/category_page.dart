@@ -18,7 +18,7 @@ class CategoryPage extends StatelessWidget {
     final statusBarHeight = AppLayout.statusBarHeight(context);
 
     return Scaffold(
-      backgroundColor: AppColors.backgroundDark,
+      backgroundColor: AppColors.categoryRankingPageBackground,
       body: AppPageChrome(
         topBar: AppTopBar(
           statusBarHeight: statusBarHeight,

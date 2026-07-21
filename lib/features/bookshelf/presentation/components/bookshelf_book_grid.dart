@@ -78,6 +78,7 @@ class BookshelfBookGrid extends StatelessWidget {
           category: book.category,
           coverAsset: book.coverAsset,
           coverTag: book.coverTag,
+          coverBottomBadge: book.coverBottomBadge,
           onTap: onBookTap == null ? null : () => onBookTap(book, heroTag),
           heroTag: heroTag,
           showCardBackground: true,
@@ -113,6 +114,7 @@ class BookshelfBookGrid extends StatelessWidget {
               category: book.category,
               coverAsset: book.coverAsset,
               coverTag: book.coverTag,
+              coverBottomBadge: book.coverBottomBadge,
               onTap: onBookTap == null ? null : () => onBookTap!(book),
               showCardBackground: true,
             );

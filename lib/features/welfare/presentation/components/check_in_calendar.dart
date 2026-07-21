@@ -85,7 +85,7 @@ class _CheckInDayCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final bodyColor = _isToday
         ? AppWelfareColors.checkInHighlightBg
-        : AppWelfareColors.checkInDayBg;
+        : AppColors.surfaceCard;
     final headerColor = _isToday
         ? AppWelfareColors.checkInHighlightHeader
         : AppWelfareColors.checkInDayHeader;

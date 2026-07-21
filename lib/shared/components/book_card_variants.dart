@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../core/domain/entities/book_cover_tag.dart';
+import '../../core/domain/entities/book_cover_bottom_badge.dart';
 import '../../core/theme/app_sizes.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text_styles.dart';
@@ -9,6 +10,7 @@ import '../widgets/app_text.dart';
 import '../widgets/book_cover.dart';
 import '../../core/theme/app_colors.dart';
 import 'book_card_surface.dart';
+import 'book_cover_bottom_badge.dart';
 import 'book_cover_tag_badge.dart';
 
 /// 网格变体：上图下文。
@@ -19,6 +21,7 @@ class BookCardVertical extends StatelessWidget {
     required this.category,
     required this.coverAsset,
     this.coverTag,
+    this.coverBottomBadge,
     this.onTap,
     this.heroTag,
     this.showCardBackground = false,
@@ -28,6 +31,7 @@ class BookCardVertical extends StatelessWidget {
   final String category;
   final String coverAsset;
   final BookCoverTag? coverTag;
+  final BookCoverBottomBadge? coverBottomBadge;
   final VoidCallback? onTap;
   final Object? heroTag;
 
@@ -42,6 +46,9 @@ class BookCardVertical extends StatelessWidget {
       aspectRatio: AppSizes.bookCoverGridAspectRatio,
       heroTag: heroTag,
       topEndBadge: coverTag == null ? null : BookCoverTagBadge(tag: coverTag!),
+      bottomEndBadge: coverBottomBadge == null
+          ? null
+          : BookCoverBottomBadgeView(badge: coverBottomBadge!),
     );
     final textContent = _BookCardTextContent(
       title: title,

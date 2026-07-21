@@ -147,6 +147,7 @@ class BookstoreCubit extends Cubit<BookstoreState> {
         category: source.category,
         coverAsset: source.coverAsset,
         coverTag: source.coverTag,
+        coverBottomBadge: source.coverBottomBadge,
       );
     });
 

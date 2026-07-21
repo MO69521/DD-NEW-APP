@@ -19,6 +19,7 @@ class WelfareMockDataSource implements WelfareDataSource {
   @override
   Future<WelfarePageContent> fetchPageContent() async {
     return const WelfarePageContent(
+      pendingClaimEnergy: _pendingClaimEnergy,
       currencyBalances: CurrencyMockData.welfareBalances,
       vipMonthlyEnergy: _vipMonthlyEnergy,
       vipPriceYuan: _vipPriceYuan,
@@ -32,5 +33,7 @@ class WelfareMockDataSource implements WelfareDataSource {
   }
 }
 
+// Mock 接口返回值；接入真实接口后由响应字段替换。
+const int _pendingClaimEnergy = 585;
 const int _vipMonthlyEnergy = 1000;
 const double _vipPriceYuan = 4.9;

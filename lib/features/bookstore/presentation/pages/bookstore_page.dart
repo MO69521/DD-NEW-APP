@@ -165,51 +165,59 @@ class _BookstoreViewState extends State<_BookstoreView> {
             BlocSelector<BookstoreCubit, BookstoreState, BookstoreTopTab>(
               selector: (state) => state.interaction.selectedTopTab,
               builder: (context, selectedTopTab) {
-                return AppPageChrome(
-                  topBar: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      SizedBox(height: statusBarHeight),
-                      BookstorePageHeader(
-                        selectedTopTab: selectedTopTab,
-                        onTopTabSelected: cubit.switchTopTab,
-                        swipeProgress: _topTabSwipeProgress,
-                        onSearchTap: () =>
-                            AppRouter.pushNamed(AppRoutes.searchName),
-                      ),
-                    ],
-                  ),
-                  body: ScrollConfiguration(
-                    behavior: const _TopTabSwipeScrollBehavior(),
-                    // 仅在滚动结束（松手落页）后切换 Tab，拖动过程中不中途翻页。
-                    child: NotificationListener<ScrollEndNotification>(
-                      onNotification: (notification) {
-                        if (!_pageController.hasClients ||
-                            _pageController.page == null) {
-                          return false;
-                        }
-                        final target = _pageController.page!.round().clamp(
-                          0,
-                          BookstoreTopTab.values.length - 1,
-                        );
-                        if (target != selectedTopTab.index) {
-                          cubit.switchTopTab(BookstoreTopTab.values[target]);
-                        }
-                        return false;
-                      },
-                      child: NotificationListener<ScrollUpdateNotification>(
+                final backgroundColor =
+                    selectedTopTab == BookstoreTopTab.recommend
+                    ? AppColors.backgroundDark
+                    : AppColors.categoryRankingPageBackground;
+                return ColoredBox(
+                  key: const ValueKey('bookstore-tab-background'),
+                  color: backgroundColor,
+                  child: AppPageChrome(
+                    topBar: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        SizedBox(height: statusBarHeight),
+                        BookstorePageHeader(
+                          selectedTopTab: selectedTopTab,
+                          onTopTabSelected: cubit.switchTopTab,
+                          swipeProgress: _topTabSwipeProgress,
+                          onSearchTap: () =>
+                              AppRouter.pushNamed(AppRoutes.searchName),
+                        ),
+                      ],
+                    ),
+                    body: ScrollConfiguration(
+                      behavior: const _TopTabSwipeScrollBehavior(),
+                      // 仅在滚动结束（松手落页）后切换 Tab，拖动过程中不中途翻页。
+                      child: NotificationListener<ScrollEndNotification>(
                         onNotification: (notification) {
-                          _updateTopTabSwipeProgress();
+                          if (!_pageController.hasClients ||
+                              _pageController.page == null) {
+                            return false;
+                          }
+                          final target = _pageController.page!.round().clamp(
+                            0,
+                            BookstoreTopTab.values.length - 1,
+                          );
+                          if (target != selectedTopTab.index) {
+                            cubit.switchTopTab(BookstoreTopTab.values[target]);
+                          }
                           return false;
                         },
-                        child: PageView(
-                          controller: _pageController,
-                          physics: const PageScrollPhysics(),
-                          children: [
-                            const BookstoreRecommendBody(),
-                            widget.categoryTabBuilder(context),
-                            widget.rankingTabBuilder(context),
-                          ],
+                        child: NotificationListener<ScrollUpdateNotification>(
+                          onNotification: (notification) {
+                            _updateTopTabSwipeProgress();
+                            return false;
+                          },
+                          child: PageView(
+                            controller: _pageController,
+                            physics: const PageScrollPhysics(),
+                            children: [
+                              const BookstoreRecommendBody(),
+                              widget.categoryTabBuilder(context),
+                              widget.rankingTabBuilder(context),
+                            ],
+                          ),
                         ),
                       ),
                     ),

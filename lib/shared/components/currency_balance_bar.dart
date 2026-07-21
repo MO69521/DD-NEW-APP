@@ -27,72 +27,75 @@ class CurrencyBalanceBar extends StatelessWidget {
     super.key,
     required this.balances,
     this.onCurrencyTap,
+    this.useTransparentYellowLightStyle = false,
   });
 
   final List<CurrencyBalance> balances;
   final ValueChanged<CurrencyType>? onCurrencyTap;
+  final bool useTransparentYellowLightStyle;
 
   @override
   Widget build(BuildContext context) {
     const isYellowLight = AppBrandColors.isYellowLight;
+    final isTransparent = isYellowLight && useTransparentYellowLightStyle;
     final borderRadius = BorderRadius.circular(AppRadius.lg);
 
-    Widget bar = Container(
-      padding: isYellowLight
-          ? EdgeInsets.zero
-          : const EdgeInsets.all(AppSpacing.sm),
-      decoration: isYellowLight
-          ? null
-          : BoxDecoration(
-              color: AppColors.surfaceCard,
-              borderRadius: borderRadius,
-              border: Border.all(
-                color: AppColors.borderGlass,
-                width: AppSizes.hairline,
+    final content = Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        for (var i = 0; i < balances.length; i++) ...[
+          if (i > 0)
+            Container(
+              width: AppSizes.hairline,
+              height: AppSizes.welfareCurrencyDividerHeight,
+              color: AppColors.borderGlass,
+            ),
+          Expanded(
+            child: Align(
+              alignment: isTransparent
+                  ? _yellowLightAlignment(i, balances.length)
+                  : Alignment.center,
+              child: _CurrencyColumn(
+                balance: balances[i],
+                onTap: onCurrencyTap == null
+                    ? null
+                    : () => onCurrencyTap!(balances[i].type),
               ),
             ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          for (var i = 0; i < balances.length; i++) ...[
-            if (i > 0)
-              Container(
-                width: AppSizes.hairline,
-                height: AppSizes.welfareCurrencyDividerHeight,
-                color: AppColors.borderGlass,
+          ),
+        ],
+      ],
+    );
+
+    if (isTransparent) return content;
+
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        Positioned.fill(
+          child: ClipRRect(
+            borderRadius: borderRadius,
+            child: BackdropFilter(
+              filter: ImageFilter.blur(
+                sigmaX: AppSizes.welfareCurrencyBlurSigma,
+                sigmaY: AppSizes.welfareCurrencyBlurSigma,
               ),
-            Expanded(
-              child: Align(
-                alignment: isYellowLight
-                    ? _yellowLightAlignment(i, balances.length)
-                    : Alignment.center,
-                child: _CurrencyColumn(
-                  balance: balances[i],
-                  onTap: onCurrencyTap == null
-                      ? null
-                      : () => onCurrencyTap!(balances[i].type),
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  color: AppColors.surfaceCard,
+                  borderRadius: borderRadius,
+                  border: Border.all(
+                    color: AppColors.borderGlass,
+                    width: AppSizes.hairline,
+                  ),
                 ),
               ),
             ),
-          ],
-        ],
-      ),
-    );
-
-    if (!isYellowLight) {
-      bar = ClipRRect(
-        borderRadius: borderRadius,
-        child: BackdropFilter(
-          filter: ImageFilter.blur(
-            sigmaX: AppSizes.welfareCurrencyBlurSigma,
-            sigmaY: AppSizes.welfareCurrencyBlurSigma,
           ),
-          child: bar,
         ),
-      );
-    }
-
-    return bar;
+        Padding(padding: const EdgeInsets.all(AppSpacing.sm), child: content),
+      ],
+    );
   }
 
   Alignment _yellowLightAlignment(int index, int itemCount) {
@@ -138,8 +141,7 @@ class _CurrencyColumn extends StatelessWidget {
               if (AppBrandColors.isYellowLight &&
                   balance.type == CurrencyType.stardust)
                 const Positioned(
-                  bottom:
-                      AppSizes.welfareCurrencyAmountFontSize + AppSpacing.xxs,
+                  bottom: AppSizes.welfareCurrencyAmountFontSize,
                   child: _StardustExchangeBadge(),
                 ),
             ],
@@ -197,7 +199,7 @@ class _StardustExchangeBadge extends StatelessWidget {
         Container(
           padding: const EdgeInsets.symmetric(
             horizontal: AppSpacing.xxs,
-            vertical: AppSpacing.xxsHalf,
+            vertical: AppSpacing.xxs,
           ),
           decoration: BoxDecoration(
             color: AppWelfareColors.hotSaleBadge,

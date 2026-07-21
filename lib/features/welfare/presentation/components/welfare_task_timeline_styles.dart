@@ -22,7 +22,7 @@ WelfareTimelineNodeStyle welfareTimelineNodeStyle(
     );
   }
   // 已领取 / 还不能领取：与行内奖励角标同底（深色 4% 白 / 浅色弱实体面）；
-  // 原 surfaceCard 与福利卡片容器同色导致气泡不可见。已领取整体降 30% 由外层处理。
+  // 原 surfaceCard 与福利卡片容器同色导致气泡不可见。已领取仅内容降 30%，背景保持实体。
   return (
     background: AppWelfareColors.taskRewardChipBg,
     border: null,

@@ -113,6 +113,7 @@ class _LimitedFreeSectionState extends State<LimitedFreeSection> {
                                 category: book.category,
                                 coverAsset: book.coverAsset,
                                 coverTag: book.coverTag,
+                                coverBottomBadge: book.coverBottomBadge,
                                 heroTag: heroTag,
                                 onTap: widget.onBookTap == null
                                     ? null

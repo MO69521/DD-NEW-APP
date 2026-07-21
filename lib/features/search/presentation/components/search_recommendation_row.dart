@@ -28,6 +28,7 @@ class SearchRecommendationRow extends StatelessWidget {
       description: item.description,
       footer: item.author,
       coverTag: BookCoverTag.fromLabel(item.badgeLabel),
+      coverBottomBadge: item.book.coverBottomBadge,
       leadingBadge: rank == null ? null : RankingRankBadge(rank: rank!),
       padding: EdgeInsets.zero,
       heroTag: 'book-cover-${item.book.id}',

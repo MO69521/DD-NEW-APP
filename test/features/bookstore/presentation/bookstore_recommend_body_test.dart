@@ -205,4 +205,38 @@ void main() {
       isNot(firstFrame),
     );
   });
+
+  testWidgets('上拉进度越大小熊越靠近完整尺寸，初始尺寸不会过小', (tester) async {
+    Future<double> pumpScale(double progress) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: Center(
+              child: BookstoreRefreshVisual(
+                refreshState: RefreshIndicatorMode.drag,
+                progress: progress,
+              ),
+            ),
+          ),
+        ),
+      );
+      return tester
+          .widget<Transform>(
+            find.byKey(const ValueKey('bookstore-refresh-scale')),
+          )
+          .transform
+          .entry(0, 0);
+    }
+
+    final minimumScale = await pumpScale(0);
+    final pulledScale = await pumpScale(0.5);
+    final armedScale = await pumpScale(1);
+
+    expect(
+      minimumScale * AppSizes.bookstoreRefreshAnimationSize,
+      AppSpacing.lg + AppSpacing.sm,
+    );
+    expect(pulledScale, greaterThan(minimumScale));
+    expect(armedScale, 1);
+  });
 }

@@ -21,6 +21,7 @@ abstract final class AppColors {
   static const Color white100 = AppPalette.whiteAlpha100;
 
   // ── 中性色阶：黑色透明度（遮罩 / 蒙版语义名，指向 AppPalette）──
+  static const Color black100 = AppPalette.blackAlpha100;
   static const Color black00 = AppPalette.blackAlpha00;
   static const Color black04 = AppPalette.blackAlpha04;
   static const Color black08 = AppPalette.blackAlpha08;
@@ -113,9 +114,19 @@ abstract final class AppColors {
   /// （`backgroundDark`）。全主题底栏统一实心底，不磨砂透出背后内容。
   static const Color bottomNavScrim = _isLight ? white100 : backgroundDark;
 
+  /// 底部导航顶部 0.5px 分割线：浅色使用实体浅灰，深色使用半透明白。
+  static const Color bottomNavTopDividerLight = AppPalette.neutralCool200;
+  static const Color bottomNavTopDividerDark = AppPalette.whiteAlpha08;
+  static const Color bottomNavTopDivider = _isLight
+      ? bottomNavTopDividerLight
+      : bottomNavTopDividerDark;
+
   /// 底部导航「纹理需透出」时的叠色 scrim（约 60% 壳基色 tint）。
   /// 当前底栏默认用不透明 [bottomNavScrim] 盖住纹理；设计需透出时改接线此 token。
   static const Color bottomNavTextureScrim = bgTint60;
+
+  /// 福利页顶栏说明图标：浅色主题纯黑；深色主题保持原 60% 白的弱化层级。
+  static const Color welfareHeaderInfoIcon = _isLight ? black100 : white60;
 
   /// 顶栏滚动后底色（仅 `AppPageChrome`，如书城等 Tab 页）：深色态毛玻璃（约 80% tint）；
   /// 浅色态纯白不透明（`white100`）；深色态保持毛玻璃。
@@ -289,11 +300,25 @@ abstract final class AppColors {
   static const Color bookCoverTagUpdatedBorder =
       white04; // light-audit: keep-dark
 
+  static const Color bookCoverBottomPopularityBackground =
+      black60; // light-audit: keep-dark
+  static const Color bookCoverBottomPromotionBackground =
+      AppPalette.orange500; // light-audit: keep-dark
+  static const Color bookCoverBottomBadgeText =
+      white100; // light-audit: keep-dark
+  static const Color bookCoverBottomPopularityIcon =
+      AppPalette.orange500; // light-audit: keep-dark
+
   /// 卡片彩色角标字色（充值「热」/ 免费领取「0/300每日」/ 会员标等）：全主题恒白。
   static const Color cornerBadgeText = white100; // light-audit: keep-dark
 
   /// 区块右侧胶囊操作入口底（「更多福利」「完整榜单」等）：纯黑 4%，全主题统一。
   static const Color sectionMoreActionBackground = black04;
+
+  /// 分类 / 排行页整页背景：浅色包纯白，黄黑包保持深底可读。
+  static const Color categoryRankingPageBackground = _isLight
+      ? white100
+      : backgroundDark;
 
   // 我的页头图 alpha 蒙版（Figma 400:2302 / 205:5742）
   static const Color profileHeroImageMaskOpaque = white100;
@@ -304,6 +329,11 @@ abstract final class AppColors {
   static const Color segmentedSelectedFill = AppBrandColors.accentSoft08;
   // 选中态去描边（全局统一）：仅靠 fill + 文字色区分选中
   static const Color segmentedSelectedBorder = white00;
+
+  /// 年龄选项选中描边：仅 yellow_light 使用主黄色增强选中反馈；其余主题保持透明。
+  static const Color ageRangeSelectedBorder = AppBrandColors.isYellowLight
+      ? primary
+      : segmentedSelectedBorder;
   // 选中文字：浅色态亮黄/亮粉在白面上不可读，走强调文字档 accentText。
   static const Color segmentedSelectedText = accentText;
   static const Color segmentedUnselectedText = textOnDarkPlaceholder;

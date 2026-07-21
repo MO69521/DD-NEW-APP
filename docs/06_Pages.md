@@ -179,7 +179,7 @@ flowchart LR
 
 ### splash · [splash_page.dart](../lib/features/splash/presentation/pages/splash_page.dart)
 - **职责**：启动闪屏，延时后按会话跳首页或登录。
-- **模块**：`splash_logo`。**公共组件**：无（原生 `Scaffold`）。
+- **模块**：`splash_logo`；全屏背景图上叠加底部品牌 Logo，Logo 占屏宽 68.5%（最大 315px），并位于底部安全区上方 24px。**公共组件**：无（原生 `Scaffold`）。
 - **Model**：`SplashState`。**Repository**：无。
 - **接入点**：`splash_cubit.dart` → `ServiceLocator.authSession`（`InMemoryAuthSessionService`，待换持久化）。
 

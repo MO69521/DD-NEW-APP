@@ -1,5 +1,6 @@
 import '../../../../core/domain/entities/book.dart';
 import '../../../../core/domain/entities/book_cover_tag.dart';
+import '../../../../core/domain/entities/book_cover_bottom_badge.dart';
 import '../../domain/entities/bookstore_page_content.dart';
 
 /// data 层 DTO：解析后端 JSON 字段，再 `toEntity()` 映射为 domain 领域模型。
@@ -15,6 +16,8 @@ class BookDto {
     this.summary,
     this.annotations = const [],
     this.coverTag,
+    this.coverBottomBadgeType,
+    this.coverBottomBadgeLabel,
   });
 
   factory BookDto.fromJson(Map<String, Object?> json) {
@@ -31,6 +34,8 @@ class BookDto {
               .toList() ??
           const [],
       coverTag: json['coverTag'] as String?,
+      coverBottomBadgeType: json['coverBottomBadgeType'] as String?,
+      coverBottomBadgeLabel: json['coverBottomBadgeLabel'] as String?,
     );
   }
 
@@ -41,6 +46,8 @@ class BookDto {
   final String? summary;
   final List<String> annotations;
   final String? coverTag;
+  final String? coverBottomBadgeType;
+  final String? coverBottomBadgeLabel;
 
   Book toEntity() {
     return Book(
@@ -51,6 +58,15 @@ class BookDto {
       summary: summary,
       annotations: annotations,
       coverTag: BookCoverTag.fromLabel(coverTag),
+      coverBottomBadge:
+          coverBottomBadgeLabel == null || coverBottomBadgeLabel!.isEmpty
+          ? null
+          : BookCoverBottomBadge(
+              type: coverBottomBadgeType == 'popularity'
+                  ? BookCoverBottomBadgeType.popularity
+                  : BookCoverBottomBadgeType.promotion,
+              label: coverBottomBadgeLabel!,
+            ),
     );
   }
 

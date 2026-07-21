@@ -5,18 +5,21 @@ import 'package:flutter/material.dart';
 import '../../core/constants/main_tab_config.dart';
 import '../../core/theme/app_brand_colors.dart';
 import '../../core/theme/app_colors.dart';
+import '../../core/theme/app_durations.dart';
 import '../../core/theme/app_radius.dart';
 import '../../core/theme/app_sizes.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../core/theme/app_theme_assets.dart';
+import '../../core/theme/app_welfare_colors.dart';
 import '../components/app_blurred_chrome_bar.dart';
 import '../widgets/app_nav_icon.dart';
 import '../widgets/app_text.dart';
 
+part 'app_bottom_nav_pending_claim_badge.dart';
+
 enum AppBottomNavStyle { fullWidthSolid, glassCapsule }
 
-/// App Shell 底部导航栏（当前 4 Tab；「伙伴」暂时下线）。
 class AppBottomNav extends StatelessWidget {
   const AppBottomNav({
     super.key,
@@ -25,6 +28,7 @@ class AppBottomNav extends StatelessWidget {
     this.onTabChanged,
     this.style = AppBottomNavStyle.fullWidthSolid,
     this.blurEnabled = true,
+    this.pendingClaimEnergy,
   });
 
   final List<MainTabItem> items;
@@ -32,16 +36,14 @@ class AppBottomNav extends StatelessWidget {
   final ValueChanged<int>? onTabChanged;
   final AppBottomNavStyle style;
   final bool blurEnabled;
-
+  final int? pendingClaimEnergy;
   static const double barHeight = AppSizes.bottomNavBarHeight;
-
   static const List<Color> _bottomFadeColors = [
     AppColors.gradientFadeStart,
     AppColors.gradientFadeMid,
     AppColors.gradientFadeEnd,
     AppColors.backgroundDark,
   ];
-
   static const List<double> _bottomFadeStops = [0.0, 0.4, 0.7, 1.0];
 
   @override
@@ -86,6 +88,11 @@ class AppBottomNav extends StatelessWidget {
               child: _NavTabItem(
                 item: items[index],
                 isSelected: index == selectedIndex,
+                pendingClaimEnergy:
+                    index == MainTabConfig.welfareIndex &&
+                        index != selectedIndex
+                    ? pendingClaimEnergy
+                    : null,
                 onTap: () => onTabChanged?.call(index),
               ),
             ),
@@ -96,21 +103,32 @@ class AppBottomNav extends StatelessWidget {
 
   Widget _buildSolidBottomBar(Widget navCapsule) {
     const texture = AppThemeAssets.bottomNavTexture;
-    return AppBlurredChromeBar(
-      blurEnabled: false,
-      blurSigma: AppSizes.bottomNavBlurSigma,
-      textureAsset: texture,
-      scrimColor: AppColors.bottomNavScrim,
-      child: SafeArea(
-        top: false,
-        left: false,
-        right: false,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            navCapsule,
-            const SizedBox(height: AppSizes.bottomNavBottomInset),
-          ],
+    return DecoratedBox(
+      key: const ValueKey('bottom-nav-top-divider'),
+      decoration: const BoxDecoration(
+        border: Border(
+          top: BorderSide(
+            color: AppColors.bottomNavTopDivider,
+            width: AppSizes.hairline,
+          ),
+        ),
+      ),
+      child: AppBlurredChromeBar(
+        blurEnabled: false,
+        blurSigma: AppSizes.bottomNavBlurSigma,
+        textureAsset: texture,
+        scrimColor: AppColors.bottomNavScrim,
+        child: SafeArea(
+          top: false,
+          left: false,
+          right: false,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              navCapsule,
+              const SizedBox(height: AppSizes.bottomNavBottomInset),
+            ],
+          ),
         ),
       ),
     );
@@ -166,11 +184,13 @@ class _NavTabItem extends StatefulWidget {
     required this.item,
     required this.isSelected,
     required this.onTap,
+    this.pendingClaimEnergy,
   });
 
   final MainTabItem item;
   final bool isSelected;
   final VoidCallback onTap;
+  final int? pendingClaimEnergy;
 
   @override
   State<_NavTabItem> createState() => _NavTabItemState();
@@ -191,34 +211,54 @@ class _NavTabItemState extends State<_NavTabItem> {
       behavior: HitTestBehavior.opaque,
       child: SizedBox(
         height: AppSizes.bottomNavItemHeight,
-        child: Padding(
-          padding: const EdgeInsets.only(
-            top: AppSizes.bottomNavItemContentTopInset,
-            bottom: AppSizes.bottomNavItemContentBottomInset,
-          ),
-          child: FittedBox(
-            fit: BoxFit.scaleDown,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                AppNavIcon(
-                  item: widget.item,
-                  isSelected: widget.isSelected,
-                  tapEpoch: _tapEpoch,
+        child: Stack(
+          clipBehavior: Clip.none,
+          alignment: Alignment.center,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(
+                top: AppSizes.bottomNavItemContentTopInset,
+                bottom: AppSizes.bottomNavItemContentBottomInset,
+              ),
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    AppNavIcon(
+                      item: widget.item,
+                      isSelected: widget.isSelected,
+                      tapEpoch: _tapEpoch,
+                    ),
+                    const SizedBox(height: AppSizes.bottomNavIconLabelGap),
+                    AppText(
+                      widget.item.label,
+                      style: widget.isSelected
+                          ? AppTextStyles.navLabelActiveDark
+                          : AppTextStyles.navLabelInactiveDark,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
                 ),
-                const SizedBox(height: AppSizes.bottomNavIconLabelGap),
-                AppText(
-                  widget.item.label,
-                  style: widget.isSelected
-                      ? AppTextStyles.navLabelActiveDark
-                      : AppTextStyles.navLabelInactiveDark,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ],
+              ),
             ),
-          ),
+            Positioned(
+              top: -AppSpacing.lg,
+              child: AnimatedSwitcher(
+                duration: AppDurations.normal,
+                child: (widget.pendingClaimEnergy ?? 0) > 0
+                    ? _PendingClaimBadge(
+                        key: const ValueKey('pending-claim-badge'),
+                        energy: widget.pendingClaimEnergy!,
+                      )
+                    : const SizedBox(
+                        key: ValueKey('pending-claim-badge-hidden'),
+                      ),
+              ),
+            ),
+          ],
         ),
       ),
     );

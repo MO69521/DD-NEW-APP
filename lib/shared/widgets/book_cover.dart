@@ -15,6 +15,7 @@ class BookCover extends StatelessWidget {
     this.aspectRatio,
     this.overlayColor,
     this.topEndBadge,
+    this.bottomEndBadge,
     this.heroTag,
   }) : assert(
          (width != null && height != null) || aspectRatio != null,
@@ -29,6 +30,9 @@ class BookCover extends StatelessWidget {
 
   /// 右上角叠加插槽（如封面状态角标），为空则不渲染。
   final Widget? topEndBadge;
+
+  /// 右下角叠加插槽（如热度或运营文案标签），为空则不渲染。
+  final Widget? bottomEndBadge;
 
   /// 共享元素转场标签；非空则封面参与 Hero 飞行（详情页头图用同 tag）。
   /// 同一屏内必须唯一，仅在书 id 唯一的列表启用。
@@ -96,6 +100,12 @@ class BookCover extends StatelessWidget {
             top: AppSizes.bookCoverTagInsetTop,
             right: AppSizes.bookCoverTagInsetRight,
             child: topEndBadge!,
+          ),
+        if (bottomEndBadge != null)
+          Positioned(
+            right: AppSizes.bookCoverTagInsetRight,
+            bottom: AppSizes.bookCoverTagInsetTop,
+            child: bottomEndBadge!,
           ),
       ],
     );
