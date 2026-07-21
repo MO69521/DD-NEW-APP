@@ -36,7 +36,7 @@ class BookCardVertical extends StatelessWidget {
   final Object? heroTag;
 
   /// 是否为整张卡片（封面 + 文本）铺一层卡面底（[BookCardSurface]）。
-  /// 默认关闭，仅书架网格开启，其余调用点外观不变。
+  /// 默认关闭。书架网格已关闭卡面底，与页底白面一体。
   final bool showCardBackground;
 
   @override

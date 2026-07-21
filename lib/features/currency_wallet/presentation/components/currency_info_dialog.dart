@@ -6,6 +6,7 @@ import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../routes/app_router.dart';
 import '../../../../shared/components/app_blurred_dialog.dart';
+import '../../../../shared/components/app_dialog_top_texture.dart';
 import '../../../../shared/components/dialog_close_button.dart';
 import '../../../../shared/widgets/app_button.dart';
 import '../../../../shared/widgets/app_text.dart';
@@ -50,42 +51,50 @@ class CurrencyInfoDialog extends StatelessWidget {
         children: [
           ConstrainedBox(
             constraints: BoxConstraints(maxHeight: maxHeight),
-            child: Container(
-              padding: const EdgeInsets.fromLTRB(
-                AppSpacing.lg,
-                AppSpacing.lg,
-                AppSpacing.lg,
-                AppSpacing.md,
-              ),
-              decoration: BoxDecoration(
-                color: AppColors.dialogBackground,
-                borderRadius: BorderRadius.circular(AppRadius.xl),
-                border: Border.all(color: AppColors.borderGlass),
-              ),
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(AppRadius.xl),
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  color: AppColors.dialogBackground,
+                  borderRadius: BorderRadius.circular(AppRadius.xl),
+                  border: Border.all(color: AppColors.borderGlass),
+                ),
+                child: Stack(
                   children: [
-                    Center(
-                      child: AppText(
-                        title,
-                        style: AppTextStyles.titleMediumDark,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
+                    const AppDialogTopTexture(),
+                    SingleChildScrollView(
+                      padding: const EdgeInsets.fromLTRB(
+                        AppSpacing.lg,
+                        AppSpacing.lg,
+                        AppSpacing.lg,
+                        AppSpacing.md,
                       ),
-                    ),
-                    const SizedBox(height: AppSpacing.lg),
-                    for (var i = 0; i < sections.length; i++) ...[
-                      if (i > 0) const SizedBox(height: AppSpacing.md),
-                      _CurrencyInfoSectionView(section: sections[i]),
-                    ],
-                    const SizedBox(height: AppSpacing.lg),
-                    AppButton(
-                      label: '我知道了',
-                      variant: AppButtonVariant.accent,
-                      isExpanded: true,
-                      onPressed: onClose,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Center(
+                            child: AppText(
+                              title,
+                              style: AppTextStyles.titleMediumDark,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          const SizedBox(height: AppSpacing.lg),
+                          for (var i = 0; i < sections.length; i++) ...[
+                            if (i > 0) const SizedBox(height: AppSpacing.md),
+                            _CurrencyInfoSectionView(section: sections[i]),
+                          ],
+                          const SizedBox(height: AppSpacing.lg),
+                          AppButton(
+                            label: '我知道了',
+                            variant: AppButtonVariant.accent,
+                            isExpanded: true,
+                            onPressed: onClose,
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),

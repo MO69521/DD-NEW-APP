@@ -9,6 +9,8 @@ import '../../../../shared/widgets/app_asset_image.dart';
 import '../../../../shared/widgets/app_pressable.dart';
 import '../../../../shared/widgets/app_text.dart';
 import '../../domain/entities/book_discussion_post.dart';
+import 'book_discussion_author_badge.dart';
+import 'book_discussion_like_icon.dart';
 
 /// 书评详情主内容：主贴 + 全部回复。
 class BookDiscussionDetailContent extends StatelessWidget {
@@ -109,9 +111,21 @@ class _PostHeader extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              AppText(
-                post.authorName,
-                style: AppTextStyles.bookDetailDiscussionAuthor,
+              Row(
+                children: [
+                  Flexible(
+                    child: AppText(
+                      post.authorName,
+                      style: AppTextStyles.bookDetailDiscussionAuthor,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  if (post.isAuthor) ...[
+                    const SizedBox(width: AppSpacing.xs),
+                    const BookDiscussionAuthorBadge(),
+                  ],
+                ],
               ),
               const SizedBox(height: AppSpacing.xxs),
               AppText(
@@ -125,12 +139,9 @@ class _PostHeader extends StatelessWidget {
           onTap: isLikePending ? null : onLikeTap,
           child: Row(
             children: [
-              Icon(
-                post.isLiked ? Icons.thumb_up_alt : Icons.thumb_up_alt_outlined,
-                size: AppSizes.bookDetailDiscussionLikeIconSize,
-                color: post.isLiked
-                    ? AppColors.accentText
-                    : AppColors.iconMuted,
+              BookDiscussionLikeIcon(
+                isLiked: post.isLiked,
+                inactiveColor: AppColors.iconMuted,
               ),
               const SizedBox(width: AppSpacing.xxsHalf),
               AppText(
@@ -175,7 +186,22 @@ class _ReplyItem extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              AppText(reply.authorName, style: AppTextStyles.labelMediumDark),
+              Row(
+                children: [
+                  Flexible(
+                    child: AppText(
+                      reply.authorName,
+                      style: AppTextStyles.labelMediumDark,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  if (reply.isAuthor) ...[
+                    const SizedBox(width: AppSpacing.xs),
+                    const BookDiscussionAuthorBadge(),
+                  ],
+                ],
+              ),
               const SizedBox(height: AppSpacing.xxs),
               AppText(reply.content, style: AppTextStyles.bodyMediumDark),
               const SizedBox(height: AppSpacing.xxs),
@@ -191,14 +217,9 @@ class _ReplyItem extends StatelessWidget {
           onTap: isLikePending ? null : onLikeTap,
           child: Row(
             children: [
-              Icon(
-                reply.isLiked
-                    ? Icons.thumb_up_alt
-                    : Icons.thumb_up_alt_outlined,
-                size: AppSizes.bookDetailDiscussionLikeIconSize,
-                color: reply.isLiked
-                    ? AppColors.accentText
-                    : AppColors.iconMuted,
+              BookDiscussionLikeIcon(
+                isLiked: reply.isLiked,
+                inactiveColor: AppColors.iconMuted,
               ),
               const SizedBox(width: AppSpacing.xxsHalf),
               AppText(

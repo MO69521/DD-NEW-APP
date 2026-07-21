@@ -10,8 +10,10 @@ import '../../../../core/theme/app_spacing.dart';
 import '../../../../routes/app_router.dart';
 import '../../../../routes/app_routes.dart';
 import '../../../../shared/components/app_async_page_body.dart';
+import '../../../../shared/layouts/app_bottom_nav.dart';
 import '../../../../shared/layouts/app_page_chrome.dart';
 import '../../../../shared/layouts/main_tab_controller.dart';
+import '../../../../shared/layouts/main_tab_shell.dart';
 import '../../application/bookstore_cubit.dart';
 import '../../application/bookstore_state.dart';
 import '../../domain/entities/bookstore_top_tab.dart';
@@ -225,10 +227,18 @@ class _BookstoreViewState extends State<_BookstoreView> {
                 );
               },
             ),
-            Positioned(
+            AnimatedPositioned(
+              duration: AppDurations.normal,
+              curve: Curves.easeOutCubic,
               left: 0,
               right: 0,
-              bottom: AppSizes.bottomNavBarHeight + AppSpacing.xs,
+              bottom:
+                  AppSizes.bottomNavBarHeight +
+                  AppSpacing.xs +
+                  ((MainTabPendingClaimScope.maybeOf(context)?.isVisible ??
+                          false)
+                      ? AppBottomNav.pendingClaimBadgeClearance
+                      : 0),
               child: BlocBuilder<BookstoreCubit, BookstoreState>(
                 buildWhen: (previous, current) =>
                     previous.domain.continueReadingBook !=

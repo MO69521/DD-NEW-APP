@@ -267,7 +267,7 @@ class EnergyRecordRow extends StatelessWidget {
                   ? '+${record.amountDelta}'
                   : '${record.amountDelta}',
               style: AppTextStyles.titleMediumDark.copyWith(
-                color: AppColors.bookDetailUpdateTextHighlighted,
+                color: AppColors.bookDetailUpdateHighlight,
               ),
             ),
             const SizedBox(width: AppSpacing.xxs),

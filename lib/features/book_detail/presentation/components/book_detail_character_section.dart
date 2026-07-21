@@ -4,11 +4,9 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
-import '../../../../core/theme/app_icon_assets.dart';
 import '../../../../shared/components/app_blurred_dialog.dart';
-import '../../../../shared/widgets/app_icon.dart';
+import '../../../../shared/components/section_header.dart';
 import '../../../../shared/widgets/app_pressable.dart';
-import '../../../../shared/widgets/app_text.dart';
 import '../../domain/entities/book_detail.dart';
 import 'book_detail_character_card.dart';
 import 'book_detail_character_help_dialog.dart';
@@ -59,33 +57,23 @@ class _Header extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        const AppText('角色介绍', style: AppTextStyles.bookDetailSectionTitle),
-        const SizedBox(width: AppSpacing.xxs),
-        AppPressable(
-          onTap: () {
-            showAppBlurredDialog<void>(
-              context: context,
-              builder: (_) => const BookDetailCharacterHelpDialog(),
-            );
-          },
-          child: const Icon(
-            Icons.info_outline,
-            size: AppSizes.titleInfoIconSize,
-            color: AppColors.textOnDarkMuted,
-          ),
-        ),
-        const Spacer(),
-        const AppText('滑动查看更多', style: AppTextStyles.bookDetailSectionHint),
-        const SizedBox(width: AppSpacing.xxs),
-        const AppIcon(
-          assetPath: AppIconAssets.arrowRight,
-          width: AppSizes.bookDetailSectionHintIconSize,
-          height: AppSizes.bookDetailSectionHintIconSize,
+    return SectionHeader(
+      title: '角色介绍',
+      titleStyle: AppTextStyles.bookDetailBlockTitle,
+      titleSuffix: AppPressable(
+        onTap: () {
+          showAppBlurredDialog<void>(
+            context: context,
+            builder: (_) => const BookDetailCharacterHelpDialog(),
+          );
+        },
+        child: const Icon(
+          Icons.info_outline,
+          size: AppSizes.titleInfoIconSize,
           color: AppColors.textOnDarkMuted,
         ),
-      ],
+      ),
+      actionLabel: '滑动查看更多',
     );
   }
 }

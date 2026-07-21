@@ -197,21 +197,28 @@ abstract final class AppColors {
   static const Color discussionFilterSelectedBackground = _isLight
       ? accentYellow
       : white100;
+  /// 讨论筛选未选中胶囊底（浅 `neutralCool50` / 深弱面；白页上可见）。
+  static const Color discussionFilterUnselectedBackground = surfaceSoft;
   static const Color discussionFilterUnselectedText = textOnDarkPlaceholder;
   static const Color discussionItemReplyBackground = surfaceSoft;
+  /// 讨论新发评论短暂高亮底：品牌粉 8%（比实色 `pink75` 更淡）。
+  static const Color discussionNewCommentHighlight =
+      AppPalette.pink500Alpha08;
+  /// 讨论帖行内标签底（如「精选」）；与未选筛选胶囊同面，避免浅色白底隐形。
+  static const Color discussionTagBackground = surfaceSoft;
   static const Color discussionLikeIcon = textOnDarkPlaceholder;
   static const Color bookDetailUpdateDate = textOnDarkMuted;
+  /// 账本等正向数额强调色（橙金）；书详情「更新」时间线高亮改走主文字色，不再用此色。
   static const Color bookDetailUpdateHighlight = AppPalette.tan400;
-  static const Color bookDetailUpdateDateHighlighted =
-      bookDetailUpdateHighlight;
+  /// 最新更新节点：日期 / 圆点 / 正文 = 主文字（浅色黑 / 深色白）。
+  static const Color bookDetailUpdateDateHighlighted = textOnDark;
   static const Color bookDetailUpdateLine = dividerOnDark;
   static const Color bookDetailUpdateDotBorder = textOnDarkMuted;
-  static const Color bookDetailUpdateDotBorderHighlighted =
-      bookDetailUpdateHighlight;
-  static const Color bookDetailUpdateDotInner = textOnDark;
-  static const Color bookDetailUpdateText = textOnDark;
-  static const Color bookDetailUpdateTextHighlighted =
-      bookDetailUpdateHighlight;
+  static const Color bookDetailUpdateDotBorderHighlighted = textOnDark;
+  static const Color bookDetailUpdateDotInner = textOnDarkMuted;
+  /// 非最新更新条目正文（灰）。
+  static const Color bookDetailUpdateText = textOnDarkMuted;
+  static const Color bookDetailUpdateTextHighlighted = textOnDark;
   // 书籍详情悬浮促销条 (Figma 1598:4319)
   static const Color bookDetailPromoGradientStart =
       AppBrandColors.promoBarGradientStart;
@@ -239,6 +246,13 @@ abstract final class AppColors {
       ? primary
       : white00;
   static const Color tabTopHeaderGradientEnd = white00;
+
+  /// 弹窗顶部彩头（仅 `yellow_light`）：较页头更淡的 40% 黄
+  /// （`yellow500Alpha40`）→ 白 0% 垂直渐隐；其余主题透明。
+  static const Color dialogTopHeaderGradientStart = AppBrandColors.isYellowLight
+      ? AppPalette.yellow500Alpha40
+      : white00;
+  static const Color dialogTopHeaderGradientEnd = white00;
   static const Color coverBorder = black04;
   static const Color overlayScrim = black30;
 
@@ -315,10 +329,28 @@ abstract final class AppColors {
   /// 区块右侧胶囊操作入口底（「更多福利」「完整榜单」等）：纯黑 4%，全主题统一。
   static const Color sectionMoreActionBackground = black04;
 
-  /// 分类 / 排行页整页背景：浅色包纯白，黄黑包保持深底可读。
+  /// 分类 / 排行 / 书架整页背景：浅色包纯白，黄黑包保持深底可读。
   static const Color categoryRankingPageBackground = _isLight
       ? white100
       : backgroundDark;
+
+  /// 书籍详情页大背景：浅色包纯白；黄黑包保持深底可读。
+  static const Color bookDetailPageBackground = _isLight
+      ? white100
+      : backgroundDark;
+
+  /// 书架页底色：主题壳基色（浅色非纯白，供顶部白渐变下透出；深色深底）。
+  static const Color bookshelfPageBackground = backgroundDark;
+
+  /// 书架页随滚顶部垂直白渐变起色（用户指定：三主题均为纯白）。
+  static const Color bookshelfPageGradientStart =
+      white100; // light-audit: keep-dark
+
+  /// 书架页随滚顶部垂直白渐变止色（不透明度为 0）。
+  static const Color bookshelfPageGradientEnd = white00;
+
+  /// 书架「今日已阅读」分钟数强调红（复用热销红原色）。
+  static const Color bookshelfReadingMinutes = AppBrandColors.hotSaleBadge;
 
   // 我的页头图 alpha 蒙版（Figma 400:2302 / 205:5742）
   static const Color profileHeroImageMaskOpaque = white100;
@@ -326,17 +358,31 @@ abstract final class AppColors {
   static const Color profileHeroImageMaskTransparent = white00;
 
   // 全局分段控件 (Figma 1297:827)：随主强调 8%（dark/yellow_light 黄 8%、pink_light 粉 8%）。
+  // 年龄选项等仍用此组；`AppSegmentedSwitch` 选中态另见 segmentedSwitch*。
   static const Color segmentedSelectedFill = AppBrandColors.accentSoft08;
-  // 选中态去描边（全局统一）：仅靠 fill + 文字色区分选中
-  static const Color segmentedSelectedBorder = white00;
 
-  /// 年龄选项选中描边：仅 yellow_light 使用主黄色增强选中反馈；其余主题保持透明。
-  static const Color ageRangeSelectedBorder = AppBrandColors.isYellowLight
+  /// 选中态描边：仅 `yellow_light` 用主黄增强反馈（与年龄选项统一）；
+  /// `yellow_dark` / `pink_light` 保持透明，仅靠 fill + 文字色区分。
+  static const Color segmentedSelectedBorder = AppBrandColors.isYellowLight
       ? primary
-      : segmentedSelectedBorder;
+      : white00;
+
+  /// 年龄选项选中描边：与强调选中描边统一（`segmentedSelectedBorder`）。
+  static const Color ageRangeSelectedBorder = segmentedSelectedBorder;
   // 选中文字：浅色态亮黄/亮粉在白面上不可读，走强调文字档 accentText。
   static const Color segmentedSelectedText = accentText;
   static const Color segmentedUnselectedText = textOnDarkPlaceholder;
+
+  /// `AppSegmentedSwitch` 选中滑块底：浅色纯白，深色 `surface` 弱实体面。
+  static const Color segmentedSwitchSelectedFill = _isLight
+      ? white100
+      : surface;
+
+  /// `AppSegmentedSwitch` 选中无描边（与年龄选项黄描边解耦）。
+  static const Color segmentedSwitchSelectedBorder = white00;
+
+  /// `AppSegmentedSwitch` 选中字：主文字（浅色黑 / 深色白）。
+  static const Color segmentedSwitchSelectedText = textPrimary;
 
   // 榜单详情页 (Figma 220:8376)
   static const Color rankingHeroTitle = AppBrandColors.rankingHeroTitle;
@@ -379,6 +425,27 @@ abstract final class AppColors {
 
   /// 「作者」标识字（accent 徽底上的字：深色态深墨 / 浅色态白）。
   static const Color authorBadgeText = onAccent;
+
+  /// 讨论区「作者」标签底（系统红；区别于消息页黄底 [authorBadgeBackground]）。
+  static const Color discussionAuthorBadgeBackground = error;
+
+  /// 讨论区「作者」标签字（红底上恒白）。
+  static const Color discussionAuthorBadgeText = white100;
+
+  /// 讨论「置顶」标签渐变起色（左上偏黄红，复用促销橙红）。
+  static const Color discussionPinnedTagGradientStart = AppPalette.orange550;
+
+  /// 讨论「置顶」标签渐变止色（玫红）。
+  static const Color discussionPinnedTagGradientEnd = AppPalette.rose500;
+
+  /// 讨论「精选」标签渐变起色（左上淡粉紫）。
+  static const Color discussionFeaturedTagGradientStart = AppPalette.pink200;
+
+  /// 讨论「精选」标签渐变止色（紫）。
+  static const Color discussionFeaturedTagGradientEnd = AppPalette.purple400;
+
+  /// 讨论渐变内容标签字色（恒白）。
+  static const Color discussionContentTagText = white100;
 
   /// 消息条目内书籍引用块底。
   static const Color myMessagesBookRefBackground = surfaceSoft;

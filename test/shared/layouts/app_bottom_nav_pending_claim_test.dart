@@ -77,6 +77,10 @@ void main() {
     );
 
     expect(find.text('585能量待领取'), findsOneWidget);
+    expect(MainTabPendingClaimScope.maybeOf(
+          tester.element(find.byType(IndexedStack)),
+        )?.isVisible,
+        isTrue);
 
     await tester.tap(find.text('福利'));
     await tester.pump();
@@ -84,6 +88,10 @@ void main() {
 
     await tester.pumpAndSettle();
     expect(find.text('585能量待领取'), findsNothing);
+    expect(MainTabPendingClaimScope.maybeOf(
+          tester.element(find.byType(IndexedStack)),
+        )?.isVisible,
+        isFalse);
 
     await tester.tap(find.text('书城'));
     await tester.pumpAndSettle();

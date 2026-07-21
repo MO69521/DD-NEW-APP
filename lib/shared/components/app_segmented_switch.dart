@@ -45,7 +45,8 @@ class AppSegmentedSwitch extends StatelessWidget {
         child: Container(
           padding: EdgeInsets.all(outerPadding),
           decoration: BoxDecoration(
-            color: AppColors.surfaceCard,
+            // 极浅弱容器面（浅 `#F8F7FC` / 深 `neutralCool920`），白页上与选中滑块可区分。
+            color: AppColors.surfaceSoft,
             borderRadius: radius,
             border: Border.all(
               color: AppColors.borderGlass,
@@ -91,11 +92,11 @@ class AppSegmentedSwitch extends StatelessWidget {
                     width: itemWidth,
                     child: DecoratedBox(
                       decoration: BoxDecoration(
-                        color: AppColors.segmentedSelectedFill,
+                        color: AppColors.segmentedSwitchSelectedFill,
                         borderRadius: BorderRadius.circular(innerRadius),
                         border: Border.all(
-                          color: AppColors.segmentedSelectedBorder,
-                          width: AppSizes.hairline,
+                          color: AppColors.segmentedSwitchSelectedBorder,
+                          width: AppSizes.borderWidthEmphasis,
                         ),
                       ),
                     ),

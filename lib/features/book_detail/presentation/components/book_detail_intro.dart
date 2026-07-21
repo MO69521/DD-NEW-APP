@@ -18,7 +18,7 @@ class BookDetailIntro extends StatefulWidget {
 
 class _BookDetailIntroState extends State<BookDetailIntro> {
   static const int _collapsedMaxLines = 5;
-  static const String _moreSuffix = '...查看更多';
+  static const String _moreSuffix = '...全部';
 
   bool _isExpanded = false;
 
@@ -102,7 +102,7 @@ class _BookDetailIntroState extends State<BookDetailIntro> {
                           TextSpan(
                             text: _moreSuffix,
                             style: AppTextStyles.bookDetailIntroBody.copyWith(
-                              color: AppColors.textOnDark,
+                              color: AppColors.error,
                             ),
                           ),
                         ],

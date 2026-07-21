@@ -38,6 +38,10 @@ class AppBottomNav extends StatelessWidget {
   final bool blurEnabled;
   final int? pendingClaimEnergy;
   static const double barHeight = AppSizes.bottomNavBarHeight;
+
+  /// 待领取气泡可见时，「继续阅读」等浮层相对默认位额外上移量：
+  /// 与气泡顶相距 [AppSpacing.xs]（规范 8px 常用小间距）。
+  static const double pendingClaimBadgeClearance = AppSpacing.xs;
   static const List<Color> _bottomFadeColors = [
     AppColors.gradientFadeStart,
     AppColors.gradientFadeMid,
@@ -67,10 +71,14 @@ class AppBottomNav extends StatelessWidget {
 
   Widget _buildNavCapsule(BorderRadius capsuleRadius) {
     final isGlassCapsule = style == AppBottomNavStyle.glassCapsule;
+    final usesLottieIcons = items.any((item) => item.selectedLottieAsset != null);
+    final capsuleHeight = usesLottieIcons
+        ? AppSizes.bottomNavLottieCapsuleHeight
+        : AppSizes.bottomNavCapsuleHeight;
 
     return Container(
       width: double.infinity,
-      height: AppSizes.bottomNavCapsuleHeight,
+      height: capsuleHeight,
       padding: isGlassCapsule
           ? const EdgeInsets.all(AppSpacing.xxs)
           : EdgeInsets.zero,
@@ -206,11 +214,15 @@ class _NavTabItemState extends State<_NavTabItem> {
 
   @override
   Widget build(BuildContext context) {
+    final itemHeight = widget.item.selectedLottieAsset != null
+        ? AppSizes.bottomNavLottieItemHeight
+        : AppSizes.bottomNavItemHeight;
+
     return GestureDetector(
       onTap: _handleTap,
       behavior: HitTestBehavior.opaque,
       child: SizedBox(
-        height: AppSizes.bottomNavItemHeight,
+        height: itemHeight,
         child: Stack(
           clipBehavior: Clip.none,
           alignment: Alignment.center,
@@ -245,7 +257,7 @@ class _NavTabItemState extends State<_NavTabItem> {
               ),
             ),
             Positioned(
-              top: -AppSpacing.lg,
+              top: -AppSpacing.xs,
               child: AnimatedSwitcher(
                 duration: AppDurations.normal,
                 child: (widget.pendingClaimEnergy ?? 0) > 0

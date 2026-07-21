@@ -47,7 +47,8 @@ const WelfareTaskListSummary _taskListSummary = WelfareTaskListSummary(
       ],
       action: WelfareTaskAction(
         type: WelfareTaskActionType.claimReward,
-        label: '去领取',
+        label: '看视频',
+        showVideoIcon: true,
       ),
       timelineProgress: 0.58,
       timelineNodes: [

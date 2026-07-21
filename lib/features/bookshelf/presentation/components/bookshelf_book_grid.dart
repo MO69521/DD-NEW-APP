@@ -3,11 +3,10 @@ import 'package:flutter/material.dart';
 import '../../../../core/domain/entities/book.dart';
 import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
-import '../../../../shared/components/book_card_surface.dart';
 import '../../../../shared/components/book_grid_card.dart';
 import 'bookshelf_selectable_book_card.dart';
 
-/// 书架书籍 3 列网格，卡片样式对齐书城编辑推荐。
+/// 书架书籍 3 列网格（无卡面底填充，封面直铺页底）。
 class BookshelfBookGrid extends StatelessWidget {
   const BookshelfBookGrid({
     super.key,
@@ -25,12 +24,10 @@ class BookshelfBookGrid extends StatelessWidget {
   static double itemHeightForWidth(double maxWidth) {
     const totalSpacing = AppSpacing.md * (crossAxisCount - 1);
     final itemWidth = (maxWidth - totalSpacing) / crossAxisCount;
-    // 封面贴齐卡面左/上/右边，文字区保留左右与底部内边距。
     final coverHeight = itemWidth / AppSizes.bookCoverGridAspectRatio;
     return coverHeight +
         AppSizes.bookGridCoverToTextGap +
-        AppSizes.bookGridTextBlockHeight +
-        BookCardSurface.padding;
+        AppSizes.bookGridTextBlockHeight;
   }
 
   static Widget sliver({
@@ -81,7 +78,7 @@ class BookshelfBookGrid extends StatelessWidget {
           coverBottomBadge: book.coverBottomBadge,
           onTap: onBookTap == null ? null : () => onBookTap(book, heroTag),
           heroTag: heroTag,
-          showCardBackground: true,
+          showCardBackground: false,
         );
       }, childCount: books.length),
     );
@@ -116,7 +113,7 @@ class BookshelfBookGrid extends StatelessWidget {
               coverTag: book.coverTag,
               coverBottomBadge: book.coverBottomBadge,
               onTap: onBookTap == null ? null : () => onBookTap!(book),
-              showCardBackground: true,
+              showCardBackground: false,
             );
           },
         );

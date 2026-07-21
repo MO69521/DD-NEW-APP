@@ -6,12 +6,14 @@ import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../widgets/app_button.dart';
 import '../widgets/app_text.dart';
+import 'app_dialog_top_texture.dart';
 import 'dialog_close_button.dart';
 
 /// L2 — 居中确认弹窗壳（面板 chrome + 标题/正文 + 双按钮）。
 ///
 /// 遮罩仍走 [showAppBlurredDialog]；本组件只负责弹窗本体。
 /// 默认左次右主（取消 secondary / 确认 accent）；特殊场景可覆写变体与文案。
+/// `yellow_light` 顶部叠 [AppDialogTopTexture] 淡黄彩头。
 class AppConfirmDialog extends StatelessWidget {
   const AppConfirmDialog({
     super.key,
@@ -65,84 +67,88 @@ class AppConfirmDialog extends StatelessWidget {
     return Dialog(
       backgroundColor: Colors.transparent,
       insetPadding: const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          color: AppColors.surfaceElevated,
-          borderRadius: BorderRadius.circular(AppRadius.xl),
-          border: Border.all(color: AppColors.borderSubtle),
-        ),
-        child: Stack(
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(
-                AppSpacing.xl,
-                AppSpacing.xl,
-                AppSpacing.xl,
-                AppSpacing.lg,
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  AppText(
-                    title,
-                    style: AppTextStyles.titleMedium.copyWith(
-                      color: AppColors.textPrimary,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(AppRadius.xl),
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            color: AppColors.surfaceElevated,
+            borderRadius: BorderRadius.circular(AppRadius.xl),
+            border: Border.all(color: AppColors.borderSubtle),
+          ),
+          child: Stack(
+            children: [
+              const AppDialogTopTexture(),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(
+                  AppSpacing.xl,
+                  AppSpacing.xl,
+                  AppSpacing.xl,
+                  AppSpacing.lg,
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    AppText(
+                      title,
+                      style: AppTextStyles.titleMedium.copyWith(
+                        color: AppColors.textPrimary,
+                      ),
+                      textAlign: TextAlign.center,
                     ),
-                    textAlign: TextAlign.center,
-                  ),
-                  if (content != null) ...[
-                    SizedBox(height: titleBodyGap),
-                    content,
+                    if (content != null) ...[
+                      SizedBox(height: titleBodyGap),
+                      content,
+                    ],
+                    const SizedBox(height: AppSpacing.xl),
+                    if (singlePrimary)
+                      AppButton(
+                        label: primaryLabel,
+                        variant: primaryVariant,
+                        isExpanded: true,
+                        onPressed: () {
+                          onPrimary?.call();
+                          Navigator.of(context).pop(primaryResult);
+                        },
+                      )
+                    else
+                      Row(
+                        children: [
+                          Expanded(
+                            child: AppButton(
+                              label: secondaryLabel,
+                              variant: secondaryVariant,
+                              onPressed: () {
+                                onSecondary?.call();
+                                Navigator.of(context).pop(secondaryResult);
+                              },
+                            ),
+                          ),
+                          const SizedBox(width: AppSpacing.md),
+                          Expanded(
+                            child: AppButton(
+                              label: primaryLabel,
+                              variant: primaryVariant,
+                              onPressed: () {
+                                onPrimary?.call();
+                                Navigator.of(context).pop(primaryResult);
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
                   ],
-                  const SizedBox(height: AppSpacing.xl),
-                  if (singlePrimary)
-                    AppButton(
-                      label: primaryLabel,
-                      variant: primaryVariant,
-                      isExpanded: true,
-                      onPressed: () {
-                        onPrimary?.call();
-                        Navigator.of(context).pop(primaryResult);
-                      },
-                    )
-                  else
-                    Row(
-                      children: [
-                        Expanded(
-                          child: AppButton(
-                            label: secondaryLabel,
-                            variant: secondaryVariant,
-                            onPressed: () {
-                              onSecondary?.call();
-                              Navigator.of(context).pop(secondaryResult);
-                            },
-                          ),
-                        ),
-                        const SizedBox(width: AppSpacing.md),
-                        Expanded(
-                          child: AppButton(
-                            label: primaryLabel,
-                            variant: primaryVariant,
-                            onPressed: () {
-                              onPrimary?.call();
-                              Navigator.of(context).pop(primaryResult);
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                ],
-              ),
-            ),
-            if (showCloseButton)
-              Positioned(
-                top: AppSpacing.lg,
-                right: AppSpacing.lg,
-                child: DialogCloseButton(
-                  onTap: () => Navigator.of(context).pop(secondaryResult),
                 ),
               ),
-          ],
+              if (showCloseButton)
+                Positioned(
+                  top: AppSpacing.lg,
+                  right: AppSpacing.lg,
+                  child: DialogCloseButton(
+                    onTap: () => Navigator.of(context).pop(secondaryResult),
+                  ),
+                ),
+            ],
+          ),
         ),
       ),
     );

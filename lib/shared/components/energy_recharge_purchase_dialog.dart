@@ -14,6 +14,7 @@ import '../widgets/app_pressable.dart';
 import '../widgets/app_selection_mark.dart';
 import '../widgets/app_text.dart';
 import 'app_blurred_dialog.dart';
+import 'app_dialog_top_texture.dart';
 import 'app_toast.dart';
 import 'dialog_close_button.dart';
 
@@ -80,60 +81,64 @@ class _EnergyRechargePurchaseDialogState
     return Dialog(
       backgroundColor: Colors.transparent,
       insetPadding: const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
-      child: Container(
-        decoration: BoxDecoration(
-          color: AppColors.dialogBackground,
-          borderRadius: BorderRadius.circular(AppRadius.xl),
-          border: Border.all(color: AppColors.borderGlass),
-        ),
-        child: Stack(
-          clipBehavior: Clip.none,
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(
-                AppSpacing.lg,
-                AppSpacing.lg,
-                AppSpacing.lg,
-                AppSpacing.md,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(AppRadius.xl),
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            color: AppColors.dialogBackground,
+            borderRadius: BorderRadius.circular(AppRadius.xl),
+            border: Border.all(color: AppColors.borderGlass),
+          ),
+          child: Stack(
+            clipBehavior: Clip.none,
+            children: [
+              const AppDialogTopTexture(),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(
+                  AppSpacing.lg,
+                  AppSpacing.lg,
+                  AppSpacing.lg,
+                  AppSpacing.md,
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    _DialogHeader(
+                      originalAmount: widget.package.originalAmount,
+                      bonusAmount: _bonusAmount,
+                    ),
+                    const SizedBox(height: AppSpacing.md),
+                    _DialogPrice(priceYuan: widget.package.priceYuan),
+                    const SizedBox(height: AppSpacing.lg),
+                    _PaymentMethodList(
+                      selectedMethod: _selectedMethod,
+                      onMethodTap: (method) =>
+                          setState(() => _selectedMethod = method),
+                    ),
+                    const SizedBox(height: AppSpacing.lg),
+                    AppButton(
+                      label:
+                          '${_selectedMethod.label} ¥${widget.package.priceYuan}',
+                      variant: AppButtonVariant.accent,
+                      isExpanded: true,
+                      onPressed: _handleConfirm,
+                    ),
+                    const SizedBox(height: AppSpacing.md),
+                    _AgreementFooter(
+                      agreementTitle:
+                          EnergyRechargePurchaseDialog._agreementTitle,
+                      onAgreementTap: widget.onAgreementTap,
+                    ),
+                  ],
+                ),
               ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  _DialogHeader(
-                    originalAmount: widget.package.originalAmount,
-                    bonusAmount: _bonusAmount,
-                  ),
-                  const SizedBox(height: AppSpacing.md),
-                  _DialogPrice(priceYuan: widget.package.priceYuan),
-                  const SizedBox(height: AppSpacing.lg),
-                  _PaymentMethodList(
-                    selectedMethod: _selectedMethod,
-                    onMethodTap: (method) =>
-                        setState(() => _selectedMethod = method),
-                  ),
-                  const SizedBox(height: AppSpacing.lg),
-                  AppButton(
-                    label:
-                        '${_selectedMethod.label} ¥${widget.package.priceYuan}',
-                    variant: AppButtonVariant.accent,
-                    isExpanded: true,
-                    onPressed: _handleConfirm,
-                  ),
-                  const SizedBox(height: AppSpacing.md),
-                  _AgreementFooter(
-                    agreementTitle:
-                        EnergyRechargePurchaseDialog._agreementTitle,
-                    onAgreementTap: widget.onAgreementTap,
-                  ),
-                ],
+              Positioned(
+                top: AppSpacing.lg,
+                right: AppSpacing.lg,
+                child: DialogCloseButton(onTap: _handleClose),
               ),
-            ),
-            Positioned(
-              top: AppSpacing.lg,
-              right: AppSpacing.lg,
-              child: DialogCloseButton(onTap: _handleClose),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

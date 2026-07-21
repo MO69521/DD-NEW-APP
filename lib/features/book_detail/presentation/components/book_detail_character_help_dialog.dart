@@ -6,6 +6,7 @@ import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../routes/app_router.dart';
+import '../../../../shared/components/app_dialog_top_texture.dart';
 import '../../../../shared/components/dialog_close_button.dart';
 import '../../../../shared/widgets/app_text.dart';
 
@@ -56,40 +57,51 @@ class BookDetailCharacterHelpDialog extends StatelessWidget {
         child: Stack(
           clipBehavior: Clip.none,
           children: [
-            Container(
-              padding: const EdgeInsets.all(AppSpacing.lg),
-              decoration: BoxDecoration(
-                color: AppColors.dialogBackground,
-                borderRadius: BorderRadius.circular(AppRadius.xl),
-                border: Border.all(
-                  color: AppColors.borderGlass,
-                  width: AppSizes.hairline,
-                ),
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  AppText(
-                    '角色玩法说明',
-                    style: AppTextStyles.titleMediumDark,
-                    textAlign: TextAlign.center,
+            ClipRRect(
+              borderRadius: BorderRadius.circular(AppRadius.xl),
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  color: AppColors.dialogBackground,
+                  borderRadius: BorderRadius.circular(AppRadius.xl),
+                  border: Border.all(
+                    color: AppColors.borderGlass,
+                    width: AppSizes.hairline,
                   ),
-                  const SizedBox(height: AppSpacing.lg),
-                  Flexible(
-                    child: SingleChildScrollView(
-                      physics: const BouncingScrollPhysics(),
+                ),
+                child: Stack(
+                  children: [
+                    const AppDialogTopTexture(),
+                    Padding(
+                      padding: const EdgeInsets.all(AppSpacing.lg),
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
                         children: [
-                          for (var i = 0; i < _sections.length; i++) ...[
-                            if (i > 0) const SizedBox(height: AppSpacing.md),
-                            _HelpSectionBlock(section: _sections[i]),
-                          ],
+                          AppText(
+                            '角色玩法说明',
+                            style: AppTextStyles.titleMediumDark,
+                            textAlign: TextAlign.center,
+                          ),
+                          const SizedBox(height: AppSpacing.lg),
+                          Flexible(
+                            child: SingleChildScrollView(
+                              physics: const BouncingScrollPhysics(),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  for (var i = 0; i < _sections.length; i++) ...[
+                                    if (i > 0)
+                                      const SizedBox(height: AppSpacing.md),
+                                    _HelpSectionBlock(section: _sections[i]),
+                                  ],
+                                ],
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
             const Positioned(

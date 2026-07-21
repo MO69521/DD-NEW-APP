@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/theme/app_colors.dart';
-import '../../../../core/theme/app_radius.dart';
 import '../../../../core/theme/app_sizes.dart';
-import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../shared/widgets/animated_count_text.dart';
 import '../../../../shared/widgets/app_asset_image.dart';
 import '../../../../shared/widgets/app_button.dart';
 import '../../../../shared/widgets/app_text.dart';
 
-/// 今日阅读横幅（Figma 220:9725 / 377:1909）：白熊插画 + 阅读时长 + 领福利。
+/// 今日阅读横幅：阅读时长文案 + 领福利（无插画、无底填充）。
+///
+/// 高度固定为 [AppSizes.bookshelfClaimWelfareCtaHeight]，与书架吸顶 Chrome
+/// 占位一致（三主题共用）。
 class DailyReadingBanner extends StatelessWidget {
   const DailyReadingBanner({
     super.key,
@@ -21,49 +21,22 @@ class DailyReadingBanner extends StatelessWidget {
   final int todayReadingMinutes;
   final VoidCallback onClaimWelfareTap;
 
-  static const String _bearAsset = 'assets/images/bookshelf/reading_bear.svg';
   static const String _energyIconAsset = 'assets/icons/welfare/energy.svg';
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: AppSizes.bookshelfReadingBannerHeight,
-      decoration: BoxDecoration(
-        color: AppColors.surfaceGlass,
-        borderRadius: BorderRadius.circular(AppRadius.bookshelfReadingBanner),
-      ),
-      child: Stack(
-        clipBehavior: Clip.hardEdge,
+    return SizedBox(
+      height: AppSizes.bookshelfClaimWelfareCtaHeight,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          const Positioned(
-            left: AppSizes.bookshelfBearIllustrationLeftInset,
-            top: AppSizes.bookshelfBearIllustrationTopInset,
-            width: AppSizes.bookshelfBearIllustrationWidth,
-            height: AppSizes.bookshelfBearIllustrationPaintHeight,
-            child: AppAssetImage(
-              assetPath: _bearAsset,
-              width: AppSizes.bookshelfBearIllustrationWidth,
-              height: AppSizes.bookshelfBearIllustrationPaintHeight,
-              fit: BoxFit.contain,
+          Expanded(
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: _ReadingMinutesText(minutes: todayReadingMinutes),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(
-              left: AppSizes.bookshelfReadingBannerContentInsetLeft,
-              right: AppSpacing.sm,
-              top: AppSpacing.sm,
-              bottom: AppSpacing.sm,
-            ),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Expanded(
-                  child: _ReadingMinutesText(minutes: todayReadingMinutes),
-                ),
-                _ClaimWelfareButton(onTap: onClaimWelfareTap),
-              ],
-            ),
-          ),
+          _ClaimWelfareButton(onTap: onClaimWelfareTap),
         ],
       ),
     );
@@ -84,21 +57,15 @@ class _ReadingMinutesText extends StatelessWidget {
       children: [
         AppText(
           '今日已阅读 ',
-          style: AppTextStyles.bookshelfReadingLabel.copyWith(
-            color: AppColors.textOnDarkPlaceholder,
-          ),
+          style: AppTextStyles.bookshelfReadingLabel,
         ),
         AnimatedCountText(
           value: minutes,
-          style: AppTextStyles.bookshelfReadingMinutes.copyWith(
-            color: AppColors.textOnDark,
-          ),
+          style: AppTextStyles.bookshelfReadingMinutes,
         ),
         AppText(
           ' 分钟',
-          style: AppTextStyles.bookshelfReadingLabel.copyWith(
-            color: AppColors.textOnDarkPlaceholder,
-          ),
+          style: AppTextStyles.bookshelfReadingLabel,
         ),
       ],
     );

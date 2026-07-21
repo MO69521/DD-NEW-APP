@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_radius.dart';
-import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../routes/app_router.dart';
+import '../../../../shared/components/app_dialog_top_texture.dart';
 import '../../../../shared/components/dialog_close_button.dart';
 import '../../../../shared/widgets/app_button.dart';
 import '../../../../shared/widgets/app_text.dart';
@@ -31,34 +31,17 @@ class WelfareRulesDialog extends StatelessWidget {
       child: Stack(
         clipBehavior: Clip.none,
         children: [
-          Container(
-            decoration: BoxDecoration(
-              color: AppColors.dialogBackground,
-              borderRadius: BorderRadius.circular(AppRadius.xl),
-              border: Border.all(color: AppColors.borderGlass),
-            ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(AppRadius.xl),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(AppRadius.xl),
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                color: AppColors.dialogBackground,
+                borderRadius: BorderRadius.circular(AppRadius.xl),
+                border: Border.all(color: AppColors.borderGlass),
+              ),
               child: Stack(
                 children: [
-                  const Positioned(
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    height: AppSizes.dialogTopTextureHeight,
-                    child: DecoratedBox(
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          colors: [
-                            AppColors.tabTopHeaderGradientStart,
-                            AppColors.tabTopHeaderGradientEnd,
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
+                  const AppDialogTopTexture(),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(
                       AppSpacing.xl,

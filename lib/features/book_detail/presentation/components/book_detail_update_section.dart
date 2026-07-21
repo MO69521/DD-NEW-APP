@@ -127,7 +127,7 @@ class _TimelineNode extends StatelessWidget {
     final borderColor = isHighlighted
         ? AppColors.bookDetailUpdateDotBorderHighlighted
         : AppColors.bookDetailUpdateDotBorder;
-    // 高亮（最新）节点：中心圆点同步为橙色高亮色，与日期 / 描边一致。
+    // 高亮（最新）节点：中心圆点与描边同为主文字色。
     final innerColor = isHighlighted
         ? AppColors.bookDetailUpdateDotBorderHighlighted
         : AppColors.bookDetailUpdateDotInner;

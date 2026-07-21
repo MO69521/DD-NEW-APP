@@ -18,6 +18,7 @@ import '../../domain/entities/bookshelf_tab.dart';
 import '../components/bookshelf_manage_action_overlay.dart';
 import '../components/bookshelf_page_header.dart';
 import '../components/bookshelf_tab_scroll_view.dart';
+import '../components/daily_reading_banner.dart';
 import '../../../../core/theme/app_colors.dart';
 
 /// 书架页（Figma 220:9341）：仅渲染 state、触发 action。
@@ -42,7 +43,7 @@ class BookshelfPage extends StatelessWidget {
         // 保留骨架屏加载，避免 AppAsyncPageBody 默认 spinner 改变 UX。
         if (state.ui.isLoading) {
           return Scaffold(
-            backgroundColor: AppColors.backgroundDark,
+            backgroundColor: AppColors.bookshelfPageBackground,
             body: BookGridSkeleton(
               padding: EdgeInsets.fromLTRB(
                 AppSpacing.md,
@@ -57,7 +58,7 @@ class BookshelfPage extends StatelessWidget {
         final content = state.domain.content;
         if (state.ui.errorMessage != null || content == null) {
           return Scaffold(
-            backgroundColor: AppColors.backgroundDark,
+            backgroundColor: AppColors.bookshelfPageBackground,
             body: AppAsyncPageBody(
               isLoading: false,
               errorMessage: state.ui.errorMessage,
@@ -166,7 +167,7 @@ class _BookshelfViewState extends State<_BookshelfView> {
   }) {
     return BookshelfTabScrollView(
       tab: tab,
-      scrollController: _scrollControllers[tab],
+      scrollController: _scrollControllers[tab]!,
       headerHeight: headerHeight,
       gridWidth: gridWidth,
       bottomReserve: _BookshelfView._bottomNavReserve,
@@ -178,6 +179,11 @@ class _BookshelfViewState extends State<_BookshelfView> {
   Widget build(BuildContext context) {
     final statusBarHeight = AppLayout.statusBarHeight(context);
     final headerHeight = statusBarHeight + AppSizes.bookshelfHeaderHeight;
+    // 固定顶栏含：Header + 顶距 + 横幅（随 CTA 高）+ 横幅→书格距。
+    final pinnedChromeHeight = headerHeight +
+        AppSizes.bookshelfHeaderToBannerGap +
+        AppSizes.bookshelfClaimWelfareCtaHeight +
+        AppSizes.bookshelfBannerToGridGap;
     final gridWidth = MediaQuery.sizeOf(context).width - AppSpacing.sm * 2;
 
     return BlocListener<BookshelfCubit, BookshelfState>(
@@ -187,7 +193,7 @@ class _BookshelfViewState extends State<_BookshelfView> {
           previous.ui.isLoadingMore != current.ui.isLoadingMore,
       listener: (_, state) => _scheduleScrollCheck(),
       child: Scaffold(
-        backgroundColor: AppColors.backgroundDark,
+        backgroundColor: AppColors.bookshelfPageBackground,
         body: Stack(
           children: [
             BlocSelector<
@@ -212,13 +218,13 @@ class _BookshelfViewState extends State<_BookshelfView> {
                     _buildTabScrollView(
                       context,
                       tab: BookshelfTab.shelf,
-                      headerHeight: headerHeight,
+                      headerHeight: pinnedChromeHeight,
                       gridWidth: gridWidth,
                     ),
                     _buildTabScrollView(
                       context,
                       tab: BookshelfTab.history,
-                      headerHeight: headerHeight,
+                      headerHeight: pinnedChromeHeight,
                       gridWidth: gridWidth,
                     ),
                   ],
@@ -257,6 +263,26 @@ class _BookshelfViewState extends State<_BookshelfView> {
                               .onManageTap,
                         );
                       },
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(
+                        AppSpacing.sm,
+                        AppSizes.bookshelfHeaderToBannerGap,
+                        AppSpacing.sm,
+                        AppSizes.bookshelfBannerToGridGap,
+                      ),
+                      child: BlocSelector<BookshelfCubit, BookshelfState, int>(
+                        selector: (state) => state.domain.todayReadingMinutes,
+                        builder: (context, minutes) {
+                          return DailyReadingBanner(
+                            todayReadingMinutes: minutes,
+                            onClaimWelfareTap: () =>
+                                widget.mainTabController?.switchTo(
+                              MainTabConfig.welfareIndex,
+                            ),
+                          );
+                        },
+                      ),
                     ),
                   ],
                 ),

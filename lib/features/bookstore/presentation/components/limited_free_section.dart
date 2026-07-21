@@ -4,18 +4,20 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/domain/entities/book.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_icon_assets.dart';
 import '../../../../core/theme/app_radius.dart';
+import '../../../../core/theme/app_shared_assets.dart';
 import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/theme/app_welfare_colors.dart';
-import '../../../../core/theme/app_icon_assets.dart';
 import '../../../../shared/components/book_grid_card.dart';
+import '../../../../shared/widgets/app_asset_image.dart';
 import '../../../../shared/widgets/app_icon.dart';
 import '../../../../shared/widgets/app_pressable.dart';
 import '../../../../shared/widgets/app_text.dart';
 
-/// 限时免费区块：倒计时 + 横向 3 本书卡。
+/// 限时免费区块：顶部 FREE 彩头 + 倒计时 + 横向 3 本书卡。
 class LimitedFreeSection extends StatefulWidget {
   const LimitedFreeSection({
     super.key,
@@ -72,63 +74,98 @@ class _LimitedFreeSectionState extends State<LimitedFreeSection> {
     final visibleBooks = widget.books.take(3).toList();
     if (visibleBooks.isEmpty) return const SizedBox.shrink();
 
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: AppColors.surfaceCard,
-        borderRadius: BorderRadius.circular(AppRadius.lg),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(AppSpacing.sm),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(AppRadius.lg),
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          color: AppColors.surfaceCard,
+          borderRadius: BorderRadius.circular(AppRadius.lg),
+        ),
+        child: Stack(
           children: [
-            _LimitedFreeHeader(
-              remaining: _remaining,
-              onMoreTap: widget.onMoreTap,
+            const Positioned(
+              top: 0,
+              left: 0,
+              right: 0,
+              child: _LimitedFreeHeaderBackground(),
             ),
-            const SizedBox(height: AppSpacing.md),
-            LayoutBuilder(
-              builder: (context, constraints) {
-                final itemWidth =
-                    (constraints.maxWidth - AppSpacing.md * 2) / 3;
-                return Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    for (var index = 0; index < visibleBooks.length; index++)
-                      Padding(
-                        padding: EdgeInsets.only(
-                          right: index == visibleBooks.length - 1
-                              ? 0
-                              : AppSpacing.md,
-                        ),
-                        child: SizedBox(
-                          width: itemWidth,
-                          child: Builder(
-                            builder: (context) {
-                              final book = visibleBooks[index];
-                              final heroTag =
-                                  'book-cover-limitedfree-${book.id}';
-                              return BookGridCard(
-                                title: book.title,
-                                category: book.category,
-                                coverAsset: book.coverAsset,
-                                coverTag: book.coverTag,
-                                coverBottomBadge: book.coverBottomBadge,
-                                heroTag: heroTag,
-                                onTap: widget.onBookTap == null
-                                    ? null
-                                    : () => widget.onBookTap!(book, heroTag),
-                              );
-                            },
-                          ),
-                        ),
-                      ),
-                  ],
-                );
-              },
+            Padding(
+              padding: const EdgeInsets.all(AppSpacing.sm),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _LimitedFreeHeader(
+                    remaining: _remaining,
+                    onMoreTap: widget.onMoreTap,
+                  ),
+                  const SizedBox(height: AppSpacing.md),
+                  LayoutBuilder(
+                    builder: (context, constraints) {
+                      final itemWidth =
+                          (constraints.maxWidth - AppSpacing.md * 2) / 3;
+                      return Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          for (
+                            var index = 0;
+                            index < visibleBooks.length;
+                            index++
+                          )
+                            Padding(
+                              padding: EdgeInsets.only(
+                                right: index == visibleBooks.length - 1
+                                    ? 0
+                                    : AppSpacing.md,
+                              ),
+                              child: SizedBox(
+                                width: itemWidth,
+                                child: Builder(
+                                  builder: (context) {
+                                    final book = visibleBooks[index];
+                                    final heroTag =
+                                        'book-cover-limitedfree-${book.id}';
+                                    return BookGridCard(
+                                      title: book.title,
+                                      category: book.category,
+                                      coverAsset: book.coverAsset,
+                                      coverTag: book.coverTag,
+                                      coverBottomBadge: book.coverBottomBadge,
+                                      heroTag: heroTag,
+                                      onTap: widget.onBookTap == null
+                                          ? null
+                                          : () => widget.onBookTap!(
+                                              book,
+                                              heroTag,
+                                            ),
+                                    );
+                                  },
+                                ),
+                              ),
+                            ),
+                        ],
+                      );
+                    },
+                  ),
+                ],
+              ),
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _LimitedFreeHeaderBackground extends StatelessWidget {
+  const _LimitedFreeHeaderBackground();
+
+  @override
+  Widget build(BuildContext context) {
+    return AspectRatio(
+      aspectRatio: AppSizes.limitedFreeHeaderBgAspectRatio,
+      child: const AppAssetImage(
+        assetPath: AppSharedAssets.limitedFreeHeaderBg,
+        fit: BoxFit.cover,
       ),
     );
   }

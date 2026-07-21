@@ -89,7 +89,7 @@ class _LedgerRecordRow extends StatelessWidget {
               ? '+${record.amountDelta}'
               : '${record.amountDelta}',
           style: AppTextStyles.bodyMediumDark.copyWith(
-            color: AppColors.bookDetailUpdateTextHighlighted,
+            color: AppColors.bookDetailUpdateHighlight,
           ),
         ),
       ],

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/theme/app_layout.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_durations.dart';
 import '../../../../core/theme/app_sizes.dart';
 import '../../../../routes/app_router.dart';
 import '../../../../shared/components/app_toast.dart';
@@ -12,6 +13,7 @@ import '../../application/book_detail_cubit.dart';
 import '../../application/book_detail_state.dart';
 import '../../domain/entities/book_discussion_filter.dart';
 import '../../domain/entities/book_discussion_post.dart';
+import '../../domain/entities/book_discussion_sort.dart';
 import '../../domain/entities/book_detail.dart';
 import '../../domain/entities/book_detail_tab.dart';
 import '../components/book_detail_catalog_drawer.dart';
@@ -22,6 +24,7 @@ import '../components/book_detail_promo_bar.dart';
 import '../components/book_detail_quick_reply_sheet.dart';
 import '../components/book_detail_status_views.dart';
 import '../components/book_detail_top_bar.dart';
+import '../components/book_detail_write_comment_fab.dart';
 
 /// 书籍详情页（Figma 183:1874）：仅渲染 state、触发 action。
 class BookDetailPage extends StatelessWidget {
@@ -40,7 +43,7 @@ class BookDetailPage extends StatelessWidget {
           previous.ui.shelfToastTick != current.ui.shelfToastTick,
       listener: (context, state) {
         if (state.ui.quickReplySuccessTick > 0) {
-          AppToast.show(context, '回复已发送');
+          AppToast.show(context, '发送成功');
         }
         final quickReplyError = state.ui.quickReplyErrorMessage;
         if (state.ui.quickReplyErrorTick > 0 && quickReplyError != null) {
@@ -76,6 +79,9 @@ class BookDetailPage extends StatelessWidget {
             selectedTab: state.interaction.selectedTab,
             selectedDiscussionFilter:
                 state.interaction.selectedDiscussionFilter,
+            selectedDiscussionSort: state.interaction.selectedDiscussionSort,
+            highlightedDiscussionPostId:
+                state.ui.highlightedDiscussionPostId,
             isInShelf: state.interaction.isInShelf,
             isGiftSent: state.interaction.isGiftSent,
             isPromoDismissed: state.interaction.isPromoDismissed,
@@ -92,6 +98,8 @@ class _BookDetailView extends StatefulWidget {
     required this.coverHeroTag,
     required this.selectedTab,
     required this.selectedDiscussionFilter,
+    required this.selectedDiscussionSort,
+    required this.highlightedDiscussionPostId,
     required this.isInShelf,
     required this.isGiftSent,
     required this.isPromoDismissed,
@@ -101,6 +109,8 @@ class _BookDetailView extends StatefulWidget {
   final Object? coverHeroTag;
   final BookDetailTab selectedTab;
   final BookDiscussionFilter selectedDiscussionFilter;
+  final BookDiscussionSort selectedDiscussionSort;
+  final String? highlightedDiscussionPostId;
   final bool isInShelf;
   final bool isGiftSent;
   final bool isPromoDismissed;
@@ -111,6 +121,7 @@ class _BookDetailView extends StatefulWidget {
 
 class _BookDetailViewState extends State<_BookDetailView> {
   late final ScrollController _scrollController;
+  final GlobalKey _highlightedCommentKey = GlobalKey();
 
   @override
   void initState() {
@@ -119,9 +130,36 @@ class _BookDetailViewState extends State<_BookDetailView> {
   }
 
   @override
+  void didUpdateWidget(covariant _BookDetailView oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    final nextId = widget.highlightedDiscussionPostId;
+    if (nextId != null &&
+        nextId != oldWidget.highlightedDiscussionPostId) {
+      _scheduleScrollToHighlightedComment();
+    }
+  }
+
+  @override
   void dispose() {
     _scrollController.dispose();
     super.dispose();
+  }
+
+  void _scheduleScrollToHighlightedComment() {
+    // 等弹层关闭 + 列表插入完成后再滚，连两帧避免布局未就绪。
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
+        final target = _highlightedCommentKey.currentContext;
+        if (target == null) return;
+        Scrollable.ensureVisible(
+          target,
+          duration: AppDurations.normal,
+          curve: Curves.easeInOut,
+          alignment: AppSizes.bookDetailNewCommentScrollAlignment,
+        );
+      });
+    });
   }
 
   void _preserveScrollOffsetWhile(VoidCallback action) {
@@ -172,6 +210,15 @@ class _BookDetailViewState extends State<_BookDetailView> {
     );
   }
 
+  Future<void> _openWriteComment(BuildContext context) async {
+    final text = await BookDetailQuickReplySheet.show(
+      context,
+      title: '写评论',
+    );
+    if (!context.mounted || text == null || text.trim().isEmpty) return;
+    await context.read<BookDetailCubit>().submitDiscussionComment(text);
+  }
+
   void _openCatalog(BuildContext context) {
     BookDetailCatalogDrawer.show(
       context,
@@ -193,7 +240,7 @@ class _BookDetailViewState extends State<_BookDetailView> {
     final statusBar = AppLayout.statusBarHeight(context);
 
     return Scaffold(
-      backgroundColor: AppColors.backgroundDark,
+      backgroundColor: AppColors.bookDetailPageBackground,
       bottomNavigationBar: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -251,10 +298,19 @@ class _BookDetailViewState extends State<_BookDetailView> {
                           selectedTab: widget.selectedTab,
                           selectedDiscussionFilter:
                               widget.selectedDiscussionFilter,
+                          selectedDiscussionSort:
+                              widget.selectedDiscussionSort,
+                          highlightedDiscussionPostId:
+                              widget.highlightedDiscussionPostId,
+                          highlightedCommentKey: _highlightedCommentKey,
                           onTabSelected: cubit.switchTab,
                           onDiscussionFilterSelected: (filter) =>
                               _preserveScrollOffsetWhile(
                                 () => cubit.switchDiscussionFilter(filter),
+                              ),
+                          onDiscussionSortSelected: (sort) =>
+                              _preserveScrollOffsetWhile(
+                                () => cubit.switchDiscussionSort(sort),
                               ),
                           onDiscussionPostTap: (post) =>
                               AppRouter.pushBookDiscussionDetail(
@@ -282,6 +338,11 @@ class _BookDetailViewState extends State<_BookDetailView> {
               blurEnabled: topBlurEnabled,
               title: widget.detail.title,
             ),
+            if (widget.selectedTab == BookDetailTab.discussion)
+              BookDetailWriteCommentFab(
+                hasPromoBar: !widget.isPromoDismissed,
+                onTap: () => _openWriteComment(context),
+              ),
           ],
         ),
       ),

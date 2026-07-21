@@ -114,6 +114,7 @@ export default function DesignSystemSpec() {
     { part: "02", title: "导航列表行", keywords: "", render: <NavigationListRowSection /> },
     { part: "02", title: "加载更多脚", keywords: "", render: <ListLoadMoreFooterSection /> },
     { part: "02", title: "区块标题", keywords: "", render: <SectionHeaderSection /> },
+    { part: "02", title: "区块尾随操作", keywords: "更多 目录 滑动", render: <SectionTrailingActionSection /> },
   ];
 
   const matchPart = (p: PartId) => activePart === "all" || activePart === p;
@@ -400,7 +401,7 @@ const MOTION_CATEGORIES: Array<{ title: string; items: MotionEffect[] }> = [
       },
       {
         name: "VIP 领取按钮",
-        desc: "签到成功弹窗粉色 VIP 按钮呼吸 + 扫光 + 液态边缘形变",
+        desc: "签到类弹窗统一装饰（每日签到/签到成功）：顶边条10 + 侧纹0.45 + 外飘四角星；成功弹窗 VIP 呼吸扫光",
         tech: "LiquidSweepCtaClip + SweepHighlightOverlay",
         path: "lib/features/welfare/presentation/components/check_in_green500_dialog.dart",
       },
@@ -436,7 +437,7 @@ const MOTION_CATEGORIES: Array<{ title: string; items: MotionEffect[] }> = [
       },
       {
         name: "AppLottie",
-        desc: "Lottie 帧动画统一封装（基建就绪，资源放 assets/lottie/）",
+        desc: "Lottie 帧动画统一封装（controller / onLoaded；底栏 yellow_light 已接）",
         tech: "lottie 包 Lottie.asset",
         path: "lib/shared/components/app_lottie.dart",
       },
@@ -515,6 +516,12 @@ const MOTION_CATEGORIES: Array<{ title: string; items: MotionEffect[] }> = [
         desc: "玻璃胶囊 / 搜索框容器",
         tech: "BackdropFilter(glassBlurSigma)",
         path: "lib/shared/components/glass_chip_button.dart",
+      },
+      {
+        name: "AppDialogTopTexture",
+        desc: "弹窗顶部彩头渐变（仅 yellow_light：40% 黄 → 透明）",
+        tech: "Positioned + dialogTopHeaderGradient*",
+        path: "lib/shared/components/app_dialog_top_texture.dart",
       },
       {
         name: "CurrencyBalanceBar",
@@ -691,7 +698,7 @@ const MOTION_CATEGORIES: Array<{ title: string; items: MotionEffect[] }> = [
 ];
 
 const MOTION_GAPS =
-  "Lottie 具体动画（基建就绪：lottie 依赖 + AppLottie + assets/lottie/，待放入 JSON 资源并接入）";
+  "Lottie：底栏 yellow_light 已接入（assets/lottie/bottom_nav/yellow_light/）；其它场景经 AppLottie 扩展";
 
 function MotionGallerySection({
   categories = MOTION_CATEGORIES,
@@ -1742,14 +1749,22 @@ function SemanticTierView() {
             ["planSelectedFooterText", swatch("#202020"), "#202020（textOnLightPanel）", "选中卡脚文字"],
             ["planUnselectedBg", <Row gap={4}>{alphaSwatch("rgba(255,255,255,0.04)", APP.bg)}{swatch("#FFFFFF")}</Row>, "深 whiteAlpha04 / 浅 surfaceCard", "未选中卡底（浅色纯白）"],
             ["searchHotAccent", swatch("#FF7E32"), "#FF7E32（accentOrange）", "搜索热词强调"],
-            ["bookDetailUpdateHighlight", swatch("#F0B16A"), "#F0B16A", "书详情「更新」高亮：日期 / 圆点边 / 文字"],
+            ["bookDetailUpdateHighlight", swatch("#F0B16A"), "#F0B16A", "账本正向数额橙金（时间线已不用）"],
+            ["bookDetailUpdate*Highlighted", <Row gap={4}>{swatch("#FFFFFF")}{swatch("#1A1A2E")}</Row>, "深 textPrimary 白 / 浅黑", "更新时间线最新：日期/圆点/正文"],
+            ["bookDetailUpdateText（非高亮）", <Row gap={4}>{swatch("#9AA0AA")}{swatch("#6B7280")}</Row>, "textOnDarkMuted", "更新时间线历史条目灰字"],
             ["rankingSegmentedSelectedText", swatch("#202020"), "#202020（textOnLightPanel）", "榜单分段控件选中字"],
-            ["segmentedSelectedBorder", alphaSwatch("rgba(255,255,255,0)", APP.bg), "whiteAlpha00（透明）", "分段控件选中去描边（仅 fill + 黄字）"],
+            ["segmentedSelectedBorder", <Row gap={4}>{alphaSwatch("rgba(255,255,255,0)", APP.bg)}{swatch("#FFE847")}</Row>, "深/粉 transparent / 浅黄 primary", "分段·年龄选中描边（仅 yellow_light 主黄）"],
+            ["dialogTopHeaderGradientStart/End", <Row gap={4}>{alphaSwatch("rgba(255,232,71,0.4)", "#FFFFFF")}{alphaSwatch("rgba(255,255,255,0)", APP.bg)}</Row>, "浅黄 yellow500Alpha40 → white00；其余透明", "弹窗顶部彩头（AppDialogTopTexture）"],
             ["bookDetailPromoGradientStart/Mid/End", <Row gap={4}>{swatch("#FF4E6C")}{swatch("#FF6F4B")}{swatch("#FF9359")}</Row>, "#FF4E6C / #FF6F4B / #FF9359", "悬浮促销条底暖渐变（约 94°）"],
             ["bookDetailPromoTitle", swatch("#FFFFFF"), "whiteAlpha100", "促销条主标题"],
             ["bookDetailPromoSubtitle", swatch("#FFF9F2"), "#FFF9F2（cream50）", "促销条副标题"],
             ["bookDetailPromoRewardText", swatch("#E64D00"), "#E64D00（orange700）", "+N 能量角标文字"],
             ["bookDetailPromoCloseIcon", swatch("#FFFFFF"), "whiteAlpha100", "促销条关闭 X"],
+            ["discussionFilterUnselectedBackground", <Row gap={4}>{swatch("#111722")}{swatch("#F8F7FC")}</Row>, "深 surfaceSoft / 浅 neutralCool50", "讨论筛选历史胶囊底（现纯文字）"],
+            ["discussionTagBackground", <Row gap={4}>{swatch("#111722")}{swatch("#F8F7FC")}</Row>, "surfaceSoft（同未选胶囊）", "讨论帖「公告」弱面标签底"],
+            ["discussionAuthorBadgeBackground/Text", <Row gap={4}>{swatch("#FF667F")}{swatch("#FFFFFF")}</Row>, "error / white100", "讨论区昵称旁「作者」红标"],
+            ["discussionPinnedTagGradient", <Row gap={4}>{swatch("#FF6F4B")}{swatch("#FF4E6C")}</Row>, "orange550 → rose500", "置顶标签左上偏黄红渐变"],
+            ["discussionFeaturedTagGradient", <Row gap={4}>{swatch("#FF9CC7")}{swatch("#9C87FF")}</Row>, "pink200 → purple400", "精选标签左上淡粉紫渐变"],
           ].map((r) => r.map(cell))}
         />
       </Stack>
@@ -1767,7 +1782,7 @@ function ComponentTierView() {
       title: "按钮",
       rows: [
         ["AppButton.accent", <Row gap={4}>{swatch("#FFE847")}{swatch("#090E17")}</Row>, "primary / onPrimary", "主按钮底色与文字"],
-        ["AppButton.secondary", <Row gap={4}>{swatch("#151B24")}{swatch("#FFFFFF")}</Row>, "surface / textPrimary", "次按钮弱底与文字"],
+        ["AppButton.secondary", <Row gap={4}>{swatch("#151B24")}{swatch("#F8F7FC")}</Row>, "深 surface / 浅 surfaceSoft · textPrimary", "次按钮弱底（浅色极轻灰，避免白底弹窗看不见）"],
       ],
     },
     {
@@ -2164,20 +2179,20 @@ function SizeIndexSection() {
     ["顶栏 AppTopBar", "顶栏高度 / 图标框 / 返回钮", "topBar*"],
     ["按钮 AppButton", "内边距 / loading / 图标间距", "buttonPadding*"],
     ["搜索栏 / 玻璃模糊", "搜索框高 / 各级磨砂半径", "searchBarHeight · glassBlurSigma · strongBlurSigma"],
-    ["书城首页", "顶栏 / 加载(刷新跑熊 50×50) / 继续阅读浮层", "bookstore* · continueReading*"],
-    ["底部导航 AppBottomNav", "胶囊 / 图标 / 弹跳缩放", "bottomNav*"],
+    ["书城首页", "顶栏 / 加载(刷新跑熊 50×50) / 继续阅读浮层 / 限时免费 FREE 彩头", "bookstore* · continueReading* · limitedFreeHeaderBg"],
+    ["底部导航 AppBottomNav", "胶囊 / 图标26·Lottie档32 / 弹跳缩放", "bottomNav* · bottomNavLottieIconSize"],
     ["榜单", "指示器 / 轮播 / 头图 / 维度导航", "ranking* · tab*"],
     ["书籍封面 / 书卡", "列表/网格封面 / 右下热度与运营标签 / 大封面横向书卡", "bookCover* · bookGrid* · bookCardLarge*"],
-    ["福利页", "头图 / 顶栏说明图标（浅色纯黑）/ 签到里程碑 / 任务时间线 / 充值弹窗 / 规则弹窗顶部120px彩头", "welfareHeaderInfoIcon · welfare* · rechargePurchaseDialog* · dialogTopTextureHeight"],
-    ["书架页", "顶栏 / 阅读横幅（小熊 64×64、top 8、底边裁剪）/ 空状态 / 封面角标", "bookshelf* · bookCoverTag*"],
+    ["福利页", "头图 / 顶栏说明图标（浅色纯黑）/ 签到里程碑 / 任务时间线 / 倒计时未归零按钮暂未开启 / 充值弹窗 / 弹窗统一顶部淡黄彩头 / 签到成功顶边条10·侧纹透明度0.45", "welfareHeaderInfoIcon · welfare* · rechargePurchaseDialog* · dialogTopHeaderGradient* · dialogTopTextureHeight · AppDialogTopTexture · welfareCheckInSuccessTopAccentHeight"],
+    ["书架页", "顶栏 / 阅读横幅吸顶固定无插画无底高32 / 分钟数标红 / 壳基色底+随滚白渐变500 / 书卡无卡面底 / 顶栏→横幅4·横幅→书格12", "bookshelf* · bookshelfPageGradient* · bookshelfHeaderToBannerGap"],
     ["我的页", "Hero / 头像 / 快捷入口 / 成就勋章", "profile* · homeIndicator* · listRowMinHeight"],
     ["我的-子页", "账号设置 / 消息 / 卡包", "accountSettings* · myMessages* · cardPack*"],
     ["设置页", "Logo / 开关 AppSwitch", "settings* · appSwitch*"],
-    ["书籍详情页", "头图 / 目录抽屉 / 角色卡 / 讨论区 / 更新时间线", "bookDetail* · bookDiscussionDetail*"],
+    ["书籍详情页", "头图 / 目录抽屉 / 角色卡 / 讨论区 / 更新时间线 / 整页底浅色纯白深色深底 / 写评论FAB80·底距12 / 新评论粉8%通栏无圆角·滚入对齐0.2", "bookDetail* · bookDiscussionDetail* · bookDetailPageBackground · bookDetailWriteCommentFab* · bookDetailNewCommentScrollAlignment · discussionNewCommentHighlight"],
     ["搜索页", "顶栏返回 / 输入图标 / 空状态", "searchAppBar* · searchInput* · searchEmpty*"],
     ["会员页", "Hero 轮播 / 方案卡 / 权益宫格 / CTA / 特权详情", "membership*"],
     ["伙伴页", "头部 / 顶部极光 / 角色卡 / 消息 Tab / 互动 Tab", "partner* · partnerTopAuroraHeight · partnerTopAuroraOpacity"],
-    ["分类页", "筛选组 / chip / 下划线 / 滑出后顶部摘要与点击回顶 / 浅色主题整页纯白", "categoryFilter* · categoryRankingPageBackground"],
+    ["分类页", "筛选组 / chip / 下划线 / 筛选↔书单间距 24 / 滑出后顶部摘要与点击回顶 / 浅色主题整页纯白", "categoryFilter* · categoryRankingPageBackground"],
     ["帮助与反馈", "Banner / 输入 / 上传框", "helpFeedback*"],
     ["Toast / 交互阈值", "轻提示内边距 / 滑动切换阈值", "toast* · swipeTabVelocityThreshold"],
   ];
@@ -2315,7 +2330,7 @@ function ButtonSection() {
         columnAlign={["left", "left", "left"]}
         rows={[
           ["accent", "黄底深字 · 胶囊", "深色页主 CTA：阅读 / 确认 / 提交 / 领取 / 充值（最常用）"],
-          ["secondary", "4% 白底 · 无描边 · 胶囊", "次操作 / 弱化 / 未激活态（重试默认、退出登录、验证码倒计时）· 默认变体"],
+          ["secondary", "浅 surfaceSoft 极轻灰 / 深 surface · 无描边 · 胶囊", "次操作 / 弱化 / 未激活态（重试默认、退出登录、验证码倒计时、签到成功看视频再领）· 默认变体"],
           ["outneutralCool100", "透明底 + 细边框", "对话框取消 · 轻量次要操作"],
           ["vip", "粉金渐变底 + 深粉字 · 胶囊", "VIP 领取 / 会员向操作（福利「VIP领取」等）"],
         ].map((r) => r.map(cell))}
@@ -2449,7 +2464,7 @@ function DialogSection() {
   return (
     <SpecSection
         zh="弹窗"
-        note="showAppBlurredDialog 遮罩入口 + AppConfirmDialog 确认壳 · 80% 纯黑遮罩 · 点遮罩不关闭 · 圆角 xl"
+        note="showAppBlurredDialog 遮罩入口 + AppConfirmDialog 确认壳 · AppDialogTopTexture 浅黄彩头 · 80% 纯黑遮罩 · 点遮罩不关闭 · 圆角 xl"
         src="lib/shared/components/app_confirm_dialog.dart"
       >
       <Stage style={{ padding: 0, overflow: "hidden" }}>
@@ -2463,12 +2478,13 @@ function DialogSection() {
             padding: 24,
           }}
         >
-          <div style={{ width: 280, background: APP.dialogBg, borderRadius: 24, padding: 20, border: `1px solid ${APP.panelEdge}` }}>
-            <div style={{ color: APP.text, fontSize: 16, fontWeight: 700, textAlign: "center" }}>删除提示</div>
-            <div style={{ color: APP.textMuted, fontSize: 13, neutralCool100Height: 1.5, textAlign: "center", marginTop: 8 }}>
+          <div style={{ width: 280, background: APP.dialogBg, borderRadius: 24, padding: 20, border: `1px solid ${APP.panelEdge}`, position: "relative", overflow: "hidden" }}>
+            <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 120, background: "linear-gradient(180deg, rgba(255,232,71,0.4) 0%, rgba(255,255,255,0) 100%)", pointerEvents: "none" }} />
+            <div style={{ position: "relative", color: APP.text, fontSize: 16, fontWeight: 700, textAlign: "center" }}>删除提示</div>
+            <div style={{ position: "relative", color: APP.textMuted, fontSize: 13, textAlign: "center", marginTop: 8 }}>
               确认删除全部搜索历史吗？
             </div>
-            <div style={{ display: "flex", gap: 10, marginTop: 18 }}>
+            <div style={{ position: "relative", display: "flex", gap: 10, marginTop: 18 }}>
               <DemoButton variant="secondary" expand>
                 取消
               </DemoButton>
@@ -2483,7 +2499,8 @@ function DialogSection() {
         两层分工：遮罩入口{" "}
         <Code>lib/shared/components/app_blurred_dialog.dart</Code>
         （<Code>showAppBlurredDialog</Code>）+ 确认壳{" "}
-        <Code>AppConfirmDialog</Code>。自定义内容弹窗也走遮罩入口，只是不用确认壳；所有弹窗点遮罩不关闭，只能通过内部按钮或关闭图标关闭。
+        <Code>AppConfirmDialog</Code>。自定义内容弹窗也走遮罩入口，只是不用确认壳；浅黄主题弹窗顶部统一叠{" "}
+        <Code>AppDialogTopTexture</Code>（40% 黄 → 透明）。所有弹窗点遮罩不关闭，只能通过内部按钮或关闭图标关闭。
         按钮即 <Code>AppButton</Code>（取消 <Code>secondary</Code> / 确认 <Code>accent</Code>）。
       </Text>
     </SpecSection>
@@ -2568,7 +2585,7 @@ function BottomNavSection() {
   return (
     <SpecSection
         zh="底部导航"
-        note="AppBottomNav · 当前 4 Tab（书城/福利/书架/我的；伙伴暂时下线）· 实心底栏仅顶部 0.5px 分割线（浅色实体浅灰 / 深色半透明白）· 图标 26 · 选中弹跳（1.18→0.92→1）· 福利待领取气泡首次进入时渐隐，本会话不再显示"
+        note="AppBottomNav · 当前 4 Tab（书城/福利/书架/我的；伙伴暂时下线）· 实心底栏仅顶部 0.5px 分割线（浅色实体浅灰 / 深色半透明白）· 图标 SVG 26 / yellow_light Lottie·nor 32 · yellow_light 选中 Lottie 播一次停末帧 / 其它主题选中弹跳（1.18→0.92→1）· 福利待领取气泡首次进入时渐隐，本会话不再显示 · 气泡可见时书城继续阅读浮层上移 AppSpacing.xs（8px）与气泡顶相距"
         src="lib/shared/layouts/app_bottom_nav.dart"
       >
       <Stage>
@@ -2687,7 +2704,7 @@ function SegmentedSection() {
   return (
     <SpecSection
         zh="分段切换"
-        note="AppSegmentedSwitch · 玻璃态 + 滑块动画（选中无描边，8% 黄底 + 黄字）· 书籍详情「详情/讨论/更新」、榜单频道同款（圆角 46）"
+        note="AppSegmentedSwitch · 轨道 surfaceSoft · 选中白底+主文字无描边（segmentedSwitch*）· 书籍详情「详情/讨论/更新」、榜单频道同款（圆角 46）；年龄选项仍走强调选中"
         src="lib/shared/components/app_segmented_switch.dart"
       >
       <Stage>
@@ -3298,7 +3315,7 @@ function SectionHeaderSection() {
   return (
     <SpecSection
         zh="区块标题"
-        note="SectionHeader · 标题 + 右侧操作链接"
+        note="SectionHeader · 标题 + 可选 titleSuffix + 右侧 SectionTrailingAction"
         src="lib/shared/components/section_header.dart"
       >
       <Stage>
@@ -3308,6 +3325,35 @@ function SectionHeaderSection() {
             <span>更多</span>
             <Glyph name="arrow" color={APP.textMuted} size={12} strokeWidth={2} />
           </Pressable>
+        </div>
+      </Stage>
+    </SpecSection>
+  );
+}
+
+function SectionTrailingActionSection() {
+  return (
+    <SpecSection
+        zh="区块尾随操作"
+        note="SectionTrailingAction · 文案 + 右箭头；目录状态 / 滑动提示 / SectionHeader「更多」共用"
+        src="lib/shared/components/section_trailing_action.dart"
+      >
+      <Stage>
+        <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+            <span style={{ color: APP.text, fontSize: 16, fontWeight: 600 }}>目录</span>
+            <div style={{ display: "flex", alignItems: "center", gap: 2, color: APP.textMuted, fontSize: 12 }}>
+              <span>连载中 · 更新至142章</span>
+              <Glyph name="arrow" color={APP.textMuted} size={12} strokeWidth={2} />
+            </div>
+          </div>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+            <span style={{ color: APP.text, fontSize: 16, fontWeight: 600 }}>角色介绍</span>
+            <div style={{ display: "flex", alignItems: "center", gap: 2, color: APP.textMuted, fontSize: 12 }}>
+              <span>滑动查看更多</span>
+              <Glyph name="arrow" color={APP.textMuted} size={12} strokeWidth={2} />
+            </div>
+          </div>
         </div>
       </Stage>
     </SpecSection>

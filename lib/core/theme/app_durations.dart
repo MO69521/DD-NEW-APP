@@ -39,4 +39,7 @@ abstract final class AppDurations {
 
   /// 跑马灯滚动一轮后、下一轮开始前的静止间隔（滚过一次即停 6 秒再滚）。
   static const Duration marqueeInterval = Duration(seconds: 6);
+
+  /// 讨论区新发评论淡黄高亮停留时长。
+  static const Duration discussionNewCommentHighlight = Duration(seconds: 5);
 }

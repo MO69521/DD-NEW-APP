@@ -24,6 +24,7 @@ class RankingBookRow extends StatelessWidget {
       title: book.title,
       meta: book.category,
       description: book.summary,
+      coverTag: book.coverTag,
       coverBottomBadge: book.coverBottomBadge,
       titleMaxLines: 2,
       leadingBadge: RankingRankBadge(rank: rank),

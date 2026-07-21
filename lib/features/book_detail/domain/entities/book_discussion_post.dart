@@ -2,6 +2,21 @@ import 'package:equatable/equatable.dart';
 
 import 'book_discussion_filter.dart';
 
+/// 讨论帖正文前的内容标签（可叠加，展示顺序：置顶 → 精选 → 公告）。
+enum BookDiscussionPostBadge {
+  pinned,
+  featured,
+  notice,
+}
+
+extension BookDiscussionPostBadgeX on BookDiscussionPostBadge {
+  String get label => switch (this) {
+    BookDiscussionPostBadge.pinned => '置顶',
+    BookDiscussionPostBadge.featured => '精选',
+    BookDiscussionPostBadge.notice => '公告',
+  };
+}
+
 /// 讨论区回复预览（灰底摘要块）。
 class BookDiscussionReplyPreview extends Equatable {
   const BookDiscussionReplyPreview({
@@ -26,6 +41,7 @@ class BookDiscussionReply extends Equatable {
     required this.content,
     required this.likeCount,
     this.isLiked = false,
+    this.isAuthor = false,
   });
 
   final String id;
@@ -36,7 +52,14 @@ class BookDiscussionReply extends Equatable {
   final int likeCount;
   final bool isLiked;
 
-  BookDiscussionReply copyWith({int? likeCount, bool? isLiked}) {
+  /// 是否为本书作者发言。
+  final bool isAuthor;
+
+  BookDiscussionReply copyWith({
+    int? likeCount,
+    bool? isLiked,
+    bool? isAuthor,
+  }) {
     return BookDiscussionReply(
       id: id,
       authorName: authorName,
@@ -45,6 +68,7 @@ class BookDiscussionReply extends Equatable {
       content: content,
       likeCount: likeCount ?? this.likeCount,
       isLiked: isLiked ?? this.isLiked,
+      isAuthor: isAuthor ?? this.isAuthor,
     );
   }
 
@@ -57,6 +81,7 @@ class BookDiscussionReply extends Equatable {
     content,
     likeCount,
     isLiked,
+    isAuthor,
   ];
 }
 
@@ -73,8 +98,9 @@ class BookDiscussionPost extends Equatable {
     required this.replyCount,
     required this.filters,
     this.isLiked = false,
+    this.isAuthor = false,
     this.replies = const [],
-    this.highlightTag,
+    this.badges = const [],
     this.replyPreview,
   });
 
@@ -90,10 +116,13 @@ class BookDiscussionPost extends Equatable {
   final int replyCount;
   final List<BookDiscussionFilter> filters;
   final bool isLiked;
+
+  /// 是否为本书作者发言。
+  final bool isAuthor;
   final List<BookDiscussionReply> replies;
 
-  /// 帖子标签，如「精选」。
-  final String? highlightTag;
+  /// 正文前标签（置顶 / 精选 / 公告，可多选）。
+  final List<BookDiscussionPostBadge> badges;
   final BookDiscussionReplyPreview? replyPreview;
 
   BookDiscussionPost copyWith({
@@ -101,6 +130,8 @@ class BookDiscussionPost extends Equatable {
     List<BookDiscussionReply>? replies,
     int? likeCount,
     bool? isLiked,
+    bool? isAuthor,
+    List<BookDiscussionPostBadge>? badges,
     BookDiscussionReplyPreview? replyPreview,
   }) {
     return BookDiscussionPost(
@@ -114,8 +145,9 @@ class BookDiscussionPost extends Equatable {
       replyCount: replyCount ?? this.replyCount,
       filters: filters,
       isLiked: isLiked ?? this.isLiked,
+      isAuthor: isAuthor ?? this.isAuthor,
       replies: replies ?? this.replies,
-      highlightTag: highlightTag,
+      badges: badges ?? this.badges,
       replyPreview: replyPreview,
     );
   }
@@ -132,8 +164,9 @@ class BookDiscussionPost extends Equatable {
     replyCount,
     filters,
     isLiked,
+    isAuthor,
     replies,
-    highlightTag,
+    badges,
     replyPreview,
   ];
 }

@@ -84,6 +84,7 @@ flutter:
     - assets/images/welfare/slices/
     - assets/images/bookshelf/
     - assets/images/bookstore/refresh_bear/
+    - assets/images/bookstore/shared/
     - assets/images/empty_states/
     - assets/images/onboarding/
     - assets/icons/profile/
@@ -111,6 +112,19 @@ flutter:
     - assets/images/auth/pink_light/
     - assets/images/auth/yellow_light/
     - assets/lottie/
+    - assets/lottie/bottom_nav/
+    - assets/lottie/bottom_nav/yellow_light/
+    - assets/lottie/bottom_nav/yellow_light/book_city/
+    - assets/lottie/bottom_nav/yellow_light/book_city/images/
+    - assets/lottie/bottom_nav/yellow_light/bookcase/
+    - assets/lottie/bottom_nav/yellow_light/bookcase/images/
+    - assets/lottie/bottom_nav/yellow_light/welfare/
+    - assets/lottie/bottom_nav/yellow_light/welfare/images/
+    - assets/lottie/bottom_nav/yellow_light/mine/
+    - assets/lottie/bottom_nav/yellow_light/mine/images/
+    - assets/lottie/bottom_nav/yellow_light/sign/
+    - assets/lottie/bottom_nav/yellow_light/partner/
+    - assets/lottie/bottom_nav/yellow_light/partner/images/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

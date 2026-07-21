@@ -27,6 +27,22 @@ abstract final class AppSharedAssets {
     'assets/images/bookstore/refresh_bear/frame_20.png',
   ];
 
+  /// 限时免费区块顶部彩头（FREE 水印渐隐底，三主题共用）。
+  static const String limitedFreeHeaderBg =
+      'assets/images/bookstore/shared/limited_free_header_bg.png';
+
+  /// 签到成功弹窗两侧斜条纹装饰（浅黄+透明，三主题共用）。
+  static const String checkInSuccessSideStripe =
+      'assets/images/welfare/check_in_success_side_stripe.png';
+
+  /// 签到成功弹窗外飘四角星装饰（三主题共用，渲染时染 `primary`）。
+  static const String checkInSuccessSparkle =
+      'assets/images/welfare/check_in_success_sparkle.png';
+
+  /// 书详情讨论 Tab「写评论」悬浮按钮（橙底白字色稿，三主题共用）。
+  static const String bookDetailWriteCommentFab =
+      'assets/images/book_detail/write_comment_fab.png';
+
   // ── empty_states · 空状态插图（三主题公用）──
   static const String emptyBookshelf =
       'assets/images/empty_states/empty_bookshelf.png';

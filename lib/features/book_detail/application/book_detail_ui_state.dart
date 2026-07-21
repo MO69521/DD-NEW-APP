@@ -10,6 +10,7 @@ class BookDetailUiState extends Equatable {
     this.quickReplyErrorMessage,
     this.shelfToastTick = 0,
     this.shelfToastMessage,
+    this.highlightedDiscussionPostId,
   });
 
   final bool isLoading;
@@ -22,6 +23,9 @@ class BookDetailUiState extends Equatable {
   final int shelfToastTick;
   final String? shelfToastMessage;
 
+  /// 新发讨论帖短暂高亮 id；`null` 表示无高亮。
+  final String? highlightedDiscussionPostId;
+
   BookDetailUiState copyWith({
     bool? isLoading,
     String? errorMessage,
@@ -32,6 +36,8 @@ class BookDetailUiState extends Equatable {
     bool clearQuickReplyError = false,
     int? shelfToastTick,
     String? shelfToastMessage,
+    String? highlightedDiscussionPostId,
+    bool clearHighlightedDiscussionPostId = false,
   }) {
     return BookDetailUiState(
       isLoading: isLoading ?? this.isLoading,
@@ -44,6 +50,9 @@ class BookDetailUiState extends Equatable {
           : quickReplyErrorMessage ?? this.quickReplyErrorMessage,
       shelfToastTick: shelfToastTick ?? this.shelfToastTick,
       shelfToastMessage: shelfToastMessage ?? this.shelfToastMessage,
+      highlightedDiscussionPostId: clearHighlightedDiscussionPostId
+          ? null
+          : highlightedDiscussionPostId ?? this.highlightedDiscussionPostId,
     );
   }
 
@@ -56,5 +65,6 @@ class BookDetailUiState extends Equatable {
     quickReplyErrorMessage,
     shelfToastTick,
     shelfToastMessage,
+    highlightedDiscussionPostId,
   ];
 }

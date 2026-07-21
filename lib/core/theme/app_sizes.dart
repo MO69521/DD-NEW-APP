@@ -86,9 +86,19 @@ abstract final class AppSizes {
   static const double bottomNavBottomInset = 4;
   static const double bottomNavBlurSigma = 40;
   static const double bottomNavIconSize = 26;
+
+  /// `yellow_light` 底栏 Lottie / `*_nor.webp` 显示边长（画布留白多，略大于 SVG 档 26）。
+  static const double bottomNavLottieIconSize = 32;
+
   static const double bottomNavSelectedIconPeakScale = 1.18;
   static const double bottomNavSelectedIconDipScale = 0.92;
   static const double bottomNavItemHeight = 42;
+
+  /// `yellow_light` 底栏单项高度（图标 32 + 间距 + 文案 + 内边距，避免 FittedBox 再缩回去）。
+  static const double bottomNavLottieItemHeight = 52;
+
+  /// `yellow_light` 底栏胶囊高度（须 ≥ [bottomNavLottieItemHeight]）。
+  static const double bottomNavLottieCapsuleHeight = 54;
   static const double bottomNavIconLabelGap = 2;
   static const double bottomNavItemContentTopInset = 0;
   static const double bottomNavItemContentBottomInset = 4;
@@ -106,6 +116,9 @@ abstract final class AppSizes {
   // 首页「限时免费」倒计时数字块：1:1 正方形，居中容纳两位数
   static const double limitedFreeCountdownBoxSize = 18;
 
+  /// 限时免费头图彩头宽高比（资源 1024×236）。
+  static const double limitedFreeHeaderBgAspectRatio = 1024 / 236;
+
   // 我的页「我的成就」勋章模块
   static const double profileAchievementMedalSize = 52;
   static const double profileAchievementActionIconSize = 12;
@@ -120,7 +133,9 @@ abstract final class AppSizes {
   static const double rankingTabSlotWidth = 55;
   static const double rankingHeaderActionTopInset = 5;
   static const double rankingHeaderActionBottomInset = 4;
-  static const double rankingFullListIconSize = 12;
+  /// 区块标题右侧尾随箭头（目录 / 滑动提示 / SectionHeader「更多」等）。
+  static const double sectionTrailingIconSize = 12;
+  static const double rankingFullListIconSize = sectionTrailingIconSize;
   static const double rankingCarouselItemWidth = 132;
   static const int rankingCarouselMaxItems = 7;
   static const int rankingGridMaxItems = 6;
@@ -186,6 +201,20 @@ abstract final class AppSizes {
   static const double welfareCheckInSuccessBadgeSize = 66;
   static const double welfareCheckInSuccessBadgeIconSize = 40;
 
+  /// 签到成功弹窗顶边主色条高度（用户指定 10）。
+  static const double welfareCheckInSuccessTopAccentHeight = 10;
+
+  /// 签到成功弹窗两侧斜纹不透明度（弱化，避免抢主内容）。
+  static const double welfareCheckInSuccessSideStripeOpacity = 0.45;
+
+  /// 签到成功弹窗外飘四角星：大 / 中 / 小。
+  static const double welfareCheckInSuccessSparkleSizeLg = 22;
+  static const double welfareCheckInSuccessSparkleSizeMd = 16;
+  static const double welfareCheckInSuccessSparkleSizeSm = 10;
+
+  /// 外飘星星整体不透明度（贴深色遮罩，略透明即可）。
+  static const double welfareCheckInSuccessSparkleOpacity = 0.85;
+
   // ── 新手基础信息收集弹窗 ──
   /// 性别头像圆底直径。
   static const double onboardingGenderAvatarSize = 80;
@@ -207,7 +236,7 @@ abstract final class AppSizes {
   static const double welfareCheckInCtaHeight = 42;
   static const double welfareCheckInDayWideMinWidth = 132;
   static const double welfareCurrencyIconSize = 16;
-  static const double welfareCurrencyArrowSize = 12;
+  static const double welfareCurrencyArrowSize = sectionTrailingIconSize;
   static const double welfareCurrencyDividerHeight = 15;
   static const double welfareCurrencyAmountFontSize = 24;
   static const double welfareCurrencyBlurSigma = 16;
@@ -256,17 +285,15 @@ abstract final class AppSizes {
 
   // ── 书架页 (Figma 220:9341 / 377:1909) ──
   static const double bookshelfHeaderHeight = 44;
-  static const double bookshelfReadingBannerHeight = 54;
-  static const double bookshelfBearIllustrationWidth = 64;
-  static const double bookshelfBearIllustrationHeight = 46;
-  static const double bookshelfBearIllustrationPaintHeight = 64;
-  static const double bookshelfBearIllustrationLeftInset = 3;
-  static const double bookshelfBearIllustrationTopInset = 8;
-  static const double bookshelfReadingBannerContentInsetLeft = 72;
-  static const double bookshelfHeaderToBannerGap = 18;
-  static const double bookshelfBannerToGridGap = 24;
+  static const double bookshelfHeaderToBannerGap = 4;
+  static const double bookshelfBannerToGridGap = 12;
+
+  /// 书架页顶部白色垂直渐隐高度（随内容滚动，底端透明）。
+  static const double bookshelfPageGradientHeight = 500;
   static const double bookshelfClaimWelfareIconSize = 16;
-  static const double bookshelfClaimWelfareCtaHeight = 30;
+
+  /// 与 `AppButton` small + 16 图标实测高度一致（paddingV 8×2 + icon 16）。
+  static const double bookshelfClaimWelfareCtaHeight = 32;
   static const double bookshelfClaimWelfareCtaPaddingHorizontal = 11;
   static const double bookshelfClaimWelfareCtaPaddingVertical = 7;
   static const double bookshelfManageActionFontSize = 14;
@@ -495,9 +522,7 @@ abstract final class AppSizes {
   static const double bookDetailTabOuterPadding = 2;
   static const double bookDetailTabItemPaddingVertical = 10;
 
-  static const double bookDetailCatalogPaddingH = 12.5;
-  static const double bookDetailCatalogPaddingV = 16.5;
-  static const double bookDetailCatalogArrowSize = 12;
+  static const double bookDetailCatalogArrowSize = sectionTrailingIconSize;
   static const double bookDetailCatalogDrawerWidthRatio = 0.78;
   static const double bookDetailCatalogDrawerCoverWidth = 48;
   static const double bookDetailCatalogDrawerCoverHeight = 64;
@@ -511,15 +536,16 @@ abstract final class AppSizes {
   static const double bookDetailCharacterHelpDialogWidthRatio = 0.84;
   static const double bookDetailCharacterHelpDialogMaxHeightRatio = 0.62;
   static const double bookDetailCharacterHelpCloseSize = 32;
-  static const double bookDetailSectionHintIconSize = 12;
+  static const double bookDetailSectionHintIconSize = sectionTrailingIconSize;
   static const double bookDetailDiscussionAvatarSize = 28;
   static const double bookDetailDiscussionListAvatarSize = 24;
-  static const double bookDetailDiscussionBodyIndent = 40;
   static const double bookDetailDiscussionCardPadding = 12;
   static const double bookDetailDiscussionReplyPadding = 10;
   static const double bookDetailDiscussionLikeIconSize = 18;
   static const double bookDetailDiscussionFilterPaddingH = 16;
   static const double bookDetailDiscussionFilterPaddingV = 6;
+  /// 讨论区「最新 / 最热」分段开关宽度（两档短文案）。
+  static const double bookDetailDiscussionSortSwitchWidth = 108;
   static const double bookDetailDiscussionListGap = 22;
   static const double bookDetailDiscussionShortListBottomReserveFactor = 0.55;
   static const double bookDiscussionDetailReplyAvatarSize = 24;
@@ -556,6 +582,12 @@ abstract final class AppSizes {
   static const double bookDetailPromoRewardTagLeft = 30;
   static const double bookDetailPromoRewardTagTopOverhang = 8;
   static const double bookDetailPromoRewardTextTop = 2;
+  /// 讨论 Tab「写评论」悬浮按钮边长（资源 240px @3x → 80 逻辑点）。
+  static const double bookDetailWriteCommentFabSize = 80;
+  /// 无促销条时，写评论 FAB 距底部固定操作栏的间距。
+  static const double bookDetailWriteCommentFabBottomGap = 12;
+  /// 新评论滚入可视区时，目标相对视口的对齐比例（偏上便于阅读）。
+  static const double bookDetailNewCommentScrollAlignment = 0.2;
 
   // ── 搜索页（深色态） ──
   static const double searchAppBarBackIconWidth = 14;
@@ -766,7 +798,8 @@ abstract final class AppSizes {
   static const double categoryFilterChipLabelToUnderlineGap = 4;
   static const double categoryFilterUnderlineWidth = 16;
   static const double categoryFilterUnderlineHeight = 3;
-  static const double categoryFilterSectionVerticalPadding = 16;
+  /// 筛选区底部内边距（筛选末行 ↔ 书单首行间距）。
+  static const double categoryFilterSectionVerticalPadding = 24;
   static const double categoryHeaderToFilterGap = 8;
 
   // ── 帮助与反馈页 ──

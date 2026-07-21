@@ -7,6 +7,26 @@ import '../widgets/app_text.dart';
 import 'app_bottom_nav.dart';
 import 'main_tab_controller.dart';
 
+/// 主 Tab 待领取气泡是否可见（与底栏展示条件一致），供书城浮层避让。
+class MainTabPendingClaimScope extends InheritedWidget {
+  const MainTabPendingClaimScope({
+    super.key,
+    required this.isVisible,
+    required super.child,
+  });
+
+  final bool isVisible;
+
+  static MainTabPendingClaimScope? maybeOf(BuildContext context) {
+    return context
+        .dependOnInheritedWidgetOfExactType<MainTabPendingClaimScope>();
+  }
+
+  @override
+  bool updateShouldNotify(MainTabPendingClaimScope oldWidget) =>
+      isVisible != oldWidget.isVisible;
+}
+
 /// 主 Tab Shell：管理 Tab 切换与共享底栏，页面由外部注入。
 class MainTabShell extends StatefulWidget {
   const MainTabShell({
@@ -82,28 +102,34 @@ class _MainTabShellState extends State<MainTabShell> {
 
   void _onTabChanged(int index) => _switchToTab(index);
 
+  bool get _pendingClaimBadgeVisible =>
+      !_hasVisitedWelfare && (widget.pendingClaimEnergy ?? 0) > 0;
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.backgroundDark,
-      body: Stack(
-        children: [
-          IndexedStack(index: _selectedIndex, children: widget.pages),
-          if (!widget.hideBottomNav)
-            Positioned(
-              left: 0,
-              right: 0,
-              bottom: 0,
-              child: AppBottomNav(
-                selectedIndex: _selectedIndex,
-                pendingClaimEnergy: _hasVisitedWelfare
-                    ? null
-                    : widget.pendingClaimEnergy,
-                onTabChanged: _onTabChanged,
-                style: AppBottomNavStyle.fullWidthSolid,
+    return MainTabPendingClaimScope(
+      isVisible: _pendingClaimBadgeVisible,
+      child: Scaffold(
+        backgroundColor: AppColors.backgroundDark,
+        body: Stack(
+          children: [
+            IndexedStack(index: _selectedIndex, children: widget.pages),
+            if (!widget.hideBottomNav)
+              Positioned(
+                left: 0,
+                right: 0,
+                bottom: 0,
+                child: AppBottomNav(
+                  selectedIndex: _selectedIndex,
+                  pendingClaimEnergy: _pendingClaimBadgeVisible
+                      ? widget.pendingClaimEnergy
+                      : null,
+                  onTabChanged: _onTabChanged,
+                  style: AppBottomNavStyle.fullWidthSolid,
+                ),
               ),
-            ),
-        ],
+          ],
+        ),
       ),
     );
   }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
@@ -11,6 +12,7 @@ import '../../domain/entities/book_detail.dart';
 import '../../domain/entities/book_detail_tab.dart';
 import '../../domain/entities/book_discussion_filter.dart';
 import '../../domain/entities/book_discussion_post.dart';
+import '../../domain/entities/book_discussion_sort.dart';
 import 'book_detail_catalog_entry.dart';
 import 'book_detail_character_section.dart';
 import 'book_detail_discussion_section.dart';
@@ -27,8 +29,12 @@ class BookDetailContent extends StatelessWidget {
     required this.detail,
     required this.selectedTab,
     required this.selectedDiscussionFilter,
+    required this.selectedDiscussionSort,
+    this.highlightedDiscussionPostId,
+    this.highlightedCommentKey,
     required this.onTabSelected,
     required this.onDiscussionFilterSelected,
+    required this.onDiscussionSortSelected,
     required this.onDiscussionPostTap,
     required this.onDiscussionPostLikeTap,
     required this.onDiscussionPostBodyTap,
@@ -40,8 +46,12 @@ class BookDetailContent extends StatelessWidget {
   final BookDetail detail;
   final BookDetailTab selectedTab;
   final BookDiscussionFilter selectedDiscussionFilter;
+  final BookDiscussionSort selectedDiscussionSort;
+  final String? highlightedDiscussionPostId;
+  final GlobalKey? highlightedCommentKey;
   final ValueChanged<BookDetailTab> onTabSelected;
   final ValueChanged<BookDiscussionFilter> onDiscussionFilterSelected;
+  final ValueChanged<BookDiscussionSort> onDiscussionSortSelected;
   final ValueChanged<BookDiscussionPost> onDiscussionPostTap;
   final ValueChanged<BookDiscussionPost> onDiscussionPostLikeTap;
   final ValueChanged<BookDiscussionPost> onDiscussionPostBodyTap;
@@ -83,8 +93,12 @@ class BookDetailContent extends StatelessWidget {
       ),
       BookDetailTab.discussion => BookDetailDiscussionSection(
         selectedFilter: selectedDiscussionFilter,
+        selectedSort: selectedDiscussionSort,
         posts: detail.discussionPosts,
+        highlightedPostId: highlightedDiscussionPostId,
+        highlightedCommentKey: highlightedCommentKey,
         onFilterSelected: onDiscussionFilterSelected,
+        onSortSelected: onDiscussionSortSelected,
         onPostTap: onDiscussionPostTap,
         onPostLikeTap: onDiscussionPostLikeTap,
         onPostBodyTap: onDiscussionPostBodyTap,
@@ -115,12 +129,20 @@ class _DetailTabBody extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         BookDetailIntro(intro: detail.intro),
-        const SizedBox(height: AppSizes.bookDetailSectionGap),
+        const Divider(
+          height: AppSpacing.xxl,
+          thickness: AppSizes.hairline,
+          color: AppColors.divider,
+        ),
         BookDetailCatalogEntry(
           serialStatus: detail.serialStatus,
           onTap: onCatalogTap,
         ),
-        const SizedBox(height: AppSizes.bookDetailSectionGap),
+        const Divider(
+          height: AppSpacing.xxl,
+          thickness: AppSizes.hairline,
+          color: AppColors.divider,
+        ),
         BookDetailCharacterSection(
           characters: detail.characters,
           onCharacterFavTap: onCharacterFavTap,

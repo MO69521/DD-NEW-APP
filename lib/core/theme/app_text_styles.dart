@@ -229,6 +229,14 @@ abstract final class AppTextStyles {
     height: AppLineHeights.none,
   );
 
+  /// 区块标题右侧尾随文案（目录状态 / 滑动提示 / SectionHeader「更多」）。
+  static const TextStyle sectionTrailingAction = TextStyle(
+    fontSize: AppFontSizes.md,
+    fontWeight: AppFontWeights.regular,
+    color: AppColors.textOnDarkMuted,
+    height: AppLineHeights.none,
+  );
+
   /// 「猜你喜欢」卡片摘要文案（12px，2 行展示）。
   static TextStyle get bookGuessLikeSummaryDark => labelMedium.copyWith(
     color: AppColors.textOnDarkMuted,
@@ -424,10 +432,10 @@ abstract final class AppTextStyles {
   );
 
   static TextStyle get bookshelfReadingMinutes =>
-      displaySm.copyWith(color: AppColors.textOnDark);
+      displaySm.copyWith(color: AppColors.bookshelfReadingMinutes);
 
   static TextStyle get bookshelfReadingLabel => bodyMedium.copyWith(
-    color: AppColors.textOnDarkPlaceholder,
+    color: AppColors.textSecondary,
     fontWeight: AppFontWeights.regular,
     height: AppLineHeights.none,
   );
@@ -509,7 +517,7 @@ abstract final class AppTextStyles {
   static const TextStyle rankingChannelActive = TextStyle(
     fontSize: AppFontSizes.base,
     fontWeight: AppFontWeights.medium,
-    color: AppColors.segmentedSelectedText,
+    color: AppColors.segmentedSwitchSelectedText,
     height: AppLineHeights.none,
   );
 
@@ -578,7 +586,7 @@ abstract final class AppTextStyles {
   static const TextStyle bookDetailTabSelected = TextStyle(
     fontSize: AppFontSizes.base,
     fontWeight: AppFontWeights.medium,
-    color: AppColors.segmentedSelectedText,
+    color: AppColors.segmentedSwitchSelectedText,
     height: AppLineHeights.none,
   );
 
@@ -603,11 +611,13 @@ abstract final class AppTextStyles {
     height: AppLineHeights.none,
   );
 
+  /// 详情页区块标题（与模块 [sectionTitleDark] / [SectionHeader] 同档：`xl` semibold）。
   static const TextStyle bookDetailBlockTitle = TextStyle(
-    fontSize: AppFontSizes.lg,
-    fontWeight: AppFontWeights.medium,
+    fontSize: AppFontSizes.xl,
+    fontFamily: AppFontFamilies.number,
+    fontWeight: AppFontWeights.semibold,
     color: AppColors.textOnDark,
-    height: AppLineHeights.none,
+    height: AppLineHeights.normal,
   );
 
   static const TextStyle bookDetailSectionTitle = TextStyle(
@@ -625,12 +635,8 @@ abstract final class AppTextStyles {
     height: AppLineHeights.loose,
   );
 
-  static const TextStyle bookDetailCatalogMeta = TextStyle(
-    fontSize: AppFontSizes.md,
-    fontWeight: AppFontWeights.regular,
-    color: AppColors.textOnDarkPlaceholder,
-    height: AppLineHeights.none,
-  );
+  /// 目录入口右侧状态文案（别名 [sectionTrailingAction]）。
+  static const TextStyle bookDetailCatalogMeta = sectionTrailingAction;
 
   static const TextStyle bookDetailCatalogDrawerTitle = TextStyle(
     fontSize: AppFontSizes.lg,
@@ -646,12 +652,8 @@ abstract final class AppTextStyles {
     height: AppLineHeights.normal,
   );
 
-  static const TextStyle bookDetailSectionHint = TextStyle(
-    fontSize: AppFontSizes.md,
-    fontWeight: AppFontWeights.regular,
-    color: AppColors.textOnDarkMuted,
-    height: AppLineHeights.none,
-  );
+  /// 角色介绍等区块右侧提示（别名 [sectionTrailingAction]）。
+  static const TextStyle bookDetailSectionHint = sectionTrailingAction;
 
   static const TextStyle bookDetailCharName = TextStyle(
     fontSize: AppFontSizes.base,
@@ -710,19 +712,13 @@ abstract final class AppTextStyles {
     height: AppLineHeights.normal,
   );
 
-  static const TextStyle bookDetailDiscussionFilterSelected = TextStyle(
-    fontSize: AppFontSizes.base,
-    fontWeight: AppFontWeights.medium,
-    color: AppColors.onAccent,
-    height: AppLineHeights.none,
-  );
+  /// 讨论筛选选中：与分类页纯文字筛选一致（主文字 / semibold）。
+  static const TextStyle bookDetailDiscussionFilterSelected =
+      categoryFilterSelected;
 
-  static const TextStyle bookDetailDiscussionFilterUnselected = TextStyle(
-    fontSize: AppFontSizes.base,
-    fontWeight: AppFontWeights.regular,
-    color: AppColors.discussionFilterUnselectedText,
-    height: AppLineHeights.none,
-  );
+  /// 讨论筛选未选：与分类页纯文字筛选一致。
+  static const TextStyle bookDetailDiscussionFilterUnselected =
+      categoryFilterUnselected;
 
   static const TextStyle bookDetailDiscussionAuthor = TextStyle(
     fontSize: AppFontSizes.lg,

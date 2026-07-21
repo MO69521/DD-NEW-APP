@@ -13,7 +13,7 @@ enum AppButtonVariant {
   /// 暗色页主 CTA（黄色胶囊）。
   accent,
 
-  /// 次操作 / 弱强调面按钮（4% 白底、无描边、胶囊）。
+  /// 次操作 / 弱强调面按钮（浅色 `surfaceSoft` 极轻灰底、深色 `surface`；无描边、胶囊）。
   secondary,
 
   /// 描边按钮（透明底 + 细边框）。
@@ -57,7 +57,11 @@ class AppButton extends StatelessWidget {
 
   Color get _backgroundColor => switch (variant) {
     AppButtonVariant.accent => AppColors.primary,
-    AppButtonVariant.secondary => AppColors.surface,
+    // 浅色弹窗/白面上次按钮：`surface` 纯白不可见，改用弱容器面 `surfaceSoft`
+    //（极轻灰）；深色保持 `surface`。
+    AppButtonVariant.secondary => AppBrandColors.isLightExperiment
+        ? AppColors.surfaceSoft
+        : AppColors.surface,
     AppButtonVariant.outline => Colors.transparent,
     AppButtonVariant.vip => Colors.transparent,
   };

@@ -38,6 +38,7 @@ class BookDetailMockDataSource implements BookDetailDataSource {
           authorAvatarAsset: 'assets/images/profile/avatar_placeholder.png',
           publishMeta: '06-21 23:32·江苏省',
           likeCount: 39,
+          isAuthor: true,
           title: '关于现代abo的表哥建议（朝尧是下位，鸟男女皆可）',
           content:
               'A鸟 × O哥（以下只是我激情四射下的产出，ooc致歉）\\n'
@@ -69,7 +70,10 @@ class BookDetailMockDataSource implements BookDetailDataSource {
               likeCount: 5,
             ),
           ],
-          highlightTag: '精选',
+          badges: const [
+            BookDiscussionPostBadge.pinned,
+            BookDiscussionPostBadge.featured,
+          ],
           replyPreview: BookDiscussionReplyPreview(
             authorName: '衍风来',
             content:
@@ -116,7 +120,7 @@ class BookDetailMockDataSource implements BookDetailDataSource {
               likeCount: 2,
             ),
           ],
-          highlightTag: '公告',
+          badges: const [BookDiscussionPostBadge.notice],
         ),
         BookDiscussionPost(
           id: 'd4',

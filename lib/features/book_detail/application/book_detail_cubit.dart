@@ -5,11 +5,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/domain/entities/book.dart';
 import '../../../core/services/bookshelf_membership_service.dart';
 import '../../../core/services/service_locator.dart';
+import '../../../core/theme/app_durations.dart';
 import '../data/datasources/book_detail_mock_datasource.dart';
 import '../data/repositories/book_detail_repository_impl.dart';
 import '../domain/entities/book_detail.dart';
 import '../domain/entities/book_discussion_post.dart';
 import '../domain/entities/book_discussion_filter.dart';
+import '../domain/entities/book_discussion_sort.dart';
 import '../domain/entities/book_detail_tab.dart';
 import '../domain/repositories/book_detail_repository.dart';
 import 'book_detail_domain_state.dart';
@@ -57,6 +59,7 @@ class BookDetailCubit extends Cubit<BookDetailState> {
   final BookshelfMembershipService _membershipService;
   late final StreamSubscription<List<Book>> _membershipSubscription;
   late bool _fallbackIsInShelf;
+  Timer? _discussionHighlightTimer;
 
   Future<void> load() async {
     emit(
@@ -100,6 +103,17 @@ class BookDetailCubit extends Cubit<BookDetailState> {
       state.copyWith(
         interaction: state.interaction.copyWith(
           selectedDiscussionFilter: filter,
+        ),
+      ),
+    );
+  }
+
+  void switchDiscussionSort(BookDiscussionSort sort) {
+    if (sort == state.interaction.selectedDiscussionSort) return;
+    emit(
+      state.copyWith(
+        interaction: state.interaction.copyWith(
+          selectedDiscussionSort: sort,
         ),
       ),
     );
@@ -286,8 +300,81 @@ class BookDetailCubit extends Cubit<BookDetailState> {
     );
   }
 
+  /// 讨论 Tab「写评论」：插到作者发言下方，淡黄高亮后清除。
+  Future<void> submitDiscussionComment(String content) async {
+    final text = content.trim();
+    if (text.isEmpty) {
+      emit(
+        state.copyWith(
+          ui: state.ui.copyWith(
+            quickReplyErrorTick: state.ui.quickReplyErrorTick + 1,
+            quickReplyErrorMessage: '评论内容不能为空',
+          ),
+        ),
+      );
+      return;
+    }
+
+    final detail = state.domain.detail;
+    if (detail == null) return;
+
+    final postId =
+        'local-${DateTime.now().millisecondsSinceEpoch}';
+    final newPost = BookDiscussionPost(
+      id: postId,
+      authorName: '我',
+      authorAvatarAsset: 'assets/images/profile/avatar_placeholder.png',
+      publishMeta: '刚刚',
+      likeCount: 0,
+      title: text,
+      content: '',
+      replyCount: 0,
+      filters: const [BookDiscussionFilter.all],
+    );
+
+    final posts = List<BookDiscussionPost>.of(detail.discussionPosts);
+    final authorIndex = posts.indexWhere((post) => post.isAuthor);
+    final insertAt = authorIndex >= 0 ? authorIndex + 1 : 0;
+    posts.insert(insertAt, newPost);
+
+    _discussionHighlightTimer?.cancel();
+    emit(
+      state.copyWith(
+        domain: state.domain.copyWith(
+          detail: detail.copyWith(
+            discussionPosts: List.unmodifiable(posts),
+            discussionCount: detail.discussionCount + 1,
+          ),
+        ),
+        interaction: state.interaction.copyWith(
+          selectedDiscussionFilter: BookDiscussionFilter.all,
+          selectedDiscussionSort: BookDiscussionSort.latest,
+        ),
+        ui: state.ui.copyWith(
+          quickReplySuccessTick: state.ui.quickReplySuccessTick + 1,
+          clearQuickReplyError: true,
+          highlightedDiscussionPostId: postId,
+        ),
+      ),
+    );
+
+    _discussionHighlightTimer = Timer(
+      AppDurations.discussionNewCommentHighlight,
+      () {
+        if (isClosed) return;
+        if (state.ui.highlightedDiscussionPostId != postId) return;
+        emit(
+          state.copyWith(
+            ui: state.ui.copyWith(clearHighlightedDiscussionPostId: true),
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Future<void> close() {
+    _discussionHighlightTimer?.cancel();
     _membershipSubscription.cancel();
     return super.close();
   }

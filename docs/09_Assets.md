@@ -10,14 +10,18 @@
 | `assets/icons/` | SVG 图标 + 少量位图图标（按 feature 分子目录） | `AppIcon` / `AppAssetImage` |
 | `assets/images/` | 业务位图（按 feature 分子目录） | `AppAssetImage` |
 | `assets/fonts/` | 定制数字字体 `TCloudNumber`（3 档字重） | 字体族 `AppFontFamilies.number` |
-| `assets/lottie/` | Lottie 动画（当前仅 `README.md` 占位，**暂无 .json**） | `AppLottie`（待接入） |
+| `assets/lottie/` | Lottie 动画（含 `bottom_nav/yellow_light/` 底栏 Tab） | `AppLottie` / `AppNavIcon` |
 | `assets/shaders/` | 片元着色器 `aurora.frag`、`liquid_button.frag` | `AuroraBackground` / 液态按钮 |
 
 ## 2. Images（图片资源）
 
 - `assets/images/<feature>/`：按业务分目录；**空状态插图**统一放 [`assets/images/empty_states/`](../assets/images/empty_states/)（三主题公用，经 [`AppSharedAssets`](../lib/core/theme/app_shared_assets.dart)）。
 - 书城下拉刷新使用 `assets/images/bookstore/refresh_bear/frame_01.png` … `frame_20.png` 透明序列帧，三主题共用并经 `AppSharedAssets.bookstoreRefreshBearFrames` 集中取用；源图 500×500，界面按 50×50 播放。
-- 书架今日阅读横幅的小熊使用 `assets/images/bookshelf/reading_bear.svg`，由 `AppAssetImage` 自动经 `flutter_svg` 加载；以 64×64 方形画布和 top 8 偏移绘制，使用 `BoxFit.contain` 保持比例，下半身由横幅底边裁剪。
+- 限时免费区块顶部彩头：`assets/images/bookstore/shared/limited_free_header_bg.png`（1024×236，浅紫 FREE 水印 → 白渐隐），经 `AppSharedAssets.limitedFreeHeaderBg` 引用，三主题共用。
+- 签到成功弹窗两侧斜条纹：`assets/images/welfare/check_in_success_side_stripe.png`（36×804，浅黄实色+透明斜纹），经 `AppSharedAssets.checkInSuccessSideStripe` 引用；渲染时 `ColorFilter.srcIn` 染为 `primary`，整体不透明度 `welfareCheckInSuccessSideStripeOpacity`（0.45），宽 `AppSpacing.sm`，自上而下渐隐。顶边主色条高 `welfareCheckInSuccessTopAccentHeight`（10）。
+- 签到成功弹窗外飘四角星：`assets/images/welfare/check_in_success_sparkle.png`（60×60），经 `AppSharedAssets.checkInSuccessSparkle`；左中 1 + 右上 2（大/小）浮于卡片外侧，标题旁另有两枚小星；染 `primary`，不透明度 `welfareCheckInSuccessSparkleOpacity`（0.85），尺寸 `welfareCheckInSuccessSparkleSizeLg/Md/Sm`（22/16/10）。每日签到弹窗与签到成功弹窗经 `check_in_dialog_decor.dart` 共用上述装饰。
+- 书详情讨论「写评论」悬浮钮：`assets/images/book_detail/write_comment_fab.png`（240×240 橙底白字色稿），经 `AppSharedAssets.bookDetailWriteCommentFab`，三主题共用。
+- 书架今日阅读横幅已去掉小熊插画；`assets/images/bookshelf/reading_bear.svg` 暂保留资产、不再被横幅引用。
 - **随主题变的位图**：`assets/images/<feature>/<themeId>/`（例：登录头图、我的 Hero、底栏纹理）。
 - `assets/covers/`：书籍封面 mock（真实接入后由后端返回 `coverUrl`，网络图走 `AppNetworkAvatar` / `Image.network` 封装）。
 - 加载：统一 `AppAssetImage(assetPath: ...)`；封面场景用 `BookCover`；主题位图经 `AppThemeAssets`；空态等共用图经 `AppSharedAssets`。
@@ -36,7 +40,7 @@
   assets/images/<feature>/{yellow_dark|pink_light|yellow_light}/… # 主题位图
   ```
   未建主题子目录的 feature（如 `payment`、`profile`）视为跨主题共用，**不复制三份**。
-- 当前主题包：`nav/<themeId>/`（10 Tab）、`book_detail/<themeId>/`（加入书架/送心）、`book_detail/shared/`（促销标/刷新）、`images/bottom_nav/<themeId>/nav_texture.png`。路径经 [`AppThemeAssets`](../lib/core/theme/app_theme_assets.dart)；完整色稿 **不再** `ColorFilter` 染色。
+- 当前主题包：`nav/<themeId>/`（10 Tab）、`book_detail/<themeId>/`（加入书架/送心）、`book_detail/shared/`（促销标/刷新/点赞）、`images/bottom_nav/<themeId>/nav_texture.png`。路径经 [`AppThemeAssets`](../lib/core/theme/app_theme_assets.dart)；完整色稿 **不再** `ColorFilter` 染色。
 - 加载：主题相关 → `AppThemeAssets`；通用 UI → `AppIconAssets`；其余可用 `AppIcon`。
 
 ## 4. Fonts（字体）
@@ -62,14 +66,15 @@
 | 福利页顶部纹理 | `assets/images/tab_top/<themeId>/top_texture.png`（`AppThemeAssets.tabTopTexture`；切图未到位时为 `null`；书城首页 / 书架不调用） |
 | 登录页头图 | `yellow_light` 复用 `assets/images/profile/yellow_light/hero_background_default.png`；`pink_light` / `yellow_dark` 保持 `assets/images/auth/<themeId>/login_top_bg.png` |
 | 我的页默认头图 | `assets/images/profile/<themeId>/hero_background_default.png` |
-| 底栏 Tab（10） | `assets/icons/nav/<themeId>/{bookstore,welfare,partner,bookshelf,profile}_{active,inactive}.svg` |
+| 底栏 Tab（10 SVG / 浅黄 Lottie） | SVG：`assets/icons/nav/<themeId>/{bookstore,welfare,partner,bookshelf,profile}_{active,inactive}.svg`；`yellow_light` 未选中改 `assets/images/bottom_nav/yellow_light/*_nor.webp`，选中 Lottie：`assets/lottie/bottom_nav/yellow_light/{book_city,welfare,bookcase,mine}/…`（经 `AppThemeAssets.nav*SelectedLottie`） |
 | 书详加入书架 / 送心（4） | `assets/icons/book_detail/<themeId>/{add_to_shelf,in_shelf,send_heart,send_heart_sent}.svg` |
-| 书详共用 | `assets/icons/book_detail/shared/{promo_reward_tag,refresh}.svg` |
+| 书详共用 | `assets/icons/book_detail/shared/{promo_reward_tag,refresh,like,like_active}.svg` |
 
 ## 6. Lottie
 
-- `assets/lottie/` 目前仅 `README.md` 占位，**尚无实际 `.json` 动画**。
-- 封装组件 `AppLottie`（[app_lottie.dart](../lib/shared/components/app_lottie.dart)）已就绪但**未被引用**；接入 Lottie 时把 `.json` 放入本目录、登记 pubspec，再用 `AppLottie(asset: ...)`。
+- 底栏切换（仅 `yellow_light`）：`assets/lottie/bottom_nav/yellow_light/`，由 `AppNavIcon` 在选中时播一次并停末帧；未选中用同主题 `*_nor.webp`。**须在 `pubspec.yaml` 逐级登记子目录**（与本仓库其它 assets 约定一致；只写 `assets/lottie/` 不会打进深层 JSON）。
+- 封装组件 `AppLottie`（[app_lottie.dart](../lib/shared/components/app_lottie.dart)）支持 `controller` / `onLoaded`；其它场景继续把 `.json` 放入本目录并经语义 token 引用。
+- 已入库待接线：`sign/`（福利签到态）、`partner/`（伙伴 Tab）、`book_city/back_to_top.json`。
 
 ## 7. Rive
 

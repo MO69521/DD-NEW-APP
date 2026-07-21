@@ -25,7 +25,7 @@ class BookDiscussionDetailPage extends StatelessWidget {
     if (discussionPost == null) {
       final statusBarHeight = AppLayout.statusBarHeight(context);
       return Scaffold(
-        backgroundColor: AppColors.backgroundDark,
+        backgroundColor: AppColors.bookDetailPageBackground,
         body: Column(
           children: [
             AppTopBar(
@@ -60,7 +60,7 @@ class BookDiscussionDetailPage extends StatelessWidget {
               builder: (context, state) {
                 final statusBarHeight = AppLayout.statusBarHeight(context);
                 return Scaffold(
-                  backgroundColor: AppColors.backgroundDark,
+                  backgroundColor: AppColors.bookDetailPageBackground,
                   body: Column(
                     children: [
                       AppTopBar(

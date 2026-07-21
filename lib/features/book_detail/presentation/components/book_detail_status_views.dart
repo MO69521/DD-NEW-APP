@@ -22,12 +22,12 @@ class BookDetailLoadingView extends StatelessWidget {
     final cover = coverAsset;
     if (cover == null) {
       return const Scaffold(
-        backgroundColor: AppColors.backgroundDark,
+        backgroundColor: AppColors.bookDetailPageBackground,
         body: Center(child: CircularProgressIndicator()),
       );
     }
     return Scaffold(
-      backgroundColor: AppColors.backgroundDark,
+      backgroundColor: AppColors.bookDetailPageBackground,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -53,7 +53,7 @@ class BookDetailErrorView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.backgroundDark,
+      backgroundColor: AppColors.bookDetailPageBackground,
       body: EmptyState(
         title: '加载失败',
         description: errorMessage,

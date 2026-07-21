@@ -7,20 +7,34 @@ void main() {
     final content = await const WelfareMockDataSource().fetchPageContent();
     final tasks = content.taskListSummary.tasks;
 
-    for (final taskId in ['watch_video', 'reading_duration_reward']) {
-      final task = tasks.singleWhere((item) => item.id == taskId);
+    final watchVideo = tasks.singleWhere((item) => item.id == 'watch_video');
+    expect(watchVideo.action.type, WelfareTaskActionType.claimReward);
+    expect(watchVideo.action.label, '看视频');
+    expect(watchVideo.action.showVideoIcon, isTrue);
+    expect(
+      watchVideo.timelineNodes.take(3).every((node) => node.isReached),
+      isTrue,
+    );
+    expect(watchVideo.timelineNodes[3].isActive, isTrue);
+    expect(
+      watchVideo.timelineNodes.skip(4).every((node) => !node.isActive),
+      isTrue,
+    );
 
-      expect(task.action.type, WelfareTaskActionType.claimReward);
-      expect(task.action.label, '去领取');
-      expect(
-        task.timelineNodes.take(3).every((node) => node.isReached),
-        isTrue,
-      );
-      expect(task.timelineNodes[3].isActive, isTrue);
-      expect(
-        task.timelineNodes.skip(4).every((node) => !node.isActive),
-        isTrue,
-      );
-    }
+    final reading = tasks.singleWhere(
+      (item) => item.id == 'reading_duration_reward',
+    );
+    expect(reading.action.type, WelfareTaskActionType.claimReward);
+    expect(reading.action.label, '去领取');
+    expect(reading.action.showVideoIcon, isFalse);
+    expect(
+      reading.timelineNodes.take(3).every((node) => node.isReached),
+      isTrue,
+    );
+    expect(reading.timelineNodes[3].isActive, isTrue);
+    expect(
+      reading.timelineNodes.skip(4).every((node) => !node.isActive),
+      isTrue,
+    );
   });
 }

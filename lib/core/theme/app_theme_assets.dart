@@ -38,26 +38,64 @@ abstract final class AppThemeAssets {
   /// 切图到位后改为：`'assets/images/tab_top/$_pack/top_texture.png'`。
   static const String? tabTopTexture = null;
 
-  static const String navBookstoreInactive =
-      'assets/icons/nav/$_pack/bookstore_inactive.svg';
-  static const String navBookstoreActive =
-      'assets/icons/nav/$_pack/bookstore_active.svg';
-  static const String navWelfareInactive =
-      'assets/icons/nav/$_pack/welfare_inactive.svg';
-  static const String navWelfareActive =
-      'assets/icons/nav/$_pack/welfare_active.svg';
-  static const String navPartnerInactive =
-      'assets/icons/nav/$_pack/partner_inactive.svg';
-  static const String navPartnerActive =
-      'assets/icons/nav/$_pack/partner_active.svg';
-  static const String navBookshelfInactive =
-      'assets/icons/nav/$_pack/bookshelf_inactive.svg';
-  static const String navBookshelfActive =
-      'assets/icons/nav/$_pack/bookshelf_active.svg';
-  static const String navProfileInactive =
-      'assets/icons/nav/$_pack/profile_inactive.svg';
-  static const String navProfileActive =
-      'assets/icons/nav/$_pack/profile_active.svg';
+  static const String navBookstoreInactive = _pack == AppThemeId.yellowLight
+      ? 'assets/images/bottom_nav/yellow_light/bookcity_nor.webp'
+      : 'assets/icons/nav/$_pack/bookstore_inactive.svg';
+  static const String? navBookstoreActive = _pack == AppThemeId.yellowLight
+      ? null
+      : 'assets/icons/nav/$_pack/bookstore_active.svg';
+  static const String? navBookstoreSelectedLottie = _pack == AppThemeId.yellowLight
+      ? 'assets/lottie/bottom_nav/yellow_light/book_city/book_city.json'
+      : null;
+
+  static const String navWelfareInactive = _pack == AppThemeId.yellowLight
+      ? 'assets/images/bottom_nav/yellow_light/welfare_nor.webp'
+      : 'assets/icons/nav/$_pack/welfare_inactive.svg';
+  static const String? navWelfareActive = _pack == AppThemeId.yellowLight
+      ? null
+      : 'assets/icons/nav/$_pack/welfare_active.svg';
+  static const String? navWelfareSelectedLottie = _pack == AppThemeId.yellowLight
+      ? 'assets/lottie/bottom_nav/yellow_light/welfare/data.json'
+      : null;
+
+  /// 福利「签到」态静态 / Lottie（素材已入库；当前底栏默认仍用福利礼盒，待产品接线）。
+  static const String? navWelfareSignInactive = _pack == AppThemeId.yellowLight
+      ? 'assets/images/bottom_nav/yellow_light/sign_nor.webp'
+      : null;
+  static const String? navWelfareSignSelectedLottie =
+      _pack == AppThemeId.yellowLight
+      ? 'assets/lottie/bottom_nav/yellow_light/sign/data.json'
+      : null;
+
+  static const String navPartnerInactive = _pack == AppThemeId.yellowLight
+      ? 'assets/images/bottom_nav/yellow_light/partner_nor.webp'
+      : 'assets/icons/nav/$_pack/partner_inactive.svg';
+  static const String? navPartnerActive = _pack == AppThemeId.yellowLight
+      ? null
+      : 'assets/icons/nav/$_pack/partner_active.svg';
+  static const String? navPartnerSelectedLottie = _pack == AppThemeId.yellowLight
+      ? 'assets/lottie/bottom_nav/yellow_light/partner/data.json'
+      : null;
+
+  static const String navBookshelfInactive = _pack == AppThemeId.yellowLight
+      ? 'assets/images/bottom_nav/yellow_light/bookcase_nor.webp'
+      : 'assets/icons/nav/$_pack/bookshelf_inactive.svg';
+  static const String? navBookshelfActive = _pack == AppThemeId.yellowLight
+      ? null
+      : 'assets/icons/nav/$_pack/bookshelf_active.svg';
+  static const String? navBookshelfSelectedLottie = _pack == AppThemeId.yellowLight
+      ? 'assets/lottie/bottom_nav/yellow_light/bookcase/bookcase.json'
+      : null;
+
+  static const String navProfileInactive = _pack == AppThemeId.yellowLight
+      ? 'assets/images/bottom_nav/yellow_light/mine_nor.webp'
+      : 'assets/icons/nav/$_pack/profile_inactive.svg';
+  static const String? navProfileActive = _pack == AppThemeId.yellowLight
+      ? null
+      : 'assets/icons/nav/$_pack/profile_active.svg';
+  static const String? navProfileSelectedLottie = _pack == AppThemeId.yellowLight
+      ? 'assets/lottie/bottom_nav/yellow_light/mine/mine.json'
+      : null;
 
   // ══════════════════════════════════════════════════════════════
   // 登录页 / 我的页 · 头图
@@ -93,4 +131,8 @@ abstract final class AppThemeAssets {
       'assets/icons/book_detail/shared/promo_reward_tag.svg';
   static const String bookDetailRefresh =
       'assets/icons/book_detail/shared/refresh.svg';
+  static const String bookDetailLike =
+      'assets/icons/book_detail/shared/like.svg';
+  static const String bookDetailLikeActive =
+      'assets/icons/book_detail/shared/like_active.svg';
 }

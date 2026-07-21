@@ -2,6 +2,743 @@
 
 > 研发知识库与工程变更日志，**追加式**记录，勿覆盖历史。每次开发按「日期 / 新增 / 修改 / 删除 / 影响模块 / Breaking Changes」登记。
 
+## 2026-07-21（新评论高亮延长至 5s）
+
+### 修改
+- `AppDurations.discussionNewCommentHighlight`：3s → 5s。
+
+### 影响模块
+- 书籍详情 · 讨论 Tab；`docs/06` / `10`；`design-system`。
+
+### Breaking Changes
+- 无。
+
+## 2026-07-21（新评论高亮再淡至粉 8%）
+
+### 修改
+- `discussionNewCommentHighlight`：`pink75` → `pink500Alpha08`（品牌粉 8% 叠加）。
+
+### 影响模块
+- 书籍详情 · 讨论 Tab；`docs/06` / `10`；`design-system`。
+
+### Breaking Changes
+- 无。
+
+## 2026-07-21（新评论高亮再淡至 pink75）
+
+### 修改
+- `discussionNewCommentHighlight`：`pink100Soft` → `pink75`（`#F8E6ED`），红感更轻。
+
+### 影响模块
+- 书籍详情 · 讨论 Tab；`docs/06` / `10`；`design-system`。
+
+### Breaking Changes
+- 无。
+
+## 2026-07-21（修复新评论通栏负 margin 红屏）
+
+### 修改
+- 通栏高亮改为 `Stack` + `Positioned` 向两侧伸出；不再使用负 margin（`Container`/`AnimatedContainer` 断言会整页 Error 红屏）。
+
+### 影响模块
+- 书籍详情 · 讨论 Tab。
+
+### Breaking Changes
+- 无。
+
+## 2026-07-21（新评论高亮改淡红通栏）
+
+### 修改
+- `discussionNewCommentHighlight` → `pink100Soft` 淡红（全主题恒定）。
+- 高亮区域通栏贴页边（负 margin 抵消 `bookDetailContentHInset`），去掉圆角。
+
+### 影响模块
+- 书籍详情 · 讨论 Tab；`docs/06` / `10`；`design-system`。
+
+### Breaking Changes
+- 无。
+
+## 2026-07-21（新评论高亮加强为强调色 40%）
+
+### 修改
+- `discussionNewCommentHighlight`：`primarySoft`（4%）→ `accentDisabledFill`（强调色 40%），淡黄/浅粉更易辨认。
+
+### 影响模块
+- 书籍详情 · 讨论 Tab；`docs/06`；`design-system`。
+
+### Breaking Changes
+- 无。
+
+## 2026-07-21（评论成功后滚入可视区）
+
+### 新增
+- 新评论高亮出现后，经 `GlobalKey` + `Scrollable.ensureVisible` 自动滚入可视区（对齐 `bookDetailNewCommentScrollAlignment` 0.2，时长 `AppDurations.normal`）。
+
+### 影响模块
+- 书籍详情 · 讨论 Tab；`docs/06` / `10`。
+
+### Breaking Changes
+- 无。
+
+## 2026-07-21（写评论插入列表 + 淡黄高亮 3s）
+
+### 新增
+- `submitDiscussionComment`：评论插到作者发言下方；`highlightedDiscussionPostId` + `discussionNewCommentHighlight` 底色高亮。
+- `AppDurations.discussionNewCommentHighlight`（3s）后高亮淡出。
+
+### 修改
+- 写评论发送成功 Toast 文案统一「发送成功」。
+
+### 影响模块
+- 书籍详情 · 讨论 Tab；`docs/06` / `10`；`design-system`。
+
+### Breaking Changes
+- 无。
+
+## 2026-07-21（写评论光标改主文字色）
+
+### 修改
+- 写评论 / 快速回复输入光标：`searchCursor`（亮黄）→ `textOnDark`（浅黑 / 深白），避免浅灰输入面上过抢。
+
+### 影响模块
+- 书籍详情 · 写评论 / 快速回复弹层。
+
+### Breaking Changes
+- 无。
+
+## 2026-07-21（写评论输入框改弱灰面）
+
+### 修改
+- 写评论 / 快速回复输入区：`surfaceCard` → `surfaceSoft` + `borderGlass` 细描边（对齐帮助反馈输入，白底弹窗可见灰框）。
+
+### 影响模块
+- 书籍详情 · 写评论 / 快速回复弹层。
+
+### Breaking Changes
+- 无。
+
+## 2026-07-21（写评论 FAB 恢复 @3x 原始逻辑尺寸）
+
+### 修改
+- `bookDetailWriteCommentFabSize`：64 → 80（资源 240px @3x）。
+
+### 影响模块
+- 书籍详情 · 讨论写评论悬浮钮。
+
+### Breaking Changes
+- 无。
+
+## 2026-07-21（讨论写评论悬浮钮）
+
+### 新增
+- `assets/images/book_detail/write_comment_fab.png` + `AppSharedAssets.bookDetailWriteCommentFab`（三主题共用）。
+- L3 `BookDetailWriteCommentFab`：讨论 Tab 右下角；有促销条叠上方，无则距底栏 12；贴右。
+- `bookDetailWriteCommentFabSize` / `bookDetailWriteCommentFabBottomGap`。
+
+### 修改
+- 快速回复弹层支持自定义 `title`（写评论复用）。
+
+### 影响模块
+- 书籍详情 · 讨论 Tab；`docs/06` / `09`；`design-system` 尺寸索引。
+
+### Breaking Changes
+- 无。
+
+## 2026-07-21（讨论帖通栏对齐筛选条）
+
+### 修改
+- 讨论列表项去掉额外水平 `xs` 内边距，与上方筛选/排序条同宽通栏。
+
+### 影响模块
+- 书籍详情 · 讨论 Tab。
+
+### Breaking Changes
+- 无。
+
+## 2026-07-21（讨论双标间距收至 xxs）
+
+### 修改
+- 讨论帖置顶/精选等行内标签间距：`md`(16) → `xxs`(4)。
+
+### 影响模块
+- 书籍详情 · 讨论列表。
+
+### Breaking Changes
+- 无。
+
+## 2026-07-21（更新时间线最新黑字 / 历史灰字）
+
+### 修改
+- 书详情「更新」时间线：最新节点日期/圆点/正文改 `textPrimary`（浅黄等浅色主题为黑）；历史条目统一灰字灰点。
+- `bookDetailUpdateHighlight`（橙金）仅留给账本正向数额；账本改直接引用该 token。
+
+### 影响模块
+- 书籍详情 · 更新 Tab；货币账本；`design-system` 色表。
+
+### Breaking Changes
+- 无。
+
+## 2026-07-21（继续阅读与待领取气泡间距 8px）
+
+### 修改
+- `AppBottomNav.pendingClaimBadgeClearance` 收敛为 `AppSpacing.xs`（规范 8px），浮层底与气泡顶相距一档常用小间距。
+
+### 影响模块
+- 书城继续阅读浮层、底栏待领取气泡避让。
+
+### Breaking Changes
+- 无。
+
+## 2026-07-21（详情目录/角色尾随操作统一）
+
+### 新增
+- L2 `SectionTrailingAction`：区块右侧文案 + 右箭头。
+- `sectionTrailingAction` 字样式、`sectionTrailingIconSize`（12，既有箭头尺寸别名收敛）。
+
+### 修改
+- `SectionHeader` 复用 `SectionTrailingAction`，并支持 `titleSuffix`。
+- 详情「目录」「角色介绍」均走 `SectionHeader`，去掉各自手写文案+箭头。
+
+### 影响模块
+- `shared/components`；书籍详情 · 详情 Tab；`design-system` / `docs/05` / `docs/06`。
+
+### Breaking Changes
+- 无。
+
+## 2026-07-21（继续阅读避让待领取气泡）
+
+### 新增
+- `MainTabPendingClaimScope`：主 Tab 待领取气泡可见性，供书城浮层订阅。
+- `AppBottomNav.pendingClaimBadgeClearance`：气泡上凸净空（既有 spacing / 字号组合）。
+
+### 修改
+- 书城「继续阅读」在气泡可见时 `AnimatedPositioned` 上移避让，气泡消失后归位（与气泡渐隐同 `AppDurations.normal`）。
+
+### 影响模块
+- 主 Tab Shell、底栏、书城继续阅读浮层。
+
+### Breaking Changes
+- 无。
+
+## 2026-07-21（讨论筛选改纯文字 + 最新最热）
+
+### 新增
+- `BookDiscussionSort`（最新 / 最热）与 cubit `switchDiscussionSort`。
+- `bookDetailDiscussionSortSwitchWidth`：右侧排序分段宽度。
+
+### 修改
+- 讨论 Tab 左侧筛选去掉面性胶囊，改分类同款纯文字（选中黑字）。
+- 右侧接入「最新 / 最热」`AppSegmentedSwitch`；最热按点赞排序（置顶优先）。
+- `bookDetailDiscussionFilterSelected/Unselected` 别名对齐 `categoryFilter*`。
+
+### 影响模块
+- 书籍详情 · 讨论 Tab；`design-system` 筛选说明。
+
+### Breaking Changes
+- 无。
+
+## 2026-07-21（详情区块标题对齐模块标题）
+
+### 修改
+- `bookDetailBlockTitle` 对齐 `sectionTitleDark` / `SectionHeader`：`xl` + 数字字体 + `semibold`（原 `lg` medium）。
+- 作品简介 / 目录 / 角色介绍与下方「猜你喜欢」等模块标题同档。
+
+### 影响模块
+- 书籍详情 · 详情 Tab。
+
+### Breaking Changes
+- 无。
+
+## 2026-07-21（详情区块标题字档统一）
+
+### 修改
+- 「角色介绍」标题由 `bookDetailSectionTitle`（`xl` + 数字字体）改为与「作品简介」「目录」同用 `bookDetailBlockTitle`。
+
+### 影响模块
+- 书籍详情 · 详情 Tab。
+
+### Breaking Changes
+- 无。
+
+## 2026-07-21（详情区块分隔线 · 间距 lg）
+
+### 修改
+- 简介 ↔ 目录分隔占位：`md`(16) → `xxl`(48)。
+- 目录 ↔ 角色介绍：由 `SizedBox(bookDetailSectionGap)` 改为同款 `Divider`（高 `xxl`）。
+
+### 影响模块
+- 书籍详情 · 详情 Tab。
+
+### Breaking Changes
+- 无。
+
+## 2026-07-21（简介与目录间距 16）
+
+### 修改
+- 作品简介 ↔ 目录分隔线占位高：`hairline` → `AppSpacing.md`（16），细线仍居中。
+
+### 影响模块
+- 书籍详情 · 详情 Tab。
+
+### Breaking Changes
+- 无。
+
+## 2026-07-21（讨论置顶/精选渐变双标）
+
+### 新增
+- `BookDiscussionPostBadge`（置顶/精选/公告）与 `badges` 列表；`BookDiscussionContentTag`。
+- 渐变 token：`discussionPinnedTagGradient*`（`orange550`→`rose500`）、`discussionFeaturedTagGradient*`（`pink200`→`purple400`）、`discussionContentTagText`。
+
+### 修改
+- 正文前可同时展示置顶+精选（行内段落开头）；公告仍弱面底。Mock 首帖演示双标。
+- 「作者」红标水平 padding `xs`(8) → `xxs`(4)。
+- 置顶/精选与作者标签统一：内边距 `xxsHalf × xxsHalf`、圆角 `AppRadius.xs`；标签与标签/正文间距 `md`(16)。
+
+### 删除
+- 单值 `highlightTag` 字段。
+
+### 影响模块
+- 书籍详情讨论区。
+
+### Breaking Changes
+- `BookDiscussionPost.highlightTag` → `badges`（接入方需改映射）。
+
+## 2026-07-21（讨论区作者红标）
+
+### 新增
+- `BookDiscussionPost` / `BookDiscussionReply.isAuthor`；`discussionAuthorBadgeBackground/Text`（=`error` / `white100`）。
+- L3 `BookDiscussionAuthorBadge`：昵称旁红底「作者」。
+
+### 修改
+- 讨论列表 / 书评详情在 `isAuthor` 时展示作者标；Mock 首帖演示。
+
+### 影响模块
+- 书籍详情讨论、书评详情。
+
+### Breaking Changes
+- 无（消息页黄底 `authorBadge*` 不变）。
+
+## 2026-07-21（讨论正文与昵称左对齐）
+
+### 修改
+- 讨论帖改为「头像 | 名称+正文」同行布局，正文与昵称同列左对齐。
+
+### 删除
+- `bookDetailDiscussionBodyIndent`（原 40 导致正文比昵称偏右）。
+
+### 影响模块
+- 书籍详情 · 讨论列表。
+
+### Breaking Changes
+- 无。
+
+## 2026-07-21（讨论点赞改 SVG）
+
+### 新增
+- `assets/icons/book_detail/shared/like.svg` / `like_active.svg`；`AppThemeAssets.bookDetailLike` / `bookDetailLikeActive`。
+- L3 `BookDiscussionLikeIcon`：讨论列表与书评详情共用。
+
+### 修改
+- 讨论区点赞由 Material `thumb_up` 改为上述 SVG（未赞线稿染色、已赞橙填色稿不染色）。
+
+### 影响模块
+- 书籍详情讨论列表、书评详情。
+
+### Breaking Changes
+- 无。
+
+## 2026-07-21（讨论筛选/精选标签底色可见）
+
+### 新增
+- `discussionFilterUnselectedBackground` / `discussionTagBackground`：别名 `surfaceSoft`（浅色白页上可见弱面）。
+
+### 修改
+- 讨论未选筛选芯片由透明底改为弱面底；帖内「精选」等标签由 `navBarBackground`（浅色纯白隐形）改接 `discussionTagBackground`。
+
+### 影响模块
+- 书籍详情 · 讨论区。
+
+### Breaking Changes
+- 无（深色态由无底改为弱面胶囊，视觉略加强调）。
+
+## 2026-07-21（书详情目录去卡片 · 简介分隔线）
+
+### 修改
+- `BookDetailCatalogEntry`：去掉玻璃卡片底、圆角与内外边距，改为纯横排入口。
+- 作品简介与目录之间改用 `AppColors.divider` 细线分隔（原 `bookDetailSectionGap`）。
+
+### 删除
+- 未再使用的 `bookDetailCatalogPaddingH/V`、`AppRadius.bookDetailCatalog`。
+
+### 影响模块
+- 书籍详情 · 详情 Tab。
+
+### Breaking Changes
+- 无。
+
+## 2026-07-21（书详情简介「全部」系统红）
+
+### 修改
+- `BookDetailIntro` 折叠尾缀：`...查看更多` → `...全部`，字色 `AppColors.error`（系统红）；字号与简介正文同档（`lg`）。
+
+### 影响模块
+- 书籍详情 · 作品简介。
+
+### Breaking Changes
+- 无。
+
+## 2026-07-21（分段 Tab 选中白底黑字无描边）
+
+### 新增
+- `segmentedSwitchSelectedFill` / `segmentedSwitchSelectedBorder` / `segmentedSwitchSelectedText`：`AppSegmentedSwitch` 专用选中态（浅白底+主文字+无描边；深色 `surface`+主文字），与年龄选项 `segmentedSelected*` 解耦。
+
+### 修改
+- `AppSegmentedSwitch` 与书详情 / 榜单频道选中文案改接上述 token。
+
+### 影响模块
+- `AppSegmentedSwitch`、书详情 Tab、榜单频道分段。
+
+### Breaking Changes
+- 无（年龄选项选中样式不变）。
+
+## 2026-07-21（分段 Tab 轨道极浅底）
+
+### 修改
+- `AppSegmentedSwitch` 轨道填充：`surfaceCard`（浅色纯白）→ `surfaceSoft`（极浅弱面 `#F8F7FC` / 深 `neutralCool920`）；书详情 / 榜单等全部调用点同步。
+
+### 影响模块
+- `AppSegmentedSwitch`（书详情 Tab、榜单频道等）。
+
+### Breaking Changes
+- 无。
+
+## 2026-07-21（书籍详情页大背景纯白）
+
+### 新增
+- `AppColors.bookDetailPageBackground`：浅色 `white100` / 深色 `backgroundDark`（与分类排行页底同模式）。
+
+### 修改
+- 书详情 / 加载失败 / 书评详情 Scaffold 底色改接该 token（原 `backgroundDark` 在浅色为壳灰）。
+
+### 影响模块
+- 书籍详情、书评详情。
+
+### Breaking Changes
+- 无。
+
+## 2026-07-21（每日签到弹窗统一签到装饰）
+
+### 修改
+- 抽出 `check_in_dialog_decor.dart`（顶边条 / 侧纹 / 外飘星 / 标题星），`DailyCheckInDialog` 与 `CheckInSuccessDialog` 共用。
+- 每日签到提醒弹窗接入与签到成功一致的装饰样式。
+
+### 影响模块
+- 福利签到弹窗（每日签到、签到成功）。
+
+### Breaking Changes
+- 无。
+
+## 2026-07-21（签到成功弹窗外飘四角星）
+
+### 新增
+- `assets/images/welfare/check_in_success_sparkle.png` → `AppSharedAssets.checkInSuccessSparkle`。
+- 尺寸/透明度 token：`welfareCheckInSuccessSparkleSizeLg/Md/Sm`（22/16/10）、`welfareCheckInSuccessSparkleOpacity`（0.85）。
+
+### 修改
+- `CheckInSuccessDialog`：参考图布局——左中 1 星、右上大+小 2 星（卡片外侧），标题旁 2 枚小星；染 `primary`。
+
+### 影响模块
+- 签到成功弹窗装饰。
+
+### Breaking Changes
+- 无。
+
+## 2026-07-21（签到成功顶条 10px · 侧纹降透明）
+
+### 修改
+- 顶边主色条高 → `welfareCheckInSuccessTopAccentHeight` 10。
+- 两侧斜纹整体不透明度 → `welfareCheckInSuccessSideStripeOpacity` 0.45。
+
+### 影响模块
+- 签到成功弹窗装饰。
+
+### Breaking Changes
+- 无。
+
+## 2026-07-21（签到成功弹窗装饰可见性修复）
+
+### 修改
+- 侧边斜纹源图为浅黄+透明，白底几乎不可见：非透明像素 `ColorFilter.srcIn` 染为 `primary`；宽 `xs`→`sm`，`Row` 用 `stretch` 避免高度为 0。
+- 顶边黄线高 `xxsHalf`(2)→`xs`(8)；装饰叠到内容层之上（`IgnorePointer`）。
+
+### 影响模块
+- 签到成功弹窗装饰。
+
+### Breaking Changes
+- 无。
+
+## 2026-07-21（签到成功弹窗两侧条纹 + 顶边黄线）
+
+### 新增
+- `assets/images/welfare/check_in_success_side_stripe.png`（36×804 黑/浅黄斜纹）→ `AppSharedAssets.checkInSuccessSideStripe`。
+
+### 修改
+- `CheckInSuccessDialog`：面板内左右贴边斜条纹（宽 `AppSpacing.xs`，自上而下渐隐约半高）+ 顶边 `AppColors.primary` 细线（高 `AppSpacing.xxsHalf`）；VIP 按钮拆 `part` 控体积。
+
+### 影响模块
+- 福利签到成功弹窗。
+
+### Breaking Changes
+- 无。
+
+## 2026-07-21（浅色次按钮极轻灰底）
+
+### 修改
+- `AppButton` `secondary` 底色：浅色主题（`yellow_light` / `pink_light`）由纯白 `surface` 改为 `surfaceSoft`（`#F8F7FC` 极轻灰），白底弹窗上可见；`yellow_dark` 仍用 `surface`。
+
+### 影响模块
+- 全站 `AppButton(secondary)`（含签到成功「看视频再领」、确认弹窗取消等）。
+
+### Breaking Changes
+- 无。
+
+## 2026-07-21（书架今日阅读横幅吸顶 · 三主题）
+
+### 修改
+- `DailyReadingBanner` 移入书架页 `AppBlurredChromeBar`，与顶栏一并固定；滚动区仅预留 Chrome 总高。
+- 横幅高度收敛为 `bookshelfClaimWelfareCtaHeight` 32（与 small CTA + 16 图标一致）；文案区垂直居中对齐「领福利」。
+- 三主题（`yellow_dark` / `pink_light` / `yellow_light`）共用同一实现。
+
+### 影响模块
+- 书架 Tab / 阅读历史 Tab 顶栏 Chrome、`DailyReadingBanner`。
+
+### Breaking Changes
+- 无。
+
+## 2026-07-21（福利待领取气泡下移）
+
+### 修改
+- 底栏福利「{n}能量待领取」气泡 `Positioned.top`：`-AppSpacing.lg`（-24）→ `-AppSpacing.xs`（-8），更贴近福利图标。
+
+### 影响模块
+- `AppBottomNav` 待领取气泡。
+
+### Breaking Changes
+- 无。
+
+## 2026-07-21（书架横幅→书格间距略拉开）
+
+### 修改
+- `bookshelfBannerToGridGap`：4 → 12（顶栏→横幅仍 4）。
+
+### 影响模块
+- 书架 Tab。
+
+### Breaking Changes
+- 无。
+
+## 2026-07-21（书架横幅去固定高 + 间距再收）
+
+### 修改
+- `DailyReadingBanner` 去掉固定高 54（去小熊后多余留白）；删除 `bookshelfReadingBannerHeight`。
+- `bookshelfHeaderToBannerGap` / `bookshelfBannerToGridGap`：均为 4。
+
+### 影响模块
+- 书架 Tab 竖向节奏。
+
+### Breaking Changes
+- 无。
+
+## 2026-07-21（书架顶栏/横幅与书格间距再收紧）
+
+### 修改
+- `bookshelfHeaderToBannerGap`：12 → 8；`bookshelfBannerToGridGap`：16 → 12。
+
+### 影响模块
+- 书架 Tab 滚动内容区竖向节奏。
+
+### Breaking Changes
+- 无。
+
+## 2026-07-21（福利任务倒计时未归零按钮暂未开启）
+
+### 修改
+- `WelfareTaskRow`：描述高亮为 `HH:MM:SS` 且剩余 > 0 时，右侧按钮 `onPressed=null`（全局禁用样式），文案「暂未开启」；归零后恢复原动作。
+
+### 影响模块
+- 福利任务列表（吃饭签到 / 睡觉打卡等）；Pages 说明。
+
+### Breaking Changes
+- 无。
+
+## 2026-07-21（yellow_light 底栏图标略放大）
+
+### 新增
+- `bottomNavLottieIconSize` 32、`bottomNavLottieItemHeight` 52、`bottomNavLottieCapsuleHeight` 54：浅黄 Lottie / `*_nor.webp` 显示档（画布留白补偿，避免 FittedBox 回缩）。
+
+### 修改
+- `AppNavIcon` / `AppBottomNav`：有 `selectedLottieAsset` 时用上述尺寸；其它主题仍 26 / 42。
+
+### 影响模块
+- 底栏；Design Token / 设计系统。
+
+### Breaking Changes
+- 无。
+
+## 2026-07-21（修复 yellow_light 底栏 Lottie 未打包）
+
+### 修改
+- `pubspec.yaml` 补登记 `assets/lottie/bottom_nav/yellow_light/**` 各子目录（本工程资源目录声明非深层递归，仅写 `assets/lottie/` 时子路径 JSON 不会进包，选中态会显示 Unable to load）。
+
+### 影响模块
+- 底栏 Lottie 资源打包。
+
+### Breaking Changes
+- 无。
+
+## 2026-07-21（yellow_light 底栏 Lottie 切换动效）
+
+### 新增
+- `assets/lottie/bottom_nav/yellow_light/`：书城 / 福利 / 书架 / 我的（及待接线的 sign、partner、back_to_top）Lottie；JSON 与 `images/` 相对位置保持素材原样（`mine/img_0.webp` 纠正到 `mine/images/`）。
+- `assets/images/bottom_nav/yellow_light/*_nor.webp`：未选中静态图标。
+- `AppThemeAssets.nav*SelectedLottie`（及 sign 预留语义）；`MainTabItem.selectedLottieAsset`。
+
+### 修改
+- `AppNavIcon`：有 Lottie 时选中播一次停末帧、未选中静态图；其它主题仍 SVG + 缩放。
+- `AppLottie`：支持 `controller` / `onLoaded`。
+
+### 影响模块
+- 底栏；Assets / Animation / Theme / Components / 设计系统。
+
+### Breaking Changes
+- 无。
+
+## 2026-07-21（书架页随滚白色垂直渐变底）
+
+### 新增
+- `bookshelfPageGradientStart` / `bookshelfPageGradientEnd`（`white100` → `white00`）、`bookshelfPageGradientHeight`（500）。
+- L3 `BookshelfPageScrollGradient`：叠在滚动内容下并随 `ScrollController` 同滚。
+
+### 修改
+- `bookshelfPageBackground` 改回主题壳基色（`backgroundDark`），不再整页纯白。
+
+### 影响模块
+- 书架 Tab；Theme / Design Token / Pages / 设计系统。
+
+### Breaking Changes
+- 无。
+
+## 2026-07-21（书架顶栏/横幅与书格间距收紧）
+
+### 修改
+- `bookshelfHeaderToBannerGap`：18 → 12；`bookshelfBannerToGridGap`：24 → 16。
+
+### 影响模块
+- 书架 Tab 滚动内容区竖向节奏；设计系统 / Pages 说明。
+
+### Breaking Changes
+- 无。
+
+## 2026-07-21（浅色主题顶栏默认白底）
+
+### 修改
+- `AppPageChrome`：浅色主题（`pink_light` / `yellow_light`）顶栏默认启用 `topChromeBarScrolledScrim` 纯白实底；深色主题仍仅在内容滚入后启用毛玻璃。
+
+### 影响模块
+- 书城等使用 `AppPageChrome` 的页面顶栏；设计系统 / Theme 说明。
+
+### Breaking Changes
+- 无。
+
+## 2026-07-21（限时免费区块增加 FREE 彩头）
+
+### 新增
+- `assets/images/bookstore/shared/limited_free_header_bg.png`：限时免费顶部浅紫 FREE 水印渐隐底。
+- `AppSharedAssets.limitedFreeHeaderBg`、`AppSizes.limitedFreeHeaderBgAspectRatio`（1024/236）。
+
+### 修改
+- `LimitedFreeSection` 卡片顶部叠彩头，标题/倒计时叠在其上；三主题共用。
+
+### 影响模块
+- 书城推荐页「限时免费」；资源与设计系统说明。
+
+### Breaking Changes
+- 无。
+
+## 2026-07-21（书架页白底 / 去小熊与卡面填充 / 分钟标红）
+
+### 修改
+- 书架整页底改为 `bookshelfPageBackground`（浅色纯白，与分类/排行一致）。
+- 今日阅读横幅去掉小熊插画与底填充，文案与「领福利」同行对齐；分钟数走 `bookshelfReadingMinutes`（热销红）。
+- 书架 / 阅读历史书卡关闭卡面底填充。
+- 清理已无用小熊插画尺寸 token 与横幅圆角 token。
+
+### 影响模块
+- 书架 Tab；`AppColors` / `AppTextStyles` / `AppSizes`；设计系统说明。
+
+### Breaking Changes
+- 无。
+
+## 2026-07-21（浅黄弹窗统一淡黄彩头）
+
+### 新增
+- `AppDialogTopTexture`：弹窗顶部彩头共享层；`dialogTopHeaderGradientStart/End`（浅黄 40% 黄 → 透明，其余主题透明）。
+
+### 修改
+- `AppConfirmDialog` 与各自定义弹窗（规则/签到/充值/货币说明/新手信息/角色说明等）统一叠彩头；色值较福利页头更淡。
+
+### 影响模块
+- 全局弹窗壳；`AppColors` / 设计系统说明。
+
+### Breaking Changes
+- 无。
+
+## 2026-07-21（浅黄分段选中描边与年龄选项统一）
+
+### 修改
+- `segmentedSelectedBorder`：`yellow_light` 取 `primary` 主黄描边，`yellow_dark` / `pink_light` 保持透明；`ageRangeSelectedBorder` 收敛为其别名。
+- `AppSegmentedSwitch` 选中滑块描边宽度改为 `borderWidthEmphasis`，与 `AgeRangeOption` 一致（榜单频道、书详情 Tab 等共用）。
+
+### 影响模块
+- 全局分段控件与年龄选项；设计系统 / token 文档同步。
+
+### Breaking Changes
+- 无。
+
+## 2026-07-21（排行榜书行补封面角标）
+
+### 修改
+- `RankingBookRow` 透传 `coverTag`，与分类/搜索一致展示右上状态角标。
+- 榜单 Mock 补齐 `coverTag` / `coverBottomBadge`（完结榜统一「完结」，追更/飙升偏「更新」）。
+
+### 影响模块
+- 排行榜 Tab / 榜单详情页书行。
+
+### Breaking Changes
+- 无。
+
+## 2026-07-21（分类页筛选与书单间距加大）
+
+### 修改
+- `categoryFilterSectionVerticalPadding`：16 → 24，拉大筛选末行与书单首行间距。
+
+### 影响模块
+- 分类 Tab / 分类页；`AppSizes` 与设计系统说明。
+
+### Breaking Changes
+- 无。
+
+## 2026-07-21（看视频任务 CTA 文案与图标）
+
+### 修改
+- 「看视频得奖励」右侧按钮文案由「去领取」改为「看视频」，并开启前置视频图标（`task_video.svg`）。
+
+### 影响模块
+- 福利页任务列表 mock 数据；`WelfareTaskActionButton` 既有 `showVideoIcon` 能力。
+
+### Breaking Changes
+- 无。
+
 ## 2026-07-20（启动页增加底部品牌 Logo）
 
 ### 新增

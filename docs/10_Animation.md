@@ -13,7 +13,7 @@ flowchart LR
   anim --> hero[Hero 共享元素]
   anim --> transition[Transition 转场]
   anim --> shader[Shader 着色器]
-  anim --> lottie["Lottie (待接入)"]
+  anim --> lottie["Lottie (底栏 yellow_light)"]
 ```
 
 ## 1. Implicit（隐式动画）
@@ -25,7 +25,7 @@ flowchart LR
 | 数字滚动 | `AnimatedCountText`（[animated_count_text.dart](../lib/shared/widgets/animated_count_text.dart)） | 数值变化从旧值滚到新值，时长 `numberRoll` |
 | Tab 文字过渡 | `AppAnimatedTabLabel`（[app_animated_tab_label.dart](../lib/shared/components/app_animated_tab_label.dart)） | 选中/未选中样式插值；点击切换仅 from/to 两端交叉过渡（不扫过中间索引），跟手滑动仍按连续进度插值 |
 | Tab 指示条 | `ElasticTabIndicator`（[elastic_tab_indicator.dart](../lib/shared/components/elastic_tab_indicator.dart)） | 平移 + 宽度拉伸回弹（§3.5 规范：弹性只作用于宽度恢复） |
-| 底部导航图标 | `AppNavIcon`（[app_nav_icon.dart](../lib/shared/widgets/app_nav_icon.dart)） | 选中缩放微动画 |
+| 底部导航图标 | `AppNavIcon`（[app_nav_icon.dart](../lib/shared/widgets/app_nav_icon.dart)） | `yellow_light`：选中播 Lottie 一次停末帧；其它主题：选中缩放微动画 |
 
 ## 2. Explicit / 脚本动画
 
@@ -56,6 +56,8 @@ flowchart LR
 |---|---|---|
 | 容器转换（卡片→全屏） | `AdvancedTransitionWrapper`（[advanced_transition_wrapper.dart](../lib/shared/widgets/advanced_transition_wrapper.dart)） | 基于 `animations` 包 `OpenContainer`，时长 `containerTransform`（welfare 充值详情） |
 | Tab 内容跟手切换 | `AppSwipeTabSwitcher`（[app_swipe_tab_switcher.dart](../lib/shared/components/app_swipe_tab_switcher.dart)） | PageView / 手势跟手，顶部 chrome 固定（§3.4 规范） |
+| 讨论新评论高亮 | 书详情讨论列表 `_DiscussionCard` | 发送后粉 8% 底 `discussionNewCommentHighlight`（`pink500Alpha08`）通栏无圆角，停留 `AppDurations.discussionNewCommentHighlight`（5s）后 `AnimatedContainer` 淡出 |
+| 讨论新评论滚入 | 书详情页 `_BookDetailView` | `highlightedDiscussionPostId` 变更后双帧 `ensureVisible`，时长 `AppDurations.normal`，对齐 `bookDetailNewCommentScrollAlignment` |
 
 ## 5. Shader（片元着色器）
 
@@ -64,10 +66,11 @@ flowchart LR
 | 极光背景 | `assets/shaders/aurora.frag` → `AuroraBackground`（[aurora_background.dart](../lib/shared/widgets/aurora_background.dart)） | GLSL 动画背景，失败回退静态渐变（partner / membership） |
 | 液态按钮 | `assets/shaders/liquid_button.frag` | 液态扫光按钮效果 |
 
-## 6. Lottie（待接入）
+## 6. Lottie
 
-- 封装组件 `AppLottie`（[app_lottie.dart](../lib/shared/components/app_lottie.dart)）已就绪，但当前**未被引用**，`assets/lottie/` 仅占位无 `.json`。
-- 接入：把 `.json` 放入 `assets/lottie/` 并登记 pubspec，再用 `AppLottie(asset: ...)`。
+- 底栏（仅 `yellow_light`）：资源见 [09_Assets.md](./09_Assets.md) §6；`AppNavIcon` 驱动选中播一次。
+- 封装组件 `AppLottie`（[app_lottie.dart](../lib/shared/components/app_lottie.dart)）支持循环播放或外部 `controller`。
+- 接入其它场景：把 `.json`（及同级 `images/`）放入 `assets/lottie/`，经 `AppThemeAssets` / `AppSharedAssets` 语义路径引用。
 
 ## 7. Rive
 

@@ -1,4 +1,6 @@
 import '../../../../core/domain/entities/book.dart';
+import '../../../../core/domain/entities/book_cover_bottom_badge.dart';
+import '../../../../core/domain/entities/book_cover_tag.dart';
 import '../../domain/entities/ranking_channel.dart';
 import '../../domain/entities/ranking_dimension.dart';
 import '../../domain/entities/ranking_page_content.dart';
@@ -69,15 +71,48 @@ class RankingMockDataSource implements RankingDataSource {
       for (var i = 0; i < _pageSize; i++)
         () {
           final templateIndex = (startIndex + i) % _templates.length;
+          final template = _templates[templateIndex];
           return Book(
             id: '${prefix}_${startIndex + i + 1}',
-            title: _templates[templateIndex].$1,
-            category: _templates[templateIndex].$2,
-            coverAsset: _templates[templateIndex].$3,
-            summary: _templates[templateIndex].$4,
+            title: template.$1,
+            category: template.$2,
+            coverAsset: template.$3,
+            summary: template.$4,
+            coverTag: _coverTagFor(dimension, startIndex + i),
+            coverBottomBadge: _coverBottomBadgeFor(startIndex + i),
           );
         }(),
     ];
+  }
+
+  /// 完结榜统一「完结」；追更/飙升偏「更新」；其余在三种状态间轮换。
+  BookCoverTag _coverTagFor(RankingDimension dimension, int index) {
+    if (dimension == RankingDimension.completed) {
+      return BookCoverTag.completed;
+    }
+    if (dimension == RankingDimension.following ||
+        dimension == RankingDimension.rising) {
+      return BookCoverTag.updated;
+    }
+    return switch (index % 3) {
+      0 => BookCoverTag.updated,
+      1 => BookCoverTag.completed,
+      _ => BookCoverTag.serializing,
+    };
+  }
+
+  BookCoverBottomBadge _coverBottomBadgeFor(int index) {
+    final popularity = index.isEven;
+    return BookCoverBottomBadge(
+      type: popularity
+          ? BookCoverBottomBadgeType.popularity
+          : BookCoverBottomBadgeType.promotion,
+      label: popularity
+          ? '${(index + 5) * 11}.0万'
+          : index % 4 == 1
+          ? '2.3万人在读'
+          : '连续更新15周',
+    );
   }
 
   /// (title, category, coverAsset, summary) 模板，循环复用本地封面资源。

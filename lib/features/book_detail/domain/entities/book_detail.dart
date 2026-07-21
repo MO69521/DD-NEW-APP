@@ -86,6 +86,7 @@ class BookDetail extends Equatable {
   BookDetail copyWith({
     String? title,
     String? coverAsset,
+    int? discussionCount,
     List<BookDiscussionPost>? discussionPosts,
     List<BookUpdateEntry>? updateEntries,
     List<BookCatalogChapter>? catalogChapters,
@@ -107,7 +108,7 @@ class BookDetail extends Equatable {
       wordCount: wordCount,
       intro: intro,
       serialStatus: serialStatus,
-      discussionCount: discussionCount,
+      discussionCount: discussionCount ?? this.discussionCount,
       discussionPosts: discussionPosts ?? this.discussionPosts,
       updateEntries: updateEntries ?? this.updateEntries,
       catalogChapters: catalogChapters ?? this.catalogChapters,

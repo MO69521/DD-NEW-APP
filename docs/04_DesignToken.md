@@ -39,7 +39,7 @@ flowchart TD
 | 类别 | 真源 | 示例 |
 |---|---|---|
 | 主题壳源色 | [app_brand_colors.dart](../lib/core/theme/app_brand_colors.dart) | 中性外壳 `backgroundDark`、`dialogBackground`、`bgTint*`（按 `isLightExperiment` 翻转）+ 强调身份 `accent`、`onAccent`、`accentText`（白底强调文字：黄系 `yellow700` / 粉浅 `pink600`）、`accentSoft04/08`、`accentDisabledFill`（按 `themeId` 选粉/黄） |
-| 全局语义色 | [app_colors.dart](../lib/core/theme/app_colors.dart) | `primary`、`onPrimary`、`surface`、`textPrimary/Secondary/Tertiary`、`border`、`divider`、`success/warning/error`、`overlayScrim80` |
+| 全局语义色 | [app_colors.dart](../lib/core/theme/app_colors.dart) | `primary`、`onPrimary`、`surface`、`textPrimary/Secondary/Tertiary`、`border`、`divider`、`success/warning/error`、`overlayScrim80`；讨论区筛选/标签/作者标/`discussionPinnedTagGradient*`/`discussionFeaturedTagGradient*`（均复用色板既有色） |
 | feature 语义色 | `app_welfare_colors` / `app_partner_colors` / `app_membership_colors` | 业务专属语义色 |
 | 文字样式 | `AppTextStyles`（[app_text_styles.dart](../lib/core/theme/app_text_styles.dart)） | `displayLarge`、`headlineMedium`、`titleMedium`、`bodyLarge`、`bodyMedium`、`caption*` 等组合样式 |
 | 圆角语义别名 | [app_radius.dart](../lib/core/theme/app_radius.dart) | `bookCover = xs`、`welfareCheckInSection = lg`、`membershipCta = xl` |
@@ -51,7 +51,7 @@ flowchart TD
 
 具体组件的 Figma 精确尺寸 / 内边距 / 模糊半径 / 比例，集中在 [app_sizes.dart](../lib/core/theme/app_sizes.dart)（约 760 行，按 feature 分组），以及部分圆角 Figma 精确值。
 
-示例：`topBarHeight44`、`tabTopTextureHeight120`、`bottomNavCapsuleWidth327`、`bookCoverGridAspectRatio`、`glassBlurSigma4`、`bookCoverTagBlurSigma8`、`chromeBarBlurSigma40`、`strongBlurSigma90`、`welfareCheckInMilestoneHeight70`、`membershipHeroHeight300`、`tapPressScale0.94` 等；部分由其它 token 推导（如 `rankingSegmentedHeight = outerPadding*2 + itemPaddingV*2 + 14`）。
+示例：`topBarHeight44`、`tabTopTextureHeight120`、`dialogTopTextureHeight` / `dialogTopHeaderGradientStart`（浅黄弹窗 40% 黄彩头）、`bottomNavCapsuleWidth327`、`bottomNavLottieIconSize`（浅黄底栏 Lottie 档 32）、`bookCoverGridAspectRatio`、`glassBlurSigma4`、`bookCoverTagBlurSigma8`、`chromeBarBlurSigma40`、`strongBlurSigma90`、`welfareCheckInMilestoneHeight70`、`membershipHeroHeight300`、`tapPressScale0.94`、`categoryFilterSectionVerticalPadding`（分类筛选区底 ↔ 书单间距 24）、`segmentedSelectedBorder`（仅 `yellow_light` 主黄选中描边，与年龄选项统一）、`bookDetailPageBackground`（书详情浅色纯白 / 深色深底）、`bookshelfPageBackground` / `bookshelfPageGradient*` / `bookshelfPageGradientHeight` / `bookshelfReadingMinutes` / `bookshelfClaimWelfareCtaHeight`（书架壳底 + 随滚白渐变、分钟标红、吸顶阅读横幅高 32）等；部分由其它 token 推导（如 `rankingSegmentedHeight = outerPadding*2 + itemPaddingV*2 + 14`）。
 
 `app_sizes.dart` / `app_text_styles.dart` 作为 token registry，经架构规则 §11 明确豁免「>300 行拆分」。
 

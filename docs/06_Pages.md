@@ -19,8 +19,8 @@ flowchart LR
 ## 1. 发现 / 内容域
 
 ### bookstore · [bookstore_page.dart](../lib/features/bookstore/presentation/pages/bookstore_page.dart)
-- **职责**：书城主 Tab 容器（推荐/分类/排行），顶栏切换 + 底部「继续阅读」浮层（全主题锁定深色壳 `continueReadingCard*`，不随浅色包翻转）；推荐页进入时预缓存全部 20 帧，避免首次拖动临时解码造成首帧停滞。50×50 奔跑小熊随拉动在顶栏与首卡之间逐渐显现，视觉下移至 `AppSpacing.xxl + AppSpacing.xl + AppSpacing.lg`；刷新占位高度为 `chromeTopHeight - AppSpacing.md`，手势触发距离保持不变，小熊在上一版基础上再下移 24px，并进一步靠近下方首卡。从开始拖动到刷新完成后的收起阶段，只要小熊仍可见就以 0.8 秒周期持续循环奔跑；松手后先让弹簧收敛到固定停留态，最短展示 `(AppDurations.slow + AppDurations.normal) * 2`（1.6 秒），保证完整循环两次，刷新完成才释放占位，内容自动回弹且动画消失。刷新期间保留现有数据，完成后替换最新书城内容并重置「猜你喜欢」分页；预览 Mock 每次返回下一组书籍排序，真实接口模式直接展示服务端最新快照。
-- **模块**：`bookstore_page_header`、`bookstore_recommend_body`、`continue_reading_card`、`ranking_section`、`limited_free_section`、`editor_pick_section`、`guess_like_section`（分类/排行 Tab 由 `CategoryTabBody`、`RankingTabBody` 注入）。
+- **职责**：书城主 Tab 容器（推荐/分类/排行），顶栏切换 + 底部「继续阅读」浮层（全主题锁定深色壳 `continueReadingCard*`，不随浅色包翻转；福利待领取气泡可见时上移 `AppSpacing.xs`（8px，与气泡顶相距），消失后归位）；推荐页进入时预缓存全部 20 帧，避免首次拖动临时解码造成首帧停滞。50×50 奔跑小熊随拉动在顶栏与首卡之间逐渐显现，视觉下移至 `AppSpacing.xxl + AppSpacing.xl + AppSpacing.lg`；刷新占位高度为 `chromeTopHeight - AppSpacing.md`，手势触发距离保持不变，小熊在上一版基础上再下移 24px，并进一步靠近下方首卡。从开始拖动到刷新完成后的收起阶段，只要小熊仍可见就以 0.8 秒周期持续循环奔跑；松手后先让弹簧收敛到固定停留态，最短展示 `(AppDurations.slow + AppDurations.normal) * 2`（1.6 秒），保证完整循环两次，刷新完成才释放占位，内容自动回弹且动画消失。刷新期间保留现有数据，完成后替换最新书城内容并重置「猜你喜欢」分页；预览 Mock 每次返回下一组书籍排序，真实接口模式直接展示服务端最新快照。
+- **模块**：`bookstore_page_header`、`bookstore_recommend_body`、`continue_reading_card`、`ranking_section`、`limited_free_section`（顶部 FREE 彩头 `AppSharedAssets.limitedFreeHeaderBg`）、`editor_pick_section`、`guess_like_section`（分类/排行 Tab 由 `CategoryTabBody`、`RankingTabBody` 注入）。
 - **公共组件**：`AppPageChrome`、`AppTabTopTexture`、`MainTabController`、`AppAsyncPageBody`、`AppTopBar`、`AppTopBarIconButton`、`AppTopTabBar`、`AppSwipeTabSwitcher`、`BookGridCard`、`SectionHeader`、`BookCoverTagBadge`、`RankingRankBadge`、`BookCover`、`AppMarqueeText`。
 - **Model**：`BookstorePageContent`、`BookstoreTopTab`、`Book`、`RankingTab`。
 - **Repository**：`BookstoreRepository`。
@@ -28,6 +28,7 @@ flowchart LR
 
 ### category · [category_page.dart](../lib/features/category/presentation/pages/category_page.dart)
 - **职责**：分类二级页壳（也内嵌于书城 Tab），主体为 `CategoryTabBody`。
+- **筛选与书单间距**：筛选区底部内边距 `categoryFilterSectionVerticalPadding` = 24。
 - **模块**：`category_tab_body`、`category_filter_section`、`category_book_list`（`category_book_row`）、`category_list_footer`、`category_filter_chip`。
 - **公共组件**：`AppPageChrome`、`AppTopBar`、`BookLargeRowListSkeleton`、`EmptyState`、`BookCardLargeRow`、`AppListLoadMoreFooter`。
 - **Model**：`CategoryPageContent`、`CategoryFilterGroup`、`CategoryBookItem`、`Book`。
@@ -36,6 +37,7 @@ flowchart LR
 
 ### ranking · [ranking_page.dart](../lib/features/ranking/presentation/pages/ranking_page.dart)
 - **职责**：多维度榜单详情页壳（也内嵌书城 Tab），主体为 `RankingTabBody`。
+- **封面角标**：书行透传 `book.coverTag`（右上「更新/完结/连载」）与 `book.coverBottomBadge`（右下热度/运营文案），与分类/搜索大书卡一致；左上仍为名次 `RankingRankBadge`。
 - **模块**：`ranking_tab_body`、`ranking_top_chrome`、`ranking_channel_segmented`、`ranking_dimension_rail`、`ranking_book_row`。
 - **公共组件**：`AppScrollBlurScope`、`AppBlurredChromeBar`、`AppTopBarIconButton`、`AppSegmentedSwitch`、`AppVerticalRailSwitch`、`BookCardLargeRow`、`BookLargeRowListSkeleton`、`RankingRankBadge`、`EmptyState`。
 - **Model**：`RankingPageContent`、`RankingDimension`、`RankingChannel`、`Book`。
@@ -62,9 +64,21 @@ flowchart LR
 
 ### book_detail · [book_detail_page.dart](../lib/features/book_detail/presentation/pages/book_detail_page.dart)
 - **职责**：书籍详情（封面 Hero、摘要、详情/讨论/更新 Tab、目录、底部操作）。
-- **模块**：`book_detail_hero_cover`、`book_detail_top_bar`、`book_detail_content`、`book_detail_summary_card`、`book_detail_tab_switcher`、`book_detail_intro`、`book_detail_catalog_entry`/`catalog_drawer`、`book_detail_character_section`、`book_detail_discussion_section`、`book_detail_update_section`、`book_detail_recommendation_section`、`book_detail_promo_bar`、`book_detail_bottom_bar`、`book_detail_status_views`。
+- **更新时间线**：最新条目日期/圆点/正文 = `textPrimary`（浅色主题黑字）；历史条目统一 `textOnDarkMuted` 灰字灰点。
+- **视觉**：整页底 `bookDetailPageBackground`（浅色 `white100` 纯白 / 深色 `backgroundDark`）；头图区仍为封面 Hero。
+- **作品简介**：折叠态尾缀 `...全部`，字色 `AppColors.error`（系统红）；点击展开全文。
+- **讨论写评论 FAB**：仅讨论 Tab 显示；贴右边缘；有促销条时叠在其上方，无促销条时距底栏 `bookDetailWriteCommentFabBottomGap`(12)；资源 `AppSharedAssets.bookDetailWriteCommentFab`（三主题同色稿）。写评论弹层输入框为 `surfaceSoft` 灰底 + `borderGlass` 细框。发送后插入作者发言下方，底色 `discussionNewCommentHighlight`（品牌粉 8% `pink500Alpha08`）通栏贴页边、无圆角，高亮 `AppDurations.discussionNewCommentHighlight`（5s）后淡出；同时 `Scrollable.ensureVisible` 滚入可视区（对齐 `bookDetailNewCommentScrollAlignment` 0.2，时长 `AppDurations.normal`）。
+- **讨论筛选 / 排序**：左侧「全部 / 精选 / 公告 / 攻略」为分类同款纯文字（选中 `categoryFilterSelected` 黑字、无面性胶囊）；右侧「最新 / 最热」`AppSegmentedSwitch`（`BookDiscussionSort`）。帖内「精选」等标签底仍 `discussionTagBackground`（`surfaceSoft`）。
+- **讨论点赞**：SVG `bookDetailLike` / `bookDetailLikeActive`（`BookDiscussionLikeIcon`）；已赞为 `orange500` 色稿，未赞可按主题字色染色。
+- **讨论内容标**：`badges` 可叠加「置顶」（橙红渐变）/「精选」（粉紫渐变）/「公告」（弱面），行内贴在段落开头；标签间距 `AppSpacing.xxs`；`BookDiscussionContentTag`。
+- **讨论作者标**：`isAuthor` 时昵称旁红底「作者」（`discussionAuthorBadge*`）；水平 padding `xxs`。
+- **讨论帖布局**：头像左列，名称/正文/回复摘要同列左对齐；帖子与上方筛选条同宽通栏（无额外水平内边距）。
+- **目录 / 角色介绍尾随**：统一 `SectionHeader` + `SectionTrailingAction`（文案 + 右箭头）；角色介绍标题旁 `titleSuffix` 为说明图标。
+- **目录入口**：无卡片底 / 内边距；简介 ↔ 目录、目录 ↔ 角色均以 `AppColors.divider` 细线分隔，占位高 `AppSpacing.xxl`（48）。
+- **区块标题**：作品简介 / 目录 / 角色介绍统一 `bookDetailBlockTitle`（与下方「猜你喜欢」等模块标题同档：`sectionTitleDark` · `xl` semibold）。
+- **模块**：`book_detail_hero_cover`、`book_detail_top_bar`、`book_detail_content`、`book_detail_summary_card`、`book_detail_tab_switcher`、`book_detail_intro`、`book_detail_catalog_entry`/`catalog_drawer`、`book_detail_character_section`、`book_detail_discussion_section`、`book_detail_write_comment_fab`、`book_discussion_like_icon`、`book_discussion_author_badge`、`book_discussion_content_tag`、`book_detail_update_section`、`book_detail_recommendation_section`、`book_detail_promo_bar`、`book_detail_bottom_bar`、`book_detail_status_views`。
 - **公共组件**：`AppScrollBlurScope`、`AppBlurredChromeBar`、`AppTopBar`、`OverscrollStretch`、`BookCoverHero`、`AppSwipeTabSwitcher`、`AppSegmentedSwitch`、`AppTabCountBadge`、`BookGridCard`、`SectionHeader`、`ShareBottomSheet`、`AppBlurredDialog`、`DialogCloseButton`、`SweepHighlightOverlay`、`LiquidSweepCtaClip`、`AppToast`、`EmptyState`。
-- **Model**：`BookDetail`、`BookDetailTab`、`BookDiscussionFilter`、`BookDiscussionPost`、`BookCatalogChapter`、`BookCharacter`、`BookUpdateEntry`、`Book`。
+- **Model**：`BookDetail`、`BookDetailTab`、`BookDiscussionFilter`、`BookDiscussionSort`、`BookDiscussionPost`、`BookCatalogChapter`、`BookCharacter`、`BookUpdateEntry`、`Book`。
 - **Repository**：`BookDetailRepository`（+加/删书架走 `BookshelfMembershipService`）。
 - **接入点**：`book_detail_cubit.dart` → `BookDetailRepositoryImpl` → `book_detail_data_source.dart`（仅 Mock，需新增 remote）。仅 `fetchDetail` 走 repository；讨论点赞/送心/推荐换一换为本地乐观更新。
 
@@ -78,9 +92,9 @@ flowchart LR
 
 ### bookshelf · [bookshelf_page.dart](../lib/features/bookshelf/presentation/pages/bookshelf_page.dart)
 - **职责**：一级 Tab「书架」：书架/阅读历史双 Tab、书单管理、今日阅读横幅、推荐加载更多；「为你推荐」使用双列瀑布流，每列独立向下排列，横纵间距统一 16px，短卡后的下一张卡即时上移。
-- **模块**：`bookshelf_page_header`、`bookshelf_page_tabs`、`bookshelf_tab_scroll_view`、`daily_reading_banner`、`bookshelf_book_grid`、`bookshelf_selectable_book_card`、`bookshelf_empty_view`、`bookshelf_recommendation_section`、`bookshelf_manage_action_overlay`/`action_bar`、`bookshelf_delete_confirm_dialog`。
-- **公共组件**：`AppAsyncPageBody`、`AppSwipeTabSwitcher`、`AppBlurredChromeBar`、`AppTabTopTexture`、`AppTopBar`、`AppTopBarTextButton`、`ElasticTabRow`、`BookGridSkeleton`、`BookGridCard`（书架 3 列网格开启 `showCardBackground` 铺卡面底）、`BookCardSurface`、`SectionHeader`、`AppListLoadMoreFooter`、`AppConfirmDialog`、`AppSelectionMark`、`AnimatedCountText`、`EmptyState`、`AppBottomNav`、`MainTabController`。
-- **卡面底**：书架/阅读历史网格及管理态选择卡的每本书统一铺 `BookCardSurface`（`surfaceCard` 语义面：浅色主题白面、`yellow_dark` 深灰面；`md` 圆角 + `xs` 内边距）；`bookshelf_book_grid` 的 `itemHeightForWidth` 已按卡面内边距扣除封面宽度换算高度。
+- **视觉**：整页底 `bookshelfPageBackground`（主题壳基色，非纯白）+ 顶部随滚白色垂直渐隐 `bookshelfPageGradientStart`→`bookshelfPageGradientEnd`（高 `bookshelfPageGradientHeight` 500）；阅读横幅与顶栏一并吸顶固定（`AppBlurredChromeBar` 内，三主题共用），去掉小熊插画与底填充，高度 `bookshelfClaimWelfareCtaHeight`（32）；文案与「领福利」垂直居中对齐；分钟数 `bookshelfReadingMinutes` 标红；书卡关闭卡面底填充；顶栏→横幅间距 `bookshelfHeaderToBannerGap`（4）、横幅→书格 `bookshelfBannerToGridGap`（12）。
+- **模块**：`bookshelf_page_header`、`bookshelf_page_tabs`、`bookshelf_tab_scroll_view`、`bookshelf_page_scroll_gradient`、`daily_reading_banner`、`bookshelf_book_grid`、`bookshelf_selectable_book_card`、`bookshelf_empty_view`、`bookshelf_recommendation_section`、`bookshelf_manage_action_overlay`/`action_bar`、`bookshelf_delete_confirm_dialog`。
+- **公共组件**：`AppAsyncPageBody`、`AppSwipeTabSwitcher`、`AppBlurredChromeBar`、`AppTabTopTexture`、`AppTopBar`、`AppTopBarTextButton`、`ElasticTabRow`、`BookGridSkeleton`、`BookGridCard`、`SectionHeader`、`AppListLoadMoreFooter`、`AppConfirmDialog`、`AppSelectionMark`、`AnimatedCountText`、`EmptyState`、`AppBottomNav`、`MainTabController`。
 - **Model**：`BookshelfPageContent`、`BookshelfTab`、`Book`。
 - **Repository**：`BookshelfRepository`（+`BookshelfMembershipService`）。
 - **接入点**：`bookshelf_cubit.dart` → `BookshelfRepositoryImpl` → `bookshelf_data_source.dart`（仅 Mock）。`loadMoreRecommendations()` 本地生成，待接接口。用户态强，需登录后返回个人数据。
@@ -106,7 +120,8 @@ flowchart LR
 
 ### welfare · [welfare_page.dart](../lib/features/welfare/presentation/pages/welfare_page.dart)
 - **职责**：福利中心 Tab：货币余额、充值套餐、签到、任务。
-- **模块**：`welfare_page_header`、`daily_check_in_section`、`meal_check_in_section`、`reading_vip_progress_section`、`welfare_task_list_section`、`check_in_calendar`、`check_in_success_dialog`、`welfare_rules_dialog`。
+- **任务 CTA**：「看视频得奖励」右侧动作为「看视频」+ `assets/icons/welfare/task_video.svg` 前置图标（`WelfareTaskAction.showVideoIcon`）；「阅读时长奖励」等仍为「去领取」。描述高亮为 `HH:MM:SS` 倒计时（如吃饭签到 / 睡觉打卡）且未归零时，右侧按钮禁用（`AppButton` disabled）文案「暂未开启」；归零后恢复原动作文案与可点。
+- **模块**：`welfare_page_header`、`daily_check_in_section`、`meal_check_in_section`、`reading_vip_progress_section`、`welfare_task_list_section`、`welfare_task_row` / `welfare_task_primary_row`、`check_in_calendar`、`daily_check_in_dialog` / `check_in_success_dialog`（共用 `check_in_dialog_decor`：顶边主色条 + 两侧斜纹 + 外飘/标题星）、`welfare_rules_dialog`。
 - **公共组件**：`BlurredPinnedHeaderDelegate`、`AppTabTopTexture`、`AppAsyncPageBody`、`CurrencyBalanceBar`、`RechargePackagesSection`、`AppGradientCtaButton`、`AppConfetti`、`showAppBlurredDialog`、`DialogCloseButton`、`LiquidSweepCtaClip`、`SweepHighlightOverlay`、`AppTopBar`、`AppTopBarIconButton`、`AppToast`、`AppBottomNav`。
 - **卡片描边**：余额、充值、每日签到、用餐签到、阅读 VIP 与任务等外层卡片统一使用 `borderGlass` + `hairline`；`yellow_light` 解析为更轻的 `neutralCool100 #F3F4F6`，`pink_light` / `yellow_dark` 保持原主题取值。
 - **Model**：`WelfarePageContent`、`CheckInSummary`、`MealCheckInSummary`、`WelfareTaskListSummary`、`WelfareTaskItem`、`CurrencyBalance`、`RechargePackage`。

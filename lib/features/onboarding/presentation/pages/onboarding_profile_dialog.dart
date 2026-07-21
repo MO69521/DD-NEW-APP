@@ -9,6 +9,7 @@ import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../shared/components/app_blurred_dialog.dart';
+import '../../../../shared/components/app_dialog_top_texture.dart';
 import '../../../../shared/components/app_page_dots.dart';
 import '../../../../shared/components/age_range_option.dart';
 import '../../../../shared/components/app_swipe_tab_switcher.dart';
@@ -46,66 +47,82 @@ class OnboardingProfileDialog extends StatelessWidget {
       child: Stack(
         clipBehavior: Clip.none,
         children: [
-          Container(
-            decoration: BoxDecoration(
-              color: AppColors.dialogBackground,
-              borderRadius: BorderRadius.circular(AppRadius.xl),
-              border: Border.all(color: AppColors.borderGlass),
-            ),
-            padding: const EdgeInsets.all(AppSpacing.lg),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                AppText(
-                  '选择你的性别年龄',
-                  style: AppTextStyles.titleMedium.copyWith(
-                    color: AppColors.textOnDark,
+          ClipRRect(
+            borderRadius: BorderRadius.circular(AppRadius.xl),
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                color: AppColors.dialogBackground,
+                borderRadius: BorderRadius.circular(AppRadius.xl),
+                border: Border.all(color: AppColors.borderGlass),
+              ),
+              child: Stack(
+                children: [
+                  const AppDialogTopTexture(),
+                  Padding(
+                    padding: const EdgeInsets.all(AppSpacing.lg),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        AppText(
+                          '选择你的性别年龄',
+                          style: AppTextStyles.titleMedium.copyWith(
+                            color: AppColors.textOnDark,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: AppSpacing.xxs),
+                        AppText(
+                          '让点点更了解你的喜好',
+                          style: AppTextStyles.titleMedium.copyWith(
+                            color: AppColors.textOnDark,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: AppSpacing.xl),
+                        // 两步横向切换：高度固定（取较高的年龄步），左右滑动。
+                        const _StepSwitcher(),
+                        const SizedBox(height: AppSpacing.lg),
+                        BlocSelector<
+                          OnboardingCubit,
+                          OnboardingState,
+                          OnboardingStep
+                        >(
+                          selector: (state) => state.step,
+                          builder: (context, step) {
+                            final cubit = context.read<OnboardingCubit>();
+                            return AppPageDots(
+                              count: 2,
+                              current: step == OnboardingStep.gender ? 0 : 1,
+                              onDotTap: (i) => cubit.setStep(
+                                i == 0
+                                    ? OnboardingStep.gender
+                                    : OnboardingStep.age,
+                              ),
+                            );
+                          },
+                        ),
+                        const SizedBox(height: AppSpacing.lg),
+                        BlocSelector<OnboardingCubit, OnboardingState, bool>(
+                          selector: (state) => state.canSubmit,
+                          builder: (context, canSubmit) {
+                            return AppButton(
+                              label: '完成',
+                              variant: AppButtonVariant.accent,
+                              isExpanded: true,
+                              onPressed: canSubmit
+                                  ? () {
+                                      context.read<OnboardingCubit>().submit();
+                                      Navigator.of(context).pop();
+                                    }
+                                  : null,
+                            );
+                          },
+                        ),
+                      ],
+                    ),
                   ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: AppSpacing.xxs),
-                AppText(
-                  '让点点更了解你的喜好',
-                  style: AppTextStyles.titleMedium.copyWith(
-                    color: AppColors.textOnDark,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: AppSpacing.xl),
-                // 两步横向切换：高度固定（取较高的年龄步），左右滑动。
-                const _StepSwitcher(),
-                const SizedBox(height: AppSpacing.lg),
-                BlocSelector<OnboardingCubit, OnboardingState, OnboardingStep>(
-                  selector: (state) => state.step,
-                  builder: (context, step) {
-                    final cubit = context.read<OnboardingCubit>();
-                    return AppPageDots(
-                      count: 2,
-                      current: step == OnboardingStep.gender ? 0 : 1,
-                      onDotTap: (i) => cubit.setStep(
-                        i == 0 ? OnboardingStep.gender : OnboardingStep.age,
-                      ),
-                    );
-                  },
-                ),
-                const SizedBox(height: AppSpacing.lg),
-                BlocSelector<OnboardingCubit, OnboardingState, bool>(
-                  selector: (state) => state.canSubmit,
-                  builder: (context, canSubmit) {
-                    return AppButton(
-                      label: '完成',
-                      variant: AppButtonVariant.accent,
-                      isExpanded: true,
-                      onPressed: canSubmit
-                          ? () {
-                              context.read<OnboardingCubit>().submit();
-                              Navigator.of(context).pop();
-                            }
-                          : null,
-                    );
-                  },
-                ),
-              ],
+                ],
+              ),
             ),
           ),
           Positioned(

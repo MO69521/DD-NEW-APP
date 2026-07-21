@@ -22,7 +22,6 @@ abstract final class AppRadius {
   static const double welfareRechargePrice = xl;
   static const double welfareRechargeMoreAction = 22;
 
-  static const double bookshelfReadingBanner = 45;
   static const double bookshelfClaimWelfareCta = 33;
 
   // 榜单详情页 (Figma 220:8376)
@@ -33,7 +32,6 @@ abstract final class AppRadius {
   // 书籍详情页 (Figma 183:1874)
   static const double bookDetailTabBar = 46;
   static const double bookDetailTabItem = 50;
-  static const double bookDetailCatalog = 10;
   static const double bookDetailCatalogDrawerCover = bookCover;
   static const double bookDetailReadCta = xl;
   static const double bookDetailDiscussionCard = md;
