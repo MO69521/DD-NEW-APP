@@ -6,11 +6,17 @@ import '../../core/theme/app_durations.dart';
 import '../../core/theme/app_sizes.dart';
 import '../components/app_lottie.dart';
 import 'app_asset_image.dart';
+import 'nav_bookshelf_select_icon.dart';
+import 'nav_bookstore_select_icon.dart';
+import 'nav_profile_select_icon.dart';
+import 'nav_welfare_select_icon.dart';
 
-/// Level 1 — 底部导航 Tab 图标（PNG / SVG / Lottie）。
+/// Level 1 — 底部导航 Tab 图标（PNG / SVG / Lottie / 路径动效）。
 ///
 /// - 有 [MainTabItem.selectedLottieAsset]（当前 `yellow_light`）：未选中静态图；
 ///   选中后播 Lottie 一次并停在末帧；再次点选重播。
+/// - [MainTabItem.selectMotion]（当前 `yellow_dark` 四 Tab）：未选中静态描边；
+///   选中播路径 trim + 填充弹出；再次点选重播。
 /// - 其余主题：SVG active/inactive + 选中缩放微动效。
 class AppNavIcon extends StatefulWidget {
   const AppNavIcon({
@@ -42,6 +48,8 @@ class _AppNavIconState extends State<AppNavIcon>
   bool _playLottieWhenReady = false;
 
   bool get _usesLottie => widget.item.selectedLottieAsset != null;
+  bool get _usesSelectMotion =>
+      !_usesLottie && widget.item.usesSelectMotion;
 
   double get _iconSize =>
       widget.size ??
@@ -49,15 +57,25 @@ class _AppNavIconState extends State<AppNavIcon>
           ? AppSizes.bottomNavLottieIconSize
           : AppSizes.bottomNavIconSize);
 
+  Duration get _feedbackDuration {
+    if (_usesLottie) return AppDurations.normal;
+    if (_usesSelectMotion) return AppDurations.bottomNavSelectMotion;
+    return AppDurations.normal;
+  }
+
   @override
   void initState() {
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: AppDurations.normal,
-      value: _usesLottie ? 0 : 1,
+      duration: _feedbackDuration,
+      value: _usesLottie
+          ? 0
+          : (_usesSelectMotion && widget.isSelected
+                ? 1
+                : (_usesSelectMotion ? 0 : 1)),
     );
-    if (!_usesLottie) {
+    if (!_usesLottie && !_usesSelectMotion) {
       _scale = _buildScaleAnimation();
     }
   }
@@ -106,6 +124,7 @@ class _AppNavIconState extends State<AppNavIcon>
   }
 
   void _playSelectionFeedback() {
+    _controller.duration = _feedbackDuration;
     if (_usesLottie) {
       _playLottieWhenReady = true;
       if (_lottieReady) {
@@ -134,6 +153,8 @@ class _AppNavIconState extends State<AppNavIcon>
         _lottieReady = false;
         _playLottieWhenReady = false;
         _controller.value = 0;
+      } else if (_usesSelectMotion) {
+        _controller.value = 0;
       } else {
         _controller.value = 1;
       }
@@ -144,6 +165,19 @@ class _AppNavIconState extends State<AppNavIcon>
   void dispose() {
     _controller.dispose();
     super.dispose();
+  }
+
+  Widget _selectMotionIcon(double progress) {
+    switch (widget.item.selectMotion!) {
+      case NavSelectMotionKind.bookstore:
+        return NavBookstoreSelectIcon(progress: progress, size: _iconSize);
+      case NavSelectMotionKind.welfare:
+        return NavWelfareSelectIcon(progress: progress, size: _iconSize);
+      case NavSelectMotionKind.bookshelf:
+        return NavBookshelfSelectIcon(progress: progress, size: _iconSize);
+      case NavSelectMotionKind.profile:
+        return NavProfileSelectIcon(progress: progress, size: _iconSize);
+    }
   }
 
   @override
@@ -164,6 +198,21 @@ class _AppNavIconState extends State<AppNavIcon>
         repeat: false,
         controller: _controller,
         onLoaded: _onLottieLoaded,
+      );
+    }
+
+    if (_usesSelectMotion) {
+      if (!widget.isSelected) {
+        return AppAssetImage(
+          assetPath: widget.item.iconAsset,
+          width: _iconSize,
+          height: _iconSize,
+          fit: BoxFit.contain,
+        );
+      }
+      return AnimatedBuilder(
+        animation: _controller,
+        builder: (context, _) => _selectMotionIcon(_controller.value),
       );
     }
 

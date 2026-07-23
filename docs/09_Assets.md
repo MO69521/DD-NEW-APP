@@ -17,7 +17,7 @@
 
 - `assets/images/<feature>/`：按业务分目录；**空状态插图**统一放 [`assets/images/empty_states/`](../assets/images/empty_states/)（三主题公用，经 [`AppSharedAssets`](../lib/core/theme/app_shared_assets.dart)）。
 - 书城下拉刷新使用 `assets/images/bookstore/refresh_bear/frame_01.png` … `frame_20.png` 透明序列帧，三主题共用并经 `AppSharedAssets.bookstoreRefreshBearFrames` 集中取用；源图 500×500，界面按 50×50 播放。
-- 限时免费区块顶部彩头：`assets/images/bookstore/shared/limited_free_header_bg.png`（1024×236，浅紫 FREE 水印 → 白渐隐），经 `AppSharedAssets.limitedFreeHeaderBg` 引用，三主题共用。
+- 限时免费区块顶部彩头：深色 `assets/images/bookstore/yellow_dark/limited_free_header_bg.png`（紫黑 FREE 水印）；浅色仍用 `assets/images/bookstore/shared/limited_free_header_bg.png`（浅紫 FREE → 白渐隐）；经 `AppThemeAssets.limitedFreeHeaderBg`，宽高比仍 `limitedFreeHeaderBgAspectRatio`（1024×236）。
 - 签到成功弹窗两侧斜条纹：`assets/images/welfare/check_in_success_side_stripe.png`（36×804，浅黄实色+透明斜纹），经 `AppSharedAssets.checkInSuccessSideStripe` 引用；渲染时 `ColorFilter.srcIn` 染为 `primary`，整体不透明度 `welfareCheckInSuccessSideStripeOpacity`（0.45），宽 `AppSpacing.sm`，自上而下渐隐。顶边主色条高 `welfareCheckInSuccessTopAccentHeight`（10）。
 - 签到成功弹窗外飘四角星：`assets/images/welfare/check_in_success_sparkle.png`（60×60），经 `AppSharedAssets.checkInSuccessSparkle`；左中 1 + 右上 2（大/小）浮于卡片外侧，标题旁另有两枚小星；染 `primary`，不透明度 `welfareCheckInSuccessSparkleOpacity`（0.85），尺寸 `welfareCheckInSuccessSparkleSizeLg/Md/Sm`（22/16/10）。每日签到弹窗与签到成功弹窗经 `check_in_dialog_decor.dart` 共用上述装饰。
 - 书详情讨论「写评论」悬浮钮：`assets/images/book_detail/write_comment_fab.png`（240×240 橙底白字色稿），经 `AppSharedAssets.bookDetailWriteCommentFab`，三主题共用。
@@ -66,7 +66,8 @@
 | 福利页顶部纹理 | `assets/images/tab_top/<themeId>/top_texture.png`（`AppThemeAssets.tabTopTexture`；切图未到位时为 `null`；书城首页 / 书架不调用） |
 | 登录页头图 | `yellow_light` 复用 `assets/images/profile/yellow_light/hero_background_default.png`；`pink_light` / `yellow_dark` 保持 `assets/images/auth/<themeId>/login_top_bg.png` |
 | 我的页默认头图 | `assets/images/profile/<themeId>/hero_background_default.png` |
-| 底栏 Tab（10 SVG / 浅黄 Lottie） | SVG：`assets/icons/nav/<themeId>/{bookstore,welfare,partner,bookshelf,profile}_{active,inactive}.svg`；`yellow_light` 未选中改 `assets/images/bottom_nav/yellow_light/*_nor.webp`，选中 Lottie：`assets/lottie/bottom_nav/yellow_light/{book_city,welfare,bookcase,mine}/…`（经 `AppThemeAssets.nav*SelectedLottie`） |
+| 底栏 Tab（10 SVG / 浅黄 Lottie / 深色四 Tab 路径动效） | SVG：`assets/icons/nav/<themeId>/{bookstore,welfare,partner,bookshelf,profile}_{active,inactive}.svg`；`yellow_light` 未选中改 `assets/images/bottom_nav/yellow_light/*_nor.webp`，选中 Lottie：`assets/lottie/bottom_nav/yellow_light/{book_city,welfare,bookcase,mine}/…`；`yellow_dark` 四 Tab 选中走 `Nav*SelectIcon`（`AppThemeAssets.nav*SelectMotion`） |
+| 限时免费彩头 | 深色 `assets/images/bookstore/yellow_dark/limited_free_header_bg.png`；浅色 `assets/images/bookstore/shared/limited_free_header_bg.png`（`AppThemeAssets.limitedFreeHeaderBg`） |
 | 书详加入书架 / 送心（4） | `assets/icons/book_detail/<themeId>/{add_to_shelf,in_shelf,send_heart,send_heart_sent}.svg` |
 | 书详共用 | `assets/icons/book_detail/shared/{promo_reward_tag,refresh,like,like_active}.svg` |
 

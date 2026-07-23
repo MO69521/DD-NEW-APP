@@ -182,6 +182,13 @@ abstract final class AppColors {
   static const Color iconMutedSecondary = AppBrandColors.iconMutedSecondary;
   static const Color navActiveBackground = AppPalette.neutralWhite;
   static const Color navActiveText = AppPalette.neutralCool950;
+  /// 底栏选中细节描边（Figma `#702E00`，书城笑脸 / 福利竖线 / 书架折线 / 我的双眼）。
+  static const Color navBookstoreSmileStroke = AppPalette.brown900;
+  /// 底栏选中填充渐变中段 / 止色（白 → 浅黄 → 橙）。
+  static const Color navBookstoreFillMid = AppPalette.yellow350;
+  static const Color navBookstoreFillEnd = AppPalette.orange600;
+  /// 底栏未选中描边起始不透明度（Figma 60%）。
+  static const double navBookstoreOutlineOpacity = 0.6;
 
   /// accent 色面上的文字 / 图标：深色态深墨（黄底上）；浅色实验态白（粉底上可读）。
   static const Color onAccent = onPrimary;

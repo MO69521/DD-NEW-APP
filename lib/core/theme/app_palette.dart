@@ -96,6 +96,8 @@ abstract final class AppPalette {
   static const Color yellow500Alpha04 = Color(0x0AFFE847);
   static const Color yellow500Alpha08 = Color(0x14FFE847);
   static const Color yellow500Alpha40 = Color(0x66FFE847);
+  /// 书城底栏填充渐变中段（Figma `#FFED63`）。
+  static const Color yellow350 = Color(0xFFFFED63);
   // 黄阶文字档：白底 / 浅壳底上可读的深黄（对白底对比度约 5.3:1，AA 正文达标）。
   static const Color yellow700 = Color(0xFF8F6400);
   static const Color pink500Alpha04 = Color(0x0AFF4D88);
@@ -115,9 +117,13 @@ abstract final class AppPalette {
   static const Color brown500 = Color(0xFFAA722E);
   static const Color brown600 = Color(0xFF935C1A);
   static const Color brown800 = Color(0xFF5D3A12);
+  /// 书城底栏选中笑脸描边（Figma `#702E00`）。
+  static const Color brown900 = Color(0xFF702E00);
   static const Color orange300 = Color(0xFFFF9359);
   static const Color orange500 = Color(0xFFFF7E32);
   static const Color orange550 = Color(0xFFFF6F4B);
+  /// 书城底栏填充渐变止色（Figma `#EF811D`）。
+  static const Color orange600 = Color(0xFFEF811D);
   static const Color orange700 = Color(0xFFE64D00);
   static const Color rose400 = Color(0xFFFF667F);
   static const Color rose500 = Color(0xFFFF4E6C);

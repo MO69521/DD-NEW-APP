@@ -27,8 +27,9 @@
 | `AppShimmer` / `AppShimmerBox` · [app_shimmer.dart](../lib/shared/widgets/app_shimmer.dart) | 骨架扫光层 / 占位块 | `child` req；box：`width/height/radius` | shared（骨架卡） | 建议 | 已足够 |
 | `BookCover` · [book_cover.dart](../lib/shared/widgets/book_cover.dart) | 书封（尺寸/角标/Hero） | `assetPath` req · `aspectRatio` · `topEndBadge` · `heroTag` | bookstore、bookshelf、book_detail、my_messages | 强烈建议 | 已足够 |
 | `bookCoverHeroRectTween` / `…FlightShuttleBuilder` · [book_cover_hero.dart](../lib/shared/widgets/book_cover_hero.dart) | 书封 Hero 飞行补间/交叉淡入 | 见源码（函数） | book_cover、bookstore、book_detail | 建议 | 已足够 |
-| `AppNavIcon` · [app_nav_icon.dart](../lib/shared/widgets/app_nav_icon.dart) | 底部 Tab 图标 | `item` req · `isSelected` req · `tapEpoch` | shared（`app_bottom_nav`） | 内部件 | `yellow_light` 选中 Lottie；其余主题 SVG 缩放 |
+| `AppNavIcon` · [app_nav_icon.dart](../lib/shared/widgets/app_nav_icon.dart) | 底部 Tab 图标 | `item` req · `isSelected` req · `tapEpoch` | shared（`app_bottom_nav`） | 内部件 | `yellow_light` 选中 Lottie；`yellow_dark` 四 Tab 路径动效；其余 SVG 缩放 |
 | `AppLottie` · [app_lottie.dart](../lib/shared/components/app_lottie.dart) | Lottie 动画封装 | `asset` req · `repeat` · `fit` · `controller` · `onLoaded` | `AppNavIcon` 等 | 否 | 底栏已接用 |
+| `NavBookstoreSelectIcon` 等 · `nav_*_select_icon.dart` | 底栏路径动效 | `progress` · `size` | `AppNavIcon` | 否 | 仅 `yellow_dark`；共享 `NavSelectMotion` |
 | `AuroraBackground` · [aurora_background.dart](../lib/shared/widgets/aurora_background.dart) | 极光着色器背景 | `colorStops` · `amplitude` · `blend` · `opacity` · `child` | partner、membership | 建议 | 已足够 |
 | `OverscrollStretch` · [overscroll_stretch.dart](../lib/shared/widgets/overscroll_stretch.dart) | 头图下拉视差拉伸 | `controller` req · `baseHeight` req · `child` req | membership、book_detail | 建议 | 已足够 |
 | `AdvancedTransitionWrapper` · [advanced_transition_wrapper.dart](../lib/shared/widgets/advanced_transition_wrapper.dart) | 容器转换转场（卡片→全屏） | `closedChild` req · `openBuilder` · `borderRadius` | welfare、shared（充值区） | 建议 | 已足够 |

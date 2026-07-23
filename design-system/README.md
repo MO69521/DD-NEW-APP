@@ -121,11 +121,11 @@
 | 壳基色 · 粉浅 | `pink50 #F4F2F4` + `pink50Alpha00` / `pink50Alpha35` / `pink50Alpha45` / `pink50Alpha55` / `pink50Alpha60` / `pink50Alpha80` / `pink50Alpha90` |
 | 壳基色 · 黄浅 | `neutralCool50 #F8F7FC` + `neutralCool50Alpha00` / `neutralCool50Alpha35` / `neutralCool50Alpha45` / `neutralCool50Alpha55` / `neutralCool50Alpha60` / `neutralCool50Alpha80` / `neutralCool50Alpha90`（`yellow_light` 页面大背景，中性浅灰、不偏黄） |
 | 深壳装饰 | `cream100 #FFF2C6` · `wine950 #1D0B10` · `neutralCool880 #131820` · `neutralCool800 #262B33` |
-| 主强调 | `yellow500 #FFE847`（+ `yellow500Alpha04`/`yellow500Alpha08`/`yellow500Alpha40`）· `yellow700 #8F6400`（黄阶文字档：白底/浅面上的可读深黄，白底对比度约 5.3:1）· `pink500 #FF4D88`（+ `pink500Alpha04`/`pink500Alpha08`/`pink500Alpha40`） |
+| 主强调 | `yellow500 #FFE847`（+ `yellow500Alpha04`/`yellow500Alpha08`/`yellow500Alpha40`）· `yellow350 #FFED63`（书城底栏填充中段）· `yellow700 #8F6400`（黄阶文字档：白底/浅面上的可读深黄，白底对比度约 5.3:1）· `pink500 #FF4D88`（+ `pink500Alpha04`/`pink500Alpha08`/`pink500Alpha40`） |
 | 面板深字/灰 | `neutralWarm900 #202020` · `neutralGray500 #919191` · `neutralGray600 #8C8C8C` · `neutralCool300 #B2B3BA` · `neutralCool350 #ABACB3` · `neutralGray700 #757575` |
 | VIP 粉紫 | `peach100 #FFDDC1` · `pink300 #F393DC` · `magenta950 #740551` · `peach50 #FFEBD4` · `pink100Soft #FFD5DB` · `pink200 #FF9CC7` · `magenta500 #E541BC` · `magenta980 #310F29` |
 | 伙伴粉 | 主色 = `pink500` · `pink400 #FF7AA8` · `pink600 #E03D74` |
-| 福利金/橙 | `brown600 #935C1A` · `brown500 #AA722E` · `brown800 #5D3A12` · `orange500 #FF7E32` |
+| 福利金/橙 | `brown600 #935C1A` · `brown500 #AA722E` · `brown800 #5D3A12` · `brown900 #702E00`（书城笑脸描边）· `orange500 #FF7E32` · `orange600 #EF811D`（书城填充止色） |
 | 促销条 | `rose500/orange550/orange300/cream50/orange700`（值见 §4.2.2） |
 | 榜单头图 | `cream200 #FFFAD7` · `cream200Alpha90 #E6FFFAD7` |
 | 书详情更新（账本橙金复用） | `tan400 #F0B16A` |
@@ -442,10 +442,10 @@ feature 专用圆角（在基阶之上按页面命名，如 `navOuter 47` / `sea
 | 顶栏 `AppTopBar` | 二级页顶栏高度 / 图标框 / 返回钮 | `topBar*` |
 | 按钮 `AppButton` | 各尺寸内边距 / loading / 图标间距 | `buttonPadding*` · `buttonLoadingIndicatorSize` · `buttonIconLabelGap*` |
 | 搜索栏 / 玻璃模糊 | 搜索框高 / 各级磨砂半径 | `searchBarHeight` · `glassBlurSigma` · `strongBlurSigma` · `chromeBarBlurSigma` |
-| 书城首页 | 顶栏 / 加载（刷新跑熊 50×50）/ 「继续阅读」浮层 / 「限时免费」彩头 `limitedFreeHeaderBg`（FREE 渐隐底，`limitedFreeHeaderBgAspectRatio`）+ 倒计时块 | `bookstore*` · `continueReading*` · `limitedFree*` |
+| 书城首页 | 顶栏 / 加载（刷新跑熊 50×50）/ 「继续阅读」浮层 / 「限时免费」彩头 `limitedFreeHeaderBg`（深色紫黑 FREE / 浅色浅紫→白，`limitedFreeHeaderBgAspectRatio`）+ 倒计时块 | `bookstore*` · `continueReading*` · `limitedFree*` |
 | 选择标记 `AppSelectionMark` | 多选勾选标记尺寸 / 描边 / 勾号 | `selectionMark*` · `bookshelfSelectionCheckIconSize` |
 | 新手引导 | 性别头像 / 步骤视口高 / 标签短线 | `onboarding*` |
-| 底部导航 `AppBottomNav` | 胶囊尺寸 / 图标 / 毛玻璃 / 弹跳缩放；`yellow_light` Lottie 档图标 32 / 单项 52 / 胶囊 54 | `bottomNav*` · `bottomNavLottieIconSize` · `bottomNavLottieItemHeight` · `bottomNavLottieCapsuleHeight` |
+| 底部导航 `AppBottomNav` | 胶囊尺寸 / 图标 / 毛玻璃 / 弹跳缩放；`yellow_light` Lottie 档图标 32 / 单项 52 / 胶囊 54；`yellow_dark` 四 Tab 路径动效 700ms | `bottomNav*` · `bottomNavLottieIconSize` · `bottomNavLottieItemHeight` · `bottomNavLottieCapsuleHeight` · `AppDurations.bottomNavSelectMotion` |
 | 一级 Tab 顶纹理 `AppTabTopTexture` | 全宽装饰层高度 | `tabTopTextureHeight` |
 | 榜单 | Tab 指示器 / 轮播 / 头图 / 维度导航 | `ranking*` · `tab*` |
 | 书籍封面 / 书卡 | 列表/网格封面 / 大封面横向书卡 | `bookCover*` · `bookGrid*` · `bookCardLarge*` |
@@ -555,7 +555,8 @@ feature 专用圆角（在基阶之上按页面命名，如 `navOuter 47` / `sea
 
 | 组件 | 位置 | 变体 / 说明 |
 |------|------|------|
-| `AppBottomNav` | `shared/layouts/app_bottom_nav.dart` | 底部导航（当前 4 Tab：书城/福利/书架/我的；「伙伴」暂时下线，配置见 `MainTabConfig`）；样式 `fullWidthSolid` / `glassCapsule`。`fullWidthSolid` 仅顶部绘制 `hairline` 0.5px 分割线，浅色使用 `bottomNavTopDividerLight` 实体浅灰，深色使用 `bottomNavTopDividerDark` 半透明白。`yellow_light` Tab 图标：未选中 `*_nor.webp`，选中播 `nav*SelectedLottie` 一次停末帧，显示边长 `bottomNavLottieIconSize` 32（单项 52 / 胶囊 54）；其它主题 SVG 26 + 缩放。福利 Tab 未选中、本会话尚未访问福利且服务端 `pendingClaimEnergy > 0` 时，图标上方显示红色「{n}能量待领取」气泡 + 小三角（`Positioned.top: -AppSpacing.xs`）；首次进入福利时按 `normal` 时长渐隐，本会话再切到其他 Tab 也不再显示。气泡可见时 `MainTabPendingClaimScope.isVisible` 为 true，书城「继续阅读」浮层额外抬升 `AppBottomNav.pendingClaimBadgeClearance`（=`AppSpacing.xs` 8px，与气泡顶相距），气泡消失后归位 |
+| `AppBottomNav` | `shared/layouts/app_bottom_nav.dart` | 底部导航（当前 4 Tab：书城/福利/书架/我的；「伙伴」暂时下线，配置见 `MainTabConfig`）；样式 `fullWidthSolid` / `glassCapsule`。`fullWidthSolid` 仅顶部绘制 `hairline` 0.5px 分割线，浅色使用 `bottomNavTopDividerLight` 实体浅灰，深色使用 `bottomNavTopDividerDark` 半透明白。`yellow_light` Tab 图标：未选中 `*_nor.webp`，选中播 `nav*SelectedLottie` 一次停末帧，显示边长 `bottomNavLottieIconSize` 32（单项 52 / 胶囊 54）；`yellow_dark` 四 Tab 选中走 `Nav*SelectIcon` 路径动效 700ms；其它主题 SVG 26 + 缩放。福利 Tab 未选中、本会话尚未访问福利且服务端 `pendingClaimEnergy > 0` 时，图标上方显示红色「{n}能量待领取」气泡 + 小三角（`Positioned.top: -AppSpacing.xs`）；首次进入福利时按 `normal` 时长渐隐，本会话再切到其他 Tab 也不再显示。气泡可见时 `MainTabPendingClaimScope.isVisible` 为 true，书城「继续阅读」浮层额外抬升 `AppBottomNav.pendingClaimBadgeClearance`（=`AppSpacing.xs` 8px，与气泡顶相距），气泡消失后归位 |
+| `NavBookstoreSelectIcon` / `NavWelfareSelectIcon` / `NavBookshelfSelectIcon` / `NavProfileSelectIcon` | `shared/widgets/nav_*_select_icon.dart` | 底栏选中路径动效（L1）：白描边（60% 起）消退 → 白/浅黄/橙填充 spring 弹出 → 棕细节描边；时长 `AppDurations.bottomNavSelectMotion`；色 `navBookstore*`（四 Tab 共用）；当前仅 `yellow_dark` 经 `AppNavIcon` + `NavSelectMotionKind` 接入 |
 | `AppTabTopTexture` | `shared/components/app_tab_top_texture.dart` | 福利页顶部装饰纹理；全宽 × `welfareTabTopTextureHeight` 300（用户指定）。`AppThemeAssets.tabTopTexture` 为 null 时铺 `tabTopHeaderGradient*` 头部渐变——仅 `yellow_light` 福利页可见（顶部主黄 `primary` → 底部白 0% 垂直渐隐）；书城首页/书架不调用，`yellow_dark` / `pink_light` 起止均透明 |
 | `AppDialogTopTexture` | `shared/components/app_dialog_top_texture.dart` | 弹窗顶部彩头渐变（须放 Stack 内）；高度 `dialogTopTextureHeight` 120；仅 `yellow_light` 可见（`dialogTopHeaderGradient*`：40% 黄 → 透明）；其余主题透明 |
 | `AppSegmentedSwitch` | `shared/components/app_segmented_switch.dart` | 分段 Tab（书详情 / 榜单频道等）：轨道底 `surfaceSoft`；选中滑块白底 `segmentedSwitchSelectedFill` + 主文字 `segmentedSwitchSelectedText` + 无描边；与年龄选项强调选中解耦 |
@@ -643,7 +644,7 @@ feature 专用圆角（在基阶之上按页面命名，如 `navOuter 47` / `sea
 - `AppConfetti`（`shared/components/app_confetti.dart`）：庆祝礼花迸发。
 - `AppShimmer` + 书卡骨架（`shared/widgets/app_shimmer.dart`、`shared/components/book_card_skeletons.dart`）：加载时高光扫过骨架占位，替代整屏 spinner（榜单 / 分类 / 搜索 / 书架）。
 - `AppLottie`（`shared/components/app_lottie.dart`）：Lottie 帧动画统一封装（支持 `controller` / `onLoaded`）；底栏 `yellow_light` 已接用。
-- `AppNavIcon`：`yellow_light` 选中播 Lottie；其它主题 SVG 缩放微动效。
+- `AppNavIcon`：`yellow_light` 选中播 Lottie；`yellow_dark` 四 Tab 路径动效（白描边消退 → 黄填充弹出 → 棕细节描出，`AppDurations.bottomNavSelectMotion` 700ms）；其它主题 SVG 缩放微动效。
 
 ### 9.4 着色器 / 自绘
 - 极光 GLSL 背景（`shared/widgets/aurora_background.dart` + `assets/shaders/aurora.frag`）：噪声 + 三色渐变，`Ticker` 驱动 `uTime`，含降级渐变。会员 Hero 极光整体不透明度走 `AppMembershipColors.heroAuroraOpacity`：`yellow_light` 浅底上黄色偏淡，加重到 `0.45`；`yellow_dark`（默认深色）与 `pink_light` 维持基线 `0.26`。

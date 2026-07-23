@@ -42,4 +42,7 @@ abstract final class AppDurations {
 
   /// 讨论区新发评论淡黄高亮停留时长。
   static const Duration discussionNewCommentHighlight = Duration(seconds: 5);
+
+  /// 底栏选中路径动效（相对 Figma 时间轴加速；`yellow_dark` 四 Tab）。
+  static const Duration bottomNavSelectMotion = Duration(milliseconds: 700);
 }

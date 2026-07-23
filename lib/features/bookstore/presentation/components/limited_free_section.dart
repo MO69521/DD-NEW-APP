@@ -6,10 +6,10 @@ import '../../../../core/domain/entities/book.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_icon_assets.dart';
 import '../../../../core/theme/app_radius.dart';
-import '../../../../core/theme/app_shared_assets.dart';
 import '../../../../core/theme/app_sizes.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
+import '../../../../core/theme/app_theme_assets.dart';
 import '../../../../core/theme/app_welfare_colors.dart';
 import '../../../../shared/components/book_grid_card.dart';
 import '../../../../shared/widgets/app_asset_image.dart';
@@ -164,7 +164,7 @@ class _LimitedFreeHeaderBackground extends StatelessWidget {
     return AspectRatio(
       aspectRatio: AppSizes.limitedFreeHeaderBgAspectRatio,
       child: const AppAssetImage(
-        assetPath: AppSharedAssets.limitedFreeHeaderBg,
+        assetPath: AppThemeAssets.limitedFreeHeaderBg,
         fit: BoxFit.cover,
       ),
     );

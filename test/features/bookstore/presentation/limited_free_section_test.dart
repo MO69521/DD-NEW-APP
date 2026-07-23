@@ -1,6 +1,6 @@
 import 'package:diandian_chuanshu/core/domain/entities/book.dart';
-import 'package:diandian_chuanshu/core/theme/app_shared_assets.dart';
 import 'package:diandian_chuanshu/core/theme/app_sizes.dart';
+import 'package:diandian_chuanshu/core/theme/app_theme_assets.dart';
 import 'package:diandian_chuanshu/features/bookstore/presentation/components/limited_free_section.dart';
 import 'package:diandian_chuanshu/shared/widgets/app_asset_image.dart';
 import 'package:flutter/material.dart';
@@ -31,15 +31,17 @@ void main() {
       find.byWidgetPredicate(
         (widget) =>
             widget is AppAssetImage &&
-            widget.assetPath == AppSharedAssets.limitedFreeHeaderBg,
+            widget.assetPath == AppThemeAssets.limitedFreeHeaderBg,
       ),
     );
     expect(bg.fit, BoxFit.cover);
 
-    final aspect = tester.widgetList<AspectRatio>(find.byType(AspectRatio)).firstWhere(
-      (widget) =>
-          widget.aspectRatio == AppSizes.limitedFreeHeaderBgAspectRatio,
-    );
+    final aspect = tester
+        .widgetList<AspectRatio>(find.byType(AspectRatio))
+        .firstWhere(
+          (widget) =>
+              widget.aspectRatio == AppSizes.limitedFreeHeaderBgAspectRatio,
+        );
     expect(aspect.aspectRatio, AppSizes.limitedFreeHeaderBgAspectRatio);
   });
 }

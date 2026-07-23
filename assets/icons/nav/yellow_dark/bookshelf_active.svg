@@ -1,5 +1,16 @@
-<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M9.5 7.00009C9.5 5.89556 10.3954 5.00014 11.4999 5.00009C12.6045 5.00004 13.5 5.89549 13.5 7.00009V19.0001C13.5 20.1046 12.6046 21 11.5001 21.0001C10.3955 21.0001 9.5 20.1047 9.5 19.0001L9.5 7.00009Z" fill="#FFE847" stroke="#FFE847" stroke-width="1.5" stroke-linejoin="round"/>
-<path d="M3 5.00009C3 3.89556 3.89537 3.00014 4.99991 3.00009C6.10451 3.00004 7 3.89549 7 5.00009V19.0005C7 20.105 6.10463 21.0004 5.00009 21.0005C3.89549 21.0005 3 20.1051 3 19.0005V5.00009Z" fill="#FFE847" stroke="#FFE847" stroke-width="1.5" stroke-linejoin="round"/>
-<path d="M15.5511 10.3872C15.2692 9.16608 16.1966 8.00022 17.4498 8.00016C18.3573 8.00012 19.1447 8.62647 19.3488 9.51071L21.4496 18.6131C21.7314 19.8342 20.804 21.0001 19.5508 21.0001C18.6433 21.0002 17.8559 20.3738 17.6518 19.4896L15.5511 10.3872Z" fill="#FFE847" stroke="#FFE847" stroke-width="1.5" stroke-linejoin="round"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+  <path d="M18.6211 2.86833C20.5733 2.75991 22 4.43356 22 6.38884V16.2785C21.9999 18.7501 19.742 20.6612 17.293 20.9943C16.4388 21.1105 15.5363 21.3044 14.6479 21.615C12.9697 22.2017 11.0303 22.2017 9.35214 21.615C8.4637 21.3044 7.56124 21.1105 6.70703 20.9943C4.25795 20.6612 2.00013 18.7501 2 16.2785V6.38884C2 4.43356 3.42669 2.75991 5.37891 2.86833C6.58546 2.93543 7.98542 3.13706 9.35216 3.61492C11.0303 4.20166 12.9697 4.20166 14.6478 3.61492C16.0146 3.13706 17.4145 2.93543 18.6211 2.86833Z" fill="url(#paint0_bookshelf)" stroke="url(#paint1_bookshelf)" stroke-width="0.2"/>
+  <path d="M17 11C14 11 12 13 12 13C12 13 10 11 7 11" stroke="#702E00" stroke-width="2"/>
+  <defs>
+    <linearGradient id="paint0_bookshelf" x1="5.5" y1="6.48252" x2="21.7254" y2="22.3356" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFFFFF"/>
+      <stop offset="0.497981" stop-color="#FFED63"/>
+      <stop offset="1" stop-color="#EF811D"/>
+    </linearGradient>
+    <linearGradient id="paint1_bookshelf" x1="12" y1="2.86334" x2="12" y2="22.055" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFFFFF"/>
+      <stop offset="0.399215" stop-color="#FFFFFF"/>
+      <stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
 </svg>

@@ -27,10 +27,6 @@ abstract final class AppSharedAssets {
     'assets/images/bookstore/refresh_bear/frame_20.png',
   ];
 
-  /// 限时免费区块顶部彩头（FREE 水印渐隐底，三主题共用）。
-  static const String limitedFreeHeaderBg =
-      'assets/images/bookstore/shared/limited_free_header_bg.png';
-
   /// 签到成功弹窗两侧斜条纹装饰（浅黄+透明，三主题共用）。
   static const String checkInSuccessSideStripe =
       'assets/images/welfare/check_in_success_side_stripe.png';

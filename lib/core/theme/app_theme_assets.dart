@@ -1,4 +1,5 @@
 import '../config/app_theme_id.dart';
+import '../constants/nav_select_motion_kind.dart';
 
 /// 随主题（THEME 编译包）变化的**非颜色资源**集中解析处（Tier 2 · 资源侧）。
 ///
@@ -48,6 +49,10 @@ abstract final class AppThemeAssets {
       ? 'assets/lottie/bottom_nav/yellow_light/book_city/book_city.json'
       : null;
 
+  /// 底栏选中路径动效种类；当前仅 `yellow_dark` 四 Tab；其它主题仍走 Lottie / SVG 缩放。
+  static const NavSelectMotionKind? navBookstoreSelectMotion =
+      _pack == AppThemeId.yellowDark ? NavSelectMotionKind.bookstore : null;
+
   static const String navWelfareInactive = _pack == AppThemeId.yellowLight
       ? 'assets/images/bottom_nav/yellow_light/welfare_nor.webp'
       : 'assets/icons/nav/$_pack/welfare_inactive.svg';
@@ -57,6 +62,9 @@ abstract final class AppThemeAssets {
   static const String? navWelfareSelectedLottie = _pack == AppThemeId.yellowLight
       ? 'assets/lottie/bottom_nav/yellow_light/welfare/data.json'
       : null;
+
+  static const NavSelectMotionKind? navWelfareSelectMotion =
+      _pack == AppThemeId.yellowDark ? NavSelectMotionKind.welfare : null;
 
   /// 福利「签到」态静态 / Lottie（素材已入库；当前底栏默认仍用福利礼盒，待产品接线）。
   static const String? navWelfareSignInactive = _pack == AppThemeId.yellowLight
@@ -87,6 +95,9 @@ abstract final class AppThemeAssets {
       ? 'assets/lottie/bottom_nav/yellow_light/bookcase/bookcase.json'
       : null;
 
+  static const NavSelectMotionKind? navBookshelfSelectMotion =
+      _pack == AppThemeId.yellowDark ? NavSelectMotionKind.bookshelf : null;
+
   static const String navProfileInactive = _pack == AppThemeId.yellowLight
       ? 'assets/images/bottom_nav/yellow_light/mine_nor.webp'
       : 'assets/icons/nav/$_pack/profile_inactive.svg';
@@ -96,6 +107,14 @@ abstract final class AppThemeAssets {
   static const String? navProfileSelectedLottie = _pack == AppThemeId.yellowLight
       ? 'assets/lottie/bottom_nav/yellow_light/mine/mine.json'
       : null;
+
+  static const NavSelectMotionKind? navProfileSelectMotion =
+      _pack == AppThemeId.yellowDark ? NavSelectMotionKind.profile : null;
+
+  /// 限时免费区块顶部彩头：深色用紫黑 FREE 水印；浅色仍用 shared 浅紫→白渐隐。
+  static const String limitedFreeHeaderBg = _pack == AppThemeId.yellowDark
+      ? 'assets/images/bookstore/yellow_dark/limited_free_header_bg.png'
+      : 'assets/images/bookstore/shared/limited_free_header_bg.png';
 
   // ══════════════════════════════════════════════════════════════
   // 登录页 / 我的页 · 头图

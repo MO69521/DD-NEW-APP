@@ -2,6 +2,89 @@
 
 > 研发知识库与工程变更日志，**追加式**记录，勿覆盖历史。每次开发按「日期 / 新增 / 修改 / 删除 / 影响模块 / Breaking Changes」登记。
 
+## 2026-07-23（深色限时免费彩头切图）
+
+### 新增
+- `assets/images/bookstore/yellow_dark/limited_free_header_bg.png`（1024×236，紫黑 FREE 水印）。
+
+### 修改
+- `AppThemeAssets.limitedFreeHeaderBg`：深色走主题切图，浅色仍用 `bookstore/shared/`；`LimitedFreeSection` 改引主题资源。
+- 从 `AppSharedAssets` 移除三主题共用彩头入口。
+
+### 影响模块
+- 书城推荐 · 限时免费；`docs/06` / `09`；`design-system`。
+
+### Breaking Changes
+- `AppSharedAssets.limitedFreeHeaderBg` 已移除，改用 `AppThemeAssets.limitedFreeHeaderBg`。
+
+## 2026-07-23（福利底栏图标稿更新）
+
+### 修改
+- 福利未选中 / 动效描边：路径对齐新稿（盒身 y=10、短火花、跑道形盖）；灰描边收敛 `textSecondary`（`neutralCool400`，Figma `#9D9FA2`）；白竖线 60%；仅 trimStart 消退（无 opacity 淡出）。
+- 总时长仍 `AppDurations.bottomNavSelectMotion`（700ms）。
+
+### 影响模块
+- 底栏 · 福利（`yellow_dark`）。
+
+### Breaking Changes
+- 无。
+
+## 2026-07-23（底栏选中动效加速）
+
+### 修改
+- `AppDurations.bottomNavSelectMotion`：1000ms → 700ms（四 Tab 相对时间轴比例不变）。
+
+### 影响模块
+- 底栏路径动效（`yellow_dark`）；`docs/10`；`design-system`。
+
+### Breaking Changes
+- 无。
+
+## 2026-07-23（yellow_dark 福利/书架/我的底栏路径动效）
+
+### 新增
+- `NavWelfareSelectIcon` / `NavBookshelfSelectIcon` / `NavProfileSelectIcon`；共享 `NavSelectMotion`；`NavSelectMotionKind`。
+- `AppThemeAssets.nav{Welfare,Bookshelf,Profile}SelectMotion`（仅 `yellow_dark`）。
+
+### 修改
+- `MainTabItem.selectMotion` 替代 `usesSelectMotion` bool；`AppNavIcon` 按种类分发四 Tab 动效。
+- `yellow_dark` 福利/书架/我的 inactive/active SVG 对齐 Figma 新稿。
+
+### 影响模块
+- 底栏四 Tab（`yellow_dark`）；`docs/05` / `09` / `10`；`design-system`。
+
+### Breaking Changes
+- `MainTabItem.usesSelectMotion` 改为 getter；配置字段改为 `selectMotion`。
+
+## 2026-07-23（书城底栏图标稿更新）
+
+### 新增
+- 原色 `yellow350` / `brown900` / `orange600`；语义 `navBookstoreSmileStroke` / `navBookstoreFillMid` / `navBookstoreFillEnd` / `navBookstoreOutlineOpacity`（0.6）。
+
+### 修改
+- 书城选中动效：填充改为白→浅黄→橙渐变；笑脸描边改棕；未选中描边起始 60%；spring damping 8。
+
+### 影响模块
+- 底栏 · 书城（`yellow_dark`）；`design-system`。
+
+### Breaking Changes
+- 无。
+
+## 2026-07-23（yellow_dark 书城底栏路径动效试接入）
+
+### 新增
+- `NavBookstoreSelectIcon`：按 Figma 时间轴实现白描边消退 → 黄填充弹出 → 黑笑脸描出（1s）。
+- `AppDurations.bottomNavSelectMotion`；`MainTabItem.usesSelectMotion`；依赖 `path_drawing`。
+
+### 修改
+- `yellow_dark` 书城 inactive/active SVG 换为笑脸屋形；`AppNavIcon` 选中播路径动效。
+
+### 影响模块
+- 底栏 · 书城 Tab（仅 `yellow_dark`）；`docs/05` / `09` / `10`；`design-system`。
+
+### Breaking Changes
+- 无。
+
 ## 2026-07-21（新评论高亮延长至 5s）
 
 ### 修改

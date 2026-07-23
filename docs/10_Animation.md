@@ -25,7 +25,7 @@ flowchart LR
 | 数字滚动 | `AnimatedCountText`（[animated_count_text.dart](../lib/shared/widgets/animated_count_text.dart)） | 数值变化从旧值滚到新值，时长 `numberRoll` |
 | Tab 文字过渡 | `AppAnimatedTabLabel`（[app_animated_tab_label.dart](../lib/shared/components/app_animated_tab_label.dart)） | 选中/未选中样式插值；点击切换仅 from/to 两端交叉过渡（不扫过中间索引），跟手滑动仍按连续进度插值 |
 | Tab 指示条 | `ElasticTabIndicator`（[elastic_tab_indicator.dart](../lib/shared/components/elastic_tab_indicator.dart)） | 平移 + 宽度拉伸回弹（§3.5 规范：弹性只作用于宽度恢复） |
-| 底部导航图标 | `AppNavIcon`（[app_nav_icon.dart](../lib/shared/widgets/app_nav_icon.dart)） | `yellow_light`：选中播 Lottie 一次停末帧；其它主题：选中缩放微动画 |
+| 底部导航图标 | `AppNavIcon`（[app_nav_icon.dart](../lib/shared/widgets/app_nav_icon.dart)） | `yellow_light`：选中播 Lottie 一次停末帧；`yellow_dark` 四 Tab：路径动效 700ms（`Nav*SelectIcon`）；其它：选中缩放微动画 |
 
 ## 2. Explicit / 脚本动画
 
@@ -68,7 +68,7 @@ flowchart LR
 
 ## 6. Lottie
 
-- 底栏（仅 `yellow_light`）：资源见 [09_Assets.md](./09_Assets.md) §6；`AppNavIcon` 驱动选中播一次。
+- 底栏：`yellow_light` 走 Lottie（[09_Assets.md](./09_Assets.md) §6）；`yellow_dark` 四 Tab 接入 `Nav*SelectIcon` 路径动效（`AppDurations.bottomNavSelectMotion`）；由 `AppNavIcon` 驱动选中播一次。
 - 封装组件 `AppLottie`（[app_lottie.dart](../lib/shared/components/app_lottie.dart)）支持循环播放或外部 `controller`。
 - 接入其它场景：把 `.json`（及同级 `images/`）放入 `assets/lottie/`，经 `AppThemeAssets` / `AppSharedAssets` 语义路径引用。
 

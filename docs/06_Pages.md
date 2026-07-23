@@ -20,7 +20,7 @@ flowchart LR
 
 ### bookstore · [bookstore_page.dart](../lib/features/bookstore/presentation/pages/bookstore_page.dart)
 - **职责**：书城主 Tab 容器（推荐/分类/排行），顶栏切换 + 底部「继续阅读」浮层（全主题锁定深色壳 `continueReadingCard*`，不随浅色包翻转；福利待领取气泡可见时上移 `AppSpacing.xs`（8px，与气泡顶相距），消失后归位）；推荐页进入时预缓存全部 20 帧，避免首次拖动临时解码造成首帧停滞。50×50 奔跑小熊随拉动在顶栏与首卡之间逐渐显现，视觉下移至 `AppSpacing.xxl + AppSpacing.xl + AppSpacing.lg`；刷新占位高度为 `chromeTopHeight - AppSpacing.md`，手势触发距离保持不变，小熊在上一版基础上再下移 24px，并进一步靠近下方首卡。从开始拖动到刷新完成后的收起阶段，只要小熊仍可见就以 0.8 秒周期持续循环奔跑；松手后先让弹簧收敛到固定停留态，最短展示 `(AppDurations.slow + AppDurations.normal) * 2`（1.6 秒），保证完整循环两次，刷新完成才释放占位，内容自动回弹且动画消失。刷新期间保留现有数据，完成后替换最新书城内容并重置「猜你喜欢」分页；预览 Mock 每次返回下一组书籍排序，真实接口模式直接展示服务端最新快照。
-- **模块**：`bookstore_page_header`、`bookstore_recommend_body`、`continue_reading_card`、`ranking_section`、`limited_free_section`（顶部 FREE 彩头 `AppSharedAssets.limitedFreeHeaderBg`）、`editor_pick_section`、`guess_like_section`（分类/排行 Tab 由 `CategoryTabBody`、`RankingTabBody` 注入）。
+- **模块**：`bookstore_page_header`、`bookstore_recommend_body`、`continue_reading_card`、`ranking_section`、`limited_free_section`（顶部 FREE 彩头 `AppThemeAssets.limitedFreeHeaderBg`）、`editor_pick_section`、`guess_like_section`（分类/排行 Tab 由 `CategoryTabBody`、`RankingTabBody` 注入）。
 - **公共组件**：`AppPageChrome`、`AppTabTopTexture`、`MainTabController`、`AppAsyncPageBody`、`AppTopBar`、`AppTopBarIconButton`、`AppTopTabBar`、`AppSwipeTabSwitcher`、`BookGridCard`、`SectionHeader`、`BookCoverTagBadge`、`RankingRankBadge`、`BookCover`、`AppMarqueeText`。
 - **Model**：`BookstorePageContent`、`BookstoreTopTab`、`Book`、`RankingTab`。
 - **Repository**：`BookstoreRepository`。

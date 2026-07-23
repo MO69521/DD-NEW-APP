@@ -329,6 +329,30 @@ const MOTION_CATEGORIES: Array<{ title: string; items: MotionEffect[] }> = [
         path: "lib/shared/widgets/app_nav_icon.dart",
       },
       {
+        name: "NavBookstoreSelectIcon",
+        desc: "yellow_dark 书城：白描边(60%)消退 → 白/浅黄/橙填充弹出 → 棕笑脸描出（700ms）",
+        tech: "CustomPainter + PathMetrics.trim + SpringSimulation",
+        path: "lib/shared/widgets/nav_bookstore_select_icon.dart",
+      },
+      {
+        name: "NavWelfareSelectIcon",
+        desc: "yellow_dark 福利：灰描边礼盒/火花 trim 消退 → 填充弹出 → 棕竖线描出（700ms）",
+        tech: "CustomPainter + PathMetrics.trim + SpringSimulation",
+        path: "lib/shared/widgets/nav_welfare_select_icon.dart",
+      },
+      {
+        name: "NavBookshelfSelectIcon",
+        desc: "yellow_dark 书架：白轮廓消退 → 填充弹出(damping12) → 棕折线显现（700ms）",
+        tech: "CustomPainter + PathMetrics.trim + SpringSimulation",
+        path: "lib/shared/widgets/nav_bookshelf_select_icon.dart",
+      },
+      {
+        name: "NavProfileSelectIcon",
+        desc: "yellow_dark 我的：白框/眼消退 → 填充弹出(damping12) → 棕双眼显现（700ms）",
+        tech: "CustomPainter + PathMetrics.trim + SpringSimulation",
+        path: "lib/shared/widgets/nav_profile_select_icon.dart",
+      },
+      {
         name: "分类筛选弹性下划线",
         desc: "共享下划线在 chip 间滑动 + 拉伸",
         tech: "Offset.lerp + 宽度拉伸",
@@ -2179,7 +2203,7 @@ function SizeIndexSection() {
     ["顶栏 AppTopBar", "顶栏高度 / 图标框 / 返回钮", "topBar*"],
     ["按钮 AppButton", "内边距 / loading / 图标间距", "buttonPadding*"],
     ["搜索栏 / 玻璃模糊", "搜索框高 / 各级磨砂半径", "searchBarHeight · glassBlurSigma · strongBlurSigma"],
-    ["书城首页", "顶栏 / 加载(刷新跑熊 50×50) / 继续阅读浮层 / 限时免费 FREE 彩头", "bookstore* · continueReading* · limitedFreeHeaderBg"],
+    ["书城首页", "顶栏 / 加载(刷新跑熊 50×50) / 继续阅读浮层 / 限时免费 FREE 彩头（深色紫黑 / 浅色浅紫）", "bookstore* · continueReading* · limitedFreeHeaderBg"],
     ["底部导航 AppBottomNav", "胶囊 / 图标26·Lottie档32 / 弹跳缩放", "bottomNav* · bottomNavLottieIconSize"],
     ["榜单", "指示器 / 轮播 / 头图 / 维度导航", "ranking* · tab*"],
     ["书籍封面 / 书卡", "列表/网格封面 / 右下热度与运营标签 / 大封面横向书卡", "bookCover* · bookGrid* · bookCardLarge*"],
@@ -2585,7 +2609,7 @@ function BottomNavSection() {
   return (
     <SpecSection
         zh="底部导航"
-        note="AppBottomNav · 当前 4 Tab（书城/福利/书架/我的；伙伴暂时下线）· 实心底栏仅顶部 0.5px 分割线（浅色实体浅灰 / 深色半透明白）· 图标 SVG 26 / yellow_light Lottie·nor 32 · yellow_light 选中 Lottie 播一次停末帧 / 其它主题选中弹跳（1.18→0.92→1）· 福利待领取气泡首次进入时渐隐，本会话不再显示 · 气泡可见时书城继续阅读浮层上移 AppSpacing.xs（8px）与气泡顶相距"
+        note="AppBottomNav · 当前 4 Tab（书城/福利/书架/我的；伙伴暂时下线）· 实心底栏仅顶部 0.5px 分割线（浅色实体浅灰 / 深色半透明白）· 图标 SVG 26 / yellow_light Lottie·nor 32 · yellow_light 选中 Lottie 播一次停末帧 / yellow_dark 四 Tab 路径动效 700ms / 其它主题选中弹跳（1.18→0.92→1）· 福利待领取气泡首次进入时渐隐，本会话不再显示 · 气泡可见时书城继续阅读浮层上移 AppSpacing.xs（8px）与气泡顶相距"
         src="lib/shared/layouts/app_bottom_nav.dart"
       >
       <Stage>
